@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global South Solidarities — The Archive of the Future</title>
+  <meta name="description" content="Global South Solidarities — An open-access decolonial digital humanities archive. The Archive of the Future / A(na)rchive.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Special+Elite&family=VT323&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --obsidian: #0a0806;
+      --parchment: #f0e6c8;
+      --blood: #c0190f;
+      --gold: #b8860b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--obsidian);
+      color: var(--parchment);
+      font-family: 'Libre Baskerville', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === NAV SPACER === */
+    .nav-spacer { height: 60px; }
+
+    /* === HERO === */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 90vh;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(192, 25, 15, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 8rem);
+      letter-spacing: 0.12em;
+      line-height: 0.95;
+      color: var(--parchment);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title .highlight {
+      color: var(--blood);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--gold);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    .hero-tagline {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: rgba(240, 230, 200, 0.5);
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-cta a {
+      text-decoration: none;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem;
+      padding: 0.6rem 1.8rem;
+      border: 1px solid rgba(240, 230, 200, 0.2);
+      border-radius: 50px;
+      color: var(--parchment);
+      transition: all 0.3s ease;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-cta a:hover {
+      background: var(--blood);
+      border-color: var(--blood);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .hero-cta a.primary {
+      background: var(--blood);
+      border-color: var(--blood);
+      color: #fff;
+    }
+
+    .hero-cta a.primary:hover {
+      background: #e01f14;
+      border-color: #e01f14;
+    }
+
+    /* === SECTION: WHAT IS GSS === */
+    .section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-family: 'VT323', monospace;
+      font-size: 0.8rem;
+      color: var(--blood);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--parchment);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+
+    .section p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: rgba(240, 230, 200, 0.7);
+      margin-bottom: 1.5rem;
+    }
+
+    /* === GRID: EXPLORE === */
+    .explore {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    .explore-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--parchment);
+      letter-spacing: 0.15em;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .explore-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .explore-card {
+      background: rgba(240, 230, 200, 0.03);
+      border: 1px solid rgba(240, 230, 200, 0.08);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .explore-card:hover {
+      border-color: var(--blood);
+      background: rgba(192, 25, 15, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .explore-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: var(--parchment);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .explore-card-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: rgba(240, 230, 200, 0.5);
+      line-height: 1.5;
+    }
+
+    .explore-card-tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: 'VT323', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* === DIVIDER === */
+    .divider {
+      max-width: 200px;
+      margin: 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+
+    @media (max-width: 768px) {
+      .hero { min-height: 80vh; padding: 3rem 1rem; }
+      .explore-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV (loaded from component) -->
+  <div id="nav-placeholder"></div>
+  <div class="nav-spacer"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-subtitle">The Archive of the Future</div>
+    <h1 class="hero-title">GLOBAL SOUTH<br><span class="highlight">SOLIDARITIES</span></h1>
+    <p class="hero-tagline">A(na)rchive &mdash; an open-access decolonial digital humanities archive</p>
+    <div class="hero-cta">
+      <a href="/pages/archive.html" class="primary">Enter the Archive</a>
+      <a href="/pages/interactive-pedagogy.html">Pedagogy</a>
+      <a href="/pages/gss-ai.html">GSS AI</a>
+      <a href="/pages/contact.html">Contact</a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div class="section-label">// About the Project</div>
+    <h2 class="section-heading">DECOLONIZING THE ARCHIVE</h2>
+    <p>
+      Global South Solidarities is an open-access digital humanities project that centers
+      voices, histories, and resistances from the Global South. Housed at Washington State University
+      and led by Dr. Bibhushana Poudyal, GSS reimagines what an archive can be &mdash; not a static
+      repository, but a living, breathing act of solidarity and remembrance.
+    </p>
+    <p>
+      Through interactive pedagogy, AI-assisted research, 3D artifact preservation, augmented reality
+      reenactments, and multimedia storytelling, GSS builds bridges across geographies, temporalities,
+      and disciplines.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EXPLORE -->
+  <section class="explore">
+    <h2 class="explore-heading">EXPLORE</h2>
+    <div class="explore-grid">
+      <a href="/pages/archive.html" class="explore-card">
+        <div class="explore-card-title">THE ARCHIVE</div>
+        <div class="explore-card-desc">Browse the decolonial archive of texts, images, and oral histories.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/interactive-pedagogy.html" class="explore-card">
+        <div class="explore-card-title">INTERACTIVE PEDAGOGY</div>
+        <div class="explore-card-desc">Teaching resources and interactive learning modules.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/collaborations.html" class="explore-card">
+        <div class="explore-card-title">COLLABORATIONS</div>
+        <div class="explore-card-desc">Partners, institutions, and community networks.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/multimedia-storytelling.html" class="explore-card">
+        <div class="explore-card-title">MULTIMEDIA STORYTELLING</div>
+        <div class="explore-card-desc">Video, audio, and interactive narrative experiences.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/gss-ai.html" class="explore-card">
+        <div class="explore-card-title">GSS AI</div>
+        <div class="explore-card-desc">AI-assisted research tools for decolonial scholarship.</div>
+        <div class="explore-card-tag">Phase 2</div>
+      </a>
+      <a href="/pages/3d-artifacts.html" class="explore-card">
+        <div class="explore-card-title">3D ARTIFACTS</div>
+        <div class="explore-card-desc">Interactive 3D models of cultural artifacts and sites.</div>
+        <div class="explore-card-tag">Phase 2</div>
+      </a>
+      <a href="/pages/ar-reenactments.html" class="explore-card">
+        <div class="explore-card-title">AR REENACTMENTS</div>
+        <div class="explore-card-desc">Augmented reality experiences bringing history to life.</div>
+        <div class="explore-card-tag">Phase 2</div>
+      </a>
+      <a href="/pages/visualizations.html" class="explore-card">
+        <div class="explore-card-title">DATA VISUALIZATIONS</div>
+        <div class="explore-card-desc">Maps, networks, and visual explorations of data.</div>
+        <div class="explore-card-tag">Phase 2</div>
+      </a>
+      <a href="/pages/open-access-platform.html" class="explore-card">
+        <div class="explore-card-title">OPEN ACCESS PLATFORM</div>
+        <div class="explore-card-desc">Free resources and downloadable materials.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/syllabi.html" class="explore-card">
+        <div class="explore-card-title">SYLLABI</div>
+        <div class="explore-card-desc">Course syllabi for decolonial and Global South studies.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/student-researchers.html" class="explore-card">
+        <div class="explore-card-title">STUDENT RESEARCHERS</div>
+        <div class="explore-card-desc">Meet the student researchers contributing to GSS.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+      <a href="/pages/timeline.html" class="explore-card">
+        <div class="explore-card-title">TIMELINE</div>
+        <div class="explore-card-desc">Chronological view of events, milestones, and histories.</div>
+        <div class="explore-card-tag">Phase 1</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER (loaded from component) -->
+  <div id="footer-placeholder"></div>
+
+  <script>
+    // Load shared nav and footer components
+    function loadComponent(url, placeholderId) {
+      fetch(url)
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById(placeholderId).innerHTML = html;
+        })
+        .catch(() => {
+          console.warn('Could not load component: ' + url);
+        });
+    }
+
+    loadComponent('/components/nav.html', 'nav-placeholder');
+    loadComponent('/components/footer.html', 'footer-placeholder');
+  </script>
+</body>
+</html>
