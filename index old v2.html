@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global South Solidarities — The Archive of the Future</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IM+Fell+English:ital@0;1&family=Special+Elite&family=VT323&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --obsidian: #0a0806;
+  --parchment: #f0e6c8;
+  --aged: #d4c4a0;
+  --blood: #c0190f;
+  --deep-blood: #8b0000;
+  --forest: #1a3a1a;
+  --gold: #b8860b;
+  --bright-gold: #d4a017;
+  --ember: #e85d04;
+  --teal: #0d9488;
+  --indigo: #312e81;
+  --violet: #6d28d9;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--obsidian);
+  color: var(--parchment);
+  font-family: 'Libre Baskerville', Georgia, serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+#cursor {
+  width: 20px; height: 20px;
+  border: 2px solid var(--blood);
+  position: fixed; z-index: 99999;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: transform 0.12s, width 0.18s, height 0.18s, background 0.18s, border-color 0.18s;
+  mix-blend-mode: difference;
+}
+#cursor.hover {
+  width: 50px; height: 50px;
+  background: rgba(192, 25, 15, 0.15);
+  transform: translate(-50%, -50%) rotate(0deg);
+  border-color: var(--gold);
+}
+#cursor-trail {
+  width: 8px; height: 8px;
+  background: var(--blood);
+  border-radius: 50%;
+  position: fixed; z-index: 99998;
+  pointer-events: none;
+  transition: left 0.3s ease, top 0.3s ease, opacity 0.3s;
+  opacity: 0.3;
+}
+
+/* NOISE OVERLAY */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 90000;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+/* LOADER */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--obsidian);
+  z-index: 100000;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 30px;
+  transition: opacity 0.8s ease, visibility 0.8s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+#loader-text {
+  font-family: 'VT323', monospace;
+  font-size: 18px; color: var(--blood);
+  letter-spacing: 6px; text-transform: uppercase;
+}
+#loader-bar-wrap { width: 300px; height: 1px; background: rgba(240,230,200,0.08); }
+#loader-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--blood), var(--gold)); transition: width 0.1s; }
+#loader-glyph {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px; font-weight: 300;
+  color: rgba(240, 230, 200, 0.04);
+  position: absolute;
+  animation: glyphPulse 2s ease-in-out infinite;
+}
+@keyframes glyphPulse { 0%,100%{ opacity: 0.04; transform: scale(1); } 50%{ opacity: 0.08; transform: scale(1.05); } }
+
+/* PARTICLE CANVAS */
+#particles {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 40px;
+  overflow: hidden;
+  z-index: 1;
+}
+#hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 70%, rgba(139,0,0,0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(26,58,26,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 90%, rgba(184,134,11,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 40% at 90% 80%, rgba(109,40,217,0.08) 0%, transparent 50%);
+  z-index: 0;
+}
+
+.hero-badge {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 8px;
+  color: var(--blood);
+  text-transform: uppercase;
+  border: 1px solid var(--blood);
+  padding: 6px 20px;
+  position: relative; z-index: 2;
+  opacity: 0;
+  animation: stampIn 0.4s cubic-bezier(0.4,1.6,0.5,1) forwards 1.2s;
+}
+@keyframes stampIn { from { opacity:0; transform: scale(3) rotate(-3deg); } to { opacity:1; transform: scale(1) rotate(-1deg); } }
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(65px, 14vw, 200px);
+  line-height: 0.85;
+  text-align: center;
+  position: relative; z-index: 2;
+  margin-top: 30px;
+  letter-spacing: -3px;
+}
+.hero-title .line1 {
+  display: block;
+  -webkit-text-stroke: 1.5px rgba(240,230,200,0.2);
+  color: transparent;
+  position: relative;
+}
+.hero-title .line1::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  -webkit-text-stroke: 0;
+  color: var(--gold);
+  clip-path: inset(0 100% 0 0);
+  animation: fillIn 2.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards 1.8s;
+}
+@keyframes fillIn {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0% 0 0); }
+}
+.hero-title .line2 {
+  display: block;
+  color: var(--parchment);
+}
+.hero-title .line3 {
+  display: block;
+  color: var(--blood);
+  position: relative;
+}
+.hero-title .line3::after {
+  content: '';
+  position: absolute;
+  bottom: 5px; left: 0; right: 0;
+  height: 4px;
+  background: var(--blood);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: lineReveal 1s ease forwards 2s;
+}
+@keyframes lineReveal { to { transform: scaleX(1); } }
+
+.na-gold {
+  color: var(--gold);
+}
+
+.hero-split-char {
+  display: inline-block;
+  transition: transform 0.15s, color 0.15s;
+  cursor: none;
+}
+.hero-split-char:hover {
+  transform: scale(1.2) rotate(-5deg);
+  color: var(--gold);
+}
+
+#hero-sub {
+  font-family: 'VT323', monospace;
+  font-size: clamp(13px, 1.8vw, 18px);
+  color: rgba(240,230,200,0.45);
+  text-align: center;
+  margin-top: 30px;
+  letter-spacing: 3px;
+  min-height: 28px;
+  z-index: 2; position: relative;
+}
+
+.hero-quote {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(14px, 2vw, 20px);
+  color: rgba(240,230,200,0.35);
+  text-align: center;
+  max-width: 700px;
+  margin-top: 40px;
+  line-height: 1.7;
+  z-index: 2; position: relative;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 2.5s;
+}
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } from { transform: translateY(20px); } }
+
+.scroll-hint {
+  position: absolute; bottom: 30px;
+  font-family: 'Special Elite', monospace;
+  font-size: 9px; letter-spacing: 5px;
+  color: rgba(240,230,200,0.2);
+  text-transform: uppercase;
+  z-index: 2;
+  animation: gentleBounce 2.5s ease-in-out infinite;
+}
+@keyframes gentleBounce { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(8px); } }
+
+/* FLOATING WORDS */
+.float-word {
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  color: rgba(240,230,200,0.015);
+  user-select: none; pointer-events: none;
+  z-index: 1;
+}
+
+/* TORN EDGE */
+.torn {
+  height: 30px; width: 100%;
+  clip-path: polygon(0 100%,1.5% 30%,3% 80%,5% 10%,7% 70%,9% 25%,12% 85%,15% 15%,18% 75%,21% 40%,24% 90%,27% 20%,30% 65%,34% 35%,37% 80%,40% 10%,44% 60%,47% 25%,51% 75%,54% 40%,57% 90%,61% 20%,64% 70%,68% 30%,71% 85%,74% 15%,77% 65%,81% 35%,84% 80%,87% 10%,91% 60%,94% 25%,97% 75%,100% 45%,100% 100%);
+  position: relative; z-index: 5;
+}
+
+/* MISSION SECTION */
+#mission {
+  background: var(--parchment);
+  padding: 120px 80px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+#mission::before {
+  content: 'SOLIDARITY';
+  position: absolute;
+  top: -40px; right: -30px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 220px;
+  color: rgba(13,8,0,0.025);
+  pointer-events: none;
+  line-height: 1;
+}
+.mission-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--blood);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.mission-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 130px);
+  line-height: 0.88;
+  color: var(--obsidian);
+  margin-bottom: 60px;
+}
+.mission-title .accent { color: var(--blood); }
+
+/* GLITCH EFFECT */
+.glitch {
+  position: relative;
+  display: inline-block;
+  animation: glitchShift 4s infinite;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+.glitch::before {
+  color: var(--blood);
+  clip-path: inset(0 0 65% 0);
+  animation: glitchTop 3s infinite;
+}
+.glitch::after {
+  color: var(--obsidian);
+  clip-path: inset(60% 0 0 0);
+  animation: glitchBottom 2.5s infinite;
+}
+@keyframes glitchShift {
+  0%, 90%, 100% { transform: translate(0); }
+  92% { transform: translate(-3px, 1px); }
+  94% { transform: translate(2px, -1px); }
+  96% { transform: translate(-1px, 2px); }
+  98% { transform: translate(3px, 0); }
+}
+@keyframes glitchTop {
+  0%, 85%, 100% { clip-path: inset(0 0 65% 0); transform: translate(0); }
+  87% { clip-path: inset(10% 0 50% 0); transform: translate(-4px, 0); }
+  89% { clip-path: inset(30% 0 30% 0); transform: translate(3px, 0); }
+  91% { clip-path: inset(5% 0 60% 0); transform: translate(-2px, 0); }
+  93% { clip-path: inset(0 0 65% 0); transform: translate(0); }
+}
+@keyframes glitchBottom {
+  0%, 88%, 100% { clip-path: inset(60% 0 0 0); transform: translate(0); }
+  90% { clip-path: inset(50% 0 5% 0); transform: translate(5px, 0); }
+  92% { clip-path: inset(70% 0 0% 0); transform: translate(-3px, 0); }
+  94% { clip-path: inset(55% 0 10% 0); transform: translate(2px, 0); }
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+.mission-lead {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14.5px;
+  font-weight: 300;
+  line-height: 2;
+  color: var(--obsidian);
+}
+.mission-body {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14.5px;
+  line-height: 2;
+  color: #4a3a20;
+}
+.mission-body strong { color: var(--obsidian); }
+
+/* STATS TICKER */
+.stats-bar {
+  background: var(--obsidian);
+  padding: 50px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+.stats-bar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 200px, rgba(240,230,200,0.02) 200px, rgba(240,230,200,0.02) 201px);
+}
+.stat-item {
+  text-align: center;
+  position: relative;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 68px;
+  color: var(--blood);
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: rgba(240,230,200,0.65);
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.stat-divider {
+  width: 1px; height: 60px;
+  background: rgba(240,230,200,0.15);
+}
+
+/* PILLARS SECTION */
+#pillars {
+  background: var(--obsidian);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+}
+.pillars-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.pillars-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: var(--parchment);
+  margin-bottom: 80px;
+}
+.pillar-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+.pillar-card {
+  border: 1px solid rgba(240,230,200,0.15);
+  padding: 50px 35px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--blood), transparent);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.pillar-card:hover::before { opacity: 0.15; }
+.pillar-card:hover {
+  border-color: rgba(240,230,200,0.2);
+  transform: translateY(-5px);
+}
+.pillar-icon {
+  font-size: 48px;
+  margin-bottom: 30px;
+  display: block;
+  filter: grayscale(0.3);
+  transition: filter 0.3s, transform 0.3s;
+}
+.pillar-card:hover .pillar-icon { filter: grayscale(0); transform: scale(1.1); }
+.pillar-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 100px;
+  color: rgba(240,230,200,0.03);
+  position: absolute;
+  top: -15px; right: 15px;
+  line-height: 1;
+  pointer-events: none;
+}
+.pillar-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--parchment);
+  margin-bottom: 15px;
+  line-height: 1.1;
+  position: relative;
+}
+.pillar-desc {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: rgba(240,230,200,0.78);
+  position: relative;
+}
+.pillar-tag {
+  font-family: 'Special Elite', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 20px;
+  display: inline-block;
+  border-bottom: 1px solid rgba(184,134,11,0.3);
+  padding-bottom: 2px;
+  position: relative;
+}
+
+/* PLANETARY JUSTICE MAP */
+#research {
+  background: #0d1117;
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+#research::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,70,0.008) 2px, rgba(0,255,70,0.008) 4px);
+  pointer-events: none;
+}
+.research-eyebrow {
+  font-family: 'VT323', monospace;
+  font-size: 14px; letter-spacing: 4px;
+  color: #00ff46;
+  margin-bottom: 20px;
+}
+.research-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: #00ff46;
+  margin-bottom: 20px;
+}
+.research-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 300;
+  color: rgba(240,230,200,0.55);
+  max-width: 700px; line-height: 1.7;
+  margin-bottom: 70px;
+}
+#pj-globe-wrap {
+  width: 100%; height: 500px;
+  position: relative; margin-bottom: 70px;
+  border: 1px solid rgba(0,255,70,0.08);
+  background: rgba(0,255,70,0.008);
+  overflow: hidden;
+}
+#pj-globe-wrap::before {
+  content: 'PLANETARY JUSTICE MAP — INTERACTIVE 3D VISUALIZATION — DRAG TO ROTATE';
+  position: absolute; top: 12px; left: 16px;
+  font-family: 'VT323', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(0,255,70,0.3); z-index: 2;
+}
+#pj-globe { width: 100%; height: 100%; display: block; cursor: grab; }
+#pj-globe:active { cursor: grabbing; }
+#pj-globe-label {
+  position: absolute; pointer-events: none;
+  font-family: 'VT323', monospace;
+  font-size: 12px; color: #00ff46;
+  background: rgba(13,17,23,0.85);
+  border: 1px solid rgba(0,255,70,0.2);
+  padding: 4px 10px; display: none;
+  white-space: nowrap; z-index: 5;
+  letter-spacing: 1px;
+}
+.pj-globe-legend {
+  position: absolute; bottom: 14px; right: 16px;
+  display: flex; gap: 18px; z-index: 2;
+}
+.pj-legend-item {
+  font-family: 'VT323', monospace;
+  font-size: 11px; color: rgba(240,230,200,0.5);
+  display: flex; align-items: center; gap: 6px;
+  letter-spacing: 1px;
+}
+.pj-legend-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  display: inline-block;
+}
+.pj-section-label {
+  font-family: 'VT323', monospace;
+  font-size: 13px; letter-spacing: 5px;
+  color: #00ff46; text-transform: uppercase;
+  margin-bottom: 30px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,255,70,0.15);
+  display: flex; align-items: center; gap: 12px;
+}
+.pj-section-label::before {
+  content: ''; width: 8px; height: 8px;
+  background: #00ff46; border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0,255,70,0.5);
+  flex-shrink: 0;
+}
+.pj-count { margin-left: auto; opacity: 0.4; }
+.pj-people-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 3px; margin-bottom: 80px;
+}
+.pj-person {
+  background: rgba(0,255,70,0.012);
+  border: 1px solid rgba(0,255,70,0.06);
+  padding: 22px 18px; position: relative;
+  overflow: hidden; cursor: none; transition: all 0.4s;
+}
+.pj-person::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,70,0.3), transparent);
+  transform: scaleX(0); transition: transform 0.4s;
+}
+.pj-person:hover::before { transform: scaleX(1); }
+.pj-person:hover {
+  border-color: rgba(0,255,70,0.25);
+  background: rgba(0,255,70,0.035);
+  transform: translateY(-3px);
+}
+.pj-person-name {
+  font-family: 'IM Fell English', serif;
+  font-style: italic; font-size: 14.5px;
+  color: var(--parchment); margin-bottom: 5px; line-height: 1.25;
+}
+.pj-person-place {
+  font-family: 'VT323', monospace;
+  font-size: 11px; color: #00ff46;
+  letter-spacing: 1px; margin-bottom: 6px; opacity: 0.65;
+}
+.pj-person-dates {
+  font-family: 'VT323', monospace;
+  font-size: 10px; color: rgba(240,230,200,0.35); letter-spacing: 1px;
+}
+.pj-alive {
+  display: inline-block; width: 5px; height: 5px;
+  border-radius: 50%; background: #00ff46;
+  box-shadow: 0 0 4px rgba(0,255,70,0.6);
+  margin-left: 4px; vertical-align: middle;
+  animation: alivePulse 2s ease-in-out infinite;
+}
+@keyframes alivePulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.pj-movements { display: flex; flex-direction: column; gap: 3px; }
+.pj-movement {
+  display: grid; grid-template-columns: 260px 1fr;
+  gap: 0; border: 1px solid rgba(0,255,70,0.06);
+  background: rgba(0,255,70,0.008);
+  cursor: none; transition: all 0.4s;
+  position: relative; overflow: hidden;
+}
+.pj-movement:hover {
+  border-color: rgba(0,255,70,0.2);
+  background: rgba(0,255,70,0.025);
+}
+.pj-mv-left {
+  padding: 20px 18px;
+  border-right: 1px solid rgba(0,255,70,0.06);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.pj-mv-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px; color: var(--parchment);
+  line-height: 1.15; margin-bottom: 5px; letter-spacing: 0.5px;
+}
+.pj-mv-route {
+  font-family: 'VT323', monospace;
+  font-size: 11px; color: #00ff46; opacity: 0.55; letter-spacing: 1px;
+}
+.pj-mv-route::before { content: '⟶ '; }
+.pj-mv-right { padding: 20px 22px; }
+.pj-mv-desc {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11.5px; line-height: 1.85;
+  color: rgba(240,230,200,0.65);
+}
+.pj-mv-year {
+  display: inline-block; font-family: 'VT323', monospace;
+  font-size: 11px; color: var(--gold); letter-spacing: 2px;
+  margin-top: 8px; padding: 2px 8px;
+  border: 1px solid rgba(184,134,11,0.25);
+}
+.terminal-note {
+  font-family: 'VT323', monospace;
+  font-size: 12px;
+  color: rgba(0,255,70,0.45);
+  margin-top: 50px;
+}
+.terminal-note::before { content: '// '; }
+
+/* TECHNOLOGY SECTION */
+#tech {
+  background: var(--obsidian);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+.tech-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.tech-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: var(--parchment);
+  margin-bottom: 80px;
+}
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.tech-card {
+  padding: 50px 35px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  transition: all 0.4s;
+  border-left: 3px solid rgba(240,230,200,0.12);
+}
+.tech-card:hover {
+  border-left-color: var(--ember);
+  background: rgba(232,93,4,0.04);
+}
+.tech-icon {
+  font-size: 42px;
+  margin-bottom: 20px;
+  display: block;
+  transition: transform 0.3s;
+}
+.tech-card:hover .tech-icon { transform: scale(1.15) rotate(-5deg); }
+.tech-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: var(--parchment);
+  margin-bottom: 12px;
+}
+.tech-desc {
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: rgba(240,230,200,0.75);
+}
+.tech-status {
+  display: inline-block;
+  font-family: 'VT323', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 3px 10px;
+  margin-top: 18px;
+  border: 1px solid;
+}
+.status-active { color: #00ff46; border-color: rgba(0,255,70,0.3); }
+.status-dev { color: var(--ember); border-color: rgba(232,93,4,0.3); }
+.status-coming { color: var(--gold); border-color: rgba(184,134,11,0.3); }
+
+/* SYLLABI SECTION */
+#syllabi {
+  background: var(--parchment);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+#syllabi::before {
+  content: 'PEDAGOGY';
+  position: absolute;
+  bottom: -50px; left: -20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 250px;
+  color: rgba(13,8,0,0.02);
+  pointer-events: none;
+  line-height: 1;
+}
+.syllabi-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--deep-blood);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.syllabi-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: var(--obsidian);
+  margin-bottom: 20px;
+}
+.syllabi-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: #6a5a40;
+  margin-bottom: 70px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+.syllabi-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.syllabus-card {
+  background: var(--obsidian);
+  padding: 50px 40px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  transition: all 0.4s;
+}
+.syllabus-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.syllabus-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+}
+.syllabus-card:first-child::before { background: linear-gradient(90deg, var(--blood), var(--gold)); }
+.syllabus-card:last-child::before { background: linear-gradient(90deg, var(--forest), var(--teal)); }
+.syllabus-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 100px;
+  color: rgba(240,230,200,0.03);
+  position: absolute;
+  bottom: -10px; right: 20px;
+  line-height: 1;
+}
+.syllabus-badge {
+  display: inline-block;
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--blood);
+  color: var(--blood);
+  margin-bottom: 25px;
+}
+.syllabus-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--parchment);
+  line-height: 1.1;
+  margin-bottom: 15px;
+}
+.syllabus-meta {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 25px;
+}
+.syllabus-desc {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  line-height: 1.85;
+  color: rgba(240,230,200,0.8);
+}
+.syllabus-themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 25px;
+}
+.syllabus-theme {
+  font-family: 'VT323', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border: 1px solid rgba(240,230,200,0.18);
+  color: rgba(240,230,200,0.7);
+  transition: all 0.2s;
+  cursor: none;
+}
+.syllabus-theme:hover {
+  border-color: var(--blood);
+  color: var(--blood);
+}
+
+/* STUDENT CONTRIBUTIONS */
+#students {
+  background: var(--obsidian);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+}
+.students-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.students-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: var(--parchment);
+  margin-bottom: 20px;
+}
+.students-sub {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(240,230,200,0.7);
+  margin-bottom: 70px;
+  max-width: 600px;
+}
+.student-orbit {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.student-node {
+  border: 1px solid rgba(240,230,200,0.12);
+  padding: 30px 25px;
+  text-align: center;
+  cursor: none;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.student-node:hover {
+  border-color: var(--teal);
+  background: rgba(13,148,136,0.04);
+  transform: scale(1.03);
+}
+.student-node::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: radial-gradient(circle, rgba(13,148,136,0.15), transparent);
+  border-radius: 50%;
+  transition: width 0.5s, height 0.5s;
+  transform: translate(-50%, -50%);
+}
+.student-node:hover::after { width: 200px; height: 200px; }
+.student-glyph {
+  font-size: 28px;
+  margin-bottom: 12px;
+  display: block;
+  position: relative; z-index: 1;
+}
+.student-topic {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--parchment);
+  margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.student-type {
+  font-family: 'VT323', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(240,230,200,0.5);
+  position: relative; z-index: 1;
+}
+
+/* TIMELINE */
+#timeline {
+  background: var(--parchment);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+}
+.timeline-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--deep-blood);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.timeline-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: var(--obsidian);
+  margin-bottom: 80px;
+}
+.tl-wrap {
+  position: relative;
+  padding-left: 60px;
+}
+.tl-wrap::before {
+  content: '';
+  position: absolute;
+  left: 20px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--blood), var(--gold), var(--forest));
+}
+.tl-item {
+  position: relative;
+  padding: 0 0 60px 30px;
+  cursor: none;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -50px; top: 5px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--blood);
+  background: var(--parchment);
+  transition: all 0.3s;
+}
+.tl-item:hover .tl-dot {
+  background: var(--blood);
+  box-shadow: 0 0 20px rgba(192,25,15,0.3);
+  transform: scale(1.3);
+}
+.tl-date {
+  font-family: 'VT323', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--blood);
+  margin-bottom: 8px;
+}
+.tl-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: var(--obsidian);
+  margin-bottom: 8px;
+}
+.tl-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #6a5a40;
+  max-width: 600px;
+}
+
+/* CTA */
+#cta {
+  background: var(--blood);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+  text-align: center;
+}
+#cta::before {
+  content: 'JOIN';
+  position: absolute;
+  top: -60px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 350px;
+  color: rgba(0,0,0,0.06);
+  pointer-events: none;
+  line-height: 1;
+}
+.cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 10vw, 140px);
+  line-height: 0.88;
+  color: var(--parchment);
+  margin-bottom: 30px;
+  position: relative;
+}
+.cta-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: rgba(240,230,200,0.8);
+  max-width: 650px;
+  margin: 0 auto 50px;
+  line-height: 1.7;
+}
+.cta-btn {
+  display: inline-block;
+  font-family: 'Special Elite', monospace;
+  font-size: 12px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--parchment);
+  border: 2px solid var(--parchment);
+  padding: 18px 50px;
+  text-decoration: none;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s;
+}
+.cta-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--parchment);
+  transform: translateX(-101%);
+  transition: transform 0.35s;
+}
+.cta-btn:hover::before { transform: translateX(0); }
+.cta-btn span { position: relative; z-index: 1; transition: color 0.35s; }
+.cta-btn:hover span { color: var(--blood); }
+
+/* FOOTER */
+footer {
+  background: var(--obsidian);
+  padding: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 30px;
+  position: relative; z-index: 1;
+}
+.footer-chant {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 8vw, 90px);
+  line-height: 0.85;
+  color: #ffffff;
+  opacity: 1;
+}
+.footer-info {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(240,230,200,0.45);
+  text-align: right;
+  line-height: 2.2;
+}
+.footer-info a { color: var(--gold); text-decoration: none; }
+.footer-info a:hover { text-decoration: underline; }
+
+/* REVEAL ANIMATIONS */
+.rv { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.rv.vis { opacity: 1; transform: translateY(0); }
+.rvl { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.rvl.vis { opacity: 1; transform: translateX(0); }
+
+/* MARQUEE */
+.marquee-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 20px 0;
+  background: #12100c;
+  border-top: 1px solid rgba(240,230,200,0.12);
+  border-bottom: 1px solid rgba(240,230,200,0.12);
+  position: relative; z-index: 1;
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marqueeScroll 30s linear infinite;
+}
+@keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.marquee-item {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 6px;
+  color: rgba(240,230,200,0.5);
+  padding: 0 40px;
+  flex-shrink: 0;
+}
+.marquee-item .dot {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--blood);
+  margin: 0 20px;
+  vertical-align: middle;
+  opacity: 0.8;
+}
+
+/* ORG STICKER */
+.org-sticker-wrap {
+  background: var(--obsidian);
+  padding: 50px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; z-index: 1;
+}
+.org-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(240,230,200,0.04);
+  border: 2px solid var(--gold);
+  padding: 18px 40px;
+  transform: rotate(-1.5deg);
+  position: relative;
+}
+.org-sticker::before {
+  content: '✦';
+  position: absolute;
+  top: -8px; left: -8px;
+  font-size: 14px;
+  color: var(--gold);
+}
+.org-sticker-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  color: var(--parchment);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.org-sticker-eq {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--gold);
+}
+.org-sticker-meaning {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* STATUS SECTION — What's Live & Coming */
+#status {
+  background: var(--obsidian);
+  padding: 120px 80px;
+  position: relative; z-index: 1;
+}
+.status-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px; letter-spacing: 7px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.status-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 9vw, 110px);
+  line-height: 0.88;
+  color: var(--parchment);
+  margin-bottom: 70px;
+}
+.status-title span { color: var(--blood); }
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.status-col-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--parchment);
+  margin-bottom: 30px;
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.status-col-title::before {
+  content: '';
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-live .status-col-title::before { background: #00ff46; box-shadow: 0 0 8px rgba(0,255,70,0.4); }
+.status-coming .status-col-title::before { background: var(--ember); box-shadow: 0 0 8px rgba(232,93,4,0.4); }
+.status-col-title-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(240,230,200,0.1);
+  margin-left: 10px;
+}
+.status-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid rgba(240,230,200,0.06);
+  cursor: none;
+  transition: all 0.3s;
+}
+.status-item:hover {
+  border-color: rgba(240,230,200,0.15);
+  transform: translateX(5px);
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot-live { background: #00ff46; }
+.status-dot-dev { background: var(--ember); }
+.status-dot-soon { background: var(--gold); }
+.status-item-name {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 14px;
+  color: rgba(240,230,200,0.85);
+  flex: 1;
+}
+.status-item-tag {
+  font-family: 'VT323', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 3px 10px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+.status-item-tag-live { color: #00ff46; border-color: rgba(0,255,70,0.3); }
+.status-item-tag-dev { color: var(--ember); border-color: rgba(232,93,4,0.3); }
+.status-item-tag-soon { color: var(--gold); border-color: rgba(184,134,11,0.3); }
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+  #mission, #pillars, #research, #tech, #syllabi, #students, #timeline, #cta, #status { padding: 80px 24px; }
+  .mission-grid, .syllabi-cards, .status-grid { grid-template-columns: 1fr; }
+  .pillar-cards { grid-template-columns: 1fr 1fr; }
+  .pj-people-grid { grid-template-columns: 1fr 1fr; }
+  .pj-movement { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .student-orbit { grid-template-columns: 1fr 1fr; }
+  .stats-bar { flex-wrap: wrap; padding: 40px 24px; justify-content: center; }
+  .org-sticker-wrap { padding: 40px 24px; }
+  footer { padding: 50px 24px; }
+  #hero { padding: 60px 24px; }
+}
+@media(max-width: 600px) {
+  .pillar-cards, .student-orbit, .pj-people-grid { grid-template-columns: 1fr; }
+  .side-nav, .sn-expand-zone, .sn-nav-tab { display: none; }
+}
+
+/* SIDE NAVIGATION — RIGHT SIDE, individual floating ovals */
+.side-nav {
+  position: fixed;
+  right: 90px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 99990;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+  align-items: flex-end;
+}
+.side-nav.visible { opacity: 1; pointer-events: auto; }
+
+.sn-item {
+  display: block;
+  cursor: none;
+  text-decoration: none;
+  position: relative;
+  /* each item starts off-screen to the right */
+  transform: translateX(140%);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+  opacity: 0;
+}
+/* staggered slide-in when expanded */
+.side-nav.expanded .sn-item { transform: translateX(0); opacity: 1; }
+.side-nav.expanded .sn-item:nth-child(1) { transition-delay: 0.03s; }
+.side-nav.expanded .sn-item:nth-child(2) { transition-delay: 0.07s; }
+.side-nav.expanded .sn-item:nth-child(3) { transition-delay: 0.11s; }
+.side-nav.expanded .sn-item:nth-child(4) { transition-delay: 0.15s; }
+.side-nav.expanded .sn-item:nth-child(5) { transition-delay: 0.19s; }
+.side-nav.expanded .sn-item:nth-child(6) { transition-delay: 0.23s; }
+.side-nav.expanded .sn-item:nth-child(7) { transition-delay: 0.27s; }
+.side-nav.expanded .sn-item:nth-child(8) { transition-delay: 0.31s; }
+.side-nav.expanded .sn-item:nth-child(9) { transition-delay: 0.35s; }
+
+/* the pill itself */
+.sn-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Trebuchet MS', 'Arial', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+  background: rgba(6, 4, 2, 0.96);
+  border: 2px solid rgba(192,25,15,0.7);
+  border-radius: 999px;
+  padding: 12px 24px 12px 18px;
+  white-space: nowrap;
+  width: 260px;
+  box-sizing: border-box;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.7), 0 0 14px rgba(192,25,15,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s, color 0.25s;
+}
+.sn-item:hover .sn-label {
+  background: rgba(18, 6, 2, 0.98);
+  border-color: var(--gold);
+  color: #ffe680;
+  text-shadow: 0 0 12px rgba(255,220,80,0.5);
+  box-shadow: 0 4px 26px rgba(0,0,0,0.75), 0 0 20px rgba(184,134,11,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: translateX(-5px);
+}
+.sn-item.active .sn-label {
+  border-color: var(--blood);
+  color: #ffffff;
+  background: rgba(192,25,15,0.18);
+  box-shadow: 0 4px 22px rgba(0,0,0,0.7), 0 0 18px rgba(192,25,15,0.35);
+}
+/* small dot indicator inside the pill */
+.sn-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(192,25,15,0.6);
+  flex-shrink: 0;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.sn-item:hover .sn-dot { background: var(--gold); box-shadow: 0 0 6px rgba(184,134,11,0.6); }
+.sn-item.active .sn-dot { background: var(--blood); box-shadow: 0 0 8px rgba(192,25,15,0.7); }
+
+/* hide old label-wrap since pills are self-contained */
+.sn-label-wrap { display: none; }
+
+.sn-soon {
+  font-family: 'VT323', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-left: 4px;
+  border: 1px solid rgba(184,134,11,0.35);
+  padding: 1px 5px;
+  vertical-align: middle;
+  background: rgba(184,134,11,0.06);
+  border-radius: 3px;
+}
+
+/* NAV TRIGGER — oval pill on right side */
+.sn-expand-zone {
+  position: fixed;
+  right: 0; top: 0;
+  width: 36px; height: 100%;
+  z-index: 99989;
+}
+.sn-nav-tab {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 99988;
+  background: #0a0806;
+  border: 2px solid var(--blood);
+  border-radius: 999px;
+  cursor: none;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 14px;
+  box-shadow: 0 0 20px rgba(192,25,15,0.3), 0 4px 24px rgba(0,0,0,0.6);
+  min-width: 52px;
+}
+.sn-nav-tab:hover {
+  background: #160808;
+  border-color: var(--gold);
+  box-shadow: 0 0 28px rgba(192,25,15,0.5), 0 6px 30px rgba(0,0,0,0.7);
+  transform: translateY(-50%) scale(1.06);
+}
+.sn-nav-tab.open {
+  border-color: var(--gold);
+  background: #130d00;
+  box-shadow: 0 0 28px rgba(184,134,11,0.4), 0 6px 30px rgba(0,0,0,0.7);
+}
+.sn-tab-arrow {
+  font-size: 14px;
+  color: var(--blood);
+  display: block;
+  text-align: center;
+  transition: transform 0.35s, color 0.3s;
+  line-height: 1;
+}
+.sn-nav-tab:hover .sn-tab-arrow { color: var(--gold); }
+.sn-nav-tab.open .sn-tab-arrow { transform: rotate(180deg); color: var(--gold); }
+.sn-tab-text {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #fff;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1;
+  padding: 4px 0 8px;
+  transition: color 0.3s;
+}
+.sn-tab-text span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+}
+.sn-nav-tab:hover .sn-tab-text span,
+.sn-nav-tab.open .sn-tab-text span {
+  color: var(--gold);
+}
+.sn-nav-tab::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(192,25,15,0.25);
+  animation: navPulse 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes navPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0; transform: scale(1.12); }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+<canvas id="particles"></canvas>
+
+<!-- SIDE NAV -->
+<div class="sn-expand-zone" id="snZone"></div>
+<div class="sn-nav-tab" id="snTab">
+  <span class="sn-tab-arrow">◀</span>
+  <span class="sn-tab-text">
+    <span>N</span><span>A</span><span>V</span><span>I</span><span>G</span><span>A</span><span>T</span><span>I</span><span>O</span><span>N</span>
+  </span>
+</div>
+<nav class="side-nav" id="sideNav">
+  <a class="sn-item" href="#mission"><span class="sn-label"><span class="sn-dot"></span>About GSS</span></a>
+  <a class="sn-item" href="#syllabi"><span class="sn-label"><span class="sn-dot"></span>Interactive Pedagogy</span></a>
+  <a class="sn-item" href="#research"><span class="sn-label"><span class="sn-dot"></span>Collaborations</span></a>
+  <a class="sn-item" href="#tech"><span class="sn-label"><span class="sn-dot"></span>GSS AI <span class="sn-soon">SOON</span></span></a>
+  <a class="sn-item" href="#tech"><span class="sn-label"><span class="sn-dot"></span>3D Artifact Viewer <span class="sn-soon">SOON</span></span></a>
+  <a class="sn-item" href="#tech"><span class="sn-label"><span class="sn-dot"></span>Multimedia Storytelling <span class="sn-soon">SOON</span></span></a>
+  <a class="sn-item" href="#tech"><span class="sn-label"><span class="sn-dot"></span>Visualizations <span class="sn-soon">SOON</span></span></a>
+  <a class="sn-item" href="#tech"><span class="sn-label"><span class="sn-dot"></span>AR Reenactments <span class="sn-soon">SOON</span></span></a>
+  <a class="sn-item" href="#cta"><span class="sn-label"><span class="sn-dot"></span>Open Digital Archive <span class="sn-soon">SOON</span></span></a>
+</nav>
+
+<!-- LOADER -->
+<div id="loader">
+  <div id="loader-glyph">GSS</div>
+  <div id="loader-text">INITIALIZING THE ARCHIVE<span style="animation: blink 1s step-end infinite;">_</span></div>
+  <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+</div>
+<style>@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}</style>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">Global South Solidarities</div>
+  <h1 class="hero-title">
+    <span class="line1" id="ht1" data-text="GLOBAL SOUTH">GLOBAL SOUTH</span>
+    <span class="line2" id="ht2">SOLIDARITIES</span>
+    <span class="line3" id="ht3">A<span class="na-gold">NA</span>RCHIVE.</span>
+  </h1>
+  <div id="hero-sub"></div>
+  <p class="hero-quote">"The archive is not a relic of the past — it is the seed of every future we dare to imagine."</p>
+  <div class="scroll-hint">↓ enter the archive ↓</div>
+</section>
+
+<div class="torn" style="background:var(--blood);"></div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">DECOLONIZE <span class="dot"></span> ARCHIVE <span class="dot"></span> RESIST <span class="dot"></span> LIBERATE <span class="dot"></span> REMEMBER <span class="dot"></span> RECLAIM <span class="dot"></span> SOLIDARITY <span class="dot"></span> JUSTICE <span class="dot"></span> FEMINIST <span class="dot"></span> INDIGENOUS <span class="dot"></span> NARRATIVE <span class="dot"></span> MEMORY <span class="dot"></span></span>
+  </div>
+</div>
+
+<div class="torn" style="background:var(--obsidian);"></div>
+
+<!-- ORG STICKER -->
+<div class="org-sticker-wrap rv">
+  <div class="org-sticker">
+    <span class="org-sticker-word">ORG</span>
+    <span class="org-sticker-eq">=</span>
+    <span class="org-sticker-meaning">organizing</span>
+  </div>
+</div>
+
+<div class="torn" style="background:var(--parchment);transform:scaleX(-1);"></div>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="mission-eyebrow rv">✦ Anti-Oppressive Public-Digital Humanities</div>
+  <h2 class="mission-title rv"><span class="glitch" data-text="HACKING">HACKING</span><br>THE <span class="accent">ARCHIVE</span></h2>
+  <div class="mission-grid">
+    <div class="mission-lead rv">Global South Solidarities is an open-access a(na)rchival project in anti-oppressive public-digital humanities — bridging scholarship, grassroots knowledge, and cutting-edge technologies to amplify voices, knowledges, experiences, memories, and narratives the colonial, heteropatriarchal, capitalist frameworks have silenced and absented for centuries.</div>
+    <div class="mission-body rv" style="transition-delay:0.15s;">
+      Rooted in <strong>decolonial feminist praxis</strong>, GSS aims to create a dignified space for collective memory from differently situated Global Souths. We do so with full humility before voices, knowledges, experiences, memories, and narratives we will fail to bring here because of our own inefficiencies. Through <strong>digital storytelling</strong>, <strong>AI-powered research tools</strong>, <strong>3D artifact reconstruction</strong>, and <strong>augmented reality reenactments</strong>, we are trying to play our tiny role in joining the forces that are transforming how the world encounters marginalized histories. We are stubborn about it.<br><br>
+      This project isn't about preservation — it's about <strong>resurrection</strong>. Every narrative reclaimed is an act of resistance. Every story shared is a bridge across borders. Every solidarity act is a step toward <strong>collective liberation</strong>.
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item rv"><div class="stat-num" data-target="60">0</div><div class="stat-label">Curated Narratives</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item rv"><div class="stat-num" data-target="4">0</div><div class="stat-label">Countries of Research</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item rv"><div class="stat-num" data-target="13">0</div><div class="stat-label">Student Researchers</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item rv"><div class="stat-num" data-target="5">0</div><div class="stat-label">Resource Packages</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item rv"><div class="stat-num" data-target="25">0</div><div class="stat-label">Archives Accessed</div></div>
+</div>
+
+<div class="torn" style="background:var(--obsidian);transform:rotate(180deg);"></div>
+
+<!-- PILLARS -->
+<section id="pillars">
+  <div class="pillars-eyebrow rv">What We Build</div>
+  <h2 class="pillars-title rv">FOUR<br>PILLARS</h2>
+  <div class="pillar-cards">
+    <div class="pillar-card rv">
+      <div class="pillar-num">01</div>
+      <span class="pillar-icon">🗄️</span>
+      <div class="pillar-name">Open Digital Archive</div>
+      <div class="pillar-desc">A multilingual, open-access repository of 40-60 curated narratives featuring texts, images, videos, oral histories, and interactive timelines from South Asia and MENA.</div>
+      <div class="pillar-tag">Live Platform</div>
+    </div>
+    <div class="pillar-card rv" style="transition-delay:0.1s;">
+      <div class="pillar-num">02</div>
+      <span class="pillar-icon">🤖</span>
+      <div class="pillar-name">GSS AI Engine</div>
+      <div class="pillar-desc">Custom-built artificial intelligence trained on decolonial scholarship to assist researchers, generate connections across archives, and provide contextual analysis of historical materials.</div>
+      <div class="pillar-tag">In Development</div>
+    </div>
+    <div class="pillar-card rv" style="transition-delay:0.2s;">
+      <div class="pillar-num">03</div>
+      <span class="pillar-icon">🏛️</span>
+      <div class="pillar-name">3D Artifacts &amp; AR</div>
+      <div class="pillar-desc">Photogrammetric 3D models of historical artifacts, augmented reality reenactments of key historical moments, and immersive virtual walkthroughs of archives and heritage sites.</div>
+      <div class="pillar-tag">In Development</div>
+    </div>
+    <div class="pillar-card rv" style="transition-delay:0.3s;">
+      <div class="pillar-num">04</div>
+      <span class="pillar-icon">📚</span>
+      <div class="pillar-name">Pedagogical Resources</div>
+      <div class="pillar-desc">Syllabi, lesson plans, case studies, and assignment frameworks designed to integrate Global South perspectives into classrooms worldwide. Open-access and community-driven.</div>
+      <div class="pillar-tag">Available Now</div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANETARY JUSTICE MAP -->
+<section id="research">
+  <div class="research-eyebrow rv">> PLANETARY_JUSTICE.map</div>
+  <h2 class="research-title rv">PLANETARY<br>JUSTICE MAP</h2>
+  <div class="research-sub rv">Mapping radical solidarities across borders — revolutionary figures and transnational movements that connect struggles from the Global South to the world.</div>
+
+  <!-- INTERACTIVE GLOBE -->
+  <div id="pj-globe-wrap" class="rv">
+    <canvas id="pj-globe"></canvas>
+    <div id="pj-globe-label"></div>
+    <div class="pj-globe-legend">
+      <span class="pj-legend-item"><span class="pj-legend-dot" style="background:#c0190f;box-shadow:0 0 4px rgba(192,25,15,0.5);"></span> Figures</span>
+      <span class="pj-legend-item"><span class="pj-legend-dot" style="background:#00ff46;box-shadow:0 0 4px rgba(0,255,70,0.5);"></span> Movements</span>
+      <span class="pj-legend-item"><span class="pj-legend-dot" style="background:#b8860b;box-shadow:0 0 4px rgba(184,134,11,0.5);"></span> Solidarity Networks</span>
+    </div>
+  </div>
+
+  <!-- PEOPLE -->
+  <div class="pj-section-label rv">Figures of Resistance <span class="pj-count">23 MAPPED</span></div>
+  <div class="pj-people-grid">
+    <div class="pj-person rv">
+      <div class="pj-person-name">Meena Keshwar Kamal</div>
+      <div class="pj-person-place">Afghanistan</div>
+      <div class="pj-person-dates">1956 – 1987</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Lorena Borjas</div>
+      <div class="pj-person-place">Queens, New York, USA</div>
+      <div class="pj-person-dates">1960 – 2020</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Berta Cáceres</div>
+      <div class="pj-person-place">Honduras</div>
+      <div class="pj-person-dates">1973 – 2016</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Kimpa Vita (Dona Beatriz)</div>
+      <div class="pj-person-place">Kingdom of Kongo</div>
+      <div class="pj-person-dates">1684 – 1706</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Claudia Jones</div>
+      <div class="pj-person-place">Trinidad and Tobago</div>
+      <div class="pj-person-dates">1915 – 1964</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Mekatilili wa Menza</div>
+      <div class="pj-person-place">Kenya</div>
+      <div class="pj-person-dates">1860s – 1924</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Huda Shaarawi</div>
+      <div class="pj-person-place">Egypt</div>
+      <div class="pj-person-dates">1879 – 1947</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Rosa Luxemburg</div>
+      <div class="pj-person-place">Poland / Germany</div>
+      <div class="pj-person-dates">1871 – 1919</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Funmilayo Ransome-Kuti</div>
+      <div class="pj-person-place">Nigeria</div>
+      <div class="pj-person-dates">1900 – 1978</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Eslanda Robeson</div>
+      <div class="pj-person-place">United States</div>
+      <div class="pj-person-dates">1895 – 1965</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Ahed Tamimi</div>
+      <div class="pj-person-place">Nabi Salih, Palestine</div>
+      <div class="pj-person-dates">2001 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Andrée Blouin</div>
+      <div class="pj-person-place">Central African Republic / Congo</div>
+      <div class="pj-person-dates">1921 – 1986</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Wangari Maathai</div>
+      <div class="pj-person-place">Kenya</div>
+      <div class="pj-person-dates">1940 – 2011</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Gita Bandyopadhyay</div>
+      <div class="pj-person-place">India / France / Germany</div>
+      <div class="pj-person-dates">c. 1920s – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Winnie Madikizela-Mandela</div>
+      <div class="pj-person-place">South Africa</div>
+      <div class="pj-person-dates">1936 – 2018</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Leila Khaled</div>
+      <div class="pj-person-place">Palestine</div>
+      <div class="pj-person-dates">1944 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Shigenobu Fusako</div>
+      <div class="pj-person-place">Japan / Palestine</div>
+      <div class="pj-person-dates">1945 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Sakine Cansız</div>
+      <div class="pj-person-place">Turkey / Kurdistan</div>
+      <div class="pj-person-dates">1958 – 2013</div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Nemonte Nenquimo</div>
+      <div class="pj-person-place">Ecuadorian Amazon</div>
+      <div class="pj-person-dates">1985 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Helena Gualinga</div>
+      <div class="pj-person-place">Ecuadorian Amazon</div>
+      <div class="pj-person-dates">2002 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Txai Suruí</div>
+      <div class="pj-person-place">Brazilian Amazon</div>
+      <div class="pj-person-dates">1997 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Wanjiru Wanjira</div>
+      <div class="pj-person-place">Kenya</div>
+      <div class="pj-person-dates">1995 – <span class="pj-alive"></span></div>
+    </div>
+    <div class="pj-person rv">
+      <div class="pj-person-name">Mithai Devi Viswokarma</div>
+      <div class="pj-person-place">Nepal (Dalit community)</div>
+      <div class="pj-person-dates">c. 1939 – <span class="pj-alive"></span></div>
+    </div>
+  </div>
+
+  <!-- RADICAL REVOLUTIONARY SOLIDARITIES -->
+  <div class="pj-section-label rv">Radical Revolutionary Solidarities <span class="pj-count">16 MAPPED</span></div>
+  <div class="pj-movements">
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Zapatista-Palestine Solidarity Murals</div>
+        <div class="pj-mv-route">Chiapas, Mexico to Palestine</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Murals in Oventic, Chiapas and on the Israeli Separation Wall in Bethlehem depicting Zapatista rebel with kuffiyeh-painted ski mask. Text in four languages: "To exist is to Resist" and "From Chiapas to Palestine, the struggle for liberation unites us."</div>
+        <div class="pj-mv-year">2004</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Taqi Spateen — George Floyd Mural on Separation Wall</div>
+        <div class="pj-mv-route">Bethlehem to Minneapolis, USA</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Palestinian artist painted George Floyd's portrait on Israeli Separation Wall beside murals of Palestinian icons Ahed Tamimi and Razan al-Najjar. "We in Palestine are standing with them, because we know what it's like to be strangled every day."</div>
+        <div class="pj-mv-year">2020</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Zapatista "Meeting of Resistances and Rebellions"</div>
+        <div class="pj-mv-route">Chiapas, Mexico to Palestine</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">EZLN gathering where members held Palestinian flags in solidarity during resistance gathering in Altamirano, Chiapas — connecting indigenous Mexican liberation with Palestinian struggle.</div>
+        <div class="pj-mv-year">2025</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Global Tapestry of Alternatives (GTA)</div>
+        <div class="pj-mv-route">Latin America, Africa, Middle East, Asia</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Network of networks connecting grassroots groups working on radical alternatives to dominant systems. Seeded through experiences in India, Mexico, and Colombia. Endorsed by 70+ organizations.</div>
+        <div class="pj-mv-year">2019</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Black Panther Party International Solidarity</div>
+        <div class="pj-mv-route">Oakland to North Korea, China, Japan, Europe, Africa, Palestine, Australia, India</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">BPP established foreign contacts globally. North Korea designated August 18, 1970 as "International Day of Solidarity with the Black People of the United States." Support committees formed across Europe and Asia. BPP catalyzed indigenous insurgent organizations worldwide.</div>
+        <div class="pj-mv-year">1968–1970s</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Third World Liberation Front (TWLF)</div>
+        <div class="pj-mv-route">San Francisco &amp; Berkeley, USA</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Coalition of Black, Latino, Asian American, Native American, Filipino students initiating the longest student strike in US history demanding Third World College and Ethnic Studies. Revived in 1999 with hunger strike.</div>
+        <div class="pj-mv-year">1968–1969</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">CONCP — Lusophone Liberation Conference</div>
+        <div class="pj-mv-route">Angola, Mozambique, Guinea-Bissau to Global North</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Conference of Portuguese colony nationalist organizations (MPLA, FRELIMO, PAIGC) led by Amílcar Cabral and Eduardo Mondlane. Built global solidarity networks supporting armed liberation; mobilized US activists who redefined North-South relations.</div>
+        <div class="pj-mv-year">1960s–1970s</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">PAIGC — Amílcar Cabral's Transnational Network</div>
+        <div class="pj-mv-route">Guinea-Bissau / Cabo Verde to Global South &amp; North</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Built practical socialism and multilevel revolution framework. Cabral's ideas influenced Black Liberation movements in US and anti-colonial movements across Africa. His "return to the source" theory became foundational for revolutionary nationalism.</div>
+        <div class="pj-mv-year">1960s–1973</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Malcolm X — Organization of Afro-American Unity</div>
+        <div class="pj-mv-route">USA to Africa, Asia, Latin America</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Modeled on Organization of African Unity. Sought "to unite everyone on the continent of Africa" and "in the Western Hemisphere of African descent into one united force." Articulated internal colony thesis linking Black America to colonized world.</div>
+        <div class="pj-mv-year">1964–1965</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Afro-Asian Solidarity Networks</div>
+        <div class="pj-mv-route">South &amp; Southeast Asia</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Leftist intellectuals, women, and resistance movements drawing on Afro-Asian solidarity during decolonization. Activists recovering history of the Left's dynamic role in anti-colonial internationalism.</div>
+        <div class="pj-mv-year">Cold War Era</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Taproot Earth — Global Climate Reparations Assembly</div>
+        <div class="pj-mv-route">Nairobi, Kenya — 22 countries</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">200+ Black and Indigenous frontline leaders crafting shared working statement on global climate reparations. Connected Gulf South, Appalachia, and Global Black diaspora through People's Movement Assembly rooted in radical Black freedom traditions.</div>
+        <div class="pj-mv-year">2024</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">South-South Social Movements Convergence</div>
+        <div class="pj-mv-route">South Africa — Africa, Asia, Latin America</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Connecting Gen Z tax protests in Kenya, #EndSARS in Nigeria, Chilean student uprisings. Explores digital tools for cross-border solidarity among radical movements.</div>
+        <div class="pj-mv-year">2025</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Ushahidi</div>
+        <div class="pj-mv-route">Kenya — used globally</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Crowd-mapping platform developed to map post-election violence in Kenya. Now used globally for disaster response, human rights monitoring, and amplifying voices of vulnerable populations. Technology of radical transparency from the Global South.</div>
+        <div class="pj-mv-year">2008</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">RAWA — Transnational Feminist Networks</div>
+        <div class="pj-mv-route">Afghanistan to global feminist movements</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Founded by Meena Keshwar Kamal. Clandestine pamphlets and underground schools as rhetorical acts of feminist world-making under occupation — positioned against Laura Bush's 2001 address speaking about Afghan women to justify bombing.</div>
+        <div class="pj-mv-year">1977</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">Gulf South to Appalachia (GS2A)</div>
+        <div class="pj-mv-route">Gulf South to Appalachia, USA</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Taproot Earth initiative connecting regions with intertwined histories of colonialism and extractivism. Shares traditions of resistance and frontline-led solutions across these internal colonies.</div>
+        <div class="pj-mv-year">Active</div>
+      </div>
+    </div>
+    <div class="pj-movement rv">
+      <div class="pj-mv-left">
+        <div class="pj-mv-name">International Committee to Release Eldridge Cleaver</div>
+        <div class="pj-mv-route">San Francisco — Paris, Rome, London, Amsterdam, New York, Detroit, Atlanta</div>
+      </div>
+      <div class="pj-mv-right">
+        <div class="pj-mv-desc">Solidarity network supporting Black Panther leader across multiple continents. Exemplified transnational organizing for political prisoners and cross-border radical solidarity.</div>
+        <div class="pj-mv-year">1970s</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terminal-note rv">Planetary justice mapping — 23 figures of resistance + 16 radical revolutionary solidarity movements across 6 continents</div>
+</section>
+
+<div class="torn" style="background:var(--obsidian);"></div>
+
+<!-- TECHNOLOGY -->
+<section id="tech">
+  <div class="tech-eyebrow rv">Under The Hood</div>
+  <h2 class="tech-title rv">TECHNOLOGY<br><span style="color:var(--ember);">&amp; INNOVATION</span></h2>
+  <div class="tech-grid">
+    <div class="tech-card rv">
+      <span class="tech-icon">🧠</span>
+      <div class="tech-name">GSS AI Research Assistant</div>
+      <div class="tech-desc">Custom language model trained on decolonial scholarship, archival metadata, and grassroots histories. Ask questions, discover connections, explore narratives through conversation.</div>
+      <div class="tech-status status-dev">IN DEVELOPMENT</div>
+    </div>
+    <div class="tech-card rv" style="transition-delay:0.1s;">
+      <span class="tech-icon">🔮</span>
+      <div class="tech-name">Augmented Reality Reenactments</div>
+      <div class="tech-desc">Experience historical moments through AR-powered spatial storytelling. Walk through the Jallianwala Bagh, witness Dalit movements, explore partitioned landscapes in immersive 3D.</div>
+      <div class="tech-status status-dev">IN DEVELOPMENT</div>
+    </div>
+    <div class="tech-card rv" style="transition-delay:0.2s;">
+      <span class="tech-icon">🏺</span>
+      <div class="tech-name">3D Artifact Models</div>
+      <div class="tech-desc">Photogrammetric scanning and digital reconstruction of historical artifacts, sacred texts, architectural elements, and cultural objects — all freely accessible and explorable online.</div>
+      <div class="tech-status status-dev">IN DEVELOPMENT</div>
+    </div>
+    <div class="tech-card rv" style="transition-delay:0.1s;">
+      <span class="tech-icon">📊</span>
+      <div class="tech-name">Data Visualizations</div>
+      <div class="tech-desc">Interactive maps, network graphs, and temporal visualizations that reveal hidden connections across colonial histories, resistance movements, and cultural exchanges.</div>
+      <div class="tech-status status-coming">COMING SOON</div>
+    </div>
+    <div class="tech-card rv" style="transition-delay:0.2s;">
+      <span class="tech-icon">🎬</span>
+      <div class="tech-name">Multimedia Storytelling</div>
+      <div class="tech-desc">Documentary-style video narratives, podcast series, interactive photo essays, and immersive audio experiences that bring archival materials to life.</div>
+      <div class="tech-status status-dev">IN DEVELOPMENT</div>
+    </div>
+    <div class="tech-card rv" style="transition-delay:0.3s;">
+      <span class="tech-icon">📡</span>
+      <div class="tech-name">Open-Access Platform</div>
+      <div class="tech-desc">Multilingual, fully accessible digital infrastructure built with CDSC and AOI at WSU. Designed for scholars, educators, activists, policymakers, and the global public.</div>
+      <div class="tech-status status-dev">IN DEVELOPMENT</div>
+    </div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--parchment);transform:rotate(180deg);"></div>
+
+<!-- SYLLABI -->
+<section id="syllabi">
+  <div class="syllabi-eyebrow rv">✦ Pedagogy</div>
+  <h2 class="syllabi-title rv">INTERACTIVE<br>PEDAGOGY</h2>
+  <div class="syllabi-sub rv">Two ground-breaking graduate and undergraduate courses that form the pedagogical backbone of Global South Solidarities.</div>
+  <div class="syllabi-cards">
+    <div class="syllabus-card rv">
+      <div class="syllabus-num">01</div>
+      <div class="syllabus-badge">Graduate Seminar</div>
+      <div class="syllabus-name">ENGL 548: Archive Back</div>
+      <div class="syllabus-meta">WSU · Fall 2024 · Bibhushana Poudyal</div>
+      <div class="syllabus-desc">A graduate seminar in Critical &amp; Cultural Theory exploring archives, rhetoricity of technologies, and anti-oppressive interventions. Students engage with decolonial epistemics, feminist/queer possibilities, and zine-making as acts of resistance.</div>
+      <div class="syllabus-themes">
+        <span class="syllabus-theme">DECOLONIAL</span>
+        <span class="syllabus-theme">FEMINIST</span>
+        <span class="syllabus-theme">QUEER</span>
+        <span class="syllabus-theme">ZINE-MAKING</span>
+        <span class="syllabus-theme">ALGORITHMIC JUSTICE</span>
+        <span class="syllabus-theme">MEMORY WORK</span>
+      </div>
+    </div>
+    <div class="syllabus-card rv" style="transition-delay:0.15s;">
+      <div class="syllabus-num">02</div>
+      <div class="syllabus-badge" style="border-color:var(--forest);color:var(--forest);">Research Program</div>
+      <div class="syllabus-name">Digital Storytelling &amp; Global South</div>
+      <div class="syllabus-meta">WSU · Ongoing · NFSG-Funded</div>
+      <div class="syllabus-desc">A field research program spanning Nepal, Pakistan, and India, creating curated narratives, educational resources, and multimedia storytelling that amplify Dalit movements, indigenous knowledge, feminist activism, and anti-colonial resistance.</div>
+      <div class="syllabus-themes">
+        <span class="syllabus-theme">FIELD RESEARCH</span>
+        <span class="syllabus-theme">DALIT HISTORIES</span>
+        <span class="syllabus-theme">INDIGENOUS KNOWLEDGE</span>
+        <span class="syllabus-theme">ANTI-COLONIAL</span>
+        <span class="syllabus-theme">DIGITAL HUMANITIES</span>
+        <span class="syllabus-theme">OPEN ACCESS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--obsidian);transform:scaleX(-1);"></div>
+
+<!-- STUDENT CONTRIBUTIONS -->
+<section id="students">
+  <div class="students-eyebrow rv">Collective Knowledge</div>
+  <h2 class="students-title rv">STUDENT<br><span style="color:var(--teal);">CONTRIBUTIONS</span></h2>
+  <div class="students-sub rv">Ten graduate researchers explored memory justice across the Global South, each contributing unique multimodal projects to the GSS archive.</div>
+  <div class="student-orbit">
+    <div class="student-node rv">
+      <span class="student-glyph">🌺</span>
+      <div class="student-topic">Filipino Immigrants &amp; Kuwentuhan</div>
+      <div class="student-type">ORAL HISTORY / NARRATIVE</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.05s;">
+      <span class="student-glyph">🏳️‍🌈</span>
+      <div class="student-topic">Queer &amp; Indigenous Palouse</div>
+      <div class="student-type">COMMUNITY / ARCHIVE</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.1s;">
+      <span class="student-glyph">⛓️</span>
+      <div class="student-topic">Sri Lanka, Indentured Labor, &amp; Global Capitalism</div>
+      <div class="student-type">HISTORY / ANALYSIS</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.15s;">
+      <span class="student-glyph">✊</span>
+      <div class="student-topic">Pakistan: The Land of Resistance</div>
+      <div class="student-type">RESEARCH / NARRATIVE</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.2s;">
+      <span class="student-glyph">🌧️</span>
+      <div class="student-topic">Mixteco (Ñuu Savi) &amp; Language Revitalization</div>
+      <div class="student-type">LINGUISTICS / ZINE</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.25s;">
+      <span class="student-glyph">✡︎</span>
+      <div class="student-topic">"Yellow Peril Supports Black Power"</div>
+      <div class="student-type">SOLIDARITY / HISTORY</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.3s;">
+      <span class="student-glyph">🕊️</span>
+      <div class="student-topic">Solidarity with Palestine</div>
+      <div class="student-type">ACTIVISM / ARCHIVE</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.35s;">
+      <span class="student-glyph">🧬</span>
+      <div class="student-topic">Medical Experiments on Global South Bodies</div>
+      <div class="student-type">BIOETHICS / RESEARCH</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.4s;">
+      <span class="student-glyph">🌱</span>
+      <div class="student-topic">Decolonial Reproductive Justice &amp; Turtle Island</div>
+      <div class="student-type">FEMINIST / INDIGENOUS</div>
+    </div>
+    <div class="student-node rv" style="transition-delay:0.45s;">
+      <span class="student-glyph">🌽</span>
+      <div class="student-topic">Osage Food Sovereignty &amp; Ozark Archives</div>
+      <div class="student-type">FOOD / MEMORY</div>
+    </div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--parchment);transform:rotate(180deg) scaleX(-1);"></div>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="timeline-eyebrow rv">✦ Project Timeline</div>
+  <h2 class="timeline-title rv">THE<br>ROADMAP</h2>
+  <div class="tl-wrap">
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-name">Preparation &amp; Planning</div>
+      <div class="tl-desc">Finalize logistics, establish partnerships with community experts in Nepal, Pakistan, and India, develop content framework and data management systems.</div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-name">Field Research in South Asia</div>
+      <div class="tl-desc">On-the-ground research across 25+ institutions — libraries, museums, archives, and historical sites. Digitize materials, record oral histories, and document indigenous knowledge systems.</div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-name">Archival Research &amp; Curation</div>
+      <div class="tl-desc">Remote U.S.-based archival research. Process data, create metadata, begin curating 40-60 narratives and 3-5 pedagogical resource packages.</div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-name">Platform Development &amp; Testing</div>
+      <div class="tl-desc">Build the digital archive with CDSC and AOI. Design navigation, accessibility features, 3D model integration, and AI research tools. Community-driven user testing.</div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-name">Launch &amp; Dissemination</div>
+      <div class="tl-desc">Public launch of the GSS digital archive. Disseminate through workshops, academic conferences, and professional networks. Initiate peer-reviewed publications.</div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-name">Expansion &amp; Beyond</div>
+      <div class="tl-desc">Sustained growth with new content, expanded field research to Sri Lanka and Bangladesh, AR reenactment development, and applications for NEH, Mellon, and Ford Foundation grants.</div>
+    </div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--obsidian);transform:rotate(180deg);"></div>
+
+<!-- STATUS: WHAT'S LIVE & COMING -->
+<section id="status">
+  <div class="status-eyebrow rv">✦ Project Status</div>
+  <h2 class="status-title rv">WHAT'S <span>LIVE</span><br>& COMING UP</h2>
+  <div class="status-grid">
+    <div class="status-live">
+      <div class="status-col-title">LIVE NOW <span class="status-col-title-line"></span></div>
+      <ul class="status-list">
+        <li class="status-item rv"><span class="status-dot status-dot-live"></span><span class="status-item-name">Student Research Contributions</span><span class="status-item-tag status-item-tag-live">● LIVE</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-live"></span><span class="status-item-name">Interactive Pedagogy — 2 Course Syllabi</span><span class="status-item-tag status-item-tag-live">● LIVE</span></li>
+      </ul>
+    </div>
+    <div class="status-coming">
+      <div class="status-col-title">COMING UP <span class="status-col-title-line"></span></div>
+      <ul class="status-list">
+        <li class="status-item rv"><span class="status-dot status-dot-dev"></span><span class="status-item-name">GSS AI (AI Research Assistant)</span><span class="status-item-tag status-item-tag-dev">◌ BUILDING</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-dev"></span><span class="status-item-name">Open Digital Archive Platform</span><span class="status-item-tag status-item-tag-dev">◌ IN DEV</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-dev"></span><span class="status-item-name">3D Artifact Models &amp; Scanning</span><span class="status-item-tag status-item-tag-dev">◌ IN DEV</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-dev"></span><span class="status-item-name">Augmented Reality Reenactments</span><span class="status-item-tag status-item-tag-dev">◌ IN DEV</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-dev"></span><span class="status-item-name">Multimedia Storytelling Engine</span><span class="status-item-tag status-item-tag-dev">◌ IN DEV</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-dev"></span><span class="status-item-name">Open-Access Multilingual Platform</span><span class="status-item-tag status-item-tag-dev">◌ IN DEV</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-soon"></span><span class="status-item-name">Interactive Data Visualizations</span><span class="status-item-tag status-item-tag-soon">◎ SOON</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-soon"></span><span class="status-item-name">Physical Zine Publication</span><span class="status-item-tag status-item-tag-soon">◎ SOON</span></li>
+        <li class="status-item rv"><span class="status-dot status-dot-soon"></span><span class="status-item-name">Field Research Expansion</span><span class="status-item-tag status-item-tag-soon">◎ PLANNED</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--blood);transform:scaleX(-1);"></div>
+
+<!-- CTA -->
+<section id="cta">
+  <h2 class="cta-title rv">JOIN THE<br>ARCHIVE</h2>
+  <div class="cta-body rv">Whether you're a scholar, educator, student, activist, or community member — the archive belongs to everyone. Help us reclaim, resist, and reimagine.</div>
+  <a href="#" class="cta-btn rv"><span>ENTER THE ARCHIVE</span></a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-chant" aria-hidden="true">RESIST<br>ARCHIVE<br>LIBERATE<br>REMEMBER</div>
+  <div class="footer-info">
+    Global South Solidarities<br>
+    Washington State University<br>
+    Bibhushana Poudyal, Principal Investigator<br>
+    <a href="http://bibhushanapoudyal.com">bibhushanapoudyal.com</a><br>
+    <span style="opacity:0.5;">New Faculty Seed Grant (NFSG) Funded</span>
+  </div>
+</footer>
+
+<script>
+// ===== LOADER =====
+const loaderBar = document.getElementById('loader-bar');
+const loader = document.getElementById('loader');
+const loaderText = document.getElementById('loader-text');
+const phrases = ['INITIALIZING THE ARCHIVE_','DELINKING EPISTEMICS_','LOADING NARRATIVES_','BUILDING SOLIDARITY_','ENTERING THE ARCHIVE_'];
+let lpi = 0, lw = 0;
+const lpInt = setInterval(() => { lpi++; if(lpi < phrases.length) loaderText.innerHTML = phrases[lpi] + '<span style="animation:blink 1s step-end infinite;">_</span>'; }, 500);
+const lbInt = setInterval(() => { lw += 1.5; loaderBar.style.width = lw + '%'; if(lw >= 100) { clearInterval(lbInt); clearInterval(lpInt); setTimeout(() => loader.classList.add('hidden'), 300); } }, 20);
+
+// ===== SIDE NAV =====
+const sideNav = document.getElementById('sideNav');
+const snZone = document.getElementById('snZone');
+const snTab = document.getElementById('snTab');
+let navExpanded = false;
+
+// Show nav after scrolling past hero
+window.addEventListener('scroll', () => {
+  if(window.scrollY > window.innerHeight * 0.5) {
+    sideNav.classList.add('visible');
+    snTab.style.opacity = '1';
+    snTab.style.pointerEvents = 'auto';
+  } else {
+    sideNav.classList.remove('visible');
+    sideNav.classList.remove('expanded');
+    snTab.classList.remove('open');
+    snTab.style.opacity = '0';
+    snTab.style.pointerEvents = 'none';
+  }
+});
+snTab.style.opacity = '0';
+snTab.style.transition = 'opacity 0.5s, background 0.25s';
+snTab.style.pointerEvents = 'none';
+
+// Expand on hover over the tab or nav
+snTab.addEventListener('mouseenter', () => { sideNav.classList.add('expanded'); snTab.classList.add('open'); });
+sideNav.addEventListener('mouseenter', () => { sideNav.classList.add('expanded'); snTab.classList.add('open'); });
+sideNav.addEventListener('mouseleave', (e) => {
+  if(!snTab.contains(e.relatedTarget)) { sideNav.classList.remove('expanded'); snTab.classList.remove('open'); }
+});
+snTab.addEventListener('mouseleave', (e) => {
+  if(!sideNav.contains(e.relatedTarget)) { sideNav.classList.remove('expanded'); snTab.classList.remove('open'); }
+});
+
+// Active state based on scroll position
+const snSections = document.querySelectorAll('.sn-item');
+const snObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      const id = e.target.id;
+      snSections.forEach(s => {
+        s.classList.toggle('active', s.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('#mission,#syllabi,#research,#tech,#cta').forEach(s => snObserver.observe(s));
+
+// ===== CURSOR =====
+const curEl = document.getElementById('cursor');
+const trailEl = document.getElementById('cursor-trail');
+document.addEventListener('mousemove', e => {
+  curEl.style.left = e.clientX + 'px'; curEl.style.top = e.clientY + 'px';
+  trailEl.style.left = e.clientX + 'px'; trailEl.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,.pillar-card,.pj-person,.pj-movement,.tech-card,.syllabus-card,.student-node,.tl-item,.cta-btn,.syllabus-theme,.status-item,.org-sticker,.sn-item,.sn-nav-tab').forEach(el => {
+  el.addEventListener('mouseenter', () => curEl.classList.add('hover'));
+  el.addEventListener('mouseleave', () => curEl.classList.remove('hover'));
+});
+
+// ===== PARTICLES =====
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+function resizeParticles() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
+resizeParticles(); window.addEventListener('resize', resizeParticles);
+const particles = [];
+for(let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 2 + 0.5,
+    o: Math.random() * 0.15 + 0.02
+  });
+}
+let pmx = -1, pmy = -1;
+document.addEventListener('mousemove', e => { pmx = e.clientX; pmy = e.clientY; });
+function drawParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 0) p.x = pCanvas.width;
+    if(p.x > pCanvas.width) p.x = 0;
+    if(p.y < 0) p.y = pCanvas.height;
+    if(p.y > pCanvas.height) p.y = 0;
+    // mouse repel
+    if(pmx > 0) {
+      const dx = pmx - p.x, dy = pmy - p.y, d = Math.sqrt(dx*dx + dy*dy);
+      if(d < 120) { p.x -= dx * 0.01; p.y -= dy * 0.01; }
+    }
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pCtx.fillStyle = `rgba(240,230,200,${p.o})`;
+    pCtx.fill();
+  });
+  // draw connections
+  for(let i = 0; i < particles.length; i++) {
+    for(let j = i+1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if(d < 100) {
+        pCtx.beginPath();
+        pCtx.moveTo(particles[i].x, particles[i].y);
+        pCtx.lineTo(particles[j].x, particles[j].y);
+        pCtx.strokeStyle = `rgba(192,25,15,${0.04 * (1 - d/100)})`;
+        pCtx.lineWidth = 0.5;
+        pCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ===== TYPEWRITER =====
+const subs = [
+  'Digital Storytelling · AI · 3D Artifacts · AR Reenactments',
+  'Decolonial Feminist Scholarship · Open Access · Memory Justice',
+  'The Most Ambitious Archival Project in Digital Humanities',
+  'Resist. Archive. Liberate. Remember.'
+];
+let si = 0, ci = 0, typing = true;
+const subEl = document.getElementById('hero-sub');
+function tw() {
+  if(typing) {
+    if(ci <= subs[si].length) { subEl.textContent = subs[si].substring(0, ci++) + '|'; setTimeout(tw, 35); }
+    else { typing = false; setTimeout(tw, 2800); }
+  } else {
+    if(ci > 0) { subEl.textContent = subs[si].substring(0, --ci) + '|'; setTimeout(tw, 15); }
+    else { typing = true; si = (si+1) % subs.length; setTimeout(tw, 300); }
+  }
+}
+setTimeout(tw, 2200);
+
+// ===== SPLIT CHARS =====
+['ht2'].forEach(id => {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = [...el.textContent].map(c => c === ' ' ? '&nbsp;' : `<span class="hero-split-char">${c}</span>`).join('');
+});
+
+// ===== SCROLL REVEAL =====
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); ro.unobserve(e.target); } });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.rv,.rvl').forEach(el => ro.observe(el));
+
+// ===== STAT COUNTER =====
+const statNums = document.querySelectorAll('.stat-num[data-target]');
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      const el = e.target;
+      const target = parseInt(el.dataset.target);
+      let v = 0;
+      const step = Math.max(1, Math.floor(target / 40));
+      const t = setInterval(() => {
+        v += step;
+        if(v >= target) { v = target; clearInterval(t); }
+        el.textContent = v + '+';
+      }, 30);
+      statObs.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+statNums.forEach(el => statObs.observe(el));
+
+// ===== MARQUEE DUPLICATE =====
+const marquee = document.getElementById('marquee');
+marquee.innerHTML += marquee.innerHTML;
+
+// ===== PLANETARY JUSTICE GLOBE =====
+const pjCanvas = document.getElementById('pj-globe');
+const pjLabel = document.getElementById('pj-globe-label');
+if(pjCanvas) {
+  const ctx = pjCanvas.getContext('2d');
+  const wrap = document.getElementById('pj-globe-wrap');
+  function resizePJ() { pjCanvas.width = wrap.offsetWidth; pjCanvas.height = wrap.offsetHeight; }
+  resizePJ(); window.addEventListener('resize', resizePJ);
+
+  const pts = [
+    // Figures (red)
+    {lat:34.5,lng:69.2,label:'Meena Keshwar Kamal',c:'#c0190f'},
+    {lat:40.7,lng:-73.8,label:'Lorena Borjas',c:'#c0190f'},
+    {lat:14.1,lng:-87.2,label:'Berta Cáceres',c:'#c0190f'},
+    {lat:-4.3,lng:15.3,label:'Kimpa Vita',c:'#c0190f'},
+    {lat:10.7,lng:-61.5,label:'Claudia Jones',c:'#c0190f'},
+    {lat:-1.3,lng:36.8,label:'Mekatilili wa Menza',c:'#c0190f'},
+    {lat:30.0,lng:31.2,label:'Huda Shaarawi',c:'#c0190f'},
+    {lat:52.5,lng:13.4,label:'Rosa Luxemburg',c:'#c0190f'},
+    {lat:7.4,lng:3.9,label:'Funmilayo Ransome-Kuti',c:'#c0190f'},
+    {lat:40.7,lng:-74.0,label:'Eslanda Robeson',c:'#c0190f'},
+    {lat:32.0,lng:35.2,label:'Ahed Tamimi',c:'#c0190f'},
+    {lat:4.4,lng:18.6,label:'Andrée Blouin',c:'#c0190f'},
+    {lat:-1.3,lng:36.8,label:'Wangari Maathai',c:'#c0190f'},
+    {lat:22.6,lng:88.4,label:'Gita Bandyopadhyay',c:'#c0190f'},
+    {lat:-26.2,lng:28.0,label:'Winnie Madikizela-Mandela',c:'#c0190f'},
+    {lat:32.2,lng:35.3,label:'Leila Khaled',c:'#c0190f'},
+    {lat:35.7,lng:139.7,label:'Shigenobu Fusako',c:'#c0190f'},
+    {lat:38.4,lng:43.3,label:'Sakine Cansız',c:'#c0190f'},
+    {lat:-1.5,lng:-77.5,label:'Nemonte Nenquimo',c:'#c0190f'},
+    {lat:-1.8,lng:-77.3,label:'Helena Gualinga',c:'#c0190f'},
+    {lat:-10.9,lng:-61.9,label:'Txai Suruí',c:'#c0190f'},
+    {lat:-1.1,lng:37.0,label:'Wanjiru Wanjira',c:'#c0190f'},
+    {lat:27.7,lng:85.3,label:'Mithai Devi Viswokarma',c:'#c0190f'},
+    // Movements (green)
+    {lat:16.8,lng:-92.6,label:'Zapatista-Palestine Murals',c:'#00ff46'},
+    {lat:31.7,lng:35.2,label:'George Floyd Mural — Bethlehem',c:'#00ff46'},
+    {lat:16.9,lng:-92.1,label:'Zapatista Resistances Gathering',c:'#00ff46'},
+    {lat:19.4,lng:-99.1,label:'Global Tapestry of Alternatives',c:'#b8860b'},
+    {lat:37.8,lng:-122.3,label:'Black Panther International',c:'#00ff46'},
+    {lat:37.8,lng:-122.4,label:'Third World Liberation Front',c:'#00ff46'},
+    {lat:-8.8,lng:13.2,label:'CONCP — Lusophone Liberation',c:'#00ff46'},
+    {lat:12.0,lng:-15.0,label:'PAIGC — Cabral Network',c:'#00ff46'},
+    {lat:40.8,lng:-73.9,label:'Malcolm X — OAAU',c:'#00ff46'},
+    {lat:13.8,lng:100.5,label:'Afro-Asian Solidarity',c:'#b8860b'},
+    {lat:-1.3,lng:36.8,label:'Taproot Earth — Nairobi',c:'#b8860b'},
+    {lat:-33.9,lng:18.4,label:'South-South Convergence',c:'#b8860b'},
+    {lat:-1.3,lng:36.8,label:'Ushahidi — Kenya',c:'#00ff46'},
+    {lat:34.5,lng:69.2,label:'RAWA — Afghanistan',c:'#00ff46'},
+    {lat:30.0,lng:-90.1,label:'Gulf South to Appalachia',c:'#b8860b'},
+    {lat:37.8,lng:-122.4,label:'Intl Committee — Cleaver',c:'#00ff46'},
+  ];
+
+  // Connection arcs (movement routes)
+  const arcs = [
+    {from:{lat:16.8,lng:-92.6},to:{lat:31.7,lng:35.2},c:'#00ff46'},   // Zapatista-Palestine
+    {from:{lat:31.7,lng:35.2},to:{lat:44.9,lng:-93.3},c:'#00ff46'},   // Bethlehem-Minneapolis
+    {from:{lat:37.8,lng:-122.3},to:{lat:39.0,lng:125.8},c:'#c0190f'}, // BPP-N.Korea
+    {from:{lat:37.8,lng:-122.3},to:{lat:51.5,lng:-0.1},c:'#c0190f'},  // BPP-London
+    {from:{lat:37.8,lng:-122.3},to:{lat:-1.3,lng:36.8},c:'#c0190f'},  // BPP-Kenya
+    {from:{lat:37.8,lng:-122.3},to:{lat:32.0,lng:35.2},c:'#c0190f'},  // BPP-Palestine
+    {from:{lat:40.8,lng:-73.9},to:{lat:6.5,lng:3.4},c:'#b8860b'},     // Malcolm X-Lagos
+    {from:{lat:40.8,lng:-73.9},to:{lat:-1.3,lng:36.8},c:'#b8860b'},   // Malcolm X-Kenya
+    {from:{lat:12.0,lng:-15.0},to:{lat:-8.8,lng:13.2},c:'#00ff46'},   // PAIGC-CONCP
+    {from:{lat:12.0,lng:-15.0},to:{lat:-25.7,lng:28.2},c:'#00ff46'},  // PAIGC-Mozambique
+    {from:{lat:-1.3,lng:36.8},to:{lat:30.0,lng:-90.1},c:'#b8860b'},   // Taproot Nairobi-Gulf
+    {from:{lat:34.5,lng:69.2},to:{lat:40.7,lng:-74.0},c:'#c0190f'},   // RAWA-NYC
+  ];
+
+  let pjAngle = 0.5, pjDrag = false, pjPrevX = 0, pjTilt = 0.35;
+  const pjMouse = {x:0,y:0};
+
+  pjCanvas.addEventListener('mousedown', e => { pjDrag = true; pjPrevX = e.clientX; });
+  window.addEventListener('mouseup', () => pjDrag = false);
+  window.addEventListener('mousemove', e => {
+    const r = wrap.getBoundingClientRect();
+    pjMouse.x = e.clientX - r.left;
+    pjMouse.y = e.clientY - r.top;
+    if(pjDrag) { pjAngle += (e.clientX - pjPrevX) * 0.005; pjPrevX = e.clientX; }
+  });
+
+  function latLng2Screen(lat, lng, cx, cy, radius) {
+    const phi = (90 - lat) * Math.PI / 180;
+    const theta = (lng + 180) * Math.PI / 180 + pjAngle;
+    const x3 = -Math.sin(phi) * Math.cos(theta);
+    const y3 = Math.cos(phi);
+    const z3 = Math.sin(phi) * Math.sin(theta);
+    return { x: cx + x3 * radius, y: cy - y3 * radius * 0.95, z: z3, visible: z3 > -0.15 };
+  }
+
+  function drawPJGlobe() {
+    const w = pjCanvas.width, h = pjCanvas.height;
+    const cx = w / 2, cy = h / 2;
+    const radius = Math.min(w, h) * 0.38;
+    ctx.clearRect(0, 0, w, h);
+
+    // Globe sphere
+    const grd = ctx.createRadialGradient(cx - radius*0.2, cy - radius*0.2, radius*0.1, cx, cy, radius);
+    grd.addColorStop(0, 'rgba(0,255,70,0.02)');
+    grd.addColorStop(1, 'rgba(0,255,70,0.005)');
+    ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI*2);
+    ctx.fillStyle = grd; ctx.fill();
+    ctx.strokeStyle = 'rgba(0,255,70,0.12)'; ctx.lineWidth = 1.2; ctx.stroke();
+
+    // Latitude lines
+    for(let lat = -60; lat <= 60; lat += 30) {
+      const phi = (90 - lat) * Math.PI / 180;
+      const r = Math.sin(phi) * radius;
+      const y = cy - Math.cos(phi) * radius * 0.95;
+      ctx.beginPath();
+      ctx.ellipse(cx, y, r, r * 0.12, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0,255,70,0.04)'; ctx.lineWidth = 0.6; ctx.stroke();
+    }
+    // Longitude lines
+    for(let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI + pjAngle;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, radius * Math.abs(Math.cos(a)), radius * 0.95, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0,255,70,0.03)'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+
+    // Draw arcs
+    arcs.forEach(arc => {
+      const a = latLng2Screen(arc.from.lat, arc.from.lng, cx, cy, radius);
+      const b = latLng2Screen(arc.to.lat, arc.to.lng, cx, cy, radius);
+      if(a.visible && b.visible) {
+        const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+        const dist = Math.sqrt((b.x-a.x)**2 + (b.y-a.y)**2);
+        const bulge = Math.min(dist * 0.3, 60);
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo(mx, my - bulge, b.x, b.y);
+        const alpha = Math.min(a.z, b.z) * 0.4;
+        ctx.strokeStyle = arc.c + Math.round(alpha * 60).toString(16).padStart(2,'0');
+        ctx.lineWidth = 0.8; ctx.stroke();
+      }
+    });
+
+    // Draw points + find hover
+    let hoveredPt = null;
+    const screenPts = pts.map(p => {
+      const s = latLng2Screen(p.lat, p.lng, cx, cy, radius);
+      return {...p, sx: s.x, sy: s.y, sz: s.z, vis: s.visible};
+    }).sort((a,b) => a.sz - b.sz);
+
+    screenPts.forEach(p => {
+      if(!p.vis) return;
+      const alpha = Math.max(0.15, (p.sz + 0.15) / 1.15);
+      const size = 2.5 + alpha * 3;
+
+      // Glow
+      const g = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, size * 5);
+      g.addColorStop(0, p.c + '33'); g.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.arc(p.sx, p.sy, size * 5, 0, Math.PI*2);
+      ctx.fillStyle = g; ctx.fill();
+
+      // Dot
+      ctx.beginPath(); ctx.arc(p.sx, p.sy, size, 0, Math.PI*2);
+      ctx.fillStyle = p.c; ctx.globalAlpha = alpha; ctx.fill(); ctx.globalAlpha = 1;
+
+      // Ring
+      ctx.beginPath(); ctx.arc(p.sx, p.sy, size + 2, 0, Math.PI*2);
+      ctx.strokeStyle = p.c; ctx.globalAlpha = alpha * 0.3; ctx.lineWidth = 0.5; ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // Hover detect
+      const dx = pjMouse.x - p.sx, dy = pjMouse.y - p.sy;
+      if(Math.sqrt(dx*dx + dy*dy) < 18 && alpha > 0.3) hoveredPt = p;
+    });
+
+    // Tooltip
+    if(hoveredPt && !pjDrag) {
+      pjLabel.style.display = 'block';
+      pjLabel.textContent = hoveredPt.label;
+      pjLabel.style.left = (hoveredPt.sx + 14) + 'px';
+      pjLabel.style.top = (hoveredPt.sy - 10) + 'px';
+    } else {
+      pjLabel.style.display = 'none';
+    }
+
+    if(!pjDrag) pjAngle += 0.0015;
+    requestAnimationFrame(drawPJGlobe);
+  }
+  drawPJGlobe();
+}
+
+// ===== FLOATING WORDS IN HERO =====
+const heroEl = document.getElementById('hero');
+const floatWords = ['ARCHIVE','RESIST','DECOLONIZE','LIBERATION','MEMORY','JUSTICE','SOLIDARITY','FEMINIST','INDIGENOUS','NARRATIVE','RECLAIM','DIGNITY','CARE','WITNESS','POWER','ZINE','HEALING','TRUTH'];
+floatWords.forEach(w => {
+  const d = document.createElement('div');
+  d.className = 'float-word';
+  d.textContent = w;
+  d.style.cssText = `font-size:${40 + Math.random()*80}px;left:${Math.random()*90}%;top:${Math.random()*90}%;animation:floatDrift ${12+Math.random()*12}s ease-in-out infinite ${Math.random()*6}s;transform:rotate(${Math.random()*20-10}deg);`;
+  heroEl.appendChild(d);
+});
+
+// float animation
+const floatStyle = document.createElement('style');
+floatStyle.textContent = `@keyframes floatDrift{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-20px) rotate(calc(var(--r,0deg)+3deg));}}`;
+document.head.appendChild(floatStyle);
+</script>
+
+</body>
+</html>

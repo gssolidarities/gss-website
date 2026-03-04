@@ -1,0 +1,161 @@
+<nav class="gss-nav" id="gss-nav">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Special+Elite&family=VT323&family=IM+Fell+English:ital@0;1&display=swap');
+
+    :root {
+      --obsidian: #0a0806;
+      --parchment: #f0e6c8;
+      --blood: #c0190f;
+      --gold: #b8860b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    .gss-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--obsidian);
+      border-bottom: 1px solid rgba(184, 134, 11, 0.2);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .gss-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .gss-nav-logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--parchment);
+      letter-spacing: 0.15em;
+      line-height: 1;
+    }
+
+    .gss-nav-logo-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .gss-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .gss-nav-link {
+      text-decoration: none;
+      color: var(--parchment);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.7rem;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid rgba(240, 230, 200, 0.15);
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+
+    .gss-nav-link:hover {
+      background: var(--blood);
+      border-color: var(--blood);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .gss-nav-link.active {
+      background: var(--blood);
+      border-color: var(--blood);
+      color: #fff;
+    }
+
+    .gss-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+    }
+
+    .gss-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--parchment);
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 1024px) {
+      .gss-nav { padding: 0.75rem 1rem; }
+
+      .gss-hamburger { display: flex; }
+
+      .gss-nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--obsidian);
+        border-bottom: 1px solid rgba(184, 134, 11, 0.2);
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+
+      .gss-nav-links.open { display: flex; }
+
+      .gss-nav-link {
+        text-align: center;
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+      }
+    }
+  </style>
+
+  <a href="/" class="gss-nav-logo">
+    <div>
+      <span class="gss-nav-logo-text">GLOBAL SOUTH SOLIDARITIES</span>
+      <span class="gss-nav-logo-sub">The Archive of the Future / A(na)rchive</span>
+    </div>
+  </a>
+
+  <button class="gss-hamburger" onclick="document.querySelector('.gss-nav-links').classList.toggle('open')" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="gss-nav-links">
+    <a href="/" class="gss-nav-link">Home</a>
+    <a href="/pages/archive.html" class="gss-nav-link">Archive</a>
+    <a href="/pages/interactive-pedagogy.html" class="gss-nav-link">Pedagogy</a>
+    <a href="/pages/collaborations.html" class="gss-nav-link">Collaborations</a>
+    <a href="/pages/multimedia-storytelling.html" class="gss-nav-link">Multimedia</a>
+    <a href="/pages/gss-ai.html" class="gss-nav-link">GSS AI</a>
+    <a href="/pages/3d-artifacts.html" class="gss-nav-link">3D Artifacts</a>
+    <a href="/pages/ar-reenactments.html" class="gss-nav-link">AR</a>
+    <a href="/pages/visualizations.html" class="gss-nav-link">Visualizations</a>
+    <a href="/pages/open-access-platform.html" class="gss-nav-link">Platform</a>
+    <a href="/pages/syllabi.html" class="gss-nav-link">Syllabi</a>
+    <a href="/pages/student-researchers.html" class="gss-nav-link">Students</a>
+    <a href="/pages/timeline.html" class="gss-nav-link">Timeline</a>
+    <a href="/pages/contact.html" class="gss-nav-link">Contact</a>
+  </div>
+</nav>

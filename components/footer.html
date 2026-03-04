@@ -1,0 +1,116 @@
+<footer class="gss-footer" id="gss-footer">
+  <style>
+    .gss-footer {
+      background: var(--obsidian, #0a0806);
+      border-top: 1px solid rgba(184, 134, 11, 0.2);
+      padding: 3rem 2rem 2rem;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .gss-footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .gss-footer-manifesto {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #fff;
+      letter-spacing: 0.15em;
+      line-height: 1.1;
+    }
+
+    .gss-footer-manifesto span {
+      display: inline-block;
+      margin-right: 0.5em;
+    }
+
+    .gss-footer-manifesto span:nth-child(1) { color: var(--blood, #c0190f); }
+    .gss-footer-manifesto span:nth-child(2) { color: var(--parchment, #f0e6c8); }
+    .gss-footer-manifesto span:nth-child(3) { color: var(--blood, #c0190f); }
+    .gss-footer-manifesto span:nth-child(4) { color: var(--gold, #b8860b); }
+
+    .gss-footer-info {
+      text-align: right;
+      color: rgba(240, 230, 200, 0.6);
+      font-size: 0.8rem;
+      line-height: 1.8;
+    }
+
+    .gss-footer-info a {
+      color: var(--gold, #b8860b);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .gss-footer-info a:hover {
+      color: var(--parchment, #f0e6c8);
+    }
+
+    .gss-footer-info strong {
+      color: var(--parchment, #f0e6c8);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      font-weight: normal;
+    }
+
+    .gss-footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(184, 134, 11, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .gss-footer-copy {
+      color: rgba(240, 230, 200, 0.3);
+      font-size: 0.7rem;
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.1em;
+    }
+
+    .gss-footer-orgs {
+      color: rgba(240, 230, 200, 0.3);
+      font-size: 0.7rem;
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 768px) {
+      .gss-footer { padding: 2rem 1rem 1.5rem; }
+      .gss-footer-inner { flex-direction: column; align-items: flex-start; }
+      .gss-footer-info { text-align: left; }
+      .gss-footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+
+  <div class="gss-footer-inner">
+    <div class="gss-footer-manifesto">
+      <span>RESIST</span>
+      <span>ARCHIVE</span>
+      <span>LIBERATE</span>
+      <span>REMEMBER</span>
+    </div>
+    <div class="gss-footer-info">
+      <strong>GLOBAL SOUTH SOLIDARITIES</strong><br>
+      Washington State University<br>
+      Dr. Bibhushana Poudyal<br>
+      <a href="https://bibhushanapoudyal.com" target="_blank" rel="noopener">bibhushanapoudyal.com</a>
+    </div>
+  </div>
+
+  <div class="gss-footer-bottom">
+    <div class="gss-footer-copy">&copy; 2025 Global South Solidarities. Open Access.</div>
+    <div class="gss-footer-orgs">WSU &middot; CDSC &middot; AOI</div>
+  </div>
+</footer>

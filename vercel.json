@@ -1,0 +1,25 @@
+{
+  "rewrites": [
+    { "source": "/pedagogy", "destination": "/pages/interactive-pedagogy.html" },
+    { "source": "/archive", "destination": "/pages/archive.html" },
+    { "source": "/collaborations", "destination": "/pages/collaborations.html" },
+    { "source": "/multimedia", "destination": "/pages/multimedia-storytelling.html" },
+    { "source": "/ai", "destination": "/pages/gss-ai.html" },
+    { "source": "/3d", "destination": "/pages/3d-artifacts.html" },
+    { "source": "/ar", "destination": "/pages/ar-reenactments.html" },
+    { "source": "/visualizations", "destination": "/pages/visualizations.html" },
+    { "source": "/platform", "destination": "/pages/open-access-platform.html" },
+    { "source": "/syllabi", "destination": "/pages/syllabi.html" },
+    { "source": "/students", "destination": "/pages/student-researchers.html" },
+    { "source": "/timeline", "destination": "/pages/timeline.html" },
+    { "source": "/contact", "destination": "/pages/contact.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}
