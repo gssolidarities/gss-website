@@ -1,0 +1,2761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ENGL/WGSS 362 — Antiracist Rhetorics & Feminist Worldmaking</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Space+Mono:wght@400;700&family=Bebas+Neue&family=Special+Elite&family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+/* ================================================================
+   DESIGN SYSTEM — REDACTED ARCHIVE
+   ================================================================ */
+:root {
+  --black: #0c0b09;
+  --ink: #1a1916;
+  --soot: #252320;
+  --ash: #3a3835;
+  --chalk: #e8e2d4;
+  --cream: #f5f0e4;
+  --bone: #faf6ec;
+  --vermillion: #d62828;
+  --vermillion-dark: #a31d1d;
+  --oxide: #e85d04;
+  --manila: #c9b97a;
+  --stamp: rgba(214,40,40,0.85);
+  --redact: var(--black);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html {
+  scroll-behavior: auto; /* GSAP handles smooth scroll */
+  scrollbar-width: thin;
+  scrollbar-color: var(--vermillion) var(--black);
+}
+
+body {
+  background: var(--black);
+  color: var(--chalk);
+  font-family: 'Source Serif 4', serif;
+  font-size: 17px;
+  line-height: 1.85;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+::selection {
+  background: var(--vermillion);
+  color: var(--cream);
+}
+
+/* ================================================================
+   CUSTOM CURSOR — concentric dot + trailing ring
+   ================================================================ */
+.cur-d {
+  width: 14px; height: 14px;
+  background: var(--vermillion);
+  border: 2.5px solid #fff;
+  outline: 2px solid var(--vermillion);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 100000;
+  will-change: transform;
+  transition: transform 0.15s ease;
+}
+.cur-d.mag {
+  transform: scale(1.3);
+}
+.cur-r {
+  width: 32px; height: 32px;
+  border: 1.5px solid rgba(255,255,255,0.45);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 100000;
+  will-change: transform;
+  box-shadow: 0 0 0 1px rgba(214,40,40,0.2), 0 0 12px rgba(214,40,40,0.08);
+  transition: width 0.25s cubic-bezier(0.16,1,0.3,1), height 0.25s cubic-bezier(0.16,1,0.3,1), border-color 0.25s, box-shadow 0.25s;
+}
+.cur-r.mag {
+  width: 48px; height: 48px;
+  border-color: rgba(255,255,255,0.6);
+  box-shadow: 0 0 0 1.5px rgba(214,40,40,0.35), 0 0 18px rgba(214,40,40,0.12);
+}
+
+/* ================================================================
+   GRAIN / NOISE / ATMOSPHERE
+   ================================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.015) 3px,
+    rgba(0,0,0,0.015) 4px
+  );
+}
+
+/* ================================================================
+   TYPOGRAPHY UTILITIES
+   ================================================================ */
+.t-display {
+  font-family: 'Playfair Display', serif;
+}
+.t-mono {
+  font-family: 'Space Mono', monospace;
+}
+.t-body {
+  font-family: 'Source Serif 4', serif;
+}
+.t-stamp {
+  font-family: 'Special Elite', cursive;
+}
+.vermillion { color: var(--vermillion); }
+.oxide { color: var(--oxide); }
+.chalk { color: var(--chalk); }
+
+/* ================================================================
+   REDACTION BAR — decorative element
+   ================================================================ */
+.redact-bar {
+  display: inline-block;
+  background: var(--vermillion);
+  height: 5px;
+  width: 100px;
+  vertical-align: middle;
+}
+
+/* ================================================================
+   SECTION STAMP — rubber stamp effect
+   ================================================================ */
+.sect-stamp {
+  display: inline-block;
+  font-family: 'Special Elite', cursive;
+  font-size: 13px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 3px solid var(--vermillion);
+  color: var(--vermillion);
+  transform: rotate(-2.5deg);
+  position: relative;
+}
+.sect-stamp::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid rgba(214,40,40,0.3);
+  transform: rotate(0.5deg);
+}
+
+/* ================================================================
+   TORN EDGE — CSS clip-path dividers
+   ================================================================ */
+.torn-top {
+  position: relative;
+}
+.torn-top::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: inherit;
+  clip-path: polygon(0% 100%, 2% 60%, 5% 90%, 8% 50%, 12% 80%, 15% 40%, 19% 75%, 22% 55%, 26% 85%, 30% 45%, 33% 70%, 37% 50%, 40% 80%, 44% 35%, 47% 65%, 50% 45%, 54% 75%, 57% 40%, 61% 80%, 64% 50%, 68% 70%, 71% 35%, 75% 65%, 78% 50%, 82% 80%, 85% 40%, 89% 70%, 92% 55%, 95% 80%, 98% 45%, 100% 100%);
+}
+
+/* ================================================================
+   HERO SECTION
+   ================================================================ */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background: var(--black);
+}
+
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-halftone {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0.06;
+  background-image: radial-gradient(circle, var(--chalk) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.hero-diag {
+  position: absolute;
+  top: 0; right: -5%;
+  width: 55%;
+  height: 100%;
+  background: var(--vermillion);
+  clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%);
+  z-index: 2;
+  opacity: 0.12;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  padding: 0 0 80px 80px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.hero-file-tab {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 32px;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-file-tab .dot {
+  width: 6px; height: 6px;
+  background: var(--vermillion);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-title-wrap {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(56px, 9vw, 140px);
+  line-height: 0.88;
+  color: var(--cream);
+  letter-spacing: -0.03em;
+}
+.hero-title .line {
+  display: block;
+  overflow: hidden;
+}
+.hero-title .line-inner {
+  display: block;
+  transform: translateY(105%);
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--vermillion);
+}
+.hero-title .ampersand {
+  font-size: 0.6em;
+  color: var(--manila);
+  vertical-align: 0.15em;
+  margin: 0 0.1em;
+}
+
+/* Giant background number */
+.hero-bg-num {
+  position: absolute;
+  top: 5%;
+  right: 60px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: clamp(200px, 30vw, 500px);
+  color: rgba(214,40,40,0.04);
+  line-height: 1;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-sub {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(17px, 2vw, 23px);
+  color: rgba(232,226,212,0.88);
+  max-width: 550px;
+  margin-bottom: 40px;
+  opacity: 0;
+}
+
+.hero-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  opacity: 0;
+}
+.hero-meta-item {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(232,226,212,0.8);
+}
+.hero-meta-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--vermillion);
+}
+
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 40px;
+  right: 80px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.hero-scroll-cue span {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(232,226,212,0.7);
+  writing-mode: vertical-rl;
+}
+.scroll-bar {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(180deg, var(--vermillion), transparent);
+  animation: scroll-bar-pulse 2.5s infinite;
+}
+@keyframes scroll-bar-pulse {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ================================================================
+   CONTENT WARNING
+   ================================================================ */
+#content-warning {
+  background: var(--vermillion-dark);
+  padding: 48px 80px;
+  position: relative;
+}
+.cw-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 1000px;
+}
+.cw-marker {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: 48px;
+  color: rgba(255,255,255,0.15);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cw-text {
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.95);
+}
+.cw-text strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ================================================================
+   DESCRIPTION SECTION — asymmetric split
+   ================================================================ */
+#description {
+  background: var(--black);
+  padding: 160px 0;
+  position: relative;
+  overflow: hidden;
+}
+.desc-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+}
+.desc-left {
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.desc-left::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(214,40,40,0.2), transparent);
+}
+.desc-large-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 5vw, 68px);
+  line-height: 1.05;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+.desc-large-text em { font-style: italic; color: var(--vermillion); }
+.desc-label-vert {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  writing-mode: vertical-rl;
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.desc-right {
+  padding: 80px;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.desc-para {
+  font-family: 'Source Serif 4', serif;
+  font-size: 17px;
+  line-height: 2;
+  color: rgba(232,226,212,1);
+  margin-bottom: 28px;
+}
+.desc-para:last-child { margin-bottom: 0; }
+
+/* ================================================================
+   QUESTIONS — scattered/overlapping cards
+   ================================================================ */
+#questions {
+  background: var(--cream);
+  padding: 140px 80px;
+  position: relative;
+  overflow: hidden;
+}
+#questions::before {
+  content: '?';
+  position: absolute;
+  bottom: -120px;
+  left: -40px;
+  font-family: 'Playfair Display', serif;
+  font-size: 700px;
+  color: rgba(214,40,40,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+.q-header {
+  margin-bottom: 80px;
+}
+.q-header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1;
+  color: var(--black);
+  letter-spacing: -0.02em;
+}
+.q-header-title em { font-style: italic; color: var(--vermillion); }
+
+.q-scatter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1100px;
+}
+.q-card {
+  padding: 48px;
+  border: 1px solid rgba(12,11,9,0.12);
+  position: relative;
+  background: var(--bone);
+  transition: box-shadow 0.4s, border-color 0.4s;
+  opacity: 1;
+  visibility: visible;
+}
+.q-card:hover {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  border-color: var(--vermillion);
+}
+.q-card-num {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: 64px;
+  color: rgba(214,40,40,0.07);
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  line-height: 1;
+}
+.q-card p {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.9;
+  color: #1a1916;
+}
+
+/* ================================================================
+   LEARNING OUTCOMES — horizontal scroll ticker
+   ================================================================ */
+#outcomes {
+  background: var(--ink);
+  padding: 120px 0;
+  overflow: hidden;
+  position: relative;
+}
+.out-header {
+  padding: 0 80px;
+  margin-bottom: 60px;
+}
+.out-header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--cream);
+  line-height: 1;
+}
+.out-header-title em { color: var(--vermillion); font-style: italic; }
+.out-track {
+  display: flex;
+  gap: 2px;
+  width: max-content;
+}
+.out-cell {
+  width: 380px;
+  flex-shrink: 0;
+  padding: 48px 40px;
+  background: var(--soot);
+  position: relative;
+  border-left: 4px solid var(--vermillion);
+  transition: background 0.3s;
+}
+.out-cell:hover { background: rgba(214,40,40,0.06); }
+.out-cell-num {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--vermillion);
+  margin-bottom: 12px;
+}
+.out-cell-level {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: var(--cream);
+  margin-bottom: 14px;
+  line-height: 1.1;
+}
+.out-cell-text {
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(232,226,212,0.9);
+}
+
+/* ================================================================
+   FILMS — cinematic strip
+   ================================================================ */
+#films {
+  background: var(--black);
+  padding: 140px 80px;
+  position: relative;
+}
+.films-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+  border-bottom: 1px solid rgba(232,226,212,0.08);
+  padding-bottom: 24px;
+}
+.films-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--cream);
+  line-height: 1;
+}
+.films-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--vermillion);
+}
+
+.film-strip {
+  display: grid;
+  grid-template-columns: 60px 1fr 200px;
+  gap: 0;
+  border-bottom: 1px solid rgba(232,226,212,0.04);
+  padding: 20px 0;
+  transition: all 0.3s;
+  cursor: none;
+  position: relative;
+}
+.film-strip::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 0;
+  height: 100%;
+  background: rgba(214,40,40,0.04);
+  transition: width 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.film-strip:hover::before { width: 100%; }
+.film-strip:hover .film-strip-name {
+  color: var(--vermillion);
+  transform: translateX(12px);
+}
+.film-strip-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: rgba(232,226,212,0.65);
+  padding-top: 4px;
+}
+.film-strip-name {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--chalk);
+  transition: color 0.3s, transform 0.3s;
+  position: relative;
+  z-index: 1;
+}
+.film-strip-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: rgba(232,226,212,0.7);
+  text-align: right;
+  padding-top: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================================================
+   ASSIGNMENTS OVERVIEW — stark table
+   ================================================================ */
+#assignments-overview {
+  background: var(--cream);
+  padding: 140px 80px;
+  position: relative;
+  overflow: hidden;
+}
+#assignments-overview::after {
+  content: '485';
+  position: absolute;
+  top: -30px;
+  right: -20px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: 300px;
+  color: rgba(214,40,40,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+.ao-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.ao-sub {
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px;
+  color: #2a2926;
+  margin-bottom: 56px;
+  max-width: 700px;
+}
+.ao-table {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+}
+.ao-table thead th {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #2a2926;
+  text-align: left;
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--black);
+}
+.ao-table tbody td {
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px;
+  color: #1a1916;
+  padding: 20px;
+  border-bottom: 1px solid rgba(12,11,9,0.08);
+  vertical-align: top;
+}
+.ao-table tbody tr:hover td {
+  background: rgba(214,40,40,0.03);
+}
+.ao-pts {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--vermillion);
+}
+
+/* ================================================================
+   GRADE SCHEMA
+   ================================================================ */
+#grades {
+  background: var(--soot);
+  padding: 120px 80px;
+}
+.gr-flex {
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}
+.gr-left {
+  flex-shrink: 0;
+  position: sticky;
+  top: 120px;
+}
+.gr-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.gr-total {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--vermillion);
+}
+.gr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  flex: 1;
+}
+.gr-cell {
+  background: var(--ink);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s;
+}
+.gr-cell:hover { background: rgba(214,40,40,0.08); }
+.gr-letter {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: var(--cream);
+}
+.gr-pct {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: rgba(232,226,212,0.82);
+}
+
+/* ================================================================
+   ASSIGNMENT DETAIL SECTIONS — editorial magazine spread
+   ================================================================ */
+.assign-section {
+  padding: 140px 80px;
+  position: relative;
+}
+.assign-header-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 64px;
+  position: relative;
+}
+.assign-header-num {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: clamp(100px, 15vw, 220px);
+  line-height: 0.8;
+  color: rgba(214,40,40,0.08);
+  flex-shrink: 0;
+  position: relative;
+  top: -20px;
+}
+.assign-header-text {
+  flex: 1;
+}
+.assign-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 12px;
+}
+.assign-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4.5vw, 60px);
+  line-height: 1.02;
+  color: var(--cream);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.assign-title em { font-style: italic; color: var(--vermillion); }
+.assign-pts-badge {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--cream);
+  background: var(--vermillion);
+  padding: 4px 14px;
+  margin-top: 12px;
+}
+
+.assign-editorial {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 64px;
+  max-width: 1200px;
+}
+.assign-sidebar {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+.assign-sidebar-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--vermillion);
+}
+.assign-sidebar-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(232,226,212,0.88);
+  margin-bottom: 8px;
+}
+.assign-sidebar-item strong {
+  color: var(--chalk);
+  font-weight: 600;
+}
+.assign-body {
+  font-family: 'Source Serif 4', serif;
+  font-size: 17px;
+  line-height: 2;
+  color: rgba(232,226,212,1);
+}
+.assign-body h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: var(--cream);
+  margin: 56px 0 20px;
+  line-height: 1.15;
+  position: relative;
+  padding-left: 20px;
+}
+.assign-body h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 4px;
+  height: 28px;
+  background: var(--vermillion);
+}
+.assign-body h3:first-child { margin-top: 0; }
+.assign-body h4 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 21px;
+  color: var(--vermillion);
+  margin: 40px 0 16px;
+}
+.assign-body p {
+  margin-bottom: 20px;
+}
+.assign-body .a-list {
+  padding-left: 0;
+  margin-bottom: 24px;
+}
+.assign-body .a-list li {
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px;
+  line-height: 1.9;
+  color: rgba(232,226,212,0.95);
+  margin-bottom: 8px;
+  list-style: none;
+  padding-left: 22px;
+  position: relative;
+}
+.assign-body .a-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 10px;
+  height: 2px;
+  background: var(--vermillion);
+}
+.assign-body .note-block {
+  border-left: 4px solid var(--vermillion);
+  padding: 24px 32px;
+  margin: 32px 0;
+  background: rgba(214,40,40,0.04);
+  font-style: italic;
+  color: rgba(232,226,212,0.95);
+}
+
+/* Light background variant for assign sections */
+.assign-section.light {
+  background: var(--cream);
+}
+.assign-section.light .assign-title,
+.assign-section.light .assign-body h3 { color: var(--black); }
+.assign-section.light .assign-body { color: #1a1916; }
+.assign-section.light .assign-body .a-list li { color: #2a2926; }
+.assign-section.light .assign-sidebar-item { color: #2a2926; }
+.assign-section.light .assign-sidebar-item strong { color: #1a1916; }
+
+/* ================================================================
+   DISCUSSION & REFLECTION
+   ================================================================ */
+#discussion {
+  background: var(--ink);
+  padding: 140px 80px;
+  position: relative;
+}
+.disc-header {
+  margin-bottom: 64px;
+}
+.disc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--cream);
+  line-height: 1;
+}
+.disc-title em { color: var(--vermillion); font-style: italic; }
+.disc-split {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0;
+  max-width: 1100px;
+}
+.disc-divider {
+  background: linear-gradient(180deg, transparent, var(--vermillion), transparent);
+}
+.disc-block {
+  padding: 40px;
+}
+.disc-block-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: var(--cream);
+  margin-bottom: 20px;
+}
+.disc-block-body {
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(232,226,212,0.92);
+}
+.disc-block-body .a-list {
+  padding-left: 0;
+  margin-top: 16px;
+}
+.disc-block-body .a-list li {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(232,226,212,0.88);
+  margin-bottom: 6px;
+  list-style: none;
+  padding-left: 18px;
+  position: relative;
+}
+.disc-block-body .a-list li::before {
+  content: '—';
+  position: absolute;
+  left: -4px;
+  color: var(--vermillion);
+}
+
+/* ================================================================
+   WEEKLY CALENDAR — accordion with stagger
+   ================================================================ */
+#calendar {
+  background: var(--black);
+  padding: 140px 80px;
+  position: relative;
+}
+.cal-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 60px;
+  border-bottom: 2px solid var(--vermillion);
+  padding-bottom: 20px;
+}
+.cal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--cream);
+  line-height: 1;
+}
+.cal-weeks-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--vermillion);
+}
+
+.week-block {
+  max-width: 1100px;
+  border-bottom: 1px solid rgba(232,226,212,0.06);
+}
+.week-head {
+  display: grid;
+  grid-template-columns: 100px 1fr 30px;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.week-head:hover { background: rgba(214,40,40,0.02); }
+.week-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--vermillion);
+}
+.week-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--chalk);
+  transition: color 0.3s;
+}
+.week-head:hover .week-title { color: var(--vermillion); }
+.week-toggle {
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  color: rgba(232,226,212,0.7);
+  transition: transform 0.35s, color 0.3s;
+  text-align: center;
+}
+.week-toggle.open {
+  transform: rotate(45deg);
+  color: var(--vermillion);
+}
+.week-desc {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: rgba(232,226,212,0.85);
+  padding: 0 0 16px 120px;
+  max-width: 850px;
+  line-height: 1.8;
+}
+.week-content {
+  padding: 0 0 28px 120px;
+  display: none;
+}
+.week-content.open { display: block; }
+.week-section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin: 24px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(214,40,40,0.15);
+  display: inline-block;
+}
+.week-reading {
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(232,226,212,0.92);
+  padding: 8px 0 8px 20px;
+  position: relative;
+  border-bottom: 1px solid rgba(232,226,212,0.03);
+}
+.week-reading::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 8px;
+  height: 2px;
+  background: var(--vermillion);
+}
+.week-media {
+  font-family: 'Source Serif 4', serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(232,226,212,0.82);
+  padding: 6px 0 6px 20px;
+  position: relative;
+}
+.week-media::before {
+  content: '◦';
+  position: absolute;
+  left: 4px;
+  color: rgba(232,226,212,0.6);
+  font-size: 12px;
+}
+
+/* ================================================================
+   POLICIES (exact template from prompt)
+   ================================================================ */
+#policies{background:var(--ink);padding:90px 80px;position:relative;overflow:hidden;}
+#policies::after{content:'POLICIES';position:absolute;bottom:-55px;right:-35px;font-family:'Bebas Neue',sans-serif;font-size:260px;color:rgba(240,230,200,0.018);pointer-events:none;line-height:1;}
+.pol-tit{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,8vw,94px);line-height:0.9;color:var(--paper,#f0e6d0);margin-bottom:56px;}
+.pgrid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.pblock{border:1px solid rgba(240,230,200,0.11);padding:36px;position:relative;transition:border-color 0.28s;}
+.pblock:hover{border-color:rgba(240,230,200,0.28);}
+.pnum2{font-family:'Bebas Neue',sans-serif;font-size:74px;color:rgba(240,230,200,0.035);position:absolute;top:-12px;right:18px;line-height:1;pointer-events:none;}
+.pstamp{display:inline-block;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:4px;text-transform:uppercase;padding:4px 10px;border:2px solid;margin-bottom:18px;transform:rotate(-1deg);}
+.sp{color:var(--paper,#f0e6d0);border-color:rgba(240,230,200,0.35);}
+.sg{color:var(--gold,#c9962c);border-color:var(--gold,#c9962c);}
+.sr{color:var(--red,#c45d3e);border-color:var(--red,#c45d3e);}
+.sgr{color:#5a9a5a;border-color:#5a9a5a;}
+.sbl{color:#5a8ab5;border-color:#5a8ab5;}
+.sgd{color:var(--gold,#c9962c);border-color:var(--gold,#c9962c);}
+.phead{font-family:'IM Fell English',serif;font-size:22px;color:#ffffff;margin-bottom:14px;}
+.pbody{font-family:'Libre Baskerville',serif;font-size:14px;line-height:1.9;color:#ffffff;}
+.pbody strong{color:#ffffff;}
+.pq{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;color:#ffffff;margin-top:14px;padding-top:14px;border-top:1px solid rgba(201,150,44,0.18);}
+@media(max-width:768px){
+  #policies{padding:56px 24px;}
+  .pgrid2{grid-template-columns:1fr;}
+}
+
+/* ================================================================
+   AI USE POLICY (exact template from prompt)
+   ================================================================ */
+#ai{background:#0d1117;padding:90px 80px;font-family:'VT323',monospace;position:relative;overflow:hidden;}
+#ai::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,70,0.014) 2px,rgba(0,255,70,0.014) 4px);pointer-events:none;}
+.tbar{font-size:11px;letter-spacing:3px;color:#00ff46;margin-bottom:36px;display:flex;align-items:center;gap:10px;}
+.td{width:10px;height:10px;border-radius:50%;}
+.tdr{background:#ff5f57;}.tdy{background:#ffbd2e;}.tdg{background:#28ca42;}
+.ttit{font-size:clamp(38px,6vw,76px);color:#00ff46;line-height:1;margin-bottom:52px;}
+.tprompt{color:#00ff46;font-size:17px;margin-bottom:7px;}
+.tprompt::before{content:'> ';}
+.tblock{background:rgba(0,255,70,0.025);border:1px solid rgba(0,255,70,0.13);padding:28px;margin-bottom:20px;}
+.tbltit{font-size:20px;color:#00ff46;margin-bottom:14px;letter-spacing:2px;}
+.ti{font-size:15px;color:rgba(0,255,70,0.68);padding:7px 0;border-bottom:1px solid rgba(0,255,70,0.07);transition:color 0.18s,padding-left 0.18s;cursor:none;}
+.ti:last-child{border-bottom:none;}
+.ti:hover{color:#00ff46;padding-left:10px;}
+.ti .til{color:#00ff46;}
+.ti.dn{color:rgba(255,50,50,0.68);}
+.ti.dn:hover{color:rgba(255,50,50,1);}
+.ti.dn .til{color:#ff3232;}
+.tnote{font-size:14px;color:rgba(0,255,70,0.35);margin-top:20px;}
+.tnote::before{content:'// ';}
+.aigrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:768px){
+  #ai{padding:56px 24px;}
+  .aigrid{grid-template-columns:1fr;}
+}
+
+/* ================================================================
+   ACADEMIC INTEGRITY — stacked dossier cards
+   ================================================================ */
+#integrity {
+  background: var(--ink);
+  padding: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.integ-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 36px;
+}
+.integ-title em { color: var(--vermillion); font-style: italic; }
+.sticky-board {
+  max-width: 1100px;
+  position: relative;
+}
+.sticky-note {
+  padding: 40px 48px;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+  cursor: none;
+  box-shadow: 3px 4px 16px rgba(0,0,0,0.2);
+  transform: rotate(-0.6deg);
+}
+.sticky-note:hover {
+  transform: translateY(-4px) rotate(0deg);
+  box-shadow: 4px 8px 28px rgba(0,0,0,0.3);
+}
+.sticky-y { background: #fef3c7; color: #1c1917; }
+/* Pin */
+.sticky-note::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  right: 32px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--vermillion);
+  border: 2px solid rgba(255,255,255,0.5);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+.sticky-note-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--vermillion);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(214,40,40,0.2);
+}
+.sticky-note-body {
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #1c1917;
+  max-width: 900px;
+}
+
+/* Butterfly SVG animations */
+.butterfly-container {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+.butterfly {
+  position: absolute;
+  opacity: 0.5;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.butterfly svg {
+  width: 100%;
+  height: 100%;
+}
+.bf1 {
+  width: 28px; height: 28px;
+  top: 20px; right: 120px;
+  opacity: 0.35;
+  animation: bfFloat1 6s ease-in-out infinite, bfWing 0.4s ease-in-out infinite alternate;
+}
+.bf2 {
+  width: 22px; height: 22px;
+  bottom: 30px; right: 60px;
+  opacity: 0.25;
+  animation: bfFloat2 8s ease-in-out infinite, bfWing 0.35s ease-in-out infinite alternate;
+  animation-delay: 1s;
+}
+.bf3 {
+  width: 18px; height: 18px;
+  top: 50%; left: -40px;
+  opacity: 0.2;
+  animation: bfFloat3 7s ease-in-out infinite, bfWing 0.45s ease-in-out infinite alternate;
+  animation-delay: 2.5s;
+}
+.bf4 {
+  width: 32px; height: 32px;
+  top: -10px; left: 40%;
+  opacity: 0.15;
+  animation: bfFloat4 9s ease-in-out infinite, bfWing 0.38s ease-in-out infinite alternate;
+  animation-delay: 0.5s;
+}
+.bf5 {
+  width: 20px; height: 20px;
+  bottom: 10px; left: 20%;
+  opacity: 0.3;
+  animation: bfFloat5 7.5s ease-in-out infinite, bfWing 0.42s ease-in-out infinite alternate;
+  animation-delay: 3s;
+}
+
+@keyframes bfWing {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0.4); }
+}
+@keyframes bfFloat1 {
+  0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+  25% { transform: translate(15px, -20px) rotate(3deg); }
+  50% { transform: translate(-8px, -35px) rotate(-8deg); }
+  75% { transform: translate(20px, -15px) rotate(5deg); }
+}
+@keyframes bfFloat2 {
+  0%, 100% { transform: translate(0, 0) rotate(3deg); }
+  33% { transform: translate(-25px, -18px) rotate(-6deg); }
+  66% { transform: translate(10px, -30px) rotate(8deg); }
+}
+@keyframes bfFloat3 {
+  0%, 100% { transform: translate(0, 0) rotate(5deg); }
+  30% { transform: translate(30px, -12px) rotate(-3deg); }
+  60% { transform: translate(15px, -25px) rotate(7deg); }
+}
+@keyframes bfFloat4 {
+  0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+  20% { transform: translate(-12px, 15px) rotate(4deg); }
+  50% { transform: translate(20px, -10px) rotate(-6deg); }
+  80% { transform: translate(-8px, 8px) rotate(2deg); }
+}
+@keyframes bfFloat5 {
+  0%, 100% { transform: translate(0, 0) rotate(2deg); }
+  40% { transform: translate(18px, -22px) rotate(-5deg); }
+  70% { transform: translate(-10px, -12px) rotate(6deg); }
+}
+
+@media(max-width:768px) {
+  #integrity { padding: 60px 24px; }
+  .sticky-note { padding: 28px 24px; }
+  .bf1,.bf2,.bf3,.bf4,.bf5 { display: none; }
+}
+
+/* ================================================================
+   INSTRUCTOR
+   ================================================================ */
+#instructor {
+  background: var(--black);
+  padding: 140px 80px;
+  position: relative;
+  overflow: hidden;
+}
+#instructor::before {
+  content: 'INSTRUCTOR';
+  position: absolute;
+  bottom: -20px;
+  left: -30px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: 180px;
+  color: rgba(232,226,212,0.015);
+  pointer-events: none;
+  line-height: 1;
+}
+.inst-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 20px;
+}
+.inst-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 6vw, 80px);
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.inst-role {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--vermillion);
+  margin-bottom: 4px;
+}
+.inst-dept {
+  font-family: 'Source Serif 4', serif;
+  font-size: 17px;
+  color: rgba(232,226,212,0.85);
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+#footer {
+  background: var(--ink);
+  padding: 48px 80px;
+  border-top: 2px solid var(--vermillion);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.foot-left {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(232,226,212,0.75);
+  text-transform: uppercase;
+  line-height: 2.2;
+}
+.foot-right {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: rgba(232,226,212,0.65);
+  text-align: right;
+  line-height: 2.2;
+}
+.foot-right a {
+  color: var(--vermillion);
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+.foot-right a:hover { opacity: 0.7; }
+
+/* ================================================================
+   NAVIGATION — floating
+   ================================================================ */
+.nav-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 52px;
+  height: 52px;
+  background: var(--vermillion);
+  border-radius: 50%;
+  border: none;
+  cursor: none;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+  box-shadow: 0 4px 24px rgba(214,40,40,0.4);
+}
+.nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px rgba(214,40,40,0.5);
+}
+.nav-btn .bar {
+  width: 18px;
+  height: 1.5px;
+  background: #fff;
+  position: absolute;
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-btn .bar:nth-child(1) { transform: translateY(-4px); }
+.nav-btn .bar:nth-child(2) { transform: translateY(4px); }
+.nav-btn.open .bar:nth-child(1) { transform: rotate(45deg); }
+.nav-btn.open .bar:nth-child(2) { transform: rotate(-45deg); }
+
+.nav-menu {
+  position: fixed;
+  bottom: 96px;
+  right: 32px;
+  background: var(--ink);
+  border: 1px solid rgba(214,40,40,0.2);
+  padding: 20px 0;
+  z-index: 99989;
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  min-width: 280px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.nav-menu.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+.nav-link {
+  display: block;
+  padding: 10px 32px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(232,226,212,0.85);
+  text-decoration: none;
+  transition: color 0.2s, padding-left 0.2s, background 0.2s;
+  cursor: none;
+}
+.nav-link:hover {
+  color: var(--vermillion);
+  padding-left: 40px;
+  background: rgba(214,40,40,0.04);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media(max-width:1024px) {
+  .desc-container { grid-template-columns: 1fr; }
+  .desc-left::after { display: none; }
+  .assign-editorial { grid-template-columns: 1fr; gap: 40px; }
+  .assign-sidebar { position: static; }
+  .assign-header-num { font-size: 100px; }
+  .q-scatter { grid-template-columns: 1fr; }
+  .q-card { transform: none !important; }
+  .gr-flex { flex-direction: column; gap: 40px; }
+  .gr-left { position: static; }
+  .disc-split { grid-template-columns: 1fr; }
+  .disc-divider { display: none; }
+  .sticky-board { flex-direction: column; }
+  .week-desc, .week-content { padding-left: 0; }
+  .week-head { grid-template-columns: 80px 1fr 30px; }
+  .out-cell { width: 320px; }
+}
+@media(max-width:768px) {
+  #hero .hero-content { padding: 0 24px 60px; }
+  section, .assign-section { padding: 80px 24px !important; }
+  #content-warning { padding: 40px 24px; }
+  .cw-flex { flex-direction: column; gap: 20px; }
+  .hero-meta-row { flex-direction: column; gap: 8px; }
+  .hero-scroll-cue { right: 24px; }
+  #footer { flex-direction: column; gap: 16px; padding: 40px 24px; }
+  .nav-menu { right: 16px; bottom: 88px; min-width: 240px; }
+  .nav-btn { right: 16px; bottom: 16px; }
+  .films-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .film-strip { grid-template-columns: 40px 1fr; }
+  .film-strip-meta { display: none; }
+  .gr-grid { grid-template-columns: repeat(2, 1fr); }
+  .ao-table { font-size: 14px; }
+  .desc-label-vert { display: none; }
+}
+
+/* Blink for CRT */
+.blink { animation: blinker 1s step-end infinite; }
+@keyframes blinker { 50% { opacity:0; } }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cur-d" id="curD"></div>
+<div class="cur-r" id="curR"></div>
+
+<!-- Nav -->
+<button class="nav-btn" id="navBtn" aria-label="Menu">
+  <span class="bar"></span><span class="bar"></span>
+</button>
+<nav class="nav-menu" id="navMenu">
+  <a href="#hero" class="nav-link">Home</a>
+  <a href="#description" class="nav-link">Description</a>
+  <a href="#questions" class="nav-link">Questions</a>
+  <a href="#outcomes" class="nav-link">Outcomes</a>
+  <a href="#films" class="nav-link">Films</a>
+  <a href="#assignments-overview" class="nav-link">Grading</a>
+  <a href="#assign1" class="nav-link">Assignment 01</a>
+  <a href="#assign2" class="nav-link">Assignment 02</a>
+  <a href="#assign3" class="nav-link">Assignment 03</a>
+  <a href="#discussion" class="nav-link">Discussion</a>
+  <a href="#calendar" class="nav-link">Calendar</a>
+  <a href="#policies" class="nav-link">Policies</a>
+  <a href="#ai" class="nav-link">AI Policy</a>
+  <a href="#integrity" class="nav-link">Integrity</a>
+  <a href="#instructor" class="nav-link">Instructor</a>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-halftone"></div>
+  <div class="hero-diag"></div>
+  <div class="hero-bg-num" aria-hidden="true">362</div>
+
+  <div class="hero-content">
+    <div class="hero-file-tab" id="heroTab"><span class="dot"></span> ENGL / WGSS 362 — FILE OPENED</div>
+    <div class="hero-title-wrap">
+      <h1 class="hero-title">
+        <span class="line"><span class="line-inner">Antiracist</span></span>
+        <span class="line"><span class="line-inner"><em>Rhetorics</em> <span class="ampersand">&</span></span></span>
+        <span class="line"><span class="line-inner">Feminist</span></span>
+        <span class="line"><span class="line-inner"><em>Worldmaking</em></span></span>
+      </h1>
+    </div>
+    <p class="hero-sub" id="heroSub">Intersectional rhetorics of racism, resistance, and feminist world-making.</p>
+    <div class="hero-meta-row" id="heroMeta">
+      <span class="hero-meta-item">Washington State University</span>
+      <div class="hero-meta-divider"></div>
+      <span class="hero-meta-item">Cross-listed: English & WGSS</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- ===================== CONTENT WARNING ===================== -->
+<section id="content-warning">
+  <div class="cw-flex">
+    <div class="cw-marker" aria-hidden="true">!</div>
+    <p class="cw-text">This course engages with materials that address <strong>racism, colonial violence, gender-based violence, incarceration, surveillance, environmental destruction, and systemic oppression</strong>. These topics are central to our inquiry and are treated with care. If at any point you need support, please reach out to the instructor or campus resources. Your wellbeing matters.</p>
+  </div>
+</section>
+
+<!-- ===================== DESCRIPTION ===================== -->
+<section id="description">
+  <div class="desc-container">
+    <div class="desc-left">
+      <div class="desc-label-vert">COURSE DESCRIPTION</div>
+      <div class="desc-large-text">Let's begin with <em>anti-racism,</em> instead.</div>
+    </div>
+    <div class="desc-right">
+      <p class="desc-para">In the "Antiracist Rhetorics & Feminist Worldmaking" course, anti-racism is not a singular issue or isolated concern, but a radical act of love, care, respect, kindness, and solidarity. It is envisioned as a collective and liberatory project—an ongoing, rigorous interrogation of systems and structures that shape our world. Anchored in intersectional feminist thought, this course approaches anti-racism as a sustained intellectual, emotional, and embodied practice that recognizes how people experience shared spaces and institutions in deeply unequal and unjust ways. To borrow from Audre Lorde, "There is no such thing as a single-issue struggle because we do not live single-issue lives."</p>
+      <p class="desc-para">Accordingly, anti-racism in this course is necessarily anti-heteronormativity, anti-colonialism, anti-capitalism, and anti-imperialism. It is rooted in social and global justice, linguistic justice, geo-political justice, disability justice, reproductive justice, and environmental justice—just to name a few. Through this expansive and intersectional lens, this course invites students to confront pressing questions: Why should a course on the rhetorics of racism and anti-racism matter—not only academically, but ethically and politically—to the world, to the planet, and to the people with whom we coexist, knowingly or not? What kinds of social, political, and personal transformations might we dare to envision through this work? And despite our embeddedness in institutional and bureaucratic structures that are far from equitable, how can courses like this become sites of collective inquiry, care, and possibility?</p>
+      <p class="desc-para">The guiding theoretical and methodological framework of this course is comparative anti-racist rhetorics. This means we will deliberately and critically cross colonial and imperial borders—until those borders become irrelevant in our anti-racist, feminist, and decolonial solidarities. We will learn not just from scholarly texts, but also from social media pages, musicians, artists, activists, political speeches, biographical narratives, community-led archives, and digital multimodal storytelling projects. Drawing from the lived knowledges and rhetorical practices of marginalized and resisting communities across the globe, this course centers grassroots anti-racist feminist movements that insist on collective survival, radical imagination, and liberation beyond empire.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GUIDING QUESTIONS ===================== -->
+<section id="questions">
+  <div class="q-header">
+    <div class="sect-stamp">Recurring Questions</div>
+    <h2 class="q-header-title" style="margin-top:24px;">Guiding Our <em>Theories, Praxes, & Learning</em></h2>
+  </div>
+  <div class="q-scatter">
+    <div class="q-card"><div class="q-card-num" aria-hidden="true">01</div><p>How can we live and act in ways that honor the full humanity and dignity of ourselves and others—especially those whose lives, bodies, and voices are often marginalized or erased? What does it mean to create space for collective flourishing across difference?</p></div>
+    <div class="q-card"><div class="q-card-num" aria-hidden="true">02</div><p>How might our professional, personal, public, pedagogical, social media, and institutional practices contribute to transforming slogans like "Black lives matter," "Brown lives matter," "Indigenous lives matter," "Muslim lives matter," "Asian lives matter," and "Global South lives matter" into material conditions of justice, safety, and liberation—locally and globally?</p></div>
+    <div class="q-card"><div class="q-card-num" aria-hidden="true">03</div><p>In what ways do systems of colonialism, racial capitalism, heteropatriarchy, ableism, and environmental injustice structure everyday life—and how can rhetorical practice serve as a method for confronting, refusing, and reimagining those systems?</p></div>
+    <div class="q-card"><div class="q-card-num" aria-hidden="true">04</div><p>What responsibilities do we carry—as students, teachers, cultural workers, or members of communities—in building solidarities that cross borders, identities, and disciplines? How can we center relational accountability in our anti-racist and feminist praxes?</p></div>
+  </div>
+</section>
+
+<!-- ===================== LEARNING OUTCOMES ===================== -->
+<section id="outcomes">
+  <div class="out-header">
+    <h2 class="out-header-title">Learning <em>Outcomes</em></h2>
+  </div>
+  <div class="out-track" id="outTrack">
+    <div class="out-cell"><div class="out-cell-num">01 — REMEMBERING</div><div class="out-cell-level">Identify</div><div class="out-cell-text">Identify key concepts in anti-racist, feminist, and decolonial rhetorical traditions.</div></div>
+    <div class="out-cell"><div class="out-cell-num">02 — UNDERSTANDING</div><div class="out-cell-level">Explain</div><div class="out-cell-text">Explain how structural inequalities are reproduced and resisted through rhetoric across global contexts.</div></div>
+    <div class="out-cell"><div class="out-cell-num">03 — APPLYING</div><div class="out-cell-level">Apply</div><div class="out-cell-text">Apply intersectional and transnational frameworks to analyze movements, campaigns, and rhetorical artifacts.</div></div>
+    <div class="out-cell"><div class="out-cell-num">04 — ANALYZING</div><div class="out-cell-level">Deconstruct</div><div class="out-cell-text">Deconstruct how race, gender, empire, and power intersect in various rhetorical texts and media.</div></div>
+    <div class="out-cell"><div class="out-cell-num">05 — EVALUATING</div><div class="out-cell-level">Critique</div><div class="out-cell-text">Critique dominant narratives and evaluate counter-narratives produced by marginalized communities.</div></div>
+    <div class="out-cell"><div class="out-cell-num">06 — CREATING</div><div class="out-cell-level">Produce</div><div class="out-cell-text">Produce original multimodal projects that mobilize rhetorical strategies for justice, care, and global solidarity.</div></div>
+  </div>
+</section>
+
+<!-- ===================== FILMS ===================== -->
+<section id="films">
+  <div class="films-header">
+    <h2 class="films-title">Films</h2>
+    <span class="films-count">10 FILMS</span>
+  </div>
+  <div class="film-strip"><span class="film-strip-num">01</span><span class="film-strip-name">The Battle of Algiers</span><span class="film-strip-meta">1966 · dir. Gillo Pontecorvo</span></div>
+  <div class="film-strip"><span class="film-strip-num">02</span><span class="film-strip-name">Daughters of the Dust</span><span class="film-strip-meta">1991 · dir. Julie Dash</span></div>
+  <div class="film-strip"><span class="film-strip-num">03</span><span class="film-strip-name">In The Time of the Butterflies</span><span class="film-strip-meta">2001 · dir. Mariano Barroso</span></div>
+  <div class="film-strip"><span class="film-strip-num">04</span><span class="film-strip-name">No One Knows About Persian Cats</span><span class="film-strip-meta">2009 · dir. Bahman Ghobadi</span></div>
+  <div class="film-strip"><span class="film-strip-num">05</span><span class="film-strip-name">La Haine</span><span class="film-strip-meta">1995 · dir. Mathieu Kassovitz</span></div>
+  <div class="film-strip"><span class="film-strip-num">06</span><span class="film-strip-name">The Night of Counting the Years</span><span class="film-strip-meta">1969 · dir. Shadi Abdel Salam</span></div>
+  <div class="film-strip"><span class="film-strip-num">07</span><span class="film-strip-name">The Edge of Democracy</span><span class="film-strip-meta">2019 · dir. Petra Costa</span></div>
+  <div class="film-strip"><span class="film-strip-num">08</span><span class="film-strip-name">Free Angela and All Political Prisoners</span><span class="film-strip-meta">2012 · dir. Shola Lynch</span></div>
+  <div class="film-strip"><span class="film-strip-num">09</span><span class="film-strip-name">Sorry to Bother You</span><span class="film-strip-meta">2018 · dir. Boots Riley</span></div>
+  <div class="film-strip"><span class="film-strip-num">10</span><span class="film-strip-name">The Hour of the Furnaces</span><span class="film-strip-meta">1968 · dir. Octavio Getino &amp; Fernando Solanas</span></div>
+</section>
+
+<!-- ===================== ASSIGNMENTS OVERVIEW ===================== -->
+<section id="assignments-overview">
+  <h2 class="ao-title">Projects, Points, Grading</h2>
+  <p class="ao-sub">Total Points: 485 · Note: The syllabus is subject to change. The number of posts is contingent upon the semester, and so are the points.</p>
+  <table class="ao-table">
+    <thead><tr><th>Assignments</th><th>Deliverables</th><th>Points</th><th>Due</th></tr></thead>
+    <tbody>
+      <tr><td>Low Stakes</td><td>Reading Response</td><td class="ao-pts">65</td><td>Once a week</td></tr>
+      <tr><td>Low Stakes</td><td>Scaffolding Assignments</td><td class="ao-pts">120</td><td>Once a week</td></tr>
+      <tr><td>1st Major Assignment</td><td>Project Proposal</td><td class="ao-pts">50</td><td>Check the course calendar &amp; Canvas</td></tr>
+      <tr><td>2nd Major Assignment</td><td>Anti-racist Feminist Rhetorical Analysis</td><td class="ao-pts">100</td><td>Check the course calendar &amp; Canvas</td></tr>
+      <tr><td>3rd Major Assignment</td><td>Final Project</td><td class="ao-pts">150</td><td>Check the course calendar &amp; Canvas</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===================== GRADES ===================== -->
+<section id="grades">
+  <div class="gr-flex">
+    <div class="gr-left">
+      <h2 class="gr-title">Grade Schema</h2>
+      <div class="gr-total">TOTAL: 485 PTS</div>
+    </div>
+    <div class="gr-grid">
+      <div class="gr-cell"><span class="gr-letter">A</span><span class="gr-pct">93.4 – 100</span></div>
+      <div class="gr-cell"><span class="gr-letter">A-</span><span class="gr-pct">90 – 93.3</span></div>
+      <div class="gr-cell"><span class="gr-letter">B+</span><span class="gr-pct">86.8 – 89.9</span></div>
+      <div class="gr-cell"><span class="gr-letter">B</span><span class="gr-pct">83.4 – 86.7</span></div>
+      <div class="gr-cell"><span class="gr-letter">B-</span><span class="gr-pct">80 – 83.3</span></div>
+      <div class="gr-cell"><span class="gr-letter">C+</span><span class="gr-pct">76.8 – 79.9</span></div>
+      <div class="gr-cell"><span class="gr-letter">C</span><span class="gr-pct">73.4 – 76.7</span></div>
+      <div class="gr-cell"><span class="gr-letter">C-</span><span class="gr-pct">70 – 73.3</span></div>
+      <div class="gr-cell"><span class="gr-letter">D+</span><span class="gr-pct">66.6 – 69.9</span></div>
+      <div class="gr-cell"><span class="gr-letter">D</span><span class="gr-pct">63.4 – 66.7</span></div>
+      <div class="gr-cell"><span class="gr-letter">D-</span><span class="gr-pct">60 – 63.3</span></div>
+      <div class="gr-cell"><span class="gr-letter">F</span><span class="gr-pct">0 – 59.9</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ASSIGNMENT 1 ===================== -->
+<section id="assign1" class="assign-section" style="background:var(--black);">
+  <div class="assign-header-row">
+    <div class="assign-header-num" aria-hidden="true">01</div>
+    <div class="assign-header-text">
+      <div class="assign-tag">1st Major Assignment</div>
+      <h2 class="assign-title">Solidarity Praxis <em>Proposal</em></h2>
+      <div class="assign-pts-badge">50 POINTS</div>
+    </div>
+  </div>
+  <div class="assign-editorial">
+    <div class="assign-sidebar">
+      <div class="assign-sidebar-tag">Details</div>
+      <div class="assign-sidebar-item"><strong>Length:</strong> 2–3 pages, single-spaced</div>
+      <div class="assign-sidebar-item"><strong>Font:</strong> Times New Roman, 12 pt</div>
+      <div class="assign-sidebar-item"><strong>Citations:</strong> MLA or APA (only if using external sources)</div>
+      <div class="assign-sidebar-item"><strong>Submission:</strong> Paste into Canvas submission box or upload a file (word doc or pdf)</div>
+    </div>
+    <div class="assign-body">
+      <h3>Assignment Overview</h3>
+      <p>In this first major assignment, you will craft a Solidarity Praxis Proposal—a semester-long inquiry centered on a movement, archive, rhetorical artifact, or community project connected to anti-racist feminist resistance. Your task is to name the struggle you are drawn to, clarify the political stakes, and outline how you plan to study it as both a researcher and participant in world-making.</p>
+      <p>This proposal should identify a topic that will anchor your work throughout the semester and potentially grow into your final project, which may take the form of:</p>
+      <ul class="a-list">
+        <li>an academic essay</li>
+        <li>a multimodal or digital work</li>
+        <li>an action research project</li>
+        <li>a creative or mixed-genre praxis artifact</li>
+      </ul>
+      <p>Choose a topic that emerges from your lived commitments—something urgent, something you feel in your bones. Your research and reflection should not only analyze power but amplify resistance.</p>
+
+      <h3>Proposal Components</h3>
+
+      <h4>Center a Movement, Artifact, or Archive</h4>
+      <p>Choose a specific site where anti-racist feminist rhetoric is active. Your focus could include:</p>
+      <ul class="a-list">
+        <li>Abolitionist community organizing or mutual aid networks</li>
+        <li>Indigenous land back movements</li>
+        <li>Migrant justice archives or legal struggles</li>
+        <li>Queer or trans feminist zines or digital storytelling</li>
+        <li>Student protest media, chants, or solidarity campaigns</li>
+        <li>Transnational grassroots campaigns (such as anti-imperialist feminisms or feminist struggles in the Global South)</li>
+      </ul>
+
+      <h4>Define the Scope and Context</h4>
+      <p>Where does your chosen artifact, archive, or movement live? Who created it, and who is it for? What histories, locations, and communities are involved? Identify its rhetorical features and context.</p>
+
+      <h4>Articulate Relevance</h4>
+      <p>How does this topic illuminate the intersections of racial capitalism, settler colonialism, cisheteropatriarchy, ableism, and other structures of domination? Why does this topic matter now—and to whom?</p>
+
+      <h4>Frame Guiding Questions</h4>
+      <p>Develop two to three compelling questions that will guide your inquiry. For example:</p>
+      <ul class="a-list">
+        <li>What solidarities are made possible (or foreclosed) through this rhetoric?</li>
+        <li>How do aesthetics, emotion, or narrative function within this resistance work?</li>
+        <li>In what ways is this site informed by or challenging dominant feminist or racial discourses?</li>
+      </ul>
+
+      <h4>Outline Your Comparative, Transnational Approach</h4>
+      <p>Describe how you will study your topic across borders—disciplinary, geopolitical, or ideological. What methods might you use? What kinds of sources or communities will you engage?</p>
+
+      <h3>Grading Criteria</h3>
+      <p>Your proposal will be evaluated on:</p>
+      <ul class="a-list">
+        <li>Clarity and focus: Is the project specific, grounded, and purposeful?</li>
+        <li>Theoretical rigor: Does it meaningfully engage with anti-racist feminist theory and rhetoric?</li>
+        <li>Comparative and transnational vision: Does the approach resist parochialism or US-centrism?</li>
+        <li>Feasibility: Can this inquiry be developed across the semester?</li>
+        <li>Creativity and commitment: Does it reflect care, passion, and radical curiosity?</li>
+      </ul>
+
+      <div class="note-block">Let this assignment be a declaration: of the communities you're accountable to, the visions you hold, and the solidarities you are prepared to practice. If you're unsure where to begin, bring your uncertainty—we'll work from there.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ASSIGNMENT 2 ===================== -->
+<section id="assign2" class="assign-section light" style="background:var(--cream);">
+  <div class="assign-header-row">
+    <div class="assign-header-num" aria-hidden="true" style="color:rgba(214,40,40,0.08);">02</div>
+    <div class="assign-header-text">
+      <div class="assign-tag">2nd Major Assignment</div>
+      <h2 class="assign-title">Anti-racist Feminist <em>Rhetorical Analysis</em></h2>
+      <div class="assign-pts-badge">100 POINTS</div>
+    </div>
+  </div>
+  <div class="assign-editorial">
+    <div class="assign-sidebar">
+      <div class="assign-sidebar-tag">Details</div>
+      <div class="assign-sidebar-item"><strong>Length:</strong> 10–12 double-spaced pages (not including Works Cited)</div>
+      <div class="assign-sidebar-item"><strong>Format:</strong> Times New Roman, 12 pt, 1" margins</div>
+      <div class="assign-sidebar-item"><strong>File Type:</strong> Word or PDF</div>
+      <div class="assign-sidebar-item"><strong>Submission:</strong> Upload word doc or PDF of your assignment on Canvas</div>
+    </div>
+    <div class="assign-body">
+      <h3>Purpose</h3>
+      <p>This assignment builds on your Solidarity Praxis Proposal and prepares you for your final creative or research project. It invites you to engage deeply with a site of rhetorical resistance to understand how it generates meaning, solidarity, and collective power across borders and identities. You are expected to treat rhetoric not just as persuasion, but as world-making—a form of action that reveals, resists, and reimagines systemic oppression.</p>
+
+      <h3>Assignment Overview</h3>
+      <p>This analytical essay centers a rhetorical artifact, archive, or cluster of materials—such as a protest chant, manifesto, digital campaign, oral history, speech, or cultural production—that mobilizes resistance against racism, empire, and related structures of violence. You will critically examine how the selected artifact operates rhetorically through language, aesthetics, embodiment, media, and performance. Your work should be grounded in a transnational, anti-racist feminist framework and draw on theories from class readings such as intersectionality, decoloniality, abolition, and queer of color critique.</p>
+
+      <h3>Assignment Requirements</h3>
+
+      <h4>1. Introduction (1–2 pages)</h4>
+      <ul class="a-list">
+        <li>Briefly restate your semester topic.</li>
+        <li>Identify your artifact or archive. This can include oral storytelling, grassroots zines, community organizing campaigns, visual or sound art, or digital activism.</li>
+        <li>Describe its origin: Who created it? When? Where? For whom?</li>
+        <li>Articulate why this site is significant to your inquiry and how it speaks to intersecting systems like racial capitalism, settler colonialism, cisheteropatriarchy, or imperialism.</li>
+      </ul>
+
+      <h4>2. Rhetorical Analysis (5–7 pages)</h4>
+      <p>Analyze the rhetorical strategies used. Consider elements such as:</p>
+      <ul class="a-list">
+        <li>Voice and audience</li>
+        <li>Embodiment and performance</li>
+        <li>Visual, sonic, and affective appeals</li>
+        <li>Use of metaphor, narrative, or symbolism</li>
+        <li>Resistance to dominant language conventions</li>
+      </ul>
+      <p>Situate the artifact within a broader political and cultural context. Address questions such as:</p>
+      <ul class="a-list">
+        <li>How does this artifact intervene in systems of power?</li>
+        <li>What kinds of visibility or invisibility does it produce?</li>
+        <li>What are the stakes of this rhetoric for historically marginalized communities?</li>
+        <li>How do form and content work together to shape meaning?</li>
+      </ul>
+
+      <h4>3. Theoretical Integration and Discussion (2–3 pages)</h4>
+      <ul class="a-list">
+        <li>Connect your analysis to 2–3 key course theorists.</li>
+        <li>Reflect on how your selected artifact complicates or affirms existing concepts of resistance, identity, and global justice.</li>
+        <li>Compare your artifact to other public rhetorics on race and empire.</li>
+        <li>Discuss potential contradictions, tensions, or silences within the artifact itself.</li>
+      </ul>
+
+      <h4>4. Conclusion (1–2 pages)</h4>
+      <ul class="a-list">
+        <li>Summarize key insights from your analysis.</li>
+        <li>Reflect on how this artifact expands your understanding of anti-racist feminist rhetorics.</li>
+        <li>Identify possible next steps or questions to explore in your final project.</li>
+      </ul>
+
+      <h4>5. Citations</h4>
+      <p>Use MLA or APA to cite all referenced materials. Include a complete Works Cited page.</p>
+
+      <h3>Evaluation Criteria</h3>
+      <ul class="a-list">
+        <li>Clarity and focus of argument</li>
+        <li>Depth and rigor of rhetorical analysis</li>
+        <li>Integration of theoretical concepts</li>
+        <li>Attention to transnational, intersectional, and anti-imperialist perspectives</li>
+        <li>Clear, cohesive writing and organization</li>
+        <li>Engagement with class materials and critical frameworks</li>
+      </ul>
+
+      <h3>Tips for Success</h3>
+      <ul class="a-list">
+        <li>Narrow your focus. Fewer, richer examples are better than trying to cover too much.</li>
+        <li>Stick to your topic. Build on your proposal and keep your materials aligned with your main focus.</li>
+        <li>Analyze, don't just summarize. Explain what your examples do and why they matter.</li>
+        <li>Organize by idea, not artifact. Group paragraphs around themes or rhetorical strategies, not just by material.</li>
+        <li>Use headings. They help with structure and clarity.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ASSIGNMENT 3 ===================== -->
+<section id="assign3" class="assign-section" style="background:var(--ink);">
+  <div class="assign-header-row">
+    <div class="assign-header-num" aria-hidden="true">03</div>
+    <div class="assign-header-text">
+      <div class="assign-tag">3rd Major Assignment</div>
+      <h2 class="assign-title">Final <em>Liberation</em> Project</h2>
+      <div class="assign-pts-badge">150 POINTS (PROJECT + PRESENTATION)</div>
+    </div>
+  </div>
+  <div class="assign-editorial">
+    <div class="assign-sidebar">
+      <div class="assign-sidebar-tag">Details</div>
+      <div class="assign-sidebar-item"><strong>Two Parts:</strong> Final Project (100 pts.) + Class Presentation (50 pts.)</div>
+      <div class="assign-sidebar-item"><strong>Presentation:</strong> 5–10 minutes</div>
+      <div class="assign-sidebar-item"><strong>Submission:</strong> Project file or link, Works Cited (APA or MLA)</div>
+    </div>
+    <div class="assign-body">
+      <h3>Assignment Overview</h3>
+      <p>This final assignment invites you to create a justice-oriented, multimodal intervention that builds upon your semester-long research and rhetorical inquiry. The project should center the principles of anti-racist feminist world-making and serve as a form of solidarity praxis.</p>
+      <p>You will produce a creative and critical final project—such as a digital zine, short film, podcast, interactive map, educational toolkit, social media archive, community resource, or traditional research paper—that applies intersectional rhetorical strategies to imagine otherwise. Your work should be rooted in care, transformation, collectivity, and a desire to rupture dominant systems of racial capitalism, imperialism, cisheteropatriarchy, and settler colonialism.</p>
+      <p>Your project must demonstrate the following:</p>
+      <ul class="a-list">
+        <li>Grounding in intersectional, transnational, and anti-imperialist feminist frameworks</li>
+        <li>Use of rhetorical tools (language, visuals, sound, space, embodiment, media) for liberation, not just critique</li>
+        <li>A clear call to action, rooted in care and solidarity</li>
+        <li>Critical reflection on your role as a researcher-practitioner</li>
+      </ul>
+
+      <h3>Submission Components</h3>
+      <ul class="a-list">
+        <li>Project file or link (video, podcast, toolkit, zine, site, paper, etc.)</li>
+        <li>Class presentation introducing your project, what you did, and what you are calling for</li>
+        <li>Works Cited (APA or MLA format) for all references used</li>
+      </ul>
+
+      <h3>Evaluation Criteria</h3>
+      <ul class="a-list">
+        <li>Political and rhetorical depth</li>
+        <li>Alignment with anti-racist feminist frameworks</li>
+        <li>Clarity and creativity of communication</li>
+        <li>Depth of engagement with research and theory</li>
+        <li>Solidarity-centered recommendations or interventions</li>
+        <li>Organization and clarity of creator's statement and presentation</li>
+      </ul>
+      <p>This assignment is your invitation to think, create, and communicate otherwise. It is your offering to the worlds we are trying to build together.</p>
+
+      <h3>Two Parts of the Final Assignment</h3>
+      <p><strong>Final Project (100 pts.)</strong></p>
+      <ul class="a-list">
+        <li>Academic Paper</li>
+        <li>Action Research</li>
+        <li>Digital-Multimodal Project</li>
+      </ul>
+      <p><strong>Class Presentation (50 pts.)</strong></p>
+      <p>Length: 5-10 mins. Your presentation must have:</p>
+      <ul class="a-list">
+        <li>What is your topic and final project?</li>
+        <li>What did you do in this project?</li>
+        <li>What are your findings and recommendations/call to action/suggestions?</li>
+      </ul>
+
+      <h3>Option A — Academic Paper</h3>
+      <p>This option invites you to write a research-based academic paper that explores a key issue or initiative related to anti-racist feminist resistance. The paper should not only analyze rhetorical practices in context but also offer your own justice-oriented intervention—rooted in solidarity, care, and a desire to transform existing systems.</p>
+      <p>Your work should engage with intersectional, anti-imperialist, and transnational feminist frameworks, demonstrating how rhetorical strategies are used to resist and reimagine beyond the confines of racial capitalism, settler colonialism, and cisheteropatriarchy.</p>
+
+      <h4>Purpose</h4>
+      <p>This paper calls on you to:</p>
+      <ul class="a-list">
+        <li>Interrogate a rhetorical artifact, archive, or initiative engaged in anti-racist feminist resistance.</li>
+        <li>Examine how this work operates rhetorically across global, historical, and political contexts.</li>
+        <li>Offer a justice-centered set of recommendations or a visionary call to action, grounded in your analysis and course readings.</li>
+      </ul>
+
+      <h4>Paper Components</h4>
+      <p><strong>1. Introduction (1–2 pages):</strong></p>
+      <ul class="a-list">
+        <li>Introduce your topic and explain its relevance to the rhetorics of racism, resistance, and feminist world-making.</li>
+        <li>Offer background on the community, initiative, or campaign you are analyzing.</li>
+        <li>Present a thesis that articulates your critical stance and identifies the intervention your paper aims to make.</li>
+      </ul>
+      <p><strong>2. Rhetorical Analysis (5–7 pages):</strong></p>
+      <ul class="a-list">
+        <li>Analyze how the selected archive/artifact/movement uses language, imagery, performance, digital strategies, embodiment, or storytelling to resist systems of domination.</li>
+        <li>Situate the rhetoric within intersecting structures (race, gender, empire, capital, ableism, etc.).</li>
+        <li>Engage with course texts and global feminist/queer of color critique.</li>
+        <li>Discuss effectiveness, contradictions, and possibilities. Use concrete examples from your research.</li>
+      </ul>
+      <p><strong>3. Justice-Oriented Recommendations (2–3 pages):</strong></p>
+      <ul class="a-list">
+        <li>Propose 3–5 actionable recommendations rooted in solidarity praxis.</li>
+        <li>These should emerge from your analysis and seek to extend, deepen, or revise current efforts.</li>
+        <li>Consider the ethical, material, and political stakes of implementing your recommendations.</li>
+      </ul>
+      <p><strong>4. Conclusion (1–2 pages):</strong></p>
+      <ul class="a-list">
+        <li>Reflect on your findings and the broader implications of your analysis.</li>
+        <li>Offer questions for future research or organizing.</li>
+        <li>Discuss what your own positionality contributes to this work.</li>
+      </ul>
+      <p><strong>5. Works Cited (Required):</strong></p>
+      <p>Use MLA or APA style. Include only sources cited directly in the paper, including course texts and independent research.</p>
+
+      <p><strong>Format and Submission:</strong></p>
+      <ul class="a-list">
+        <li>Length: 10–12 pages (double-spaced, excluding works cited)</li>
+        <li>Format: 12-point font, 1-inch margins</li>
+        <li>File type: Word Doc or PDF</li>
+        <li>Include: Project + separate video presentation (5–10 minutes)</li>
+      </ul>
+
+      <p><strong>Evaluation Criteria:</strong></p>
+      <ul class="a-list">
+        <li>Political and Rhetorical Depth: Clear engagement with anti-racist feminist frameworks and rhetorical strategies.</li>
+        <li>Analytical Rigor: Close reading of rhetorical practices and systemic contexts.</li>
+        <li>Justice Orientation: Thoughtful, bold, and grounded recommendations or vision.</li>
+        <li>Use of Evidence: Coherent synthesis of sources, with strong research support.</li>
+        <li>Writing Quality: Clarity, structure, and editing</li>
+        <li>Presentation Quality: Effective, engaging, and grounded introduction of your work.</li>
+      </ul>
+
+      <h3>Option B — Action Research Project</h3>
+      <p>This project invites you to directly engage with a community organization or collective addressing issues of racism, anti-imperialism, and liberation. Through action research, you will combine academic inquiry with ethical and collaborative fieldwork to document, support, and reflect on community-driven antiracist feminist efforts.</p>
+      <p>This project centers solidarity, accountability, and critical praxis. It asks you not only to study a movement or organization but to work alongside it—building relationships, learning from embodied knowledge, and contributing meaningfully to its work. Your final submission will document both your academic analysis and your contributions to the organization.</p>
+
+      <h4>Purpose</h4>
+      <ul class="a-list">
+        <li>To engage in grounded, community-connected research that reflects antiracist, feminist, and decolonial values.</li>
+        <li>To examine the rhetorical strategies, material practices, and justice-centered goals of a community organization.</li>
+        <li>To reflect on your own positionality, participation, and responsibilities in solidarity-based work.</li>
+        <li>To produce an academically rigorous and community-informed final project rooted in care and world-making.</li>
+      </ul>
+
+      <h4>Project Phases and Components</h4>
+      <p><strong>Project Proposal (1–2 pages)</strong></p>
+      <p>Before beginning your final project, you will submit a proposal for instructor approval that includes:</p>
+      <ul class="a-list">
+        <li>Identification of the organization or community you plan to engage with.</li>
+        <li>An explanation of the organization's mission and relevance to your semester topic.</li>
+        <li>A description of your anticipated engagement (e.g., volunteering, interviews, participation in events, collaborative workshops).</li>
+        <li>Research questions you intend to explore.</li>
+        <li>A preliminary vision of what your final product might look like, including possible deliverables or outputs for the organization.</li>
+      </ul>
+
+      <p><strong>Fieldwork Journal (ongoing)</strong></p>
+      <p>Throughout your engagement, you will maintain a reflective journal documenting:</p>
+      <ul class="a-list">
+        <li>Observations and experiences during your participation.</li>
+        <li>Notes on rhetorical strategies used by the organization (e.g., public campaigns, media engagement, storytelling, protests, zines).</li>
+        <li>Reflections on your role, your ethical responsibilities, and any tensions, insights, or questions that emerge.</li>
+      </ul>
+      <p>Your journal may include informal reflections, analytic insights, dialogue excerpts (with consent), and field notes.</p>
+
+      <p><strong>Final Report (6–10 pages; excluding work cited)</strong></p>
+      <p>Your report will synthesize fieldwork, academic theory, and critical analysis. It should include:</p>
+      <p><strong>Introduction (1–2 pages):</strong></p>
+      <ul class="a-list">
+        <li>Overview of your topic and the organization's work.</li>
+        <li>Statement of your research questions and purpose.</li>
+        <li>Explanation of how your action research connects to the themes of the course.</li>
+      </ul>
+      <p><strong>Analysis of Practices (2–3 pages):</strong></p>
+      <ul class="a-list">
+        <li>Examination of the rhetorical strategies and practices used by the organization.</li>
+        <li>Contextualization of their work within intersecting systems (e.g., racial capitalism, settler colonialism, cisheteropatriarchy).</li>
+        <li>Reflection on the efficacy and limitations of their strategies.</li>
+        <li>Use of evidence from fieldwork and course readings.</li>
+      </ul>
+      <p><strong>What You Did (2–3 pages):</strong></p>
+      <ul class="a-list">
+        <li>Detailed account of your work and contributions to the organization.</li>
+        <li>Explanation of how your labor supported their goals or filled a community-identified need.</li>
+        <li>Inclusion of any materials you co-created (e.g., flyers, resources, social media campaigns) as appendices if applicable.</li>
+      </ul>
+      <p><strong>Conclusion and Recommendations (1–2 pages):</strong></p>
+      <ul class="a-list">
+        <li>Reflection on what you learned from the organization and your role in it.</li>
+        <li>Proposals for future directions, improvements, or expansions of the work.</li>
+        <li>Consideration of ethical responsibilities in research and activism.</li>
+      </ul>
+      <p><strong>Works Cited:</strong></p>
+      <ul class="a-list">
+        <li>Full list of sources (academic and community-based) used in your report.</li>
+        <li>Follow MLA or APA citation style consistently.</li>
+      </ul>
+
+      <p><strong>Submission Guidelines:</strong></p>
+      <ul class="a-list">
+        <li>Final report should be submitted as a Word document or PDF.</li>
+        <li>Fieldwork journal may be submitted as a separate document or appendix.</li>
+        <li>Any media, artifacts, or documents created with the organization can be submitted as supplementary materials.</li>
+      </ul>
+
+      <p><strong>Evaluation Criteria:</strong></p>
+      <ul class="a-list">
+        <li>Evidence of sustained and meaningful engagement with the organization.</li>
+        <li>Critical analysis of the organization's rhetorical practices and strategic goals.</li>
+        <li>Thoughtful reflection on your own role and learning.</li>
+        <li>Practical, research-informed, and community-grounded recommendations.</li>
+        <li>Integration of fieldwork, theory, and praxis.</li>
+        <li>Clear writing, coherent organization, and ethical presentation of work.</li>
+      </ul>
+
+      <p><strong>Getting Started:</strong></p>
+      <ul class="a-list">
+        <li>Choose a movement, organization, or grassroots initiative aligned with your semester topic.</li>
+        <li>Prioritize collectives engaged in liberatory, anti-racist, and anti-colonial work.</li>
+        <li>Reach out to the group early and communicate your goals with humility and respect.</li>
+        <li>Bring your proposal to the instructor for feedback before beginning intensive engagement.</li>
+      </ul>
+
+      <h3>Option C — Digital-Multimodal Liberation Project</h3>
+      <p>This assignment invites you to creatively communicate your analysis of antiracist practices and recommendations using a digital or multimodal format. You may choose from the formats below or propose an alternative format of your own that aligns with the goals of this course.</p>
+      <p>Each project must:</p>
+      <ul class="a-list">
+        <li>Demonstrate critical engagement with antiracist, feminist, and decolonial frameworks.</li>
+        <li>Reflect your research, rhetorical analysis, and solidarity-based praxis.</li>
+        <li>Be designed with intention toward accessibility, audience impact, and collective liberation.</li>
+      </ul>
+
+      <h4>Project Options (choose one or propose your own)</h4>
+      <ul class="a-list">
+        <li><strong>Short Documentary (5–10 minutes):</strong> A video that explores how individuals or communities resist racism. May include interviews, archival footage, narration, or music to support your analysis and call to action.</li>
+        <li><strong>Brochure or Toolkit:</strong> A printed or digital resource designed to educate a specific audience. May include case studies, infographics, step-by-step guides, and links to community-based practices.</li>
+        <li><strong>Website or Blog Series:</strong> A site or series of blog posts that organizes your research and recommendations. Should include visual and multimedia elements such as video, sound, maps, or photo essays.</li>
+        <li><strong>Vlog Series:</strong> A collection of 3–5 short videos (3–5 minutes each) that explore key aspects of your research using personal reflection, interviews, or visual storytelling.</li>
+        <li><strong>Social Media Campaign:</strong> A mock or real campaign designed for platforms like Instagram, TikTok, or Twitter. Must include a coherent series of posts with graphics, captions, and a central hashtag.</li>
+        <li><strong>Board Game or Card Game:</strong> A physical or digital game designed to teach players about antiracist practices through collaborative play, storytelling, or scenario-based challenges.</li>
+        <li><strong>Podcast (10–15 minutes):</strong> An audio episode that weaves together narrative, research, and sound design. May include interviews, oral histories, or community voices.</li>
+        <li><strong>Zine or Illustrated Booklet:</strong> A creative publication combining text, visuals, and design. May include essays, collages, quotes, personal narratives, and radical art.</li>
+        <li><strong>Public Service Announcement (PSA):</strong> A short video or audio PSA that raises awareness about your topic and proposes concrete steps for change. Should be persuasive, creative, and accessible.</li>
+        <li><strong>Interactive Workshop or Lesson Plan:</strong> A learning session designed for a specific community. Should include objectives, facilitation materials, discussion questions, and resources. May be submitted as a lesson plan or recorded workshop.</li>
+      </ul>
+
+      <h4>Creator's Statement (1–2 pages)</h4>
+      <p>You must submit a short-written statement alongside your project. It should include:</p>
+      <ul class="a-list">
+        <li>A description of your rhetorical and design choices.</li>
+        <li>A statement of intended audience and purpose.</li>
+        <li>How your project meets the goals of the assignment and engages with course themes.</li>
+        <li>Reflection on the research and praxis behind the project.</li>
+      </ul>
+
+      <h4>Citation Requirements</h4>
+      <p>All projects must include a Works Cited page that lists your sources in APA or MLA style. Multimedia sources, interviews, and community materials must be cited appropriately.</p>
+
+      <h4>Submission Requirements</h4>
+      <ul class="a-list">
+        <li>A link or file of your completed project.</li>
+        <li>A creator's statement (Word or PDF).</li>
+        <li>A Works Cited section as part of your statement or submitted separately.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DISCUSSION & REFLECTION ===================== -->
+<section id="discussion">
+  <div class="disc-header">
+    <div class="sect-stamp" style="color:var(--vermillion);border-color:var(--vermillion);">Ongoing</div>
+    <h2 class="disc-title" style="margin-top:20px;">Discussion & <em>Reflection</em></h2>
+  </div>
+  <div class="disc-split">
+    <div class="disc-block">
+      <div class="disc-block-title">Reading Reflections (Weekly | 300–500 words)</div>
+      <div class="disc-block-body">Each week, you will respond to course materials through a reading reflection. These responses invite you to engage deeply with key concepts such as imperial feminism, environmental justice, abolition, queer diaspora, and transnational solidarity. Reflections should connect texts to lived experiences, current events, or ongoing movements and may include creative, poetic, or multimedia components.</div>
+    </div>
+    <div class="disc-divider"></div>
+    <div class="disc-block">
+      <div class="disc-block-title">Scaffolding Assignments (Ongoing)</div>
+      <div class="disc-block-body">Throughout the semester, you will complete smaller assignments that support your major projects. These include:
+        <ul class="a-list">
+          <li>Research topic brainstorming</li>
+          <li>Solidarity mapping</li>
+          <li>Rhetorical artifact annotation</li>
+          <li>Media or archive critique</li>
+          <li>Peer feedback workshops</li>
+        </ul>
+        These activities are designed to make the research and creative process more intentional, participatory, and grounded in care.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEKLY CALENDAR ===================== -->
+<section id="calendar">
+  <div class="cal-header">
+    <h2 class="cal-title">Course Calendar</h2>
+    <span class="cal-weeks-count">16 WEEKS</span>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 01</span>
+      <span class="week-title">Foundations of Intersectional Anti-Racist Rhetorics</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">These readings introduce and deepen understanding of intersectionality, radical feminist theory, and global solidarity across struggles against racism, sexism, and imperialism.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Kimberlé Crenshaw, "Mapping the Margins: Intersectionality, Identity Politics, and Violence against Women of Color" (Stanford Law Review, 1991)</div>
+      <div class="week-reading">Audre Lorde, "The Master's Tools Will Never Dismantle the Master's House" (Sister Outsider, 1979)</div>
+      <div class="week-reading">Combahee River Collective, "The Combahee River Collective Statement" (1977)</div>
+      <div class="week-reading">Angela Y. Davis, "Ferguson, Palestine, and the Foundations of a Movement" (Freedom Is a Constant Struggle, 2016)</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Bobo &amp; Flex – A podcast by two Black African women on decolonial feminism, mental health, and digital politics.</div>
+      <div class="week-media">F! It! – Radical feminist foreign policy podcast featuring First Nations and Global South voices.</div>
+      <div class="week-media">#WhoAskedHer – A feminist podcast from Papua New Guinea on Indigenous resistance and gender justice.</div>
+      <div class="week-media">Intersectionality Matters! (Kimberlé Crenshaw) – In-depth conversations on race, gender, and power across movements.</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 02</span>
+      <span class="week-title">Black Feminist Memory and Theory</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">These texts provide historical and theoretical grounding in Black feminist rhetoric, memory, and the politics of liberation.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Patricia Hill Collins, Black Feminist Thought (excerpt)</div>
+      <div class="week-reading">bell hooks, Feminism Is for Everybody: Passionate Politics (Introduction and Chapter 1)</div>
+      <div class="week-reading">Barbara Smith, "Toward a Black Feminist Criticism" (1978)</div>
+      <div class="week-reading">bell hooks, Ain't I a Woman: Black Women and Feminism (selected chapter)</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">For the Wild – Jackie Wang on Carceral Capitalism (Afrofuturist scholar on debt, racial capitalism, and policing)</div>
+      <div class="week-media">Feral Visions with Anjali Nath Upadhyay – A podcast on decolonial feminist education and community-based praxis</div>
+      <div class="week-media">Uncultured with Areej Quraishi – Satirical and sharp reflections on South Asian diasporic identity and critique</div>
+      <div class="week-media">Intersectionality Matters! (Kimberlé Crenshaw) – Episode of your choice that builds on Week 1's themes</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 03</span>
+      <span class="week-title">Rhetorics of Resistance, Love, and Revolutionary Solidarity</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week centers revolutionary love and solidarity as radical praxis and rhetorical strategy. It also introduces resistance as not only critique, but also care, interdependence, and collective futurity.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "The Meaning of Freedom"</div>
+      <div class="week-reading">June Jordan, "Poem About My Rights" (1980)</div>
+      <div class="week-reading">Assata Shakur, Assata: An Autobiography – Selected chapters</div>
+      <div class="week-reading">Alexis Pauline Gumbs, Revolutionary Mothering: Love on the Front Lines – Excerpt</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Octavia's Parables – adrienne maree brown and Toshi Reagon on Parable of the Sower</div>
+      <div class="week-media">How to Survive the End of the World – Episode on care work, grief, and transformation</div>
+      <div class="week-media">Sister Fire: Black Women and Liberation – Community archive film and storytelling project</div>
+      <div class="week-media">Truthout – Special series: "Solidarity Beyond Borders"</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 04</span>
+      <span class="week-title">Anti-Imperial Feminisms and Global South Solidarities</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week critically examines imperialist feminism, the racialized global gender order, and transnational feminist solidarity. Students will interrogate how empire shapes gendered oppression and explore strategies of resistance from Global South thinkers and movements.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Chandra Talpade Mohanty, "Under Western Eyes: Feminist Scholarship and Colonial Discourses" (1984)</div>
+      <div class="week-reading">Leila Ahmed, Women and Gender in Islam – Introduction &amp; selected chapter</div>
+      <div class="week-reading">María Lugones, "Heterosexualism and the Colonial / Modern Gender System" (2007)</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Angela Davis: Palestine, Ferguson, and the Foundations of a Movement"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Decolonizing Foreign Policy – Podcast episode featuring Rafia Zakaria on white feminism</div>
+      <div class="week-media">Voices of Muslim Women – Grassroots podcast focused on resistance through narrative, art, and memory</div>
+      <div class="week-media">Zine: Transnational Feminisms &amp; Abolition – Digital zine by Black and Palestinian scholars</div>
+      <div class="week-media">Visualizing Palestine – Infographic projects on settler colonialism, gender violence, and resistance</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 05</span>
+      <span class="week-title">Abolition Feminism and the Carceral State</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week explores the relationship between gender, race, and the prison-industrial complex through an abolitionist feminist lens. Students will investigate how carceral logics perpetuate racialized gender violence and how abolition offers tools for liberation and world-building.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Ruth Wilson Gilmore, "Globalisation and US Prison Growth: From Military Keynesianism to Post-Keynesian Militarism" (2007)</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Abolitionist Alternatives"</div>
+      <div class="week-reading">Beth Richie, Arrested Justice: Black Women, Violence, and America's Prison Nation – Selected excerpt</div>
+      <div class="week-reading">Mariame Kaba, "So You're Thinking About Becoming an Abolitionist" (2020)</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Beyond Prisons – Episode on transformative justice and feminist abolition</div>
+      <div class="week-media">No Selves to Defend – Multimedia art archive on criminalized survivors of violence</div>
+      <div class="week-media">Survived and Punished – Stories from women and queer people resisting criminalization</div>
+      <div class="week-media">Critical Resistance Abolitionist Toolkit – Community organizing and reflection resource</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 06</span>
+      <span class="week-title">Gendered Colonialism, Indigenous Feminism, and Land Back Rhetorics</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week centers Indigenous feminist resistance to settler colonialism, particularly through rhetorical strategies around land, memory, and sovereignty. We examine how gendered colonialism operates globally and how Indigenous rhetorics challenge both imperial power and liberal inclusion.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Leanne Betasamosake Simpson, As We Have Always Done: Indigenous Freedom through Radical Resistance – Selected chapter</div>
+      <div class="week-reading">Mishuana Goeman, "Notes toward a Native Feminism" (2009)</div>
+      <div class="week-reading">Sandy Grande, "Accumulation of the Primitive: The Limits of Liberalism and the Politics of Occupation in Settler Colonialism"</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Political Activism and Protest from the 1960s to the Age of Obama"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">All My Relations – Episode on Land Back and Native feminist resurgence</div>
+      <div class="week-media">RECLAMATION (short film by Thirza Cuthand) – Indigenous futurisms and land sovereignty</div>
+      <div class="week-media">Coffee with My Ma – Indigenous matriarchal storytelling across generations</div>
+      <div class="week-media">Zine: Land Back is a Verb – Decolonial zine from Indigenous Action Media</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 07</span>
+      <span class="week-title">Mutual Aid, Survival, and Community-Building Rhetorics</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week foregrounds mutual aid, care work, and radical interdependence as rhetorical and material practices of resistance. Students explore how community-led survival strategies interrupt state violence and offer abolitionist alternatives rooted in feminist and queer world-making.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Dean Spade, Mutual Aid: Building Solidarity During This Crisis (and the Next) – Introduction &amp; Chapter 1</div>
+      <div class="week-reading">Alexis Pauline Gumbs, "Evidence" from Spill: Scenes of Black Feminist Fugitivity</div>
+      <div class="week-reading">Grace Lee Boggs, The Next American Revolution – Selected excerpt</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Transnational Solidarities"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Live from the Apocalypse – Audio zine featuring mutual aid organizers and incarcerated abolitionists</div>
+      <div class="week-media">Irresistible: The People's Response to Crisis – Episode on healing justice and mutual aid</div>
+      <div class="week-media">We Are Not Waiting – Short film on QTPOC-led mutual aid and survival in pandemic and protest</div>
+      <div class="week-media">Zine: Building Community Without Police – Toolkit by CrimethInc. and defund collectives</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 08</span>
+      <span class="week-title">Surveillance, the Security State, and Racialized Control</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week critiques the role of surveillance technologies and borders in producing racialized fear, policing, and disposability. The readings offer frameworks for resisting the securitized state and imagining anti-colonial abolitionist futures.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Simone Browne, Dark Matters: On the Surveillance of Blackness – Introduction</div>
+      <div class="week-reading">Harsha Walia, Border &amp; Rule: Global Migration, Capitalism, and the Rise of Racist Nationalism – Selected chapter</div>
+      <div class="week-reading">Sarah T. Hamid, "Abolishing Carceral Tech: A Primer" (2022)</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "We Have to Talk About Systemic Change"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Militarized AI in Policing (Coded Bias podcast feature) – Algorithmic oppression &amp; resistance</div>
+      <div class="week-media">Black Code (documentary) – Surveillance and digital colonization</div>
+      <div class="week-media">Surveillance and the Border Industrial Complex – Audio series by Haymarket Books</div>
+      <div class="week-media">Zine: Against Borders, Against Surveillance – Distributed by Abolitionist Futures Collective</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 09</span>
+      <span class="week-title">Queer, Trans, and Crip of Color Critique</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week investigates how queer, trans, and disabled bodies are regulated, pathologized, and resisted under regimes of racism and neoliberalism. We explore how QTPOC and crip of color critique reframes resistance and builds coalitional possibility.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Cathy J. Cohen, "Punks, Bulldaggers, and Welfare Queens: The Radical Potential of Queer Politics?" (1997)</div>
+      <div class="week-reading">Eli Clare, Brilliant Imperfection: Grappling with Cure – Selected chapter</div>
+      <div class="week-reading">Dean Spade, "Normalization Hurts Everyone" from Normal Life: Administrative Violence, Critical Trans Politics, and the Limits of Law</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "We Have to Talk About Systemic Change" (review)</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Disability Visibility Podcast – Episode: "Disabled People Are the Original Preppers"</div>
+      <div class="week-media">Queer The Land Radio – QTPOC mutual aid, organizing, and sanctuary</div>
+      <div class="week-media">We Can't Breathe: A Queer and Trans Reflection on Police Violence – Short documentary</div>
+      <div class="week-media">Zine: Queer and Disabled Against Police – Crip abolitionist organizing toolkit</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 10</span>
+      <span class="week-title">Migration, Borders, and Refugee Resistance</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week interrogates borders as technologies of imperialism and racial violence. Students engage with feminist and decolonial critiques of migration control and build understanding of migrant and refugee-led resistance movements across the Global South and North.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Harsha Walia, Undoing Border Imperialism – Introduction</div>
+      <div class="week-reading">Nandita Sharma, Home Economics: Nationalism and the Making of 'Migrant Workers' in Canada – Selected chapter</div>
+      <div class="week-reading">Gloria Anzaldúa, "La Conciencia de la Mestiza: Towards a New Consciousness" from Borderlands/La Frontera</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Justice is Indivisible"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Migration is Beautiful – Podcast on migrant justice and art</div>
+      <div class="week-media">No One Is Illegal – Grassroots movement videos on resisting deportations</div>
+      <div class="week-media">Zine: Decolonize Migration – Created by migrant justice organizers</div>
+      <div class="week-media">From Surviving to Thriving: Refugee Women Speak – Digital storytelling archive</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 11</span>
+      <span class="week-title">Environmental Racism, Climate Justice, and Extractive Violence</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week foregrounds ecological survival as a site of resistance to racial capitalism and settler colonialism. We explore how racialized communities resist extractive industries and build climate justice movements rooted in ancestral memory, land, and collective care.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Max Liboiron, Pollution is Colonialism – Introduction &amp; Chapter 1</div>
+      <div class="week-reading">Rob Nixon, "Slow Violence and the Environmentalism of the Poor" – Selected excerpt</div>
+      <div class="week-reading">Kyle Powys Whyte, "Indigenous Science (Fiction) for the Anthropocene: Ancestral Dystopias and Fantasies of Climate Change Crises"</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "We Owe Our Collective Hope to the Grassroots"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">How to Survive the End of the World – Episode: "Black Ecologies"</div>
+      <div class="week-media">There's Something in the Water (dir. Elliot Page) – Environmental racism in Nova Scotia</div>
+      <div class="week-media">Stories from the Land – Indigenous podcast on land-based memory and activism</div>
+      <div class="week-media">Zine: Against the Greenwashed Future – Eco-abolitionist zine by Earthbound Collective</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 12</span>
+      <span class="week-title">Global Feminist Resistance and Transnational Solidarity</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week brings into focus feminist resistance movements across the globe—from Zapatista women's organizing to feminist uprisings in Sudan, Iran, and beyond. We examine how anticapitalist, anti-imperialist, and abolitionist feminisms operate across borders, while resisting cooptation by NGOism or neoliberal feminism.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Chandra Talpade Mohanty, "Under Western Eyes: Feminist Scholarship and Colonial Discourses" (1984)</div>
+      <div class="week-reading">Zapatista Women's Revolutionary Laws – English translation &amp; commentary</div>
+      <div class="week-reading">Sara Salem, "Feminist Thought in the Global South"</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Feminism and Abolition: Theories and Practices for Our Time"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Ebtihal Mahadeen on Gender and Uprisings in the Arab World – Interview from Status Podcast</div>
+      <div class="week-media">Zapatista Women Speak – Audio archive of insurgent feminist praxis</div>
+      <div class="week-media">This is Not a Coup – Documentary on feminist resistance during the Greek debt crisis</div>
+      <div class="week-media">Zine: Transnational Feminist Toolkit – Produced by feminists in diaspora &amp; exile</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 13</span>
+      <span class="week-title">Aesthetics of Resistance – Media, Art, and Embodied Rhetorics</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week foregrounds art as a form of theorizing and organizing. Through critical work on photography, sound, speculative storytelling, and embodied practice, we explore how media aesthetics participate in the labor of anti-racist world-making. Students engage with how art is weaponized—and reclaimed—as a rhetorical site of care, grief, resistance, and future-making.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Tina M. Campt, Listening to Images – Introduction</div>
+      <div class="week-reading">Alexis Pauline Gumbs, "M Archive: After the End of the World" – Selected fragments</div>
+      <div class="week-reading">Trinh T. Minh-ha, "Speaking Nearby" from When the Moon Waxes Red</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Art and the Imagination for a Just World"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Natasha Marin – Black Imagination (interview &amp; reading)</div>
+      <div class="week-media">Fragments of Justice – Visual art series on BLM, Palestine, and land dispossession</div>
+      <div class="week-media">Zine: Surviving the Long Wars – Veteran Art Truthtelling Project</div>
+      <div class="week-media">Reparations, Art, and Accountability – Panel hosted by Creative Wildfire</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 14</span>
+      <span class="week-title">Praxis, Organizing, and Anti-Racist Visioning</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week prepares students for enacting the knowledge they've cultivated throughout the course. Through abolitionist and visionary organizing frameworks, students begin collaboratively workshopping their final anti-racist praxis projects. The week centers sustainable activism, transformative justice, and solidarity across struggle.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Mariame Kaba, We Do This 'Til We Free Us – Chapter: "So You're Thinking About Becoming an Abolitionist"</div>
+      <div class="week-reading">adrienne maree brown, Emergent Strategy – Chapter: "Resilience, Transformation, and Interdependence"</div>
+      <div class="week-reading">Ruha Benjamin, "Racializing Surveillance: From the War on Terror to the War on Abolition"</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Chapter: "Reflections on Solidarity and Liberation"</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">How to Survive the End of the World – adrienne maree brown &amp; Autumn Brown on movement vision</div>
+      <div class="week-media">Visionary Organizing Lab – Series by Project NIA on dreaming abolitionist futures</div>
+      <div class="week-media">The Interference Archive – Oral histories of radical movements</div>
+      <div class="week-media">Zine: Practical Abolition – Doing the Work in Everyday Life</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 15</span>
+      <span class="week-title">Final Projects – Anti-Racist Praxis Presentations</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">This week showcases student projects that bridge research, lived experience, and public engagement. Projects may take the form of academic essays, zines, podcasts, video essays, storytelling performances, digital archives, activist toolkits, or other radical formats. You will give short presentations and receive supportive feedback from your peers.</div>
+    <div class="week-content">
+      <div class="week-section-label">Activities</div>
+      <div class="week-reading">Final Project Presentations (In-Class with Digital/Multimodal Showcase)</div>
+      <div class="week-reading">Peer Responses + Reflections: Engage critically and supportively with each other's work</div>
+      <div class="week-reading">Submit Praxis Reflection: Connect your project to course themes, theories, and your own learning trajectory</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Praxis Archives – Feminist research-to-action project library</div>
+      <div class="week-media">Public Scholarship is a Practice of Freedom – Lecture by Ruha Benjamin</div>
+      <div class="week-media">Zine: Study, Struggle, Survive – Created by student abolitionists at CUNY</div>
+      <div class="week-media">The Abolitionist Futures Project – Multimedia database of student-led justice projects</div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-head" onclick="toggleWeek(this)">
+      <span class="week-num">WEEK 16</span>
+      <span class="week-title">Collective Reflection, Closure, and Commitments</span>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-desc">In this closing week, we reflect on the intellectual, emotional, and activist labor of this course. We ask: What have we learned, unlearned, and imagined? How do we carry anti-racist, feminist, and decolonial praxis forward in our lives, communities, and movements? This is a space for gratitude, commitment, and dreaming otherwise.</div>
+    <div class="week-content">
+      <div class="week-section-label">Indicative Readings</div>
+      <div class="week-reading">Alexis Pauline Gumbs, "How to Breathe Like Ancestors are Holding You" (from Dub: Finding Ceremony)</div>
+      <div class="week-reading">Angela Y. Davis, Freedom Is a Constant Struggle – Final chapter: "Toward Abolition, Liberation, and Solidarity"</div>
+      <div class="week-section-label">In-Class Activities</div>
+      <div class="week-reading">Closing Circle: Collective reflection &amp; honoring each other's growth</div>
+      <div class="week-reading">"Syllabus for the Future" – Collaborative document to map where we go from here</div>
+      <div class="week-section-label">Recommended Media</div>
+      <div class="week-media">Finding Our Way with Prentis Hemphill – Episode on sustaining movements</div>
+      <div class="week-media">Sankofa Dreaming: Black Radical Visioning in Practice</div>
+      <div class="week-media">Zine: Futures We Dare to Teach – Ancestral and speculative pedagogy collective</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CLASS POLICIES (exact template) ===================== -->
+<section id="policies">
+  <h2 class="pol-tit rv">CLASS<br>POLI<span style="color:var(--red,#c45d3e);">CIES</span></h2>
+  <div class="pgrid2">
+    <div class="pblock rv"><div class="pnum2" aria-hidden="true">01</div><div class="pstamp sbl">Class Policies</div><div class="phead">Attendance.</div><div class="pbody"><strong>Attendance:</strong> Students make all reasonable efforts to attend all class meetings. In the event of absence: inform the instructor as soon as possible. But hey! This class is not the only life you are living. It is just a tiny fraction of your life. So, let's talk.</div></div>
+    <div class="pblock rv" style="transition-delay:0.1s;"><div class="pnum2" aria-hidden="true">02</div><div class="pstamp sgd">Class Policies</div><div class="phead">Late Work.</div><div class="pbody"><strong>Late Work:</strong> Assignments submitted by posted deadlines — clearly listed here and in Canvas.<br><br><strong>Extension:</strong> Late assignments accepted without penalty if you email at least 2 days before the deadline and an alternative deadline is mutually agreed upon.<br><br>But again, this class is not the only life you are living. It is just a tiny fraction of your life. So, let's talk and figure out the alternatives.</div></div>
+    <div class="pblock rv" style="transition-delay:0.2s;"><div class="pnum2" aria-hidden="true">03</div><div class="pstamp sgr">Inclusion &amp; Accessibility</div><div class="phead">Every Body-Mind-Heart Learns Differently.</div><div class="pbody">No two people learn exactly the same way. If you find that the materials are difficult for you to absorb, don't assume right away that you don't understand the material. Perhaps you prefer to process information through speaking or listening, but all I am providing are written handouts, making it difficult for you to process. Please come speak with me if you would like to think through other options for engaging with the material and activities in the course.<br><br>Disabilities are visible and invisible, documented and undocumented: <strong>I do not distinguish between these designations.</strong> If you have a disability, or think you may have a disability, I encourage you to speak with me as soon as you can about your learning needs and how I can best accommodate them.<br><br>If there are aspects of the design, instruction, and/or experiences within this course that result in barriers to your inclusion or accurate assessment of achievement, please notify me as soon as possible and/or contact Student Accessibility Services. You may contact Accommodations and Services without notifying me if you wish; you may also speak with me without contacting Accommodations and Services at all. <strong>I do not require documentation for accessibility in my classroom.</strong></div></div>
+    <div class="pblock rv" style="transition-delay:0.3s;"><div class="pnum2" aria-hidden="true">04</div><div class="pstamp sr">Life First</div><div class="phead">This Is Just a Tiny Fraction of Your Life.</div><div class="pbody">Dear y'all, as we are here together, hopefully a transformative journey of exploration and reflection where we will engage in the radical work of anti-racism—a collective act of love, care, solidarity, critical thinking, and intellectual labor. Together, we will interrogate systems, cross intellectual and cultural borders, and examine anti-racism as a framework rooted in justice across intersecting identities and global contexts. Guided by and learning from scholars, artists, activists, and each other, we will envision transformations within ourselves and our communities (and if possible, beyond that). Your voices and perspectives will shape our space, teaching me as much as I hope to share with you. I am here to be with you every step of the way, so please don't hesitate to reach out with questions, concerns, or if you simply need to to de-stress. Don't let this encourage you to dehumanize yourself. Let's embark on this meaningful inquiry together by also keeping in mind that your emotional and mental wellbeing matters a lot.<br><br>And yes, this is also one of the class policies.</div></div>
+  </div>
+</section>
+
+<!-- ===================== AI USE POLICY (exact template) ===================== -->
+<section id="ai">
+  <div class="tbar"><div class="td tdr"></div><div class="td tdy"></div><div class="td tdg"></div><span style="margin-left:8px;font-size:12px;">AI_USE_POLICY.txt — opened</span></div>
+  <div class="ttit rv">AI USE<br>POLICY<span class="blink">_</span></div>
+  <div class="aigrid rv">
+    <div class="tblock"><div class="tprompt">ACCEPTABLE</div><div class="tbltit" style="color:#00ff46;">✓ Permitted Uses</div><div class="ti"><span class="til">LEARNING:</span> Personalized platforms, AI tutoring, study organization.</div><div class="ti"><span class="til">RESEARCH:</span> Brainstorming, ideation — critically assess and cite all AI output.</div><div class="ti"><span class="til">COLLAB:</span> Facilitating group tasks — never replacing human contribution.</div></div>
+    <div class="tblock"><div class="tprompt">UNACCEPTABLE</div><div class="tbltit" style="color:#ff3232;">✗ Prohibited Uses</div><div class="ti dn"><span class="til">PLAGIARISM:</span> AI-generated assignments presented as original work. Prohibited.</div><div class="ti dn"><span class="til">EXAM_MISUSE:</span> Unauthorized AI in assessments = academic misconduct.</div><div class="ti dn"><span class="til">PRIVACY:</span> Collecting others' data, generating impersonation content.</div></div>
+    <div class="tblock" style="grid-column:1/-1;"><div class="tprompt">DISCLOSURE REQUIRED</div><div class="tbltit">◎ Transparency Protocol</div><div class="ti">All AI use must be disclosed in submissions. (e.g. <em>"Generated using ChatGPT, edited for accuracy."</em>)</div><div class="ti">Paraphrased or quoted AI content must be cited per APA or MLA Style Guide.</div><div class="ti">Do not input sensitive personal data into AI systems. No deepfakes or misleading content.</div><div class="tnote">This AI use policy was itself generated using ChatGPT and edited for accuracy.</div></div>
+  </div>
+</section>
+
+<!-- ===================== ACADEMIC INTEGRITY ===================== -->
+<section id="integrity">
+  <h2 class="integ-title">Academic <em>Integrity</em></h2>
+  <div class="sticky-board">
+    <!-- Butterflies -->
+    <div class="butterfly bf1"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C16 14 6 8 4 14C2 20 10 22 20 20Z" stroke="#d62828" stroke-width="1" fill="none" opacity="0.6"/><path d="M20 20C24 14 34 8 36 14C38 20 30 22 20 20Z" stroke="#d62828" stroke-width="1" fill="none" opacity="0.6"/><path d="M20 20C17 24 10 32 14 34C18 36 20 26 20 20Z" stroke="#d62828" stroke-width="0.8" fill="none" opacity="0.4"/><path d="M20 20C23 24 30 32 26 34C22 36 20 26 20 20Z" stroke="#d62828" stroke-width="0.8" fill="none" opacity="0.4"/><line x1="20" y1="12" x2="20" y2="28" stroke="#d62828" stroke-width="0.7" opacity="0.5"/><line x1="17" y1="11" x2="20" y2="15" stroke="#d62828" stroke-width="0.5" opacity="0.4"/><line x1="23" y1="11" x2="20" y2="15" stroke="#d62828" stroke-width="0.5" opacity="0.4"/></svg></div>
+    <div class="butterfly bf2"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C15 13 5 9 4 16C3 23 12 23 20 20Z" stroke="#e8e2d4" stroke-width="0.8" fill="none" opacity="0.5"/><path d="M20 20C25 13 35 9 36 16C37 23 28 23 20 20Z" stroke="#e8e2d4" stroke-width="0.8" fill="none" opacity="0.5"/><path d="M20 20C18 25 12 33 16 34C20 35 20 25 20 20Z" stroke="#e8e2d4" stroke-width="0.6" fill="none" opacity="0.3"/><path d="M20 20C22 25 28 33 24 34C20 35 20 25 20 20Z" stroke="#e8e2d4" stroke-width="0.6" fill="none" opacity="0.3"/><line x1="20" y1="13" x2="20" y2="27" stroke="#e8e2d4" stroke-width="0.6" opacity="0.4"/></svg></div>
+    <div class="butterfly bf3"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C14 15 4 10 5 17C6 24 14 22 20 20Z" stroke="#d62828" stroke-width="0.7" fill="none" opacity="0.5"/><path d="M20 20C26 15 36 10 35 17C34 24 26 22 20 20Z" stroke="#d62828" stroke-width="0.7" fill="none" opacity="0.5"/><line x1="20" y1="14" x2="20" y2="26" stroke="#d62828" stroke-width="0.5" opacity="0.4"/><line x1="16" y1="12" x2="20" y2="16" stroke="#d62828" stroke-width="0.4" opacity="0.3"/><line x1="24" y1="12" x2="20" y2="16" stroke="#d62828" stroke-width="0.4" opacity="0.3"/></svg></div>
+    <div class="butterfly bf4"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C16 12 4 6 3 14C2 22 13 23 20 20Z" stroke="#e8e2d4" stroke-width="0.9" fill="none" opacity="0.35"/><path d="M20 20C24 12 36 6 37 14C38 22 27 23 20 20Z" stroke="#e8e2d4" stroke-width="0.9" fill="none" opacity="0.35"/><path d="M20 20C18 26 14 34 18 35C22 36 20 26 20 20Z" stroke="#e8e2d4" stroke-width="0.6" fill="none" opacity="0.2"/><path d="M20 20C22 26 26 34 22 35C18 36 20 26 20 20Z" stroke="#e8e2d4" stroke-width="0.6" fill="none" opacity="0.2"/><line x1="20" y1="11" x2="20" y2="29" stroke="#e8e2d4" stroke-width="0.6" opacity="0.3"/></svg></div>
+    <div class="butterfly bf5"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C15 14 7 10 6 16C5 22 13 22 20 20Z" stroke="#d62828" stroke-width="0.8" fill="none" opacity="0.45"/><path d="M20 20C25 14 33 10 34 16C35 22 27 22 20 20Z" stroke="#d62828" stroke-width="0.8" fill="none" opacity="0.45"/><line x1="20" y1="13" x2="20" y2="27" stroke="#d62828" stroke-width="0.5" opacity="0.35"/><line x1="17" y1="12" x2="20" y2="15" stroke="#d62828" stroke-width="0.4" opacity="0.3"/><line x1="23" y1="12" x2="20" y2="15" stroke="#d62828" stroke-width="0.4" opacity="0.3"/></svg></div>
+    <!-- Sticky note -->
+    <div class="sticky-note sticky-y">
+      <div class="sticky-note-title">Instructor Statement</div>
+      <div class="sticky-note-body">As we engage with complex and often personal topics related to race, power, and justice, it is essential that our work reflects honesty, originality, and respect for others' ideas. Academic integrity in this course means properly crediting all sources, producing your own work, and engaging in thoughtful, ethical scholarship.<br><br>Plagiarism, fabrication, or unauthorized collaboration not only violates university policies but also undermines the trust and integrity of our learning community. If you're ever unsure about how to cite a source or what constitutes appropriate collaboration, please ask. I'm here to support your learning.<br><br>Let's build a space where intellectual honesty and critical inquiry go hand in hand.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INSTRUCTOR ===================== -->
+<section id="instructor">
+  <div class="inst-tag">Instructor</div>
+  <div class="inst-name">Dr. Bibhushana Poudyal</div>
+  <div class="inst-role">Assistant Professor</div>
+  <div class="inst-dept">Department of English · Washington State University</div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer id="footer">
+  <div class="foot-left">
+    ENGL / WGSS 362<br>
+    Antiracist Rhetorics &amp; Feminist Worldmaking
+  </div>
+  <div class="foot-right">
+    Global South Solidarities Project
+  </div>
+</footer>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ---- Custom cursor ----
+const curD = document.getElementById('curD');
+const curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  curD.style.left = (mx-9)+'px'; curD.style.top = (my-9)+'px';
+});
+function tickCursor(){
+  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
+  curR.style.left = (rx-16)+'px'; curR.style.top = (ry-16)+'px';
+  requestAnimationFrame(tickCursor);
+}
+tickCursor();
+document.querySelectorAll('a,button,.week-head,.film-strip,.out-cell,.gr-cell,.pblock,.tblock,.ti,.q-card,.sticky-note,.nav-link').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{curR.classList.add('mag');curD.classList.add('mag');});
+  el.addEventListener('mouseleave',()=>{curR.classList.remove('mag');curD.classList.remove('mag');});
+});
+if('ontouchstart' in window){curD.style.display='none';curR.style.display='none';document.body.style.cursor='auto';}
+
+// ---- Hero animations ----
+const heroTL = gsap.timeline({delay:0.3});
+heroTL
+  .to('#heroTab', {opacity:1, duration:0.6, ease:'power2.out'})
+  .to('.hero-title .line-inner', {y:'0%', duration:1, ease:'power3.out', stagger:0.12}, '-=0.3')
+  .to('#heroSub', {opacity:1, y:0, duration:0.8, ease:'power2.out'}, '-=0.5')
+  .to('#heroMeta', {opacity:1, y:0, duration:0.6, ease:'power2.out'}, '-=0.4');
+
+// ---- Hero canvas — ink splatter / network ----
+const cvs = document.getElementById('hero-canvas');
+const c = cvs.getContext('2d');
+function resizeCvs(){cvs.width=window.innerWidth;cvs.height=window.innerHeight;}
+resizeCvs();window.addEventListener('resize',resizeCvs);
+
+// Particle network
+const particles = [];
+const pCount = 60;
+for(let i=0;i<pCount;i++){
+  particles.push({
+    x: Math.random()*cvs.width,
+    y: Math.random()*cvs.height,
+    vx: (Math.random()-0.5)*0.4,
+    vy: (Math.random()-0.5)*0.4,
+    r: Math.random()*2+0.5,
+    o: Math.random()*0.15+0.03
+  });
+}
+function drawNet(){
+  c.clearRect(0,0,cvs.width,cvs.height);
+  particles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>cvs.width)p.vx*=-1;
+    if(p.y<0||p.y>cvs.height)p.vy*=-1;
+    c.beginPath();c.arc(p.x,p.y,p.r,0,Math.PI*2);
+    c.fillStyle=`rgba(214,40,40,${p.o*1.5})`;c.fill();
+  });
+  for(let i=0;i<pCount;i++){
+    for(let j=i+1;j<pCount;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<180){
+        c.beginPath();c.moveTo(particles[i].x,particles[i].y);
+        c.lineTo(particles[j].x,particles[j].y);
+        c.strokeStyle=`rgba(214,40,40,${0.07*(1-d/180)})`;
+        c.lineWidth=0.5;c.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawNet);
+}
+drawNet();
+
+// ---- Scroll-triggered reveals ----
+gsap.utils.toArray('.desc-para, .desc-large-text, .assign-body h3, .assign-body h4, .assign-body p, .assign-body .a-list, .assign-body .note-block, .assign-tag, .assign-title, .assign-pts-badge, .assign-header-num, .assign-sidebar-tag, .assign-sidebar-item, .disc-block, .disc-title, .sect-stamp, .q-header-title, .film-strip, .out-header-title, .ao-title, .ao-sub, .ao-table, .gr-title, .gr-total, .gr-grid, .inst-tag, .inst-name, .inst-role, .inst-dept, .cal-header, .week-block, .integ-title, .films-title, .cw-flex').forEach(el => {
+  gsap.from(el, {
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 88%',
+      toggleActions: 'play none none none'
+    },
+    y: 40,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power3.out'
+  });
+});
+
+// Stagger question cards
+gsap.fromTo('.q-card', 
+  { y: 50, opacity: 0 },
+  {
+    scrollTrigger: { trigger: '.q-scatter', start: 'top 85%' },
+    y: 0, opacity: 1, duration: 0.9, stagger: 0.15, ease: 'power3.out', clearProps: 'transform'
+  }
+);
+
+// Stagger film strips
+gsap.from('.film-strip', {
+  scrollTrigger: { trigger: '#films', start: 'top 75%' },
+  x: -40, opacity: 0, duration: 0.6, stagger: 0.08, ease: 'power2.out'
+});
+
+// Stagger grade cells
+gsap.from('.gr-cell', {
+  scrollTrigger: { trigger: '.gr-grid', start: 'top 80%' },
+  scale: 0.9, opacity: 0, duration: 0.4, stagger: 0.05, ease: 'back.out(1.5)'
+});
+
+// Integrity sticky note
+gsap.from('.sticky-note', {
+  scrollTrigger: { trigger: '.sticky-board', start: 'top 80%' },
+  y: 30, opacity: 0, rotation: -3, duration: 0.8, ease: 'back.out(1.5)'
+});
+
+// Horizontal scroll for learning outcomes
+gsap.to('#outTrack', {
+  x: () => -(document.getElementById('outTrack').scrollWidth - window.innerWidth + 160),
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#outcomes',
+    start: 'top top',
+    end: () => '+=' + (document.getElementById('outTrack').scrollWidth - window.innerWidth + 160),
+    pin: true,
+    scrub: 1,
+    invalidateOnRefresh: true
+  }
+});
+
+// Policy and AI section reveals (for the rv class elements)
+gsap.utils.toArray('.rv').forEach(el => {
+  gsap.from(el, {
+    scrollTrigger: { trigger: el, start: 'top 90%' },
+    y: 30, opacity: 0, duration: 0.7, ease: 'power2.out'
+  });
+});
+
+// ---- Description parallax ----
+gsap.to('.desc-large-text', {
+  scrollTrigger: {
+    trigger: '#description',
+    start: 'top bottom',
+    end: 'bottom top',
+    scrub: true
+  },
+  y: -40
+});
+
+// ---- Navigation ----
+const navBtn = document.getElementById('navBtn');
+const navMenu = document.getElementById('navMenu');
+navBtn.addEventListener('click', () => {
+  navBtn.classList.toggle('open');
+  navMenu.classList.toggle('open');
+});
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    navBtn.classList.remove('open');
+    navMenu.classList.remove('open');
+    const target = document.querySelector(link.getAttribute('href'));
+    if(target) gsap.to(window, {duration:1, scrollTo:{y:target, offsetY:0}, ease:'power3.inOut'});
+  });
+});
+
+// ---- Weekly calendar toggle ----
+function toggleWeek(head) {
+  const block = head.parentElement;
+  const content = block.querySelector('.week-content');
+  const toggle = head.querySelector('.week-toggle');
+  const isOpen = content.classList.contains('open');
+  content.classList.toggle('open');
+  toggle.classList.toggle('open');
+  if(!isOpen){
+    gsap.from(content.children, {y:15, opacity:0, duration:0.4, stagger:0.04, ease:'power2.out'});
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+</body>
+</html>
