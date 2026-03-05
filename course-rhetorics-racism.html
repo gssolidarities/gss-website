@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENG 362: Rhetorics of Racism — Spring 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=VT323&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+--ink:#0a0a0a;
+--paper:#f0e6c8;
+--red:#c42b2b;
+--gold:#c9962c;
+--bone:#1a1714;
+--charcoal:#111;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--ink);color:var(--paper);font-family:'Libre Baskerville',serif;overflow-x:hidden;cursor:crosshair;}
+::selection{background:var(--red);color:#fff;}
+a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,150,44,0.3);transition:border-color 0.3s;}
+a:hover{border-color:var(--gold);}
+
+/* GRAIN OVERLAY */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+opacity:0.5;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--ink);}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:0;}
+
+/* REVEAL ANIMATIONS */
+.rv{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+
+/* ===================== HERO ===================== */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden;}
+#hero::before{content:'362';position:absolute;top:-80px;right:-40px;font-family:'Bebas Neue',sans-serif;font-size:clamp(200px,40vw,500px);color:rgba(196,43,43,0.04);line-height:1;pointer-events:none;}
+.hero-tag{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-tag::before{content:'';width:40px;height:1px;background:var(--gold);}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,12vw,160px);line-height:0.88;color:var(--paper);margin-bottom:20px;}
+.hero-title .red{color:var(--red);}
+.hero-sub{font-family:'Libre Baskerville',serif;font-size:clamp(14px,1.4vw,18px);line-height:1.8;max-width:640px;color:#ffffff;margin-bottom:40px;}
+.hero-meta{display:flex;gap:40px;flex-wrap:wrap;}
+.hero-meta-item{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:rgba(240,230,200,0.4);}
+.hero-meta-item span{display:block;color:var(--paper);font-size:14px;letter-spacing:1px;margin-top:4px;}
+.hero-scroll{position:absolute;bottom:40px;left:80px;font-family:'Special Elite',monospace;font-size:13px;letter-spacing:4px;color:rgba(240,230,200,0.3);writing-mode:vertical-rl;animation:pulse-scroll 2s ease infinite;}
+@keyframes pulse-scroll{0%,100%{opacity:0.3;}50%{opacity:0.8;}}
+
+/* DIVIDER */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(196,43,43,0.3),transparent);margin:0;}
+
+/* ===================== TRIGGER WARNING ===================== */
+#trigger{padding:90px 80px;position:relative;overflow:hidden;border-left:4px solid var(--red);}
+#trigger::after{content:'⚠';position:absolute;top:20px;right:40px;font-size:120px;opacity:0.03;pointer-events:none;}
+.tw-label{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:var(--red);margin-bottom:28px;display:inline-block;border:2px solid var(--red);padding:6px 14px;transform:rotate(-1deg);}
+.tw-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,80px);line-height:0.9;color:var(--paper);margin-bottom:36px;}
+.tw-body{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2;color:#ffffff;max-width:800px;}
+.tw-topics{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3vw,28px);line-height:1.4;color:var(--red);margin-top:28px;letter-spacing:2px;}
+
+/* ===================== DEDICATION ===================== */
+#dedication{padding:80px;text-align:center;position:relative;background:linear-gradient(180deg,var(--ink) 0%,rgba(196,43,43,0.06) 50%,var(--ink) 100%);}
+.ded-text{font-family:'Trebuchet MS',sans-serif;font-style:italic;font-size:clamp(16px,2.2vw,24px);line-height:1.9;color:var(--paper);max-width:700px;margin:0 auto;}
+
+/* ===================== POEMS ===================== */
+#poems{padding:90px 80px;display:grid;grid-template-columns:1fr 1fr;gap:60px;}
+.poem-card{padding:40px;border:1px solid rgba(240,230,200,0.08);position:relative;}
+.poem-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--red);}
+.poem-author{font-family:'Special Elite',monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.poem-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3vw,36px);color:var(--paper);margin-bottom:24px;line-height:1.1;}
+.poem-lines{font-family:'Trebuchet MS',sans-serif;font-size:15px;line-height:2;color:#ffffff;}
+
+/* ===================== COURSE DESCRIPTION ===================== */
+#description{padding:90px 80px;position:relative;}
+#description::after{content:'ANTI-RACISM';position:absolute;bottom:-30px;right:-20px;font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,18vw,220px);color:rgba(240,230,200,0.015);pointer-events:none;line-height:1;white-space:nowrap;}
+.sec-label{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,80px);line-height:0.9;color:var(--paper);margin-bottom:40px;}
+.desc-body{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2;color:#ffffff;max-width:800px;}
+.desc-body p{margin-bottom:24px;}
+.desc-quote{font-family:'Trebuchet MS',sans-serif;font-style:italic;font-size:18px;color:var(--gold);padding:28px 0 28px 28px;border-left:3px solid var(--gold);margin:36px 0;max-width:700px;}
+.desc-quote cite{display:block;font-size:13px;color:rgba(240,230,200,0.5);margin-top:10px;font-style:normal;font-family:'Special Elite',monospace;letter-spacing:2px;}
+
+/* ===================== STRUCTURE & SCOPE ===================== */
+#structure{padding:90px 80px;position:relative;border-top:1px solid rgba(240,230,200,0.06);}
+.struct-body{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2;color:#ffffff;max-width:800px;}
+.struct-body p{margin-bottom:24px;}
+.struct-quote{font-family:'Trebuchet MS',sans-serif;font-size:clamp(24px,4vw,48px);color:var(--red);line-height:1.2;margin:48px 0;max-width:800px;}
+.struct-quote cite{display:block;font-family:'Trebuchet MS',sans-serif;font-size:16px;color:rgba(240,230,200,0.5);margin-top:14px;font-style:italic;}
+.struct-note{font-family:'Libre Baskerville',serif;font-size:13px;line-height:1.9;color:#ffffff;margin-top:36px;padding:24px;border:1px solid rgba(240,230,200,0.08);max-width:800px;}
+
+/* ===================== RECURRING QUESTIONS ===================== */
+#questions{padding:90px 80px;background:linear-gradient(180deg,var(--ink) 0%,rgba(196,43,43,0.04) 100%);position:relative;}
+.q-item{font-family:'Trebuchet MS',sans-serif;font-size:clamp(16px,2vw,22px);line-height:1.8;color:var(--paper);padding:28px 0;border-bottom:1px solid rgba(240,230,200,0.06);}
+.q-item:last-child{border-bottom:none;}
+
+/* ===================== TEXTBOOK ===================== */
+#textbook{padding:90px 80px;position:relative;}
+.tb-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.tb-info .tb-title-book{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);color:var(--paper);line-height:1.1;margin-bottom:14px;}
+.tb-info .tb-author{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:3px;color:var(--gold);margin-bottom:20px;}
+.tb-info .tb-notes{font-family:'Libre Baskerville',serif;font-size:14px;line-height:1.9;color:#ffffff;margin-bottom:20px;}
+.tb-desc{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2;color:#ffffff;}
+.tb-desc p{margin-bottom:20px;}
+
+/* ===================== GRADING ===================== */
+#grading{padding:90px 80px;position:relative;}
+.grade-table{width:100%;border-collapse:collapse;margin-top:36px;max-width:800px;}
+.grade-table th{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold);text-align:left;padding:14px 18px;border-bottom:2px solid rgba(201,150,44,0.3);}
+.grade-table td{font-family:'Libre Baskerville',serif;font-size:14px;color:#ffffff;padding:12px 18px;border-bottom:1px solid rgba(240,230,200,0.06);}
+.grade-table tr:hover td{background:rgba(240,230,200,0.02);}
+.grade-note{font-family:'Special Elite',monospace;font-size:13px;color:var(--red);margin-top:24px;}
+.grade-schema{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:500px;margin-top:36px;}
+.gs-row{display:flex;justify-content:space-between;padding:8px 18px;border-bottom:1px solid rgba(240,230,200,0.04);font-family:'Libre Baskerville',serif;font-size:13px;color:#ffffff;}
+.gs-row .gl{color:var(--paper);font-weight:700;}
+.total-pts{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,10vw,120px);color:rgba(196,43,43,0.08);position:absolute;top:80px;right:80px;pointer-events:none;}
+
+/* ===================== ASSIGNMENTS ===================== */
+#assignments{padding:90px 80px;position:relative;}
+.assign-group{margin-bottom:60px;}
+.assign-header{display:flex;align-items:center;gap:18px;cursor:pointer;padding:20px 0;border-bottom:1px solid rgba(240,230,200,0.08);transition:border-color 0.3s;}
+.assign-header:hover{border-color:rgba(240,230,200,0.2);}
+.assign-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(196,43,43,0.15);line-height:1;min-width:70px;}
+.assign-label{flex:1;}
+.assign-label h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,3vw,32px);color:var(--paper);line-height:1.1;}
+.assign-label .assign-pts{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:3px;color:var(--gold);margin-top:4px;}
+.assign-toggle{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--red);transition:transform 0.3s;width:30px;text-align:center;}
+.assign-toggle.open{transform:rotate(45deg);}
+.assign-content{max-height:0;overflow:hidden;transition:max-height 0.6s ease;}
+.assign-content.open{max-height:10000px;}
+.assign-inner{padding:32px 0 32px 88px;font-family:'Libre Baskerville',serif;font-size:14px;line-height:2;color:#ffffff;}
+.assign-inner h4{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--paper);margin:28px 0 12px;letter-spacing:1px;}
+.assign-inner h4:first-child{margin-top:0;}
+.assign-inner p{margin-bottom:16px;}
+.assign-inner ul,.assign-inner ol{margin:12px 0 16px 24px;}
+.assign-inner li{margin-bottom:8px;padding-left:4px;}
+.assign-inner strong{color:#fff;}
+
+/* ===================== SCHEDULE ===================== */
+#schedule{padding:90px 80px;position:relative;}
+#schedule::after{content:'CALENDAR';position:absolute;bottom:-40px;left:-20px;font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,16vw,200px);color:rgba(240,230,200,0.015);pointer-events:none;line-height:1;}
+.week-row{display:grid;grid-template-columns:100px 1fr 200px;gap:24px;padding:28px 0;border-bottom:1px solid rgba(240,230,200,0.05);transition:background 0.3s;}
+.week-row:hover{background:rgba(240,230,200,0.015);}
+.week-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--red);line-height:1;}
+.week-content{font-family:'Libre Baskerville',serif;font-size:14px;line-height:1.9;color:#ffffff;}
+.week-topic{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--paper);margin-bottom:10px;letter-spacing:1px;}
+.week-readings{color:#ffffff;font-size:13px;}
+.week-readings a{font-size:13px;}
+.week-due{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:2px;color:var(--gold);text-align:right;}
+.week-due .due-type{display:block;color:rgba(240,230,200,0.5);margin-top:4px;font-size:11px;}
+
+/* ===================== INSTRUCTOR ===================== */
+#instructor{padding:90px 80px;position:relative;}
+.inst-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+.inst-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,80px);line-height:0.9;color:var(--paper);margin-bottom:24px;}
+.inst-role{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:4px;color:var(--gold);margin-bottom:20px;text-transform:uppercase;}
+.inst-detail{font-family:'Libre Baskerville',serif;font-size:14px;line-height:2;color:#ffffff;margin-bottom:10px;}
+.inst-detail strong{color:var(--paper);}
+.inst-link{font-family:'Libre Baskerville',serif;font-size:14px;color:var(--gold);}
+
+/* ===================== POLICIES (from master prompt) ===================== */
+#policies{background:var(--ink);padding:90px 80px;position:relative;overflow:hidden;}
+#policies::after{content:'POLICIES';position:absolute;bottom:-55px;right:-35px;font-family:'Bebas Neue',sans-serif;font-size:260px;color:rgba(240,230,200,0.018);pointer-events:none;line-height:1;}
+.pol-tit{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,8vw,94px);line-height:0.9;color:var(--paper);margin-bottom:56px;}
+.pgrid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.pblock{border:1px solid rgba(240,230,200,0.11);padding:36px;position:relative;transition:border-color 0.28s;}
+.pblock:hover{border-color:rgba(240,230,200,0.28);}
+.pnum2{font-family:'Bebas Neue',sans-serif;font-size:74px;color:rgba(240,230,200,0.035);position:absolute;top:-12px;right:18px;line-height:1;pointer-events:none;}
+.pstamp{display:inline-block;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:4px;text-transform:uppercase;padding:4px 10px;border:2px solid;margin-bottom:18px;transform:rotate(-1deg);}
+.sp{color:var(--paper);border-color:rgba(240,230,200,0.35);}
+.sg{color:var(--gold);border-color:var(--gold);}
+.sr{color:var(--red);border-color:var(--red);}
+.sgr{color:#5a9a5a;border-color:#5a9a5a;}
+.sbl{color:#5a8ab5;border-color:#5a8ab5;}
+.sgd{color:var(--gold);border-color:var(--gold);}
+.phead{font-family:'IM Fell English',serif;font-size:22px;color:#ffffff;margin-bottom:14px;}
+.pbody{font-family:'Libre Baskerville',serif;font-size:14px;line-height:1.9;color:#ffffff;}
+.pbody strong{color:#ffffff;}
+.pq{font-family:'Trebuchet MS',sans-serif;font-style:italic;font-size:14px;color:#ffffff;margin-top:14px;padding-top:14px;border-top:1px solid rgba(201,150,44,0.18);}
+@media(max-width:768px){
+  #policies{padding:56px 24px;}
+  .pgrid2{grid-template-columns:1fr;}
+}
+
+/* ===================== AI USE POLICY (from master prompt) ===================== */
+#ai{background:#0d1117;padding:90px 80px;font-family:'VT323',monospace;position:relative;overflow:hidden;}
+#ai::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,70,0.014) 2px,rgba(0,255,70,0.014) 4px);pointer-events:none;}
+.tbar{font-size:13px;letter-spacing:3px;color:#00ff46;margin-bottom:36px;display:flex;align-items:center;gap:10px;}
+.td{width:10px;height:10px;border-radius:50%;}
+.tdr{background:#ff5f57;}.tdy{background:#ffbd2e;}.tdg{background:#28ca42;}
+.ttit{font-size:clamp(38px,6vw,76px);color:#00ff46;line-height:1;margin-bottom:52px;}
+.tprompt{color:#00ff46;font-size:17px;margin-bottom:7px;}
+.tprompt::before{content:'> ';}
+.tblock{background:rgba(0,255,70,0.025);border:1px solid rgba(0,255,70,0.13);padding:28px;margin-bottom:20px;}
+.tbltit{font-size:20px;color:#00ff46;margin-bottom:14px;letter-spacing:2px;}
+.ti{font-size:15px;color:rgba(0,255,70,0.68);padding:7px 0;border-bottom:1px solid rgba(0,255,70,0.07);transition:color 0.18s,padding-left 0.18s;cursor:none;}
+.ti:last-child{border-bottom:none;}
+.ti:hover{color:#00ff46;padding-left:10px;}
+.ti .til{color:#00ff46;}
+.ti.dn{color:rgba(255,50,50,0.68);}
+.ti.dn:hover{color:rgba(255,50,50,1);}
+.ti.dn .til{color:#ff3232;}
+.tnote{font-size:14px;color:rgba(0,255,70,0.35);margin-top:20px;}
+.tnote::before{content:'// ';}
+.aigrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:768px){
+  #ai{padding:56px 24px;}
+  .aigrid{grid-template-columns:1fr;}
+}
+
+/* BLINK */
+.blink{animation:blink-anim 1s step-end infinite;}
+@keyframes blink-anim{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ===================== LOW STAKES ===================== */
+#lowstakes{padding:90px 80px;position:relative;}
+
+/* ===================== FOOTER ===================== */
+#footer{padding:60px 80px;border-top:1px solid rgba(240,230,200,0.06);text-align:center;}
+.footer-course{font-family:'Bebas Neue',sans-serif;font-size:24px;color:rgba(240,230,200,0.3);letter-spacing:4px;}
+.footer-uni{font-family:'Special Elite',monospace;font-size:12px;color:rgba(240,230,200,0.15);margin-top:8px;letter-spacing:3px;}
+
+/* ===================== NAV ===================== */
+.nav-btn{position:fixed;bottom:32px;right:32px;width:56px;height:56px;border-radius:50%;background:var(--red);border:none;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 4px 20px rgba(196,43,43,0.4);}
+.nav-btn:hover{transform:scale(1.08);box-shadow:0 6px 30px rgba(196,43,43,0.6);}
+.nav-btn svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;}
+.nav-menu{position:fixed;bottom:100px;right:32px;background:rgba(10,10,10,0.96);border:1px solid rgba(240,230,200,0.1);border-radius:28px;padding:16px 8px;z-index:10000;opacity:0;pointer-events:none;transform:translateY(20px) scale(0.9);transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(20px);}
+.nav-menu.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+.nav-menu a{display:block;padding:10px 24px;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#ffffff;border-bottom:none;transition:color 0.2s,padding-left 0.2s;white-space:nowrap;}
+.nav-menu a:hover{color:var(--red);padding-left:30px;}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:900px){
+  #hero{padding:48px 28px;}
+  #trigger,#dedication,#poems,#description,#structure,#questions,#textbook,#grading,#assignments,#schedule,#instructor,#lowstakes{padding:56px 28px;}
+  #poems{grid-template-columns:1fr;}
+  .tb-grid,.inst-grid{grid-template-columns:1fr;}
+  .week-row{grid-template-columns:60px 1fr;gap:12px;}
+  .week-due{text-align:left;grid-column:1/-1;}
+  .hero-scroll{display:none;}
+  .total-pts{display:none;}
+  .assign-inner{padding-left:0;}
+  #footer{padding:40px 28px;}
+}
+
+/* ACCESSIBILITY */
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--red);color:#fff;padding:12px 24px;font-family:'Special Elite',monospace;font-size:14px;z-index:100000;border-radius:0 0 4px 4px;transition:top 0.3s;}
+.skip-link:focus{top:0;}
+*:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+a:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+.nav-btn:focus-visible{outline:3px solid #fff;outline-offset:4px;}
+.assign-header:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-color:rgba(240,230,200,0.3);}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1 !important;transform:none !important;transition:none !important;}
+  .cursor-dot,.cursor-ring{display:none !important;}
+  *{cursor:auto !important;}
+  .hero-scroll{animation:none !important;}
+  .blink{animation:none !important;}
+  .nav-menu{transition:none !important;}
+  .assign-content{transition:none !important;}
+  .pblock{transition:none !important;}
+  .ti{transition:none !important;}
+  .nav-menu a{transition:none !important;}
+}
+@media(prefers-contrast:more){
+  .week-readings,.week-readings a{color:#fff !important;}
+  .desc-quote cite,.struct-quote cite{color:#fff !important;}
+  .hero-meta-item{color:#fff !important;}
+  .pnum2{color:rgba(240,230,200,0.1) !important;}
+  .grade-table td{color:#fff !important;}
+}
+</style>
+</head>
+<body>
+<a href="#description" class="skip-link">Skip to main content</a>
+
+<!-- ==================== HERO ==================== -->
+<section id="hero" aria-label="Course introduction">
+<div class="hero-tag rv">Spring 2025</div>
+<h1 class="hero-title rv">RHETORICS<br>OF <span class="red">RACISM</span></h1>
+<p class="hero-sub rv">ENGLISH-362</p>
+<div class="hero-meta rv">
+<div class="hero-meta-item">Instructor<span>Bibhushana Poudyal</span></div>
+<div class="hero-meta-item">Format<span>Asynchronous Online</span></div>
+<div class="hero-meta-item">Textbook<span>Freedom Is a Constant Struggle</span></div>
+</div>
+<div class="hero-scroll">SCROLL ↓</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== TRIGGER WARNING ==================== -->
+<section id="trigger" role="alert" aria-label="Content warning">
+<div class="tw-label rv">Content Advisory</div>
+<h2 class="tw-title rv">TRIGGER<br>WARNING</h2>
+<div class="tw-body rv">During this course, we will address topics that compel us to discuss some of the most violent atrocities some humans have inflicted upon other humans &amp; planet that includes,</div>
+<div class="tw-topics rv">RACISM, GENOCIDE, COLONIALISM, SETTLER COLONIALISM, IMPERIALISM, CAPITALISM, POLICE BRUTALITY, DESTRUCTION OF THE PLANET FOR PROFIT.</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== DEDICATION ==================== -->
+<section id="dedication">
+<div class="ded-text rv">This class is inspired by and dedicated to all the oppressed and resisting people in the world. It is envisioned with the hope that collective liberation is possible.</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== POEMS ==================== -->
+<section id="poems">
+<div class="poem-card rv">
+<div class="poem-author">Noor Hindi</div>
+<div class="poem-title">Fuck Your Lecture on Craft, My People Are Dying</div>
+<div class="poem-lines">
+Colonizers write about flowers.<br>
+I tell you about children throwing rocks at Israeli tanks<br>
+seconds before becoming daisies.<br>
+I want to be like those poets who care about the moon.<br>
+Palestinians don't see the moon from jail cells and prisons.<br>
+It's so beautiful, the moon.<br>
+They're so beautiful, the flowers.<br>
+I pick flowers for my dead father when I'm sad.<br>
+He watches Al Jazeera all day.<br>
+I wish Jessica would stop texting me Happy Ramadan.<br>
+I know I'm American because when I walk into a room something dies.<br>
+Metaphors about death are for poets who think ghosts care about sound.<br>
+When I die, I promise to haunt you forever.<br>
+One day, I'll write about the flowers like we own them.
+</div>
+</div>
+<div class="poem-card rv" style="transition-delay:0.15s;">
+<div class="poem-author">Khaled Jum</div>
+<div class="poem-title">Oh Rascal Children Of Gaza</div>
+<div class="poem-lines">
+Oh rascal children of Gaza,<br>
+You who constantly disturbed me<br>
+with your screams under my window,<br>
+You who filled every morning<br>
+with rush and chaos,<br>
+You who broke my vase and stole<br>
+the lonely flower on my balcony,<br>
+Come back –<br>
+And scream as you want,<br>
+And break all the vases,<br>
+Steal all the flowers,<br>
+Come back,<br>
+Just come back…
+</div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== COURSE DESCRIPTION ==================== -->
+<main><section id="description">
+<div class="sec-label rv">About This Course</div>
+<h2 class="sec-title rv">COURSE<br>DESCRIPTION</h2>
+<div class="desc-body rv">
+<p>Let's begin with anti-racism, instead?</p>
+<p>Anti-racism is a radical act of love, care, respect, kindness, and solidarity. It is a collective liberatory project. It is a consistent questioning of the system &amp; structure. It is an intellectual and intersectional awareness and articulation that not everyone experiences the spaces we seem to share, the world, and the systems in the same way. Anti-racism is a revolutionary action guided by knowledge, to quote Audre Lorde,</p>
+<div class="desc-quote">"There is no such thing as a single-issue struggle because we do not live single-issue lives."<cite>— Audre Lorde</cite></div>
+<p>So, anti-racism is, at the same time, anti-heteronormativity, anti-colonialism, anti-capitalism, and anti-imperialism. Anti-racism is social and global justice, linguistic justice, geo-political justice, disability justice, reproductive justice, and environmental justice, just to name a few. With this commitment, this undergraduate course is designed to help us address and interrogate the following questions: Why should the existence of the course on rhetorics of racism and anti-racism matter to the world, this planet, and the people we are aware or unaware of but co-exist with? What kinds of transformation are we daring to envision in society and ourselves through this course? Despite our situatedness in the institutional bureaucracy, which is far from equitable, how can classes like this help students and teachers alike?</p>
+<p>The guiding theoretical and methodological framework of our class will be comparative anti-racist rhetorics. In this course, we will constantly cross colonial-imperial borders until these borders become irrelevant in our anti-racist solidarity works. We will learn from one another and from scholarly works, social media pages, musicians, artists, activists, political speeches, biographical narratives, community-led archives, digital-multimodal storytelling projects, solidarity-building anti-racist movements happening on grassroots levels around the world.</p>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== STRUCTURE & SCOPE ==================== -->
+<section id="structure">
+<div class="sec-label rv">Framework</div>
+<h2 class="sec-title rv">STRUCTURE &amp;<br>SCOPE</h2>
+<div class="struct-body rv">
+<p>This course is designed as a hypertext. This means that any reading or project that I assign is intended to be just one node in a broader network of connections and relations that I hope you build throughout our time together. Rather than being situated in one discipline, sub-discipline, or any discipline for that matter, this course provides nodes to different trans/outer/disciplinary conversations that I hope you continue to engage with based on your own interests. I will still ask you to make those engagements and explorations through the framework of <strong>comparative anti-racist rhetorics</strong> as much as possible (and we will talk more about it in the class). I will also work individually with you as much you need me to make that exploration easier and more meaningful to you. Therefore, I have designed each project as a continuum of one another.</p>
+</div>
+<div class="struct-quote rv">"THE LEARNING PROCESS IS SOMETHING YOU CAN INCITE, LITERALLY INCITE, LIKE A RIOT."<cite>—Audre Lorde</cite></div>
+<div class="struct-note rv">"Why I, as a Native American, support the Palestinian people," explains the following: As a Native person of this country, I've come to the conclusion that we are related. The parallels to the plight of the Palestinian people and Native Americans have been drawn by many. Speaking in San Francisco, Tony Gonzales of the American Indian Movement (AIM), "With a common legacy of Bantustans (homelands) – Indian reservations and encircled Palestinian territories – Native Americans understand well the situation of Palestinians." (Image &amp; Text Source: Indigenous Peoples Literature)</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== RECURRING QUESTIONS ==================== -->
+<section id="questions">
+<div class="sec-label rv">Guiding Inquiries</div>
+<h2 class="sec-title rv">RECURRING<br>QUESTIONS</h2>
+<div class="desc-quote rv" style="margin-bottom:48px;">"THE BEAUTY OF ANTI-RACISM IS THAT YOU DON'T HAVE TO PRETEND TO BE FREE OF RACISM TO BE AN ANTI-RACIST. ANTI-RACISM IS THE COMMITMENT TO FIGHT RACISM WHEREVER YOU FIND IT, INCLUDING IN YOURSELF. AND IT'S THE ONLY WAY FORWARD."<cite>— Ijeoma Oluo</cite></div>
+<div class="q-item rv">How can we live this life in a way that values and reflects upon the humanity and dignity in each of us while recognizing, respecting, and making room for the humanity and dignity of others?</div>
+<div class="q-item rv">How can our professional, personal, public, social media, pedagogical, and administrative practices assist in transforming slogans like "Black lives matter," "Brown lives matter," "Indigenous lives matter," "Muslim lives matter," "Asian lives matter," "Global Souths lives matter" into the lived experiences of these communities on local, regional, global, international, and transnational levels?</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== TEXTBOOK ==================== -->
+<section id="textbook">
+<div class="sec-label rv">Required Text</div>
+<h2 class="sec-title rv">TEXTBOOK &amp;<br>MATERIALS</h2>
+<div class="tb-grid rv">
+<div class="tb-info">
+<div class="tb-title-book">Freedom Is a Constant Struggle: Ferguson, Palestine, and the Foundations of a Movement (2016)</div>
+<div class="tb-author">by Angela Y. Davis</div>
+<div class="tb-notes">*Notes: Any versions of the textbook are acceptable. Other assigned materials will be provided in PDF or other formats on Canvas.</div>
+</div>
+<div class="tb-desc">
+<p>Freedom is a Constant Struggle by Angela Davis is a revolutionary call to action for all committed to dismantling racism. Davis redefines antiracism as an inseparable part of the fight against all systems of oppression, shattering the illusion that racism can be confronted in isolation. She exposes the deep entanglement of racism with capitalism, colonialism, and state violence, revealing a global architecture of control and dehumanization. By drawing profound connections between the struggles for justice from Ferguson to Palestine, Davis demands we recognize anti-racism as a fierce, borderless, intersectional movement.</p>
+<p>This book is crucial as it insists that genuine antiracist liberation requires unbreakable solidarity across all oppressed communities; change will only come through collective, unified resistance. Davis urges readers to see racism not as an isolated injustice but as a structural force that demands radical, systemic upheaval. She challenges us to expand our vision of antiracism, embracing a global struggle rooted in solidarity, collective freedom, and justice for every oppressed person.</p>
+</div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== GRADING ==================== -->
+<section id="grading">
+<div class="sec-label rv">Assessment</div>
+<h2 class="sec-title rv">PROJECTS, POINTS,<br>GRADING <span style="color:var(--red);">SCHEMA</span></h2>
+<div class="total-pts">500</div>
+<table class="grade-table rv">
+<thead>
+<tr><th>Assignments</th><th>Deliverables</th><th>Points</th><th>Due</th></tr>
+</thead>
+<tbody>
+<tr><td>Low Stakes</td><td>Reading Response</td><td>100</td><td>Once a week</td></tr>
+<tr><td>Low Stakes</td><td>Discussion Posts</td><td>100</td><td>Once a week</td></tr>
+<tr><td>1st Major Assignment/Low Stakes</td><td>Project Proposal</td><td>50</td><td>Check the course calendar &amp; Canvas</td></tr>
+<tr><td>2nd Major Assignment</td><td>Analysis of materials on your chosen area</td><td>100</td><td>Check the course calendar &amp; Canvas</td></tr>
+<tr><td>3rd Major Assignment</td><td>Final Project &amp; Video Presentation</td><td>150</td><td>Check the course calendar &amp; Canvas</td></tr>
+</tbody>
+</table>
+<div class="grade-note rv">NOTE: THE SYLLABUS IS SUBJECT TO CHANGE. THE NUMBER OF POSTS ARE CONTINGENT UPON THE SEMESTER, AND SO ARE THE POINTS.</div>
+
+<div style="margin-top:48px;" class="rv">
+<div class="sec-label" style="margin-bottom:20px;">Grade Scale</div>
+<div class="grade-schema">
+<div class="gs-row"><span class="gl">A</span><span>93.4 - 100</span></div>
+<div class="gs-row"><span class="gl">C</span><span>73.4 - 76.7</span></div>
+<div class="gs-row"><span class="gl">A-</span><span>90 - 93.3</span></div>
+<div class="gs-row"><span class="gl">C-</span><span>70 - 73.3</span></div>
+<div class="gs-row"><span class="gl">B+</span><span>86.8 - 89.9</span></div>
+<div class="gs-row"><span class="gl">D+</span><span>66.6 - 69.9</span></div>
+<div class="gs-row"><span class="gl">B</span><span>83.4 - 86.7</span></div>
+<div class="gs-row"><span class="gl">D</span><span>63.4 - 66.7</span></div>
+<div class="gs-row"><span class="gl">B-</span><span>80 - 83.3</span></div>
+<div class="gs-row"><span class="gl">D-</span><span>60 - 63.3</span></div>
+<div class="gs-row"><span class="gl">C+</span><span>76.8 - 79.9</span></div>
+<div class="gs-row"><span class="gl">F</span><span>0 - 59.9</span></div>
+</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--paper);margin-top:24px;">Total Points: 500</div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== LOW STAKES ==================== -->
+<section id="lowstakes">
+<div class="sec-label rv">Ongoing Work</div>
+<h2 class="sec-title rv">LOW-STAKES<br>ASSIGNMENT</h2>
+<div class="desc-body rv">
+<p>Reading Responses | [Once a week] | Graded as Complete/Incomplete</p>
+<p>s [Once a week] | Graded in Points</p>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== THREE MAJOR PROJECTS OVERVIEW ==================== -->
+<section id="majorprojects" style="padding:90px 80px;position:relative;">
+<div class="sec-label rv">Major Work</div>
+<h2 class="sec-title rv">THREE MAJOR<br><span style="color:var(--red);">PROJECTS</span></h2>
+<div class="desc-quote rv">"THERE'S NO SUCH THING AS NEUTRAL EDUCATION. EDUCATION EITHER FUNCTIONS AS AN INSTRUMENT TO BRING ABOUT CONFORMITY OR FREEDOM."<cite>— Richard Shaull, "Foreword," Pedagogy of the Oppressed</cite></div>
+<div class="desc-body rv" style="margin-top:36px;">
+<p>1. Project Proposal/Low Stakes (50 Points)</p>
+<p>2. Digital, Online, Multimodal, Physical Textual Analysis (100 Points)</p>
+<p>3. Final Project &amp; Class Presentation (150 Points)</p>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== ASSIGNMENTS (FULL CONTENT) ==================== -->
+<section id="assignments">
+<div class="sec-label rv">Assignment Details</div>
+<h2 class="sec-title rv">ASSIGNMENT<br>PROMPTS</h2>
+
+<!-- === 1ST MAJOR ASSIGNMENT === -->
+<div class="assign-group rv">
+<div class="assign-header" onclick="toggleAssign(this)" tabindex="0" role="button" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAssign(this);}">
+<div class="assign-num">01</div>
+<div class="assign-label"><h3>1st Major Assignment: Semester Topic Proposal</h3><div class="assign-pts">50 Points · Due: Jan 26</div></div>
+<div class="assign-toggle">+</div>
+</div>
+<div class="assign-content">
+<div class="assign-inner">
+
+<h4>Overview</h4>
+<p>This assignment asks you to propose a semester-long topic related to the rhetoric of racism or antiracism. You will write a short proposal (2–3 pages, single-spaced) explaining what you want to study, why it matters, and how you plan to approach it. This proposal is the foundation for your entire semester project.</p>
+
+<h4>Important Note</h4>
+<p>For your final project (3rd Major Assignment), you will choose one of the following formats:</p>
+<ul>
+<li>An academic paper</li>
+<li>A digital or multimodal project</li>
+<li>An action research project</li>
+<li>Or another creative/mixed format of your choice (with instructor approval)</li>
+</ul>
+<p>Choose a topic that is meaningful, manageable, and flexible enough to be explored in multiple formats. Your topic should sustain your curiosity throughout the semester.</p>
+
+<h4>Proposal Components</h4>
+
+<h4>1. Topic Selection (Rhetorical Focus)</h4>
+<p>Select a specific area where rhetoric related to racism or antiracism is visible. Possible topics include:</p>
+<ul>
+<li>News coverage or media framing</li>
+<li>Political speeches, legislation, or debates</li>
+<li>Social media content (posts, hashtags, memes, reels)</li>
+<li>Protest rhetoric (signs, chants, visual art)</li>
+<li>Advertising, film, music, or visual culture</li>
+<li>Legal, scientific, or institutional language</li>
+<li>Community organizing or activist campaigns</li>
+</ul>
+
+<h4>2. Contextual Background</h4>
+<p>Briefly describe:</p>
+<ul>
+<li>Where and how this rhetoric appears (platform, medium, historical moment)</li>
+<li>Who is producing it (individuals, groups, institutions)</li>
+<li>Who is the intended or actual audience</li>
+<li>Why this moment or context is significant for studying racism/antiracism</li>
+</ul>
+
+<h4>3. Significance &amp; Relevance</h4>
+<p>Explain why this topic matters within the study of rhetoric and racism. Consider:</p>
+<ul>
+<li>How does this rhetoric shape public understanding of race?</li>
+<li>Does it reinforce, challenge, or complicate systems of oppression?</li>
+<li>What real-world impacts does it have (social, political, cultural)?</li>
+<li>How does it connect to broader themes from our course?</li>
+</ul>
+
+<h4>4. Guiding Research Questions</h4>
+<p>Develop 2–3 thoughtful questions that will guide your analysis and research. These should help you:</p>
+<ul>
+<li>Examine rhetorical strategies (ethos, pathos, logos, framing, narrative, etc.)</li>
+<li>Uncover implicit or explicit messages about race</li>
+<li>Explore how communication can uphold or resist racism</li>
+</ul>
+<p>Example questions:</p>
+<ul>
+<li>How do activist groups use storytelling to build solidarity in antiracist campaigns?</li>
+<li>How do political speeches frame racial issues in ways that appeal to specific audiences?</li>
+<li>How do social media platforms amplify or suppress antiracist rhetoric?</li>
+</ul>
+
+<h4>5. Preliminary Research Plan &amp; Approach</h4>
+<p>Outline how you plan to explore your topic. Consider:</p>
+<ul>
+<li>Types of materials you'll analyze (e.g., speeches, articles, videos, social media posts, policy documents)</li>
+<li>Methodological approach (e.g., rhetorical analysis, discourse analysis, visual analysis, participatory observation)</li>
+<li>Potential sources (academic, public, digital, archival)</li>
+<li>Connection to final project format: How might your topic be adapted for an academic paper, action research, or multimodal project?</li>
+</ul>
+
+<h4>Formatting &amp; Submission</h4>
+<ul>
+<li>Length: 2–3 pages, single-spaced</li>
+<li>Font: Times New Roman, 12 pt</li>
+<li>If you cite any sources, use APA or MLA format</li>
+<li>Upload a file or copy and paste your full proposal into the Canvas submission box</li>
+</ul>
+
+<h4>Grading Criteria</h4>
+<p>Your proposal will be graded based on the following:</p>
+<ul>
+<li><strong>Clarity &amp; Focus:</strong> Topic is specific, well-defined, and rhetorically grounded</li>
+<li><strong>Significance:</strong> Clearly connected to racism/antiracism and real-world impact</li>
+<li><strong>Feasibility:</strong> Manageable for a semester-long project and adaptable to final formats</li>
+<li><strong>Originality &amp; Thoughtfulness:</strong> Shows independent thinking and genuine engagement</li>
+<li><strong>Alignment with Course Goals:</strong> Prepares you for deeper analysis in the 2nd and 3rd assignments</li>
+</ul>
+
+<h4>Preparing for Future Assignments</h4>
+<p><strong>2nd Assignment (Rhetorical Analysis):</strong> Your topic will guide your analysis of 2–4 related texts or artifacts.</p>
+<p><strong>3rd Assignment (Final Project):</strong> Your topic will expand into a full project in your chosen format (paper, action research, or multimodal work).</p>
+<p><strong>Tip:</strong> Choose a topic with available materials (texts, media, organizations) and clear rhetorical dimensions to ensure a smooth transition into later assignments.</p>
+
+<h4>Need Help Getting Started?</h4>
+<p>Consider these prompts:</p>
+<ul>
+<li>How do activists use visual or digital rhetoric to mobilize antiracist action?</li>
+<li>How is racial justice framed in recent policy debates or legal discourse?</li>
+<li>How do media representations of racial identity reinforce or resist stereotypes?</li>
+<li>How do communities use oral history or testimony as antiracist practice?</li>
+</ul>
+<p>If you're unsure, please reach out during office hours or via email. This topic will carry you through the semester. So, choose something you care about!</p>
+
+</div>
+</div>
+</div>
+
+<!-- === 2ND MAJOR ASSIGNMENT === -->
+<div class="assign-group rv" style="transition-delay:0.1s;">
+<div class="assign-header" onclick="toggleAssign(this)" tabindex="0" role="button" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAssign(this);}">
+<div class="assign-num">02</div>
+<div class="assign-label"><h3>2nd Major Assignment: Semester Topic Analysis</h3><div class="assign-pts">100 Points · Due: March 9</div></div>
+<div class="assign-toggle">+</div>
+</div>
+<div class="assign-content">
+<div class="assign-inner">
+
+<h4>Rhetorical Analysis of Existing Materials on the Rhetoric of Racism</h4>
+
+<h4>Purpose</h4>
+<p>This assignment is the second major step in your semester-long project. You will conduct a rhetorical analysis of existing materials related to your chosen topic from the proposal you submitted earlier in the semester.</p>
+<p>Your goal is to explore how real-world texts—such as speeches, laws, media, literary works, music, movies, or cultural artifacts—use language, symbols, or emotion to shape ideas about race, racism, and antiracism. This analysis will help you understand how communication can either uphold or resist systems of oppression.</p>
+<p>This assignment also lays the essential groundwork for your final project. The deep analysis you perform here will directly inform the antiracist recommendations you develop later, whether you choose the academic paper, action research, or digital/multimodal format. Consider this your foundational research phase.</p>
+
+<h4>Assignment Overview</h4>
+<p>Using your approved topic, select a small group of related materials (deeper analysis of 2–4 items while bringing in other examples for context) that are connected in some way—by theme, moment, platform, or audience. These materials should reflect how your topic appears in public discourse.</p>
+<p>Examples of acceptable materials include (but are not limited to):</p>
+<ul>
+<li>Political speeches (e.g., campaign addresses, congressional hearings)</li>
+<li>Government policies, legal decisions, or court rulings</li>
+<li>News coverage or editorials from credible sources</li>
+<li>Social media content (e.g., viral posts, hashtag trends, influencer reels)</li>
+<li>Advertisements or public service announcements</li>
+<li>Films, protest songs, poems, or visual art</li>
+<li>Historical documents or archival footage</li>
+</ul>
+<p>If you're unsure whether your materials are appropriate, check in with your instructor early.</p>
+
+<h4>Focus of Your Analysis</h4>
+<p><strong>Deep Analysis:</strong> You will conduct a close, detailed rhetorical analysis of 2–4 primary artifacts (e.g., a speech, a policy document, a social media campaign, a film).</p>
+<p><strong>Supporting Examples:</strong> You may also reference additional examples to illustrate broader patterns, provide historical or cultural context, or strengthen your argument. These should be used to support—not replace—your analysis of the core artifacts.</p>
+<p>This structure ensures depth while allowing you to demonstrate awareness of larger rhetorical trends related to your topic.</p>
+
+<h4>What to Include in Your Assignment</h4>
+<p>All sections should be written in clear, double-spaced prose, using Times New Roman, 12-point font, and 1-inch margins.</p>
+
+<h4>1. Introduction (1–2 pages)</h4>
+<p>In this section:</p>
+<ul>
+<li>Restate your semester topic and why it's significant in the study of racism and antiracism.</li>
+<li>Identify the materials you have selected for your analysis. For each item, provide:
+<ul>
+<li>A brief description of what it is (e.g., speech, ad, policy, tweet)</li>
+<li>Who created it</li>
+<li>When and where it was created</li>
+<li>Who the intended or actual audience is</li>
+<li>Why you chose it for analysis</li>
+</ul></li>
+</ul>
+<p>Make sure the reader understands what you're analyzing and why it fits your topic.</p>
+
+<h4>2. Rhetorical Analysis (5–7 pages)</h4>
+<p>This is the core of your paper. You will analyze the rhetorical strategies used in your selected materials and explain how they influence perceptions of race and racism. You should:</p>
+<p>Describe how the text(s) use rhetorical devices such as:</p>
+<ul>
+<li>Ethos (credibility or authority)</li>
+<li>Pathos (emotional appeal)</li>
+<li>Logos (logic or reasoning)</li>
+<li>Framing, narrative, metaphor, symbolism, or tone</li>
+</ul>
+<p>Answer guiding questions such as:</p>
+<ul>
+<li>What messages are being sent about race or racism?</li>
+<li>How are language and imagery used to convey those messages?</li>
+<li>What values, fears, or emotions are being appealed to?</li>
+<li>Who is being centered or erased in these narratives?</li>
+<li>Are these materials reinforcing, challenging, or complicating racial stereotypes or systemic racism?</li>
+</ul>
+<p>Support your claims with specific examples, direct quotes, and careful description. Explain the impact these rhetorical choices may have on different audiences.</p>
+
+<h4>3. Discussion (2–3 pages)</h4>
+<p>Here, zoom out to consider the bigger picture:</p>
+<ul>
+<li>How do these materials compare to other public conversations about racism or antiracism?</li>
+<li>What broader messages or ideologies are being reinforced or disrupted?</li>
+<li>How do your materials reflect or resist dominant cultural narratives?</li>
+<li>What tensions or contradictions do you notice between different artifacts or between intent and effect?</li>
+<li>What do these rhetorical patterns suggest about how racism functions—or is resisted—through communication?</li>
+</ul>
+<p>This is a space to think critically and connect your findings to class themes and larger societal issues.</p>
+
+<h4>4. Conclusion (1–2 pages)</h4>
+<p>Wrap up your paper by:</p>
+<ul>
+<li>Summarizing your key insights.</li>
+<li>Reflecting on what you learned about rhetoric and racism.</li>
+<li>Explicitly connecting your analysis to your future final project. Briefly state which final project format you are considering (Academic Paper, Action Research, or Digital-Multimodal) and identify 1-2 gaps, questions, or effective strategies from your analysis that you plan to explore further. This creates a direct bridge to the next assignment.</li>
+<li>Suggesting possible directions for further study.</li>
+</ul>
+
+<h4>5. Works Cited</h4>
+<p>Use MLA or APA style consistently throughout the document.</p>
+<p>Every source listed in your Works Cited must have a corresponding in-text citation in the body of your paper, and every in-text citation must point to a source in the Works Cited.</p>
+<p>This page does not count toward your page total.</p>
+
+<h4>Formatting &amp; Submission Guidelines</h4>
+<ul>
+<li>Length: 10–12 double-spaced pages (excluding Works Cited)</li>
+<li>Font &amp; Format: Times New Roman, 12 pt, 1-inch margins</li>
+<li>Citation Style: MLA or APA</li>
+<li>File Type: Submit as a Word document or PDF only</li>
+<li>Submission Method: Upload to Canvas under the appropriate assignment tab</li>
+</ul>
+
+<h4>How You'll Be Graded – What Makes a Strong Paper</h4>
+<p>Use these key areas to guide your planning and revision:</p>
+<ul>
+<li><strong>Clarity &amp; Focus:</strong> Your topic is clear, specific, and well-supported with 2–4 strong, related materials.</li>
+<li><strong>Depth of Analysis:</strong> You go beyond description to explain how and why rhetoric is working in your 2-4 materials.</li>
+<li><strong>Supporting Materials:</strong> Not to replace your core 2-4 materials but to support your argument. It is not going to be as detailed as the core materials.</li>
+<li><strong>Concrete Examples:</strong> You include specific quotes or details and explain their effect.</li>
+<li><strong>Development of Ideas:</strong> Your ideas build logically, and your paragraphs connect clearly to your argument.</li>
+<li><strong>Connection to Class Themes:</strong> You link your analysis to bigger conversations about racism, resistance, and rhetoric.</li>
+<li><strong>Writing &amp; Organization:</strong> Your writing is well-structured, easy to follow, and carefully edited.</li>
+</ul>
+
+<h4>Tips for Success &amp; Looking Ahead</h4>
+<ul>
+<li>Narrow your focus. Fewer, richer examples are better than trying to cover too much.</li>
+<li>Stick to your topic. Build on your proposal and keep your materials aligned with your main focus.</li>
+<li>Analyze, don't just summarize. Explain what your examples do and why they matter.</li>
+<li>Organize by idea, not artifact. Group paragraphs around themes or rhetorical strategies, not just by material.</li>
+<li>Use headings. They help with structure and clarity.</li>
+<li>Think toward the final project. As you analyze, jot down notes about what's working, what's missing, or what could be done differently. These observations will become the basis for your antiracist recommendations in the final assignment.</li>
+</ul>
+<p>This assignment allows you to critically engage with the rhetoric of racism in practice, deepening your understanding of how language shapes and reflects societal power dynamics. The insights you gain here are the crucial evidence you will use to build your final project.</p>
+
+</div>
+</div>
+</div>
+
+<!-- === 3RD MAJOR ASSIGNMENT === -->
+<div class="assign-group rv" style="transition-delay:0.2s;">
+<div class="assign-header" onclick="toggleAssign(this)" tabindex="0" role="button" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAssign(this);}">
+<div class="assign-num">03</div>
+<div class="assign-label"><h3>3rd Major Assignment: Final Project &amp; Presentation Video</h3><div class="assign-pts">150 Points · Due: April 27</div></div>
+<div class="assign-toggle">+</div>
+</div>
+<div class="assign-content">
+<div class="assign-inner">
+
+<h4>Antiracist Recommendations</h4>
+<p><strong>Two Part of the Final Assignment:</strong></p>
+<p>Final Project (100 pts.)</p>
+<p>Video Presentation (50 pts.) — Length: 5-10 mins</p>
+
+<p><strong>Your Presentations must have:</strong></p>
+<ul>
+<li>What is your topic and final project?</li>
+<li>What did you do in this project?</li>
+<li>What are your findings and recommendations/call to action/suggestions?</li>
+</ul>
+
+<p><strong>Deliverables:</strong></p>
+<p>Video Presentation: Submit a link to the video or the video itself. Make sure I have access to the link. (50 pts)</p>
+<p>Final Project: One of the following options (100 Points):</p>
+<ul>
+<li>Academic Paper</li>
+<li>Action Research</li>
+<li>Digital-Multimodal Project</li>
+<li>Or a genre of your choice</li>
+</ul>
+<p>Details of each option are below.</p>
+
+<h4>Option A: Academic Paper</h4>
+
+<h4>Purpose</h4>
+<p>This assignment requires you to write a research-based academic paper that explores antiracist strategies related to your chosen topic within the rhetoric of racism. You will analyze how individuals, groups, or communities are addressing racism and propose evidence-based, actionable antiracist recommendations.</p>
+
+<h4>Assignment Description</h4>
+<p>Building on your semester topic—and directly extending the analysis you began in your 2nd Major Assignment—this paper asks you to:</p>
+<ul>
+<li>Analyze existing antiracist practices or initiatives related to your topic.</li>
+<li>Examine the rhetorical strategies and approaches employed in these efforts.</li>
+<li>Propose actionable antiracist recommendations informed by your research and analysis.</li>
+</ul>
+<p>The goal is to critically engage with real-world antiracist work, assess its effectiveness, and contribute thoughtful, practical recommendations for future action.</p>
+
+<h4>Assignment Requirements</h4>
+
+<p><strong>1. Introduction (1–2 pages)</strong></p>
+<ul>
+<li>Provide an overview of your topic and its significance within the rhetorics of racism.</li>
+<li>Identify the antiracist practices or initiatives you will analyze, providing context for each (e.g., background, audience, goals).</li>
+<li>State your thesis, clearly summarizing your main argument and proposed recommendations.</li>
+</ul>
+
+<p><strong>2. Analysis of Antiracist Practices (5–7 pages)</strong></p>
+<ul>
+<li>Examine how specific individuals, groups, or communities are addressing racism.</li>
+<li>Analyze the rhetorical strategies and methods used in these efforts (e.g., storytelling, coalition-building, policy advocacy, visual rhetoric).</li>
+<li>Assess the effectiveness of these approaches in combating racism and promoting equity.</li>
+<li>Use specific examples and evidence from your research to support your analysis. Draw upon and expand the work you began in your 2nd Major Assignment.</li>
+</ul>
+
+<p><strong>3. Antiracist Recommendations (2–3 pages)</strong></p>
+<ul>
+<li>Based on your analysis, propose 3–5 actionable recommendations for addressing racism.</li>
+<li>Explain how these recommendations build on existing practices and address current gaps or challenges.</li>
+<li>Consider the feasibility and impact of your recommendations in specific contexts (e.g., education, media, policy, community organizing).</li>
+</ul>
+
+<p><strong>4. Conclusion (1–2 pages)</strong></p>
+<ul>
+<li>Summarize your key findings and reflect on their broader implications for antiracist work.</li>
+<li>Offer suggestions for further research or exploration of your topic.</li>
+<li>Briefly connect your paper's findings to your Video Presentation content.</li>
+</ul>
+
+<p><strong>5. Works Cited</strong></p>
+<p>Include a properly formatted list of all sources referenced, using APA or MLA style consistently. Every entry in the Works Cited must correspond to at least one in-text citation in the body of your paper.</p>
+
+<p><strong>Paper Guidelines:</strong></p>
+<ul>
+<li>Length: 10–12 pages, double-spaced (excluding Works Cited).</li>
+<li>Format: Times New Roman, 12-point font, 1-inch margins.</li>
+<li>Submission: Submit as a Word document or PDF.</li>
+</ul>
+
+<p><strong>Evaluation Criteria:</strong></p>
+<ul>
+<li><strong>Depth of Analysis:</strong> Insightful examination of antiracist practices and their rhetorical strategies.</li>
+<li><strong>Quality of Recommendations:</strong> Practical, evidence-based, and thoughtful antiracist proposals.</li>
+<li><strong>Clarity and Organization:</strong> Logical structure, clear argumentation, and polished writing.</li>
+<li><strong>Use of Evidence:</strong> Strong integration of research, examples, and citations to support your claims.</li>
+<li><strong>Connection to Prior Work:</strong> Effective extension of your topic and analysis from earlier assignments.</li>
+</ul>
+
+<p><strong>Getting Started:</strong></p>
+<ul>
+<li>Revisit your 2nd Major Assignment analysis to identify promising leads, gaps, or unresolved questions.</li>
+<li>Identify antiracist initiatives, campaigns, or practices relevant to your topic.</li>
+<li>Use course readings and rhetorical frameworks to analyze the strategies employed in these efforts.</li>
+<li>Reflect on what is working, what is not, and where there are opportunities for meaningful intervention.</li>
+</ul>
+<p>This assignment challenges you to engage critically and constructively with ongoing antiracist work, contributing your voice to these vital efforts.</p>
+
+<h4>Option B: Action Research</h4>
+
+<h4>Purpose</h4>
+<p>This assignment invites you to move beyond theory and engage directly with a community organization actively addressing racism. Through action research, you will collaborate with the organization, analyze its antiracist strategies, contribute meaningfully to its work, and propose actionable recommendations grounded in both your fieldwork and academic research.</p>
+
+<h4>Assignment Description</h4>
+<p>Action research combines scholarly inquiry with hands-on engagement to address real-world challenges. For this project, you will partner with a community organization whose mission aligns with your semester topic in the rhetoric of racism. Your work will involve:</p>
+<ul>
+<li><strong>Observation &amp; Participation:</strong> Actively engaging with the organization's antiracist efforts through volunteering, attending events, conducting interviews, or supporting campaigns.</li>
+<li><strong>Rhetorical Analysis:</strong> Examining the organization's communication strategies, messaging, and outreach methods.</li>
+<li><strong>Meaningful Contribution:</strong> Completing some concrete, agreed-upon task or project that supports the organization's goals.</li>
+<li><strong>Recommendations:</strong> Proposing actionable, research-informed recommendations based on your observations and analysis.</li>
+</ul>
+
+<h4>What You Will Produce</h4>
+
+<p><strong>1. Fieldwork Journal (Ongoing)</strong></p>
+<p>Maintain a detailed journal documenting your observations, interactions, and reflections throughout your engagement. Include notes on the organization's practices, rhetorical strategies, challenges, and your own evolving role. Submit this as a separate file or appendix with your final report.</p>
+
+<p><strong>2. Final Report (8–12 pages, excluding Works Cited and Fieldwork Journal)</strong></p>
+
+<p><strong>Introduction (1–2 pages)</strong></p>
+<ul>
+<li>Overview of your semester topic and the organization's antiracist work.</li>
+<li>Statement of your research questions and purpose.</li>
+<li>Explanation of how this project extends your earlier work from the 2nd Major Assignment.</li>
+</ul>
+
+<p><strong>Analysis of Organizational Practices (3–4 pages)</strong></p>
+<ul>
+<li>Analyze the rhetorical strategies used by the organization (e.g., narrative framing, visual rhetoric, coalition-building, digital advocacy).</li>
+<li>Assess the effectiveness of these strategies in advancing racial equity.</li>
+<li>Support your analysis with evidence from your fieldwork journal and any supporting materials.</li>
+</ul>
+
+<p><strong>Description of Your Contribution (3–4 pages)</strong></p>
+<ul>
+<li>Detail the specific work you performed for the organization. This may include creating content, organizing events, conducting research, developing resources, or supporting outreach.</li>
+<li>Include evidence of your contribution (e.g., photos, screenshots, drafts, summaries, feedback from the organization).</li>
+<li>Reflect on how this work informed your understanding of antiracist practice.</li>
+</ul>
+
+<p><strong>Conclusion &amp; Recommendations (1–2 pages)</strong></p>
+<ul>
+<li>Reflect on your learning experience and the broader implications of your engagement.</li>
+<li>Propose 3–5 actionable recommendations for the organization or similar groups, informed by your analysis and fieldwork.</li>
+<li>Suggest directions for further research or community action.</li>
+</ul>
+
+<p><strong>Works Cited</strong></p>
+<p>Include all sources referenced in APA or MLA style. Each entry must correspond to in-text citations within your report.</p>
+
+<p><strong>Submission Guidelines:</strong></p>
+<ul>
+<li>Final Report: Word document or PDF.</li>
+<li>Fieldwork Journal: Separate file or clearly labeled appendix.</li>
+<li>Supporting Evidence: Include links, images, or documentation of your contribution where applicable.</li>
+</ul>
+
+<p><strong>Evaluation Criteria:</strong></p>
+<ul>
+<li><strong>Depth of Engagement:</strong> Evidence of meaningful, consistent interaction with the organization.</li>
+<li><strong>Quality of Contribution:</strong> Demonstrable, relevant work completed in support of the organization's mission.</li>
+<li><strong>Rhetorical Analysis:</strong> Insightful examination of the organization's strategies and communication.</li>
+<li><strong>Reflection &amp; Integration:</strong> Thoughtful synthesis of fieldwork, academic research, and personal learning.</li>
+<li><strong>Actionable Recommendations:</strong> Practical, evidence-based suggestions for future antiracist work.</li>
+<li><strong>Clarity &amp; Organization:</strong> Well-structured, polished, and effectively communicated writing.</li>
+</ul>
+
+<p><strong>Getting Started:</strong></p>
+<ul>
+<li>Identify an organization whose work aligns with your semester topic and research interests.</li>
+<li>Reach out early to discuss potential collaboration and define a feasible, mutually beneficial role.</li>
+<li>Submit your Project Proposal and meet with the instructor for approval before proceeding.</li>
+<li>Plan your time carefully to balance fieldwork, journaling, analysis, and writing.</li>
+</ul>
+<p>This assignment is designed to deepen your understanding of how rhetoric operates in real-world antiracist efforts and to position you as an engaged, reflective participant in community-driven change.</p>
+
+<h4>Option C: Digital-Multimodal Project</h4>
+
+<h4>Purpose</h4>
+<p>This option invites you to communicate your research and analysis through creative, accessible, and engaging multimodal formats. You will produce a project that explores antiracist practices and presents actionable recommendations using a combination of text, audio, visual, interactive, or experiential media. This format is ideal for students who wish to reach public or community audiences beyond the traditional academic paper.</p>
+
+<h4>Assignment Description</h4>
+<p>Building on your semester topic—and extending the analysis from your 2nd Major Assignment—you will design and produce a multimodal project that examines how racism is rhetorically constructed and resisted. Your project should not only analyze existing antiracist strategies but also propose meaningful recommendations for action in an accessible, compelling form.</p>
+
+<h4>Project Options</h4>
+<p>You may choose one of the following formats, or propose your own (with instructor approval):</p>
+<ul>
+<li><strong>Documentary or Short Film (5–10 minutes):</strong> Combine interviews, narration, footage, and graphics to analyze antiracist initiatives in action.</li>
+<li><strong>Podcast or Audio Series (10–15 minutes total):</strong> Feature interviews, soundscapes, narration, and discussion to explore rhetorical strategies in antiracist movements.</li>
+<li><strong>Website or Digital Portfolio:</strong> Create an interactive site that presents your research, analysis, and recommendations using text, images, video, and hyperlinks.</li>
+<li><strong>Social Media Campaign (Series of 5–7 posts, plus rationale):</strong> Design a mock or live campaign on Instagram, TikTok, Twitter/X, or another platform, using visuals, captions, and hashtags to educate and mobilize.</li>
+<li><strong>Zine, Comic, or Illustrated Booklet:</strong> Combine written analysis with original or curated art to explore antiracist rhetoric in a visually engaging format.</li>
+<li><strong>Board Game or Card Game:</strong> Design a playable game that teaches players about systemic racism and antiracist action through scenarios, choices, and collaborative challenges.</li>
+<li><strong>Public Service Announcement (PSA) Video or Audio (1–3 minutes):</strong> Produce a persuasive PSA that highlights a specific issue and calls viewers/listeners to action.</li>
+<li><strong>Interactive Workshop or Lesson Plan:</strong> Design a workshop for a specific audience (e.g., students, community groups) complete with slides, activities, handouts, and facilitation notes.</li>
+<li><strong>Digital Storytelling Project (e.g., StoryMap, TimelineJS, interactive video):</strong> Use digital tools to create an interactive narrative that traces rhetorical patterns or antiracist movements over time or space.</li>
+<li><strong>Other Format of Your Choice:</strong> Propose your own creative format in consultation with the instructor.</li>
+</ul>
+
+<h4>Required Components</h4>
+
+<p><strong>1. The Multimodal Project Itself</strong></p>
+<p>Fully developed and ready to share/view/experience. Must include:</p>
+<ul>
+<li>Clear analysis of antiracist practices or rhetorical strategies.</li>
+<li>3–5 actionable, evidence-based recommendations.</li>
+<li>Integration of research from your 2nd Major Assignment and additional sources.</li>
+</ul>
+
+<p><strong>2. Creator's Statement (1–2 pages, double-spaced)</strong></p>
+<ul>
+<li>Explain your choice of format and its appropriateness for your topic and intended audience.</li>
+<li>Describe your creative and research process.</li>
+<li>Reflect on how your project extends the work from your earlier assignments.</li>
+<li>Discuss the rhetorical choices you made in design, content, and delivery.</li>
+</ul>
+
+<p><strong>3. Works Cited / Source Attribution</strong></p>
+<p>Provide a complete list of all sources referenced in your project, formatted in APA or MLA style. Even in non-text formats, you must credit sources—this can be included in credits, captions, a closing slide, or a separate document. Every source in your Works Cited must be cited within the project (e.g., in voiceover, on-screen text, captions, or links).</p>
+
+<p><strong>Submission Guidelines:</strong></p>
+<ul>
+<li>The Project: Submit a link, file, or physical artifact as appropriate (e.g., video file, URL, PDF, game instructions and components).</li>
+<li>Creator's Statement: Submit as a separate Word document or PDF.</li>
+<li>Works Cited: Include as part of your Creator's Statement or as a separate file.</li>
+</ul>
+
+<p><strong>Evaluation Criteria:</strong></p>
+<ul>
+<li><strong>Content &amp; Analysis:</strong> Depth of research, clarity of argument, and insightful examination of antiracist rhetoric.</li>
+<li><strong>Recommendations:</strong> Relevance, feasibility, and evidence-base of proposed actions.</li>
+<li><strong>Design &amp; Creativity:</strong> Effective use of multimodal elements to engage and inform the intended audience.</li>
+<li><strong>Rhetorical Awareness:</strong> Thoughtful choices in format, style, tone, and audience engagement.</li>
+<li><strong>Technical Execution:</strong> Polished, functional, and accessible final product.</li>
+<li><strong>Reflection &amp; Integration:</strong> Quality of Creator's Statement and clear connection to prior coursework.</li>
+</ul>
+
+<p><strong>Getting Started:</strong></p>
+<ul>
+<li>Review your 2nd Major Assignment to identify key themes, sources, and questions you wish to expand.</li>
+<li>Choose a format that aligns with your strengths, audience, and topic.</li>
+<li>Draft a brief project plan or storyboard before production begins.</li>
+<li>Consult with the instructor if you are proposing a format not listed above.</li>
+</ul>
+<p>This assignment empowers you to translate academic inquiry into public-facing communication, using creativity and critical thought to contribute meaningfully to conversations about racism and resistance.</p>
+
+</div>
+</div>
+</div>
+
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== SCHEDULE ==================== -->
+<section id="schedule">
+<div class="sec-label rv">Course Calendar</div>
+<h2 class="sec-title rv">WEEKLY<br>SCHEDULE</h2>
+<p class="desc-body rv" style="margin-bottom:12px;">Eng-362 Course Calendar | Spring 2025</p>
+<p class="desc-body rv" style="margin-bottom:36px;font-size:13px;color:#ffffff;">Notes: Except for the textbook, other assigned materials will be provided in a PDF format or with a hyperlink on Canvas. The calendar is subject to change. So, please make sure you check this calendar and Canvas every week. If you encounter a broken link or notice any inconsistency or discrepancy, please notify me right away and I will fix it.<br><br>3 Major assignments due dates: 1st major assignment: Jan 26 · 2nd major assignment: March 9 · Final major assignment: April 27</p>
+
+<div class="week-row rv">
+<div class="week-num">01</div>
+<div class="week-content">
+<div class="week-topic">Combating Dehumanization of the Global South</div>
+<div class="week-readings">
+"Not Again" by Arundhati Roy | <a href="https://ccrma.stanford.edu/~peer/arundhatiRoy.html" target="_blank">Link</a><br>
+"Come September," Arundhati Roy | <a href="https://collectiveliberation.org/wp-content/uploads/2015/01/Roy_Come_September.pdf" target="_blank">Transcript</a> · <a href="https://www.youtube.com/watch?v=ET7I9jvP4Ic" target="_blank">Talk</a><br>
+Aneil Rallin, A Gathering of Spirit<br>
+"The algebra of infinite justice," Arundhati Roy (2002) | <a href="https://www.theguardian.com/world/2001/sep/29/september11.afghanistan" target="_blank">Link</a>
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">02</div>
+<div class="week-content">
+<div class="week-topic">Transnational Solidarities</div>
+<div class="week-readings">
+"Ch. 10: Transnational Solidarities," Freedom Is a Constant Struggle (FICS), Angela Davis<br>
+"Ch. 2: Ferguson Reminds Us of the Importance of a Global Context," Freedom Is a Constant Struggle (FICS), Angela Davis
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">03</div>
+<div class="week-content">
+<div class="week-topic">Global South Feminisms &amp; Imperialist Feminism</div>
+<div class="week-readings">
+"Introduction" chapter from: In the name of women's rights: The rise of femonationalism by Sara R. Farris.<br>
+Imperialist feminism and liberalism | <a href="https://www.opendemocracy.net/en/imperialist-feminism-and-liberalism/" target="_blank">Link</a><br>
+Imperialist Feminism: A Historical Overview | <a href="https://www.youtube.com/watch?v=UrWYb7u3jKo" target="_blank">Video</a>
+</div>
+</div>
+<div class="week-due"> Reading Response<br><span style="color:var(--red);">1st Major Assignment</span><br><br></div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">04</div>
+<div class="week-content">
+<div class="week-topic">Queer Rights &amp; Homonationalism</div>
+<div class="week-readings">
+Rethinking Homonationalism: Jasbir Puar<br>
+Reciprocal Solidarity: Where the Black and Palestinian Queer Struggles Meet<br>
+Stolen From Our Bodies: First Nations Two-Spirits/Queers and the Journey to a Sovereign Erotic: Qwo-Li Driskill
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">05</div>
+<div class="week-content">
+<div class="week-topic">Prison-Industrial Complex &amp; Abolition</div>
+<div class="week-readings">
+"Ch. 4: On Palestine, G4S, and the Prison-Industrial Complex," Freedom Is a Constant Struggle (FICS), Angela Davis.<br>
+"Sexual Coercion, Prisons, and Feminist Responses," Abolition Democracy. Beyond Empire, Prisons, and Torture, Angela Davis.<br>
+"Free All Black Liberation Fighters (1973)" by Assata Shakur | <a href="https://abolitionnotes.org/assatashakur/freethemall" target="_blank">Link</a><br>
+"Women in Prison: How It Is with Us" by Assata Shakur / Joanne Chesimard | <a href="https://www.historyisaweapon.com/defcon1/shakurwip.html" target="_blank">Link</a>
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">06</div>
+<div class="week-content">
+<div class="week-topic">Big Tech Sells War</div>
+<div class="week-readings">
+Big Tech Sells War: <a href="https://bigtechsellswar.com" target="_blank">bigtechsellswar.com</a><br>
+Decoding the role Big Tech plays in the war in Gaza | <a href="https://www.japantimes.co.jp/news/2024/10/08/world/war-gaza-role-big-tech/" target="_blank">Link</a><br>
+Big Tech Has Made Billions Off the 20-Year War on Terror | <a href="https://www.vice.com/en/article/big-tech-has-made-billions-off-the-20-year-war-on-terror/" target="_blank">Link</a><br>
+Report: Big Tech profited from war on terror | <a href="https://www.dw.com/en/big-tech-made-huge-profits-from-war-on-terror-us-activists-say/a-59146128" target="_blank">Link</a>
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">07</div>
+<div class="week-content">
+<div class="week-topic">Tech Industry &amp; Surveillance</div>
+<div class="week-readings">
+"Borderlands, Israel's Latest Surveillance Technology Laboratory," by Brittany Dawson<br>
+Excerpt from: Feminist Surveillance Studies by Rachel E. Dubrofsky and Shoshanna Amielle Magnet.<br>
+U.S.-Mexico Border: An Israeli Tech Laboratory | <a href="https://www.palestine-studies.org/en/node/232052" target="_blank">Link</a>
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">08</div>
+<div class="week-content">
+<div class="week-topic">Systemic Justice</div>
+<div class="week-readings">
+"From Michael Brown to Assata Shakur, the Racist State of America Persists," Freedom Is a Constant Struggle, Angela Davis<br>
+"We Have to Talk about Systemic Change," Freedom Is a Constant Struggle, Angela Davis<br>
+"Progressive Struggles against Insidious Capitalist Individualism," Freedom Is a Constant Struggle (FICS), Angela Davis
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">09</div>
+<div class="week-content">
+<div class="week-topic">Linguistic Justice</div>
+<div class="week-readings">
+"How to Tame a Wild Tongue" by Gloria Anzaldúa | <a href="https://www.everettsd.org/cms/lib07/WA01920133/Centricity/Domain/965/Anzaldua-Wild-Tongue.pdf" target="_blank">Link</a><br>
+"Killing Them Softly" by April Baker-Bell
+</div>
+</div>
+<div class="week-due"> Reading Response<br><span style="color:var(--red);">2nd Major Assignment</span><br><br></div>
+</div>
+
+<div class="week-row rv" style="opacity:0.5;">
+<div class="week-num">10</div>
+<div class="week-content">
+<div class="week-topic">Spring Break</div>
+</div>
+<div class="week-due"></div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">11</div>
+<div class="week-content">
+<div class="week-topic">Uncritical Celebration of "Green/Clean Energy" and Technological Advances</div>
+<div class="week-readings">
+The horror of cobalt mining in DR Congo | The Listening Post | <a href="https://www.youtube.com/watch?v=eJdktQ97rZ8" target="_blank">Video</a><br>
+"Cobalt Red": Smartphones &amp; Electric Cars Rely on Toxic Mineral Mined in Congo by Children | <a href="https://www.youtube.com/watch?v=7I3K7fhLmcE" target="_blank">Video</a><br>
+The genocide of the Congolese: A cautionary call against 'green growth'. <a href="https://illuminem.com/illuminemvoices/the-genocide-of-the-congolese-a-cautionary-call-against-green-growth" target="_blank">Link</a><br>
+Why this country is seeing a 'staggering' increase in the number of rapes. <a href="https://www.npr.org/sections/goats-and-soda/2024/10/22/nx-s1-5157737/rape-sexual-assault-democratic-republic-congo" target="_blank">Link</a>
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">12</div>
+<div class="week-content">
+<div class="week-topic">Racist and Colonial Corporate Media</div>
+<div class="week-readings">
+War, Resistance and Refuge: Racism and double standards in western media coverage of Ukraine | <a href="https://blogs.lse.ac.uk/medialse/2022/05/10/war-resistance-and-refuge-racism-and-double-standards-in-western-media-coverage-of-ukraine/" target="_blank">Link</a><br>
+They are 'civilised' and 'look like us': the racist coverage of Ukraine | <a href="https://www.theguardian.com/commentisfree/2022/mar/02/civilised-european-look-like-us-racist-coverage-ukraine" target="_blank">Link</a><br>
+What the war in Ukraine taught us, Palestinians | <a href="https://www.aljazeera.com/opinions/2022/3/6/what-the-war-in-ukraine-thought-us-palestinians" target="_blank">Link</a><br>
+Irish MP Richard Boyd Barrett calls out the double standards on Ukraine and Palestine | <a href="https://www.youtube.com/watch?v=mu2uI0gZD-c" target="_blank">Video</a>
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">13</div>
+<div class="week-content">
+<div class="week-topic">Wrapping Up the Textbook</div>
+<div class="week-readings">
+"Ch 5: Closures and Continuities," Freedom Is a Constant Struggle (FICS), Angela Davis.<br>
+Ch 7: The Truth Telling Project: Violence in America," Freedom Is a Constant Struggle (FICS), Angela Davis.<br>
+"Ch 9: Political Activism and Protest from the 1960s to the Age of Obama," Freedom Is a Constant Struggle (FICS), Angela Davis.
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">14</div>
+<div class="week-content">
+<div class="week-topic">Black Against Empire</div>
+<div class="week-readings">
+Ch. 12: Black Studies and Third World Liberation, Black Against Empire<br>
+Ch. 13: Vanguard of the New Left, Black Against Empire<br>
+Ch. 14: International Alliance, Black Against Empire
+</div>
+</div>
+<div class="week-due"> Reading Response</div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">15</div>
+<div class="week-content">
+<div class="week-topic">No Assigned Materials</div>
+</div>
+<div class="week-due"><br><br></div>
+</div>
+
+<div class="week-row rv">
+<div class="week-num">16</div>
+<div class="week-content">
+<div class="week-topic">No Assigned Materials</div>
+</div>
+<div class="week-due"><span style="color:var(--red);">3rd Major Assignment</span><br>Extra Point Assignment<br><br></div>
+</div>
+
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ==================== CLASS POLICIES (EXACT TEMPLATE) ==================== -->
+<section id="policies">
+  <h2 class="pol-tit rv">CLASS<br>POLI<span style="color:var(--red);">CIES</span></h2>
+  <div class="pgrid2">
+    <div class="pblock rv"><div class="pnum2" aria-hidden="true">01</div><div class="pstamp sbl">Class Policies</div><div class="phead">Attendance.</div><div class="pbody"><strong>Attendance:</strong> In this asynchronous course, attendance is tracked through weekly reading responses. Each week, students are expected to complete and submit a reading response as outlined in the course schedule. This submission will count as their attendance for the week. Failure to submit a reading response by the deadline will result in an "absence" for that week.<br><br>If circumstances prevent you from completing a reading response on time, please notify the instructor promptly to discuss potential accommodations.<br><br>Students are allowed one week of unexplained absence without penalty. This means they can skip one reading response without it impacting their attendance record. Although they may initially be marked as "absent" for that week, this absence will be excused at the end of the semester.</div></div>
+    <div class="pblock rv" style="transition-delay:0.1s;"><div class="pnum2" aria-hidden="true">02</div><div class="pstamp sgd">Class Policies</div><div class="phead">Late Work.</div><div class="pbody"><strong>Late Work:</strong> As a general rule, assignments should be submitted by the posted deadlines. Assignment deadlines are all clearly posted in both this course syllabus as well as within Canvas. I'd expect you to manage your time and meet deadlines. With that in mind, late assignments will be accepted without penalty provided you email me at least 2 days prior to the deadline and we agree on an alternative deadline.<br><br>After all, this class is not the only life we are living.</div></div>
+    <div class="pblock rv" style="transition-delay:0.2s;"><div class="pnum2" aria-hidden="true">03</div><div class="pstamp sgr">Inclusion &amp; Accessibility</div><div class="phead">Every Body-Mind-Heart Learns Differently.</div><div class="pbody">No two people learn exactly the same way. If you find that the materials are difficult for you to absorb, don't assume right away that you don't understand the material. Perhaps you prefer to process information through speaking or listening, but all I am providing are written handouts, making it difficult for you to process. Please come speak with me if you would like to think through other options for engaging with the material and activities in the course.<br><br>Disabilities are visible and invisible, documented and undocumented: <strong>I do not distinguish between these designations.</strong> If you have a disability, or think you may have a disability, I encourage you to speak with me as soon as you can about your learning needs and how I can best accommodate them.<br><br>If there are aspects of the design, instruction, and/or experiences within this course that result in barriers to your inclusion or accurate assessment of achievement, please notify me as soon as possible and/or contact Student Accessibility Services. You may contact Accommodations and Services without notifying me if you wish; you may also speak with me without contacting Accommodations and Services at all. <strong>I do not require documentation for accessibility in my classroom.</strong></div></div>
+    <div class="pblock rv" style="transition-delay:0.3s;"><div class="pnum2" aria-hidden="true">04</div><div class="pstamp sr">Life First</div><div class="phead">This Is Just a Tiny Fraction of Your Life.</div><div class="pbody">Dear y'all, as we are here together, hopefully a transformative journey of exploration and reflection where we will engage in the radical work of anti-racism—a collective act of love, care, solidarity, critical thinking, and intellectual labor. Together, we will interrogate systems, cross intellectual and cultural borders, and examine anti-racism as a framework rooted in justice across intersecting identities and global contexts. Guided by and learning from scholars, artists, activists, and each other, we will envision transformations within ourselves and our communities (and if possible, beyond that). Your voices and perspectives will shape our space, teaching me as much as I hope to share with you. I am here to be with you every step of the way, so please don't hesitate to reach out with questions, concerns, or if you simply need to to de-stress. Don't let this encourage you to dehumanize yourself. Let's embark on this meaningful inquiry together by also keeping in mind that your emotional and mental wellbeing matters a lot.<br><br>And yes, this is also one of the class policies.</div></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== AI USE POLICY (EXACT TEMPLATE) ==================== -->
+<section id="ai">
+  <div class="tbar"><div class="td tdr"></div><div class="td tdy"></div><div class="td tdg"></div><span style="margin-left:8px;font-size:12px;">AI_USE_POLICY.txt — opened</span></div>
+  <div class="ttit rv">AI USE<br>POLICY<span class="blink">_</span></div>
+  <div class="aigrid rv">
+    <div class="tblock"><div class="tprompt">ACCEPTABLE</div><div class="tbltit" style="color:#00ff46;">✓ Permitted Uses</div><div class="ti"><span class="til">LEARNING:</span> Personalized platforms, AI tutoring, study organization.</div><div class="ti"><span class="til">RESEARCH:</span> Brainstorming, ideation — critically assess and cite all AI output.</div><div class="ti"><span class="til">COLLAB:</span> Facilitating group tasks — never replacing human contribution.</div></div>
+    <div class="tblock"><div class="tprompt">UNACCEPTABLE</div><div class="tbltit" style="color:#ff3232;">✗ Prohibited Uses</div><div class="ti dn"><span class="til">PLAGIARISM:</span> AI-generated assignments presented as original work. Prohibited.</div><div class="ti dn"><span class="til">EXAM_MISUSE:</span> Unauthorized AI in assessments = academic misconduct.</div><div class="ti dn"><span class="til">PRIVACY:</span> Collecting others' data, generating impersonation content.</div></div>
+    <div class="tblock" style="grid-column:1/-1;"><div class="tprompt">DISCLOSURE REQUIRED</div><div class="tbltit">◎ Transparency Protocol</div><div class="ti">All AI use must be disclosed in submissions. (e.g. <em>"Generated using ChatGPT, edited for accuracy."</em>)</div><div class="ti">Paraphrased or quoted AI content must be cited per APA or MLA Style Guide.</div><div class="ti">Do not input sensitive personal data into AI systems. No deepfakes or misleading content.</div><div class="tnote">This AI use policy was itself generated using ChatGPT and edited for accuracy.</div></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+</main>
+<!-- ==================== FOOTER ==================== -->
+<section id="footer">
+<div class="footer-course">ENGLISH-362: RHETORICS OF RACISM</div>
+<div class="footer-uni">Spring 2025</div>
+</section>
+
+<!-- ==================== NAV ==================== -->
+<button class="nav-btn" onclick="const m=document.querySelector('.nav-menu');m.classList.toggle('open');this.setAttribute('aria-expanded',m.classList.contains('open'))" aria-label="Navigation menu" aria-expanded="false">
+<svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+</button>
+<nav class="nav-menu" role="navigation" aria-label="Page navigation">
+<a href="#hero">Home</a>
+<a href="#trigger">Trigger Warning</a>
+<a href="#description">Course Description</a>
+<a href="#textbook">Textbook</a>
+<a href="#grading">Grading</a>
+<a href="#assignments">Assignments</a>
+<a href="#schedule">Schedule</a>
+<a href="#policies">Policies</a>
+<a href="#ai">AI Policy</a>
+</nav>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+<style>
+*{cursor:none !important;}
+.cursor-dot{position:fixed;top:0;left:0;width:10px;height:10px;background:var(--red);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--red);transition:width 0.2s,height 0.2s,background 0.2s;}
+.cursor-dot.hover{width:14px;height:14px;}
+.cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.45);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);box-shadow:0 0 0 1.5px rgba(196,43,43,0.25);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+.cursor-ring.hover{width:44px;height:44px;border-color:rgba(255,255,255,0.65);}
+@media(max-width:768px){.cursor-dot,.cursor-ring{display:none !important;}*{cursor:auto !important;}}
+
+/* ACCESSIBILITY */
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--red);color:#fff;padding:12px 24px;font-family:'Special Elite',monospace;font-size:14px;z-index:100000;border-radius:0 0 4px 4px;transition:top 0.3s;}
+.skip-link:focus{top:0;}
+*:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+a:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+.nav-btn:focus-visible{outline:3px solid #fff;outline-offset:4px;}
+.assign-header:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-color:rgba(240,230,200,0.3);}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1 !important;transform:none !important;transition:none !important;}
+  .cursor-dot,.cursor-ring{display:none !important;}
+  *{cursor:auto !important;}
+  .hero-scroll{animation:none !important;}
+  .blink{animation:none !important;}
+  .nav-menu{transition:none !important;}
+  .assign-content{transition:none !important;}
+  .pblock{transition:none !important;}
+  .ti{transition:none !important;}
+  .nav-menu a{transition:none !important;}
+}
+@media(prefers-contrast:more){
+  .week-readings,.week-readings a{color:#fff !important;}
+  .desc-quote cite,.struct-quote cite{color:#fff !important;}
+  .hero-meta-item{color:#fff !important;}
+  .pnum2{color:rgba(240,230,200,0.1) !important;}
+  .grade-table td{color:#fff !important;}
+}
+</style>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver((entries)=>{
+entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Assignment toggle
+function toggleAssign(header){
+const content = header.nextElementSibling;
+const toggle = header.querySelector('.assign-toggle');
+content.classList.toggle('open');
+toggle.classList.toggle('open');
+}
+
+// Close nav on link click
+document.querySelectorAll('.nav-menu a').forEach(a=>{
+a.addEventListener('click',()=>{document.querySelector('.nav-menu').classList.remove('open');});
+});
+// Custom cursor
+const dot=document.querySelector(".cursor-dot"),ring=document.querySelector(".cursor-ring");
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+"px";dot.style.top=my+"px";});
+function lerp(){rx+=(mx-rx)*0.15;ry+=(my-ry)*0.15;ring.style.left=rx+"px";ring.style.top=ry+"px";requestAnimationFrame(lerp);}
+lerp();
+document.querySelectorAll("a,button,.assign-header,.nav-btn,.nav-menu a").forEach(el=>{
+el.addEventListener("mouseenter",()=>{dot.classList.add("hover");ring.classList.add("hover");});
+el.addEventListener("mouseleave",()=>{dot.classList.remove("hover");ring.classList.remove("hover");});
+});
+</script>
+</body>
+</html>
