@@ -1,0 +1,3821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI, Biopolitics & Engineered Oppression — ENG 548</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=VT323&display=swap');
+
+:root {
+  --red: #7B1818;
+  --red-deep: #3A0808;
+  --red-mid: #9B2335;
+  --red-bright: #C0392B;
+  --cream: #FDFBF5;
+  --sand: #E8D5B0;
+  --black: #0A0A0A;
+  --gray: #3A3A3A;
+  --gray-light: #888;
+  --rule: #C4A882;
+  --green-terminal: #00FF41;
+  --bg: #0D0D0D;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--black);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ══ SCANLINE OVERLAY ══ */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.015) 2px,
+    rgba(0,0,0,0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ══ NAV ══ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  padding: 0.8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(123,24,24,0.4);
+}
+.nav-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--red-mid);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(232,213,176,0.6);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--red-mid); }
+.status-dot {
+  width: 6px; height: 6px;
+  background: var(--green-terminal);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.4rem;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ══ HERO ══ */
+.hero {
+  min-height: 100vh;
+  background: var(--red-deep);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 4rem;
+  position: relative;
+  overflow: hidden;
+  max-width: 100vw;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(123,24,24,0.3) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(155,35,53,0.15) 0%, transparent 50%);
+}
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(123,24,24,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123,24,24,0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(232,213,176,0.5);
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+.hero-eyebrow span { color: var(--red-mid); }
+
+.hero-title {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+.hero-word {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  position: relative;
+  overflow: visible;
+  padding-bottom: 0.06em;
+}
+.hero-word:nth-child(2) { color: var(--sand); }
+.hero-word:nth-child(4) { color: var(--cream); }
+
+.hero-word-inner {
+  display: block;
+  opacity: 0;
+  transform: translateY(28px);
+  animation: wordUp 0.75s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-word:nth-child(1) .hero-word-inner { animation-delay: 0.3s; }
+.hero-word:nth-child(2) .hero-word-inner { animation-delay: 0.55s; }
+.hero-word:nth-child(3) .hero-word-inner { animation-delay: 0.8s; }
+.hero-word:nth-child(4) .hero-word-inner { animation-delay: 1.05s; }
+
+@keyframes wordUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scan beam sweeps AFTER text is visible — purely decorative, never clips text */
+.hero-word::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, rgba(192,57,43,0.9) 50%, transparent);
+  box-shadow: 0 0 12px 3px rgba(192,57,43,0.5);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  animation: scanBeam 0.65s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+.hero-word:nth-child(1)::before { animation-delay: 1.1s; }
+.hero-word:nth-child(2)::before { animation-delay: 1.35s; }
+.hero-word:nth-child(3)::before { animation-delay: 1.6s; }
+.hero-word:nth-child(4)::before { animation-delay: 1.85s; }
+
+@keyframes scanBeam {
+  0%   { opacity: 0;   left: 0%; }
+  10%  { opacity: 1;   left: 0%; }
+  88%  { opacity: 1;   left: 98%; }
+  100% { opacity: 0;   left: 100%; }
+}
+
+/* Small classified stamp after scan */
+.hero-word::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 1px; width: 0;
+  background: rgba(192,57,43,0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  animation: underlineMark 0.4s ease forwards;
+}
+.hero-word:nth-child(1)::after { animation-delay: 1.76s; }
+.hero-word:nth-child(2)::after { animation-delay: 2.01s; }
+.hero-word:nth-child(3)::after { animation-delay: 2.26s; }
+.hero-word:nth-child(4)::after { animation-delay: 2.51s; }
+@keyframes underlineMark {
+  to { opacity: 0.3; width: 100%; }
+}
+
+.hero-scan-counter {
+  display: none;
+}
+.hero-scan-bg { display: none; }
+
+.hero-period { color: var(--red-mid); }
+
+.hero-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(232,213,176,0.15);
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeIn 1s 1.4s forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+
+.instructor-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cream);
+}
+.instructor-info {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(232,213,176,0.6);
+  margin-top: 0.3rem;
+  line-height: 1.8;
+}
+
+.systems-ticker {
+  background: var(--cream);
+  border-top: 2px solid var(--red);
+  border-bottom: 2px solid var(--red);
+  border-left: none;
+  border-right: none;
+  padding: 0.7rem 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--red-deep);
+  letter-spacing: 0.1em;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  margin-top: 2.5rem;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+.ticker-inner {
+  display: inline-block;
+  animation: ticker 30s linear infinite;
+  padding: 0 2rem;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-label { color: var(--red-mid); font-weight: 600; margin-right: 1rem; }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(232,213,176,0.3);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: bounce 2s infinite;
+  z-index: 1;
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ══ SECTIONS ══ */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 3rem;
+}
+.section-full {
+  padding: 5rem 0;
+}
+.section-dark {
+  background: var(--black);
+  color: var(--cream);
+}
+.section-dark .section { padding-top: 5rem; padding-bottom: 5rem; }
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.section-dark .section-header { border-bottom-color: rgba(196,168,130,0.2); }
+.section-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--red-mid);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--red-deep);
+}
+.section-dark .section-title { color: var(--cream); }
+
+/* ══ LOGISTICS ══ */
+.logistics-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.logistics-label {
+  background: var(--red-deep);
+  color: var(--sand);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+}
+.logistics-value {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.logistics-value a { color: var(--red); font-family: 'IBM Plex Mono', monospace; font-size: 0.82em; }
+.logistics-label:last-of-type, .logistics-value:last-of-type { border-bottom: none; }
+
+/* ══ PULL QUOTE ══ */
+blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--red-deep);
+  border-left: 4px solid var(--red);
+  padding: 1.2rem 2rem;
+  margin: 2.5rem 0;
+  background: rgba(123,24,24,0.04);
+}
+
+/* ══ TRIGGER BOX ══ */
+.trigger-box {
+  border: 2px solid var(--black);
+  padding: 3rem;
+  position: relative;
+}
+.trigger-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: right;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+}
+.trigger-hr { border: none; border-top: 2px solid var(--red); margin-bottom: 1.5rem; }
+.trigger-list {
+  list-style: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.9;
+  color: var(--red-deep);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem 2rem;
+}
+
+/* ══ DOCUMENTED CASES ══ */
+.cases-block {
+  background: var(--red-deep);
+  color: var(--cream);
+  padding: 2rem 2.5rem;
+  margin-top: 2.5rem;
+}
+.cases-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(232,213,176,0.2);
+}
+.case-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.case-item:last-child { border-bottom: none; }
+.case-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--sand);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-top: 0.1rem;
+}
+.case-text { color: rgba(253,251,245,0.85); }
+
+/* ══ ASSIGNMENTS TABLE ══ */
+.assign-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.assign-table thead th {
+  background: var(--red-deep);
+  color: var(--sand);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+  padding: 1rem 1.2rem;
+  text-align: left;
+}
+.assign-table tbody td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.9rem;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.assign-table tbody tr:nth-child(odd) td { background: rgba(123,24,24,0.02); }
+.assign-table tr.major td { border-left: 3px solid var(--red); }
+.assign-table tr.major td:first-child { color: var(--red); font-weight: 600; }
+.pts-cell {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--red);
+  text-align: center !important;
+}
+.total-row td {
+  background: var(--red) !important;
+  color: white !important;
+  font-weight: 700;
+  border-bottom: none;
+}
+.total-row .pts-cell { color: white; font-size: 1.8rem; }
+
+/* ══ GRADE GRID ══ */
+.grade-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  margin-top: 2rem;
+}
+.grade-cell {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+}
+.grade-cell:nth-child(4n) { border-right: none; }
+.g-letter { font-weight: 700; color: var(--red-deep); }
+.g-pct { color: var(--gray-light); }
+
+/* ══ QUESTIONS ══ */
+.question-block {
+  padding: 1.8rem 0 1.8rem 2rem;
+  border-left: 3px solid var(--red);
+  margin-bottom: 2rem;
+}
+.q-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--red-mid);
+  margin-bottom: 0.5rem;
+}
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--black);
+}
+
+/* ══ VIDEO SECTION ══ */
+.video-link-card {
+  display: block;
+  background: linear-gradient(135deg, var(--red-deep) 0%, #1a0505 100%);
+  aspect-ratio: 16/9;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.video-link-card:hover { transform: scale(1.02); }
+.video-link-inner {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.8rem;
+}
+.video-play-icon { opacity: 0.85; transition: opacity 0.2s, transform 0.2s; }
+.video-link-card:hover .video-play-icon { opacity: 1; transform: scale(1.15); }
+.video-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(232,213,176,0.5);
+}
+.video-title a {
+  color: var(--cream);
+  text-decoration: none;
+}
+.video-title a:hover { color: var(--red-mid); }
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+}
+.video-card {
+  background: var(--black);
+  border: 1px solid rgba(123,24,24,0.3);
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.video-card:hover {
+  border-color: var(--red-mid);
+  transform: translateY(-2px);
+}
+.video-embed {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: none;
+  display: block;
+}
+.video-info {
+  padding: 1.2rem;
+  border-top: 1px solid rgba(123,24,24,0.3);
+}
+.video-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+  line-height: 1.4;
+}
+.video-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(232,213,176,0.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.video-desc {
+  font-size: 0.82rem;
+  color: rgba(232,213,176,0.7);
+  margin-top: 0.6rem;
+  line-height: 1.6;
+}
+
+/* ══ CHART CONTAINERS ══ */
+.chart-box {
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--red);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+.chart-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.4rem;
+}
+.chart-subtitle {
+  font-size: 0.82rem;
+  color: var(--gray-light);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+svg text { font-family: 'IBM Plex Mono', monospace; }
+
+/* ══ KILL CHAIN ══ */
+.killchain-viz {
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+/* ══ RESOURCE BOXES ══ */
+.resource-box {
+  background: rgba(123,24,24,0.03);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--red);
+  padding: 1.8rem;
+  margin-top: 2rem;
+}
+.resource-box h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+.res-list { list-style: none; }
+.res-list li {
+  padding: 0.6rem 0 0.6rem 1.2rem;
+  border-bottom: 1px solid rgba(196,168,130,0.25);
+  font-size: 0.88rem;
+  color: var(--gray);
+  line-height: 1.6;
+  position: relative;
+}
+.res-list li::before { content: '▸'; position: absolute; left: 0; color: var(--red); }
+.res-list li:last-child { border-bottom: none; }
+.res-url {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--red);
+  margin-top: 0.15rem;
+}
+.res-desc { font-style: italic; color: var(--gray-light); font-size: 0.82rem; }
+
+/* ══ READING LIST ══ */
+.reading-entry {
+  padding: 0.6rem 0 0.6rem 1.2rem;
+  border-bottom: 1px solid rgba(196,168,130,0.3);
+  font-size: 0.92rem;
+  color: var(--gray);
+  line-height: 1.65;
+  position: relative;
+}
+.reading-entry::before { content: '•'; position: absolute; left: 0; color: var(--red); }
+.reading-entry em { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; color: var(--black); }
+.reading-note {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--red-mid);
+  margin-top: 0.15rem;
+}
+
+/* ══ ARTICLE ENTRIES ══ */
+.article-entry {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+.article-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--black);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+.article-byline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--gray-light);
+}
+.article-url {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--red);
+  display: block;
+  margin-top: 0.15rem;
+  word-break: break-all;
+}
+
+/* ══ PLATFORM CARDS ══ */
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+.platform-card {
+  background: var(--black);
+  border: 1px solid rgba(123,24,24,0.25);
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.platform-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.platform-card:hover::before { transform: scaleX(1); }
+.platform-card:hover { border-color: rgba(123,24,24,0.6); }
+.platform-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.3rem;
+}
+.platform-url {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--red-mid);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+.platform-stat {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(232,213,176,0.5);
+  line-height: 1.6;
+}
+.platform-stat strong { color: var(--red-mid); }
+.platform-desc {
+  font-size: 0.84rem;
+  color: rgba(232,213,176,0.65);
+  line-height: 1.6;
+  margin-top: 0.8rem;
+  font-style: italic;
+}
+
+/* ══ GITHUB REPOS ══ */
+.repo-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  padding: 1.2rem;
+  background: rgba(0,255,65,0.03);
+  border: 1px solid rgba(0,255,65,0.1);
+  border-left: 3px solid rgba(0,255,65,0.4);
+  margin-bottom: 1rem;
+  transition: background 0.2s;
+}
+.repo-card:hover { background: rgba(0,255,65,0.06); }
+.repo-url {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--green-terminal);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.repo-desc { font-size: 0.85rem; color: rgba(232,213,176,0.7); line-height: 1.55; font-style: italic; }
+.repo-stars {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(0,255,65,0.5);
+  white-space: nowrap;
+}
+
+/* ══ DATASETS ══ */
+.dataset-card {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(196,168,130,0.2);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+.dataset-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sand);
+}
+.dataset-url { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--red-mid); margin-top: 0.2rem; }
+.dataset-desc { font-size: 0.85rem; color: rgba(232,213,176,0.65); font-style: italic; line-height: 1.55; }
+
+/* ══ AI POLICY ══ */
+.ai-policy {
+  background: var(--black);
+  color: var(--cream);
+  padding: 2.5rem;
+  margin-top: 2rem;
+  border-left: 4px solid var(--red-bright);
+}
+.ai-policy h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(232,213,176,0.15);
+}
+.ai-policy p { color: rgba(253,251,245,0.8); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.7; }
+.ai-policy p:last-child { margin-bottom: 0; }
+.ai-policy strong { color: var(--sand); }
+
+/* ══ POLICIES ══ */
+.policy-block { margin-bottom: 2.5rem; }
+.policy-block h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+.policy-block p { font-size: 0.95rem; color: var(--gray); line-height: 1.75; margin-bottom: 0.8rem; }
+
+/* ══ FOOTER QUOTES ══ */
+.footer-quotes {
+  background: var(--red-deep);
+}
+.footer-quote {
+  padding: 3rem;
+  border-bottom: 1px solid rgba(232,213,176,0.1);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.7;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.footer-quote cite {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(232,213,176,0.45);
+  margin-top: 1rem;
+}
+
+/* ══ BINARY STRIP ══ */
+.binary-strip {
+  background: var(--black);
+  padding: 0.8rem 3rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  color: rgba(123,24,24,0.5);
+  letter-spacing: 0.12em;
+  line-height: 1.9;
+  overflow: hidden;
+}
+.binary-decoded { color: var(--red-mid); font-weight: 600; }
+
+/* ══ SECTION SEPARATORS ══ */
+.red-bar { height: 3px; background: var(--red); }
+.thick-rule { height: 6px; background: var(--red-deep); }
+
+/* ══ INTERACTIVE TOOLTIP ══ */
+.tooltip {
+  position: fixed;
+  background: var(--black);
+  color: var(--cream);
+  padding: 0.6rem 0.8rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  border: 1px solid var(--red);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+  max-width: 240px;
+  line-height: 1.5;
+}
+
+/* ══ HEADING STYLES ══ */
+h2 { font-family: 'Playfair Display', serif; }
+p { color: var(--gray); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1.2rem; }
+.section-dark p { color: rgba(232,213,176,0.75); }
+.link { color: var(--red); font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; }
+strong { font-weight: 600; }
+
+/* ══ SCROLL ANIMATIONS ══ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ══ SUBSECTION HEADING ══ */
+.sub-h {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+.section-dark .sub-h { color: var(--cream); border-bottom-color: rgba(196,168,130,0.2); }
+
+/* ══ SCROLLING SIDEBAR ══ */
+.sidebar {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 42px;
+  background: rgba(10,10,10,0.92);
+  border: 1px solid rgba(123,24,24,0.35);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.38s cubic-bezier(0.16,1,0.3,1), box-shadow 0.38s;
+  backdrop-filter: blur(12px);
+  box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+}
+.sidebar:hover {
+  width: 210px;
+  box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+}
+.sidebar-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: rgba(232,213,176,0.25);
+  text-transform: uppercase;
+  padding: 1rem 1rem 0.8rem;
+  border-bottom: 1px solid rgba(123,24,24,0.2);
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.2s 0.1s;
+}
+.sidebar:hover .sidebar-logo { opacity: 1; }
+.sidebar-logo strong { display: block; font-size: 0.72rem; color: var(--red-mid); letter-spacing: 0.12em; margin-bottom: 0.15rem; }
+.sidebar-nav { list-style: none; padding: 0.4rem 0 0.6rem; overflow-y: auto; scrollbar-width: none; }
+.sidebar-nav::-webkit-scrollbar { display: none; }
+.sidebar-nav li { position: relative; }
+.sidebar-nav li a {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.5rem 0;
+  padding-left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(232,213,176,0.45);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s, background 0.2s;
+  border-left: 2px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sidebar-nav li a:hover { color: var(--cream); background: rgba(123,24,24,0.12); border-left-color: rgba(123,24,24,0.5); }
+.sidebar-nav li a.active { color: var(--sand); border-left-color: var(--red-mid); background: rgba(123,24,24,0.18); }
+.nav-num {
+  font-size: 0.6rem;
+  color: rgba(155,35,53,0.7);
+  min-width: 42px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.sidebar-nav li a.active .nav-num { color: var(--red-mid); }
+.nav-label {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s 0.12s, transform 0.25s 0.12s;
+  pointer-events: none;
+}
+.sidebar:hover .nav-label { opacity: 1; transform: translateX(0); pointer-events: auto; }
+/* Active dot indicator on collapsed state */
+.sidebar-nav li a.active::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px; height: 4px;
+  background: var(--red-mid);
+  border-radius: 50%;
+  transition: opacity 0.2s;
+}
+.sidebar:hover .sidebar-nav li a.active::after { opacity: 0; }
+/* Scroll progress bar */
+.sidebar-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red-deep), var(--red-bright));
+  z-index: 9998;
+  transition: width 0.1s linear;
+}
+/* No overlay or toggle needed anymore */
+.sidebar-overlay { display: none !important; }
+.sidebar-toggle { display: none !important; }
+
+/* ══ INTERACTIVE ADDITIONS ══ */
+
+/* Accordion / expandable case items */
+.case-item {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.case-item:hover { background: rgba(255,255,255,0.06); }
+.case-item.expanded { background: rgba(255,255,255,0.05); }
+.case-expand-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(232,213,176,0.35);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  display: block;
+  transition: color 0.2s;
+}
+.case-item:hover .case-expand-btn { color: var(--red-mid); }
+.case-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
+  opacity: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(232,213,176,0.45);
+  line-height: 1.7;
+  padding-right: 0.5rem;
+}
+.case-item.expanded .case-detail { max-height: 300px; opacity: 1; margin-top: 0.6rem; }
+
+/* Question block hover */
+.question-block {
+  transition: border-color 0.2s, background 0.2s, padding-left 0.2s;
+  cursor: default;
+}
+.question-block:hover {
+  border-left-color: var(--red-bright);
+  background: rgba(123,24,24,0.03);
+  padding-left: 2.5rem;
+}
+
+/* Reading entry hover */
+.reading-entry {
+  transition: background 0.15s, padding-left 0.15s;
+  cursor: default;
+}
+.reading-entry:hover {
+  background: rgba(123,24,24,0.04);
+  padding-left: 2rem;
+}
+
+/* Policy block accordion */
+.policy-block h3 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+.policy-block h3::after {
+  content: '+';
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--rule);
+  transition: transform 0.3s, color 0.2s;
+  font-weight: 300;
+}
+.policy-block.open h3::after { content: '−'; color: var(--red-mid); }
+.policy-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+  opacity: 0;
+}
+.policy-block.open .policy-content { max-height: 600px; opacity: 1; }
+
+/* Grade cells interactive */
+.grade-cell {
+  transition: background 0.15s;
+  cursor: default;
+}
+.grade-cell:hover { background: rgba(123,24,24,0.06); }
+
+/* Article entry hover */
+.article-entry {
+  transition: border-left 0.2s, padding-left 0.2s, background 0.15s;
+  cursor: default;
+  border-left: 3px solid transparent;
+  padding-left: 0;
+}
+.article-entry:hover {
+  border-left-color: var(--red);
+  padding-left: 1rem;
+  background: rgba(123,24,24,0.025);
+}
+
+/* Textbook entry hover */
+.reading-entry em, .reading-entry {
+  transition: color 0.15s;
+}
+
+/* Platform card: click to expand stats */
+.platform-card .platform-desc {
+  transition: max-height 0.4s ease, opacity 0.3s;
+}
+
+/* Assignments table row hover */
+.assign-table tbody tr {
+  transition: background 0.15s;
+  cursor: default;
+}
+.assign-table tbody tr:hover td { background: rgba(123,24,24,0.05) !important; }
+
+/* Chart box glow on hover */
+.chart-box {
+  transition: box-shadow 0.2s;
+}
+.chart-box:hover {
+  box-shadow: 0 0 0 1px rgba(123,24,24,0.3), 0 4px 24px rgba(0,0,0,0.15);
+}
+
+/* Ticker: pause on hover */
+.systems-ticker:hover .ticker-inner {
+  animation-play-state: paused;
+}
+
+/* Binary strip hover reveals */
+.binary-strip {
+  transition: background 0.3s;
+  cursor: default;
+}
+.binary-strip:hover {
+  background: #111;
+}
+
+/* Sidebar fix for no body cut-off */
+body { min-width: 320px; }
+
+/* Fix section overflow */
+.section { box-sizing: border-box; }
+
+/* Fix platform-card text overflow */
+.platform-name { word-break: break-word; }
+.platform-stat { word-break: break-word; }
+
+/* Reading entry spacing fix */
+.reading-entry { padding-right: 1rem; }
+
+
+/* Fix hero on mobile */
+@media (max-width: 768px) {
+  .hero { padding: 5rem 1.5rem 3rem; }
+  .section { padding: 3rem 1.5rem; margin-left: 0 !important; }
+  .section-full { padding-left: 0 !important; }
+  .sidebar { display: none; }
+  nav { padding: 0.6rem 1rem; }
+  .nav-links { display: none; }
+  .hero-word { font-size: clamp(2.8rem, 12vw, 6rem); }
+  .trigger-list { grid-template-columns: 1fr; }
+  .case-item { grid-template-columns: 1fr; gap: 0.3rem; }
+  .dataset-card { grid-template-columns: 1fr; }
+  .logistics-grid { grid-template-columns: 1fr; }
+  .logistics-label { border-bottom: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 0.6rem 1rem 0.3rem; }
+}
+
+
+
+
+/* ── COURSE 548 CLASS POLICIES ── */
+#policies-548{background:#0d0800;padding:90px 80px;position:relative;overflow:hidden;}
+#policies-548::after{content:'POLICIES';position:absolute;bottom:-55px;right:-35px;font-family:'Bebas Neue',sans-serif;font-size:260px;color:rgba(240,230,200,0.018);pointer-events:none;line-height:1;}
+.pol-tit548{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,8vw,94px);line-height:0.9;color:#f0e6c8;margin-bottom:56px;}
+.pgrid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.pblock{border:1px solid rgba(240,230,200,0.11);padding:36px;position:relative;transition:border-color 0.28s;}
+.pblock:hover{border-color:rgba(240,230,200,0.28);}
+.pnum2{font-family:'Bebas Neue',sans-serif;font-size:74px;color:rgba(240,230,200,0.035);position:absolute;top:-12px;right:18px;line-height:1;pointer-events:none;}
+.pstamp{display:inline-block;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:4px 10px;border:2px solid;margin-bottom:18px;transform:rotate(-1deg);}
+.sr{color:#c0392b;border-color:#c0392b;}
+.sgr{color:#5a9a5a;border-color:#5a9a5a;}
+.sbl{color:#5a8ab5;border-color:#5a8ab5;}
+.sgd{color:#c9962c;border-color:#c9962c;}
+.phead{font-family:'IM Fell English',serif;font-size:22px;color:#f0e6c8;margin-bottom:14px;}
+.pbody{font-family:'Libre Baskerville',serif;font-size:12.5px;line-height:1.9;color:rgba(240,230,200,0.62);}
+.pbody strong{color:#f0e6c8;}
+/* AI TERMINAL SECTION */
+#ai-policy{background:#0d1117;padding:90px 80px;font-family:'VT323',monospace;position:relative;overflow:hidden;}
+#ai-policy::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,70,0.014) 2px,rgba(0,255,70,0.014) 4px);pointer-events:none;}
+.tbar{font-size:11px;letter-spacing:3px;color:#00ff46;margin-bottom:36px;display:flex;align-items:center;gap:10px;}
+.td{width:10px;height:10px;border-radius:50%;}
+.tdr{background:#ff5f57;}.tdy{background:#ffbd2e;}.tdg{background:#28ca42;}
+.ttit{font-size:clamp(38px,6vw,76px);color:#00ff46;line-height:1;margin-bottom:52px;}
+.blink{animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.tprompt{color:#00ff46;font-size:17px;margin-bottom:7px;}
+.tprompt::before{content:'> ';}
+.tblock{background:rgba(0,255,70,0.025);border:1px solid rgba(0,255,70,0.13);padding:28px;margin-bottom:20px;}
+.tbltit{font-size:20px;color:#00ff46;margin-bottom:14px;letter-spacing:2px;}
+.ti{font-size:15px;color:rgba(0,255,70,0.68);padding:7px 0;border-bottom:1px solid rgba(0,255,70,0.07);transition:color 0.18s,padding-left 0.18s;}
+.ti:last-child{border-bottom:none;}
+.ti:hover{color:#00ff46;padding-left:10px;}
+.ti .til{color:#00ff46;}
+.ti.dn{color:rgba(255,50,50,0.68);}
+.ti.dn:hover{color:rgba(255,50,50,1);}
+.ti.dn .til{color:#ff3232;}
+.tnote{font-size:12px;color:rgba(0,255,70,0.35);margin-top:20px;}
+.tnote::before{content:'// ';}
+.aigrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="sidebar-progress" id="scrollProgress"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><strong>ENG 548</strong>AI · Biopolitics · Oppression</div>
+  <ul class="sidebar-nav">
+    <li><a href="#description" class="sidebar-link"><span class="nav-num">01</span><span class="nav-label">Description</span></a></li>
+    <li><a href="#systems" class="sidebar-link"><span class="nav-num">02</span><span class="nav-label">Systems</span></a></li>
+    <li><a href="#guiding" class="sidebar-link"><span class="nav-num">03</span><span class="nav-label">Frameworks</span></a></li>
+    <li><a href="#assignments" class="sidebar-link"><span class="nav-num">04</span><span class="nav-label">Assignments</span></a></li>
+    <li><a href="#major-assignments" class="sidebar-link"><span class="nav-num">04b</span><span class="nav-label">Major Assignments</span></a></li>
+    <li><a href="#questions" class="sidebar-link"><span class="nav-num">05</span><span class="nav-label">Questions</span></a></li>
+    <li><a href="#visualizations" class="sidebar-link"><span class="nav-num">06</span><span class="nav-label">Data Viz</span></a></li>
+    <li><a href="#videos" class="sidebar-link"><span class="nav-num">07</span><span class="nav-label">Videos</span></a></li>
+    <li><a href="#platforms" class="sidebar-link"><span class="nav-num">08</span><span class="nav-label">Platforms</span></a></li>
+    <li><a href="#readings" class="sidebar-link"><span class="nav-num">09</span><span class="nav-label">Readings</span></a></li>
+    <li><a href="#policies" class="sidebar-link"><span class="nav-num">10</span><span class="nav-label">Policies</span></a></li>
+    <li><a href="#calendar" class="sidebar-link"><span class="nav-num">14</span><span class="nav-label">Assigned Materials</span></a></li>
+  </ul>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span class="status-dot"></span>ENG 548 · Spring 2026 · WSU</div>
+  <ul class="nav-links">
+    <li><a href="#description">Course</a></li>
+    <li><a href="#systems">Systems</a></li>
+    <li><a href="#assignments">Grades</a></li>
+    <li><a href="#questions">Questions</a></li>
+    <li><a href="#visualizations">Data</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#readings">Readings</a></li>
+    <li><a href="#calendar">Assigned Materials</a></li>
+  </ul>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-scan-bg"></div>
+
+  <!-- Background targeting grid canvas -->
+  <canvas id="heroCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.18;z-index:0;"></canvas>
+
+
+  <div class="hero-eyebrow" style="position:relative;z-index:2;">ENG 548 — Seminar in Critical Cultural Theory · <span>Washington State University</span> · Spring 2026 · <span style="color:rgba(232,213,176,0.35);font-style:italic;">Submitted for Faculty Research Grant Consideration</span></div>
+
+  <div class="hero-title" style="position:relative;z-index:2;">
+    <span class="hero-word">
+      <span class="hero-word-inner">AI<span class="hero-period">.</span></span>
+      <span class="hero-scan-counter">SCAN 01/04 · TARGET ACQUIRED</span>
+    </span>
+    <span class="hero-word">
+      <span class="hero-word-inner">Biopolitics<span class="hero-period">.</span></span>
+      <span class="hero-scan-counter">SCAN 02/04 · CLASSIFIED</span>
+    </span>
+    <span class="hero-word">
+      <span class="hero-word-inner">Engineered</span>
+      <span class="hero-scan-counter">SCAN 03/04 · PROCESSING</span>
+    </span>
+    <span class="hero-word">
+      <span class="hero-word-inner">Oppression<span class="hero-period">.</span></span>
+      <span class="hero-scan-counter">SCAN 04/04 · AUTHORIZED</span>
+    </span>
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="instructor-name">Bibhushana Poudyal</div>
+      <div class="instructor-info">
+        bibhushanapoudyal.com<br>
+        Washington State University
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:rgba(232,213,176,0.5);">SEMESTER</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--cream);margin-top:0.2rem;">Spring 2026</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:rgba(232,213,176,0.4);margin-top:0.2rem;">ENG 548 · Seminar in Critical Cultural Theory</div>
+    </div>
+  </div>
+  <div class="systems-ticker">
+    <span class="ticker-inner">
+      <span class="ticker-label">SYSTEMS UNDER EXAMINATION:</span>
+      COMPAS (Northpointe) &nbsp;·&nbsp; Palantir Gotham &nbsp;·&nbsp; NSA SKYNET &nbsp;·&nbsp; Clearview AI &nbsp;·&nbsp; Amazon Rekognition &nbsp;·&nbsp; ShotSpotter &nbsp;·&nbsp; IDF Lavender &nbsp;·&nbsp; PredPol &nbsp;·&nbsp; HART (Rite Aid) &nbsp;·&nbsp; ICE/CBP Biometrics &nbsp;·&nbsp; ATLAS (HSI) &nbsp;·&nbsp; SurveillanceCamera Aware &nbsp;·&nbsp; Facebook's Photo DNA &nbsp;·&nbsp; Google AutoML &nbsp;·&nbsp; Microsoft Azure FRT &nbsp;·&nbsp; IBM Watson Health &nbsp;·&nbsp;
+      <span class="ticker-label">SYSTEMS UNDER EXAMINATION:</span>
+      COMPAS (Northpointe) &nbsp;·&nbsp; Palantir Gotham &nbsp;·&nbsp; NSA SKYNET &nbsp;·&nbsp; Clearview AI &nbsp;·&nbsp; Amazon Rekognition &nbsp;·&nbsp; ShotSpotter &nbsp;·&nbsp; IDF Lavender &nbsp;·&nbsp; PredPol &nbsp;·&nbsp; HART (Rite Aid) &nbsp;·&nbsp; ICE/CBP Biometrics &nbsp;·&nbsp; ATLAS (HSI) &nbsp;·&nbsp;
+    </span>
+  </div>
+  <div class="scroll-hint">↓ scroll to read ↓</div>
+</section>
+
+
+
+<!-- ════ COURSE DESCRIPTION ════ -->
+<section class="section fade-in" id="description">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Course Description</h2>
+  </div>
+  <p>This course is a radical excavation of how artificial intelligence functions as a weapon of empire, capital, and carceral power. We examine the violent entanglements of AI with biopolitical control and engineered systems of domination — systems that surveil, categorize, and criminalize the global majority under the false banners of innovation, progress, and neutrality. Grounded in decolonial, Black feminist, Indigenous, queer, and abolitionist thought, this course exposes AI not as an impartial tool, but as a racialized and militarized infrastructure built to extend the legacies of settler colonialism, slavery, and eugenics.</p>
+  <p>Through frameworks of necropolitics, racial capitalism, and surveillance abolition, we will interrogate how predictive policing, biometric surveillance, algorithmic governance, and data extraction are deployed to manage, punish, and disappear marginalized communities. We will analyze how AI consolidates power within the prison-industrial and military-industrial complexes—targeting Black, Indigenous, queer, disabled, undocumented, and impoverished bodies while presenting itself as objective and efficient.</p>
+  <p>Rather than framing these harms as accidental, we treat them as the logical outcomes of technologies designed within—and for—systems of racial and imperial domination. This course is not neutral. It is a call to dismantle oppressive AI systems and to build liberatory, collective, and just technological futures.</p>
+
+  <blockquote>The success of this course depends entirely on our shared commitment to collective un/re/learning, radical solidarity, and a refusal to settle for anything less than total liberation.</blockquote>
+
+  <!-- DOCUMENTED CASES -->
+  <div class="cases-block fade-in" id="systems">
+    <div class="cases-title">Technical Systems We Will Dissect — Documented Cases</div>
+    <div class="case-item">
+      <div class="case-label">COMPAS</div><div class="case-text">Correctional Offender Management Profiling (Northpointe/equivant). Black defendants scored High Risk at <strong>2× the rate</strong> of white defendants with identical criminal histories. Algorithm is proprietary — courts cannot inspect its weights. See: ProPublica Machine Bias (2016).<span class="case-expand-btn">▸ expand context</span><div class="case-detail">The Correctional Offender Management Profiling for Alternative Sanctions algorithm was built by Equivant (formerly Northpointe). ProPublica analyzed 7,214 defendants in Broward County, FL. The recidivism prediction is used in pre-trial, sentencing, and parole decisions across 30+ states. The algorithm's weights are proprietary — defendants have no legal right to challenge its logic.</div></div></div>
+    <div class="case-item">
+      <div class="case-label">Palantir Gotham</div><div class="case-text">Data fusion platform used by ICE, FBI, LAPD, CBP, US Army. <strong>$2.4B</strong> in government contracts (2024). Fuses hundreds of databases — arrest records, social media, license plates, utility records — into unified surveillance profiles on millions of people.<span class="case-expand-btn">▸ expand context</span><div class="case-detail">Founded by Peter Thiel with In-Q-Tel (CIA venture capital) funding. Palantir's Gotham platform is deployed at 23 of the 25 largest US police departments, ICE, CBP, US Army. It fuses 100+ data sources: DMV records, utility bills, arrest records, social media, license plate readers, etc. Each person generates a "pattern of life" profile updated in real time.</div></div></div>
+    <div class="case-item">
+      <div class="case-label">NSA SKYNET</div><div class="case-text">Machine learning program in Pakistan and Somalia identifying suspected terrorists from phone metadata patterns. Misidentification rate documented in leaked documents. Estimated <strong>hundreds of civilian deaths</strong> from algorithm-selected targets. Source: The Intercept, Drone Papers (2015).<span class="case-expand-btn">▸ expand context</span><div class="case-detail">SKYNET used metadata from 55 million Pakistani cell phone users to build behavioral models of "terrorist" communication patterns. The algorithm flagged travel routes, calling patterns, and social connections. The Intercept's analysis of leaked NSA documents showed a 0.008% precision rate — meaning roughly 99.99% of targets could be innocent civilians.</div></div></div>
+    <div class="case-item">
+      <div class="case-label">Clearview AI</div><div class="case-text">Scraped <strong>30+ billion faces</strong> from social media without consent. Sold to 3,100+ law enforcement agencies. Banned in EU, Canada, Australia, UK. Still operating in the US. CEO's legal argument: the First Amendment as a surveillance right.<span class="case-expand-btn">▸ expand context</span><div class="case-detail">CEO Hoan Ton-That argues that the First Amendment protects the right to scrape and analyze any publicly posted image. Clearview has been ordered to stop operating in the EU (GDPR), UK (ICO), Canada, and Australia. In the US: no comprehensive federal biometric law exists. The ACLU sued Clearview in Illinois under BIPA (Biometric Information Privacy Act), winning a settlement in 2022.</div></div></div>
+    <div class="case-item">
+      <div class="case-label">Amazon Rekognition</div><div class="case-text">Facial recognition API with documented <strong>28–34.7% error rate</strong> on dark-skinned women (Buolamwini &amp; Gebru, 2018). Robert Julian-Borchak Williams: first documented wrongful arrest from FRT misidentification, Michigan, 2020.<span class="case-expand-btn">▸ expand context</span><div class="case-detail">Joy Buolamwini's Gender Shades study (MIT, 2018) tested three commercial FRT systems. Amazon's Rekognition showed 0% error on light-skinned men, 34.7% error on dark-skinned women. Robert Julian-Borchak Williams was handcuffed in front of his daughters after a Michigan police officer ran a grainy surveillance photo through Rekognition. The match was wrong.</div></div></div>
+    <div class="case-item">
+      <div class="case-label">ShotSpotter</div><div class="case-text">Acoustic gunshot detection deployed at <strong>89% concentration</strong> in Black neighborhoods. Generated <strong>40,000+ false alerts</strong> in Chicago (2019–2021) with no evidence of crime. Secret contracts — residents not notified. Evidence used to obtain warrants.<span class="case-expand-btn">▸ expand context</span><div class="case-detail">Vice Media obtained ShotSpotter internal documents through FOIA. The company employs human reviewers who reclassify acoustic detections after the fact — changing "firecracker" to "gunshot." In Chicago, 89% of ShotSpotter alerts led to no evidence of crime. The company's contracts with cities are confidential — residents in surveilled areas were never informed.</div></div></div>
+    <div class="case-item">
+      <div class="case-label">IDF Lavender</div><div class="case-text">Israeli AI targeting system that auto-selected <strong>37,000+ targets</strong> in Gaza with minimal human review per strike authorization. Reported 15–20 civilian deaths per "junior militant" target considered acceptable. Source: +972 Magazine, The Guardian (2024).<span class="case-expand-btn">▸ expand context</span><div class="case-detail">+972 Magazine published Israeli intelligence sources describing a system that generated a target list of 37,000 people based on association networks. A parallel system called "Where's Daddy?" tracked when targets entered their family homes — the preferred strike time. Human review per strike authorization: approximately 20 seconds.</div></div></div>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ VISUALIZATIONS ════ -->
+<section class="section-full section-dark" id="visualizations">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Data Visualizations</h2>
+    </div>
+    <p>These charts are built from real, citable data — run the analysis yourself using the GitHub links below. Hover over chart elements for details.</p>
+
+    <!-- COMPAS BIAS CHART -->
+    <div class="chart-box fade-in" style="background:#111; border-color: rgba(123,24,24,0.3); color: var(--cream);">
+      <div class="chart-title">COMPAS Racial Bias — Broward County, FL (n = 7,214 defendants)</div>
+      <div class="chart-subtitle">Source: ProPublica Machine Bias (2016) · github.com/propublica/compas-analysis · DOI data available</div>
+      <div id="compas-chart"></div>
+    </div>
+
+    <!-- BIG TECH WAR CHART -->
+    <div class="chart-box fade-in" style="background:#111; border-color: rgba(123,24,24,0.3); color: var(--cream); margin-top: 2rem;">
+      <div class="chart-title">Big Tech Federal Contracts by Agency — Amazon, Google, Microsoft (DoD, DHS, DoJ, State + Other)</div>
+      <div class="chart-subtitle">Source: Digital Destroyers — bigtechsellswar.com · Hover bars for contract details</div>
+      <div id="bigtech-chart"></div>
+    </div>
+
+    <!-- KILL CHAIN -->
+    <div class="chart-box fade-in" style="background:#111; border-color: rgba(123,24,24,0.3); color: var(--cream); margin-top: 2rem;">
+      <div class="chart-title">NSA SKYNET / Drone Kill Chain — Algorithmic Steps from Data to Strike</div>
+      <div class="chart-subtitle">Source: The Intercept — The Drone Papers (2015) · theintercept.com/drone-papers/ · Click each step for detail</div>
+      <div id="killchain-chart"></div>
+    </div>
+
+    <!-- FRT ERROR RATES -->
+    <div class="chart-box fade-in" style="background:#111; border-color: rgba(123,24,24,0.3); color: var(--cream); margin-top: 2rem;">
+      <div class="chart-title">Facial Recognition Error Rates by Skin Tone & Gender — Gender Shades Study</div>
+      <div class="chart-subtitle">Source: Buolamwini & Gebru (2018) · proceedings.mlr.press/v81/buolamwini18a.html · Microsoft, IBM, Face++ systems tested</div>
+      <div id="frt-chart"></div>
+    </div>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ TEXTBOOK ════ -->
+<section class="section fade-in" id="textbook">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Textbook &amp; Essential Readings</h2>
+  </div>
+
+  <div style="border-left:4px solid var(--red); padding: 1.2rem 1.5rem; margin-bottom: 2rem; background: rgba(123,24,24,0.03);">
+    <div style="font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; font-style:italic;">Necropolitics</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color: var(--gray-light); margin-top:0.2rem;">Mbembe, Achille. (2019). Duke University Press. — <strong>PRIMARY TEXT</strong></div>
+    <p style="margin-top:0.8rem; font-size:0.9rem;">The foundational framework for this course. Mbembe's necropolitics — the sovereign power to decide who may live and who must die — is applied directly to every AI system examined. Read the original 2003 essay first: <strong>DOI 10.2307/3250559</strong> (JSTOR open access).</p>
+  </div>
+
+  <p><em>*All other required materials provided via PDF or Canvas links.</em></p>
+
+  <div class="sub-h">Additionally Essential — Technically Annotated</div>
+
+  <div class="reading-entry" style="padding: 1rem 0 1rem 1.5rem; margin-bottom: 0.5rem;">
+    <em>The Age of Surveillance Capitalism</em> — Zuboff, S. (2019). PublicAffairs.
+    <span class="reading-note">→ Technical anatomy of data extraction as an economic model. Why surveillance is profitable, not just harmful.</span>
+  </div>
+  <div class="reading-entry" style="padding: 1rem 0 1rem 1.5rem; margin-bottom: 0.5rem;">
+    <em>Race After Technology: Abolitionist Tools for the New Jim Code</em> — Benjamin, R. (2019). Polity.
+    <span class="reading-note">→ The "New Jim Code." Racial hierarchy repackaged in algorithmic language. Read alongside Noble.</span>
+  </div>
+  <div class="reading-entry" style="padding: 1rem 0 1rem 1.5rem; margin-bottom: 0.5rem;">
+    <em>Weapons of Math Destruction</em> — O'Neil, C. (2016). Crown.
+    <span class="reading-note">→ Mathematical proof, written accessibly, of how "neutral" models produce targeted harm. Pairs with ProPublica COMPAS analysis.</span>
+  </div>
+  <div class="reading-entry" style="padding: 1rem 0 1rem 1.5rem; margin-bottom: 0.5rem;">
+    <em>Dark Matters: On the Surveillance of Blackness</em> — Browne, S. (2015). Duke UP.
+    <span class="reading-note">→ Surveillance as anti-Black technology from slave ships to biometrics. The historical continuity argument: this has always been the system.</span>
+  </div>
+  <div class="reading-entry" style="padding: 1rem 0 1rem 1.5rem; margin-bottom: 0.5rem;">
+    <em>Algorithms of Oppression</em> — Noble, S.U. (2018). NYU Press.
+    <span class="reading-note">→ White supremacy in Google's ranking systems. Note: every LLM trained on internet text inherits this problem. Critique the AI tools you use daily.</span>
+  </div>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- ════ TRIGGER WARNING ════ -->
+<section class="section fade-in" id="trigger">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Trigger Warning</h2>
+  </div>
+  <div class="trigger-box">
+    <div class="trigger-title">TRIGGER WARNING</div>
+    <div class="trigger-hr"></div>
+    <p style="margin-bottom:1.5rem;">During this course, we will address topics that compel us to discuss some of the most violent atrocities humans have inflicted upon other humans and planet. That includes:</p>
+    <ul class="trigger-list">
+      <li>Racism &amp; Anti-Black Violence</li>
+      <li>Genocide &amp; Ethnic Cleansing</li>
+      <li>Colonialism &amp; Settler Colonialism</li>
+      <li>Imperialism &amp; Military Occupation</li>
+      <li>Capitalism &amp; Exploitation</li>
+      <li>Police Brutality &amp; Carceral Violence</li>
+      <li>Algorithmic Targeting</li>
+      <li>Drone Warfare</li>
+      <li>Destruction of the Planet for Profit</li>
+      <li>Data Colonialism</li>
+    </ul>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ ASSIGNMENTS ════ -->
+<section class="section fade-in" id="assignments">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Projects, Points, Grading Schema</h2>
+  </div>
+  <table class="assign-table">
+    <thead>
+      <tr><th>Assignments</th><th>Deliverables</th><th style="text-align:center">Points</th><th>Due</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Low Stakes</td><td><strong>Reading Response</strong></td><td class="pts-cell">100</td><td>Wednesday midnight every week</td></tr>
+      <tr><td>Low Stakes</td><td><strong>Scaffolding Assignments</strong></td><td class="pts-cell">100</td><td>Wednesday midnight every week</td></tr>
+      <tr><td>Low Stakes</td><td><strong>Mid-Semester Research Presentation</strong></td><td class="pts-cell">100</td><td>Each student once a semester</td></tr>
+      <tr class="major"><td>1st Major / Low Stakes</td><td><strong>Project Proposal</strong></td><td class="pts-cell">50</td><td>Check course calendar</td></tr>
+      <tr class="major"><td>2nd Major Assignment</td><td><strong>Topic Analysis</strong></td><td class="pts-cell">100</td><td>Check course calendar</td></tr>
+      <tr class="major"><td>3rd Major Assignment</td><td><strong>Final Project &amp; Class Presentation</strong></td><td class="pts-cell">150</td><td>Check course calendar</td></tr>
+      <tr class="total-row"><td colspan="2"><strong>Total Points</strong></td><td class="pts-cell">500</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="grade-grid" style="margin-top:1.5rem;">
+    <div class="grade-cell"><span class="g-letter">A</span><span class="g-pct">93.4–100</span></div>
+    <div class="grade-cell"><span class="g-letter">A−</span><span class="g-pct">90–93.3</span></div>
+    <div class="grade-cell"><span class="g-letter">B+</span><span class="g-pct">86.8–89.9</span></div>
+    <div class="grade-cell"><span class="g-letter">B</span><span class="g-pct">83.4–86.7</span></div>
+    <div class="grade-cell"><span class="g-letter">B−</span><span class="g-pct">80–83.3</span></div>
+    <div class="grade-cell"><span class="g-letter">C+</span><span class="g-pct">76.8–79.9</span></div>
+    <div class="grade-cell"><span class="g-letter">C</span><span class="g-pct">73.4–76.7</span></div>
+    <div class="grade-cell"><span class="g-letter">C−</span><span class="g-pct">70–73.3</span></div>
+    <div class="grade-cell"><span class="g-letter">D+</span><span class="g-pct">66.6–69.9</span></div>
+    <div class="grade-cell"><span class="g-letter">D</span><span class="g-pct">63.4–66.7</span></div>
+    <div class="grade-cell"><span class="g-letter">D−</span><span class="g-pct">60–63.3</span></div>
+    <div class="grade-cell"><span class="g-letter">F</span><span class="g-pct">0–59.9</span></div>
+  </div>
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--gray-light);margin-top:1rem;">THE SYLLABUS IS SUBJECT TO CHANGE. · Ada Omvlak/Chronza. Pologne. Collectif Kefija.</p>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- ════ MAJOR ASSIGNMENTS DETAIL ════ -->
+<section class="section fade-in" id="major-assignments">
+  <div class="section-header">
+    <span class="section-num">06b</span>
+    <h2 class="section-title">Major Assignments — Full Details</h2>
+  </div>
+
+  <style>
+    /* ── Assignment blocks ── */
+    .ma-block { margin-bottom: 5rem; }
+    .ma-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.4rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.8rem;
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap;
+    }
+    .ma-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--red-mid);
+      background: rgba(123,24,24,0.08);
+      border: 1px solid rgba(123,24,24,0.22);
+      padding: 0.28rem 0.65rem;
+      white-space: nowrap;
+      margin-top: 0.55rem;
+      flex-shrink: 0;
+    }
+    .ma-title-wrap {}
+    .ma-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      margin-bottom: 0.7rem;
+    }
+    .ma-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .ma-pill {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.6rem;
+      border: 1px solid;
+    }
+    .ma-pill-r { border-color: var(--red); color: var(--red-deep); background: rgba(123,24,24,0.06); }
+    .ma-pill-s { border-color: var(--rule); color: var(--gray); background: rgba(196,168,130,0.1); }
+
+    /* ── Sub-sections ── */
+    .ma-sec { margin-bottom: 1.8rem; }
+    .ma-sec-lbl {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--red-mid);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .ma-sec-lbl::after { content:''; flex:1; height:1px; background:rgba(123,24,24,0.13); }
+    .ma-sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--black);
+      margin-bottom: 0.55rem;
+      text-decoration: underline;
+      text-decoration-color: rgba(123,24,24,0.25);
+      text-underline-offset: 3px;
+    }
+    .ma-body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--gray);
+      line-height: 1.8;
+    }
+    .ma-body p { margin-bottom: 0.7rem; }
+    .ma-body p:last-child { margin-bottom: 0; }
+    .ma-body strong { color: var(--black); font-weight: 600; }
+
+    /* ── Lists ── */
+    .ma-list { list-style:none; padding:0; margin:0.5rem 0 0; display:flex; flex-direction:column; gap:0.4rem; }
+    .ma-list li { font-family:'IBM Plex Sans',sans-serif; font-size:0.88rem; font-weight:300; color:var(--gray); line-height:1.65; padding-left:1.15rem; position:relative; }
+    .ma-list li::before { content:'—'; position:absolute; left:0; color:var(--red); font-family:'IBM Plex Mono',monospace; font-size:0.72rem; top:0.05em; }
+    .ma-list li strong { color:var(--black); font-weight:600; }
+    .ma-sublist { list-style:none; padding:0; margin:0.35rem 0 0 1rem; display:flex; flex-direction:column; gap:0.3rem; }
+    .ma-sublist li { font-size:0.83rem; padding-left:0.9rem; color:var(--gray); }
+    .ma-sublist li::before { content:'◦'; color:var(--red-mid); font-size:0.68rem; }
+
+    /* ── Rubric ── */
+    .ma-rubric { border:1px solid rgba(196,168,130,0.35); overflow:hidden; margin-top:0.7rem; }
+    .ma-rrow { display:grid; grid-template-columns:1fr 2fr; border-bottom:1px solid rgba(196,168,130,0.2); }
+    .ma-rrow:last-child { border-bottom:none; }
+    .ma-rrow:nth-child(odd):not(.ma-rhead) { background:rgba(123,24,24,0.025); }
+    .ma-rcell { padding:0.75rem 0.95rem; font-family:'IBM Plex Sans',sans-serif; font-size:0.84rem; font-weight:300; color:var(--gray); line-height:1.6; }
+    .ma-rcell:first-child { font-family:'IBM Plex Mono',monospace; font-size:0.67rem; font-weight:500; color:var(--red-deep); letter-spacing:0.04em; border-right:1px solid rgba(196,168,130,0.2); display:flex; align-items:flex-start; padding-top:0.85rem; }
+    .ma-rhead { background:var(--red-deep) !important; }
+    .ma-rhead .ma-rcell { color:rgba(232,213,176,0.75); font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:500; border-right-color:rgba(232,213,176,0.12); }
+
+    /* ── Callouts ── */
+    .ma-callout { margin-top:1.4rem; padding:1rem 1.3rem; border-left:3px solid var(--red); background:rgba(123,24,24,0.04); }
+    .ma-callout p { font-family:'IBM Plex Sans',sans-serif; font-size:0.88rem; color:var(--gray); line-height:1.75; font-weight:300; }
+    .ma-callout p strong { color:var(--red-deep); font-weight:600; }
+    .ma-manifesto { background:var(--red-deep); padding:1.4rem 1.8rem; margin-top:0.8rem; }
+    .ma-manifesto p { font-family:'Playfair Display',serif; font-style:italic; font-size:1rem; color:var(--cream); line-height:1.7; font-weight:400; }
+    .ma-manifesto strong { font-weight:700; color:var(--sand) !important; font-style:normal; }
+
+    /* ── Options grid ── */
+    .ma-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem; margin-top:0.7rem; }
+    .ma-option { border:1px solid rgba(196,168,130,0.35); padding:1.2rem; background:rgba(253,251,245,0.5); transition:border-color 0.2s, background 0.2s; }
+    .ma-option:hover { border-color:var(--red); background:rgba(123,24,24,0.03); }
+    .ma-opt-tag { font-family:'IBM Plex Mono',monospace; font-size:0.57rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--red-mid); background:rgba(123,24,24,0.08); border:1px solid rgba(123,24,24,0.2); padding:0.18rem 0.5rem; display:inline-block; margin-bottom:0.7rem; }
+    .ma-opt-title { font-family:'Playfair Display',serif; font-weight:700; font-size:0.95rem; color:var(--black); margin-bottom:0.55rem; font-style:italic; }
+    .ma-opt-body { font-family:'IBM Plex Sans',sans-serif; font-size:0.82rem; color:var(--gray); line-height:1.62; font-weight:300; }
+
+    /* ── Divider between assignments ── */
+    .ma-divider { border:none; height:1px; background:linear-gradient(to right, var(--red), transparent); margin:4rem 0; opacity:0.25; }
+
+    /* ── Deliverable cards ── */
+    .ma-deliv { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.6rem; }
+    .ma-deliv-card { padding:1rem 1.1rem; border:1px solid; }
+    .ma-deliv-card.primary { border-color:rgba(123,24,24,0.3); background:rgba(123,24,24,0.04); }
+    .ma-deliv-card.secondary { border-color:rgba(196,168,130,0.4); background:rgba(196,168,130,0.06); }
+    .ma-deliv-label { font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.4rem; }
+    .ma-deliv-card.primary .ma-deliv-label { color:var(--red-mid); }
+    .ma-deliv-card.secondary .ma-deliv-label { color:var(--gray-light); }
+    .ma-deliv-name { font-family:'Playfair Display',serif; font-weight:700; font-size:0.95rem; color:var(--black); }
+    .ma-deliv-pts { font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--gray-light); margin-top:0.25rem; }
+
+    @media (max-width:680px) {
+      .ma-head { flex-direction:column; gap:0.8rem; }
+      .ma-deliv { grid-template-columns:1fr; }
+      .ma-options { grid-template-columns:1fr; }
+    }
+  </style>
+
+  <!-- ══ ASSIGNMENT 1 ══ -->
+  <div class="ma-block">
+    <div class="ma-head">
+      <span class="ma-num">Assignment 01</span>
+      <div class="ma-title-wrap">
+        <h3 class="ma-title">Radical Topic Proposal</h3>
+        <div class="ma-pills">
+          <span class="ma-pill ma-pill-r">50 Points</span>
+          <span class="ma-pill ma-pill-s">2–3 pages · Single-spaced</span>
+          <span class="ma-pill ma-pill-r">Due: Feb 11</span>
+          <span class="ma-pill ma-pill-s">Times New Roman 12pt · MLA or APA · Submit via Canvas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Purpose</div>
+      <div class="ma-body">
+        <p>This assignment invites you to choose a site of struggle where AI, data, or technology functions as a tool of domination. Your proposal will frame a semester-long investigation into how technological systems enact violence, reinforce oppression, and sustain racial capitalism, colonialism, and carceral power.</p>
+        <p>This is not a neutral exercise. It is an act of refusal and reimagining. Your topic will reflect a commitment to abolitionist, decolonial, and anti-oppressive thought, preparing you for deeper analysis in Assignments 2 and 3.</p>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">What to Include</div>
+      <div style="display:flex;flex-direction:column;gap:1.3rem;margin-top:0.4rem;">
+
+        <div>
+          <div class="ma-sec-title">Site of Struggle</div>
+          <div class="ma-body"><p>Select a specific system, technology, or practice where AI or data-driven tools are used to surveil, classify, control, or harm. Examples (but not limited to):</p></div>
+          <ul class="ma-list">
+            <li>Predictive policing or risk-assessment algorithms</li>
+            <li>Biometric border surveillance or immigration databases</li>
+            <li>AI-driven hiring, healthcare, or social service allocation</li>
+            <li>Facial recognition in schools, public housing, or protests</li>
+            <li>Data extraction in the Global South or on Indigenous land</li>
+            <li>Militarized AI (drones, automated warfare, occupation tech)</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">Context &amp; Harm</div>
+          <div class="ma-body"><p>Briefly explain:</p></div>
+          <ul class="ma-list">
+            <li>Who built it? Who benefits?</li>
+            <li>Who is targeted, disappeared, or made disposable?</li>
+            <li>What historical systems does it continue? (e.g., slavery, colonialism, eugenics)</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">Why It Matters</div>
+          <div class="ma-body"><p>Articulate the political, ethical, and existential stakes. Connect your topic to course themes:</p></div>
+          <ul class="ma-list">
+            <li>Racial capitalism</li>
+            <li>Necropolitics / biopolitics</li>
+            <li>Settler colonialism / empire</li>
+            <li>Abolitionist futures</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">Guiding Questions</div>
+          <div class="ma-body"><p>Pose 2–3 critical questions to guide your inquiry. These should be analytical and politically engaged. Examples:</p></div>
+          <ul class="ma-list">
+            <li>How does this technology reproduce anti-Blackness or colonial violence?</li>
+            <li>What would it mean to abolish this system?</li>
+            <li>How do communities resist, subvert, or imagine beyond it?</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">Initial Approach</div>
+          <div class="ma-body"><p>Describe what materials or methods you might use to investigate this topic. These could include:</p></div>
+          <ul class="ma-list">
+            <li>Case studies, policy documents, tech whitepapers</li>
+            <li>Activist media, protest art, social media campaigns</li>
+            <li>Scholarly texts, community reports, oral histories</li>
+            <li>Methods: discourse analysis, visual/rhetorical analysis, speculative design</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Before Submitting — What to Look For</div>
+      <div class="ma-rubric">
+        <div class="ma-rrow ma-rhead">
+          <div class="ma-rcell">Criterion</div>
+          <div class="ma-rcell">What We're Looking For</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Clarity &amp; Specificity</div>
+          <div class="ma-rcell">Is the topic clearly defined and focused? Does it identify a concrete system, technology, or site of struggle? Is it actionable for in-depth rhetorical and political analysis?</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Political Urgency</div>
+          <div class="ma-rcell">Does the topic confront systems of harm, domination, or violence? Does it address the stakes for marginalized communities and reflect an understanding of power, oppression, and resistance?</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Theoretical Grounding</div>
+          <div class="ma-rcell">Is the topic informed by—and does it engage with—decolonial, abolitionist, Black feminist, Indigenous, queer, or other radical frameworks? Does it move beyond liberal or technical critiques?</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Feasibility</div>
+          <div class="ma-rcell">Can the topic support deep, sustained investigation across 10–12 pages? Are relevant materials (texts, artifacts, media) available for analysis? Does it allow for meaningful connection to course themes and thinkers?</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Voice &amp; Commitment</div>
+          <div class="ma-rcell">Does the proposal reflect authentic critical engagement, curiosity, and a refusal of neutrality? Is there a clear sense of intellectual and political investment in the inquiry?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-callout">
+      <p><strong>Note:</strong> Your proposal sets the tone for your work this semester. Choose a topic you care about deeply—one that fuels your curiosity, critique, and commitment to building liberatory futures.</p>
+      <p style="margin-top:0.5rem;">Let your inquiry be radical, your analysis be sharp, and your imagination be unbound.</p>
+    </div>
+    <div class="ma-manifesto">
+      <p><strong>We are not here to fix oppressive systems. We are here to dismantle them.</strong></p>
+    </div>
+  </div>
+
+  <hr class="ma-divider">
+
+  <!-- ══ ASSIGNMENT 2 ══ -->
+  <div class="ma-block">
+    <div class="ma-head">
+      <span class="ma-num">Assignment 02</span>
+      <div class="ma-title-wrap">
+        <h3 class="ma-title">Rhetoric, Power, and Techno-Politics</h3>
+        <div class="ma-pills">
+          <span class="ma-pill ma-pill-r">100 Points</span>
+          <span class="ma-pill ma-pill-s">10–12 pages · Double-spaced · Excl. citations</span>
+          <span class="ma-pill ma-pill-r">Due: March 15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Why This Assignment?</div>
+      <div class="ma-body">
+        <p>This is a radical rhetorical excavation. You will analyze how power speaks through and around technology—how violence is made to sound reasonable, how control is framed as care, and how resistance breaks through dominant narratives. Your task is to unmask the political work done by texts, visuals, and designs that shape our technological world.</p>
+        <p>This analysis directly prepares you for your final project, where you will move from critique to intervention.</p>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">What You'll Do</div>
+      <div class="ma-body"><p>Select 2–3 materials linked to your semester topic that reveal how rhetoric operates in the service of—or against—systems of oppression. These can be (not limited to):</p></div>
+      <ul class="ma-list" style="margin-top:0.7rem;">
+        <li><strong>Official/powerful texts:</strong> Tech white papers, policy briefs, corporate ethics statements, surveillance patents, legal rulings.</li>
+        <li><strong>Public/persuasive texts:</strong> Political speeches, news coverage, marketing campaigns, training materials.</li>
+        <li><strong>Resistance texts:</strong> Protest art, zines, social media threads, abolitionist toolkits, music, counter-data visualizations.</li>
+      </ul>
+      <div class="ma-callout" style="margin-top:0.9rem;">
+        <p>All materials should be treated as non-neutral artifacts carrying ideological force.</p>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Required Sections</div>
+      <div style="display:flex;flex-direction:column;gap:1.3rem;margin-top:0.4rem;">
+
+        <div>
+          <div class="ma-sec-title">1. Introduction (1–2 pages)</div>
+          <ul class="ma-list">
+            <li>Re-state your topic and its stakes within systems of racial capitalism, colonialism, or carceral power.</li>
+            <li>Present your 2–3 materials with brief context for each:
+              <ul class="ma-sublist">
+                <li>What it is, where it circulated, who produced it.</li>
+                <li>Intended audience and purpose.</li>
+                <li>Why you chose it? What rhetorical power does it hold or challenge?</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">2. Critical Rhetorical Analysis (5–7 pages)</div>
+          <div class="ma-body"><p>This is the core of your paper. Examine how each text works rhetorically. Consider:</p></div>
+          <ul class="ma-list" style="margin-top:0.6rem;">
+            <li><strong>Framing &amp; Metaphor:</strong> How are AI, data, or surveillance described? (e.g., "smart," "neutral," "guardian," "threat")</li>
+            <li><strong>Absence &amp; Erasure:</strong> Whose voices, bodies, or harms are missing?</li>
+            <li><strong>Emotional Appeals:</strong> What feelings are mobilized? (fear, urgency, trust, pride)</li>
+            <li><strong>Visual &amp; Design Rhetoric:</strong> How do layout, color, imagery, or interface design persuade?</li>
+            <li><strong>Narrative &amp; Logic:</strong> What stories are told about progress, safety, or inevitability?</li>
+            <li>Use direct evidence: quotes, images, descriptions.</li>
+            <li>Cite course thinkers to deepen your analysis.</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">3. Discussion: Radical Implications (2–3 pages)</div>
+          <div class="ma-body"><p>Step back. Synthesize what your analysis reveals about:</p></div>
+          <ul class="ma-list" style="margin-top:0.6rem;">
+            <li>How these texts reinforce or resist racial capitalism, settler colonialism, or carceral logics.</li>
+            <li>How liberal language ("fairness," "transparency," "innovation") can be weaponized.</li>
+            <li>Where you see ruptures: moments of refusal, subversion, or abolitionist imagination.</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">4. Conclusion: Toward Intervention (1–2 pages)</div>
+          <ul class="ma-list">
+            <li>Reflect on what you've learned about rhetoric as a political force.</li>
+            <li>Pose lingering questions.</li>
+            <li>Explain how this analysis informs your final project vision—what will you build, resist, or reimagine?</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="ma-sec-title">5. Works Cited</div>
+          <div class="ma-body"><p>MLA or APA style. Not included in page count.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Before Submitting — What to Look For</div>
+      <div class="ma-rubric">
+        <div class="ma-rrow ma-rhead">
+          <div class="ma-rcell">Category</div>
+          <div class="ma-rcell">What We're Looking For</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Clarity &amp; Focus</div>
+          <div class="ma-rcell">Clear topic, well-chosen materials, sharp thesis.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Analytical Depth</div>
+          <div class="ma-rcell">Goes beyond description to expose ideology, power, and harm.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Use of Evidence</div>
+          <div class="ma-rcell">Quotes, images, and examples are woven critically into analysis.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Course Engagement</div>
+          <div class="ma-rcell">Uses radical frameworks (abolitionist, decolonial, anti-racist).</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Political Insight</div>
+          <div class="ma-rcell">Shows how rhetoric shapes material realities and possibilities.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Writing &amp; Structure</div>
+          <div class="ma-rcell">Polished, organized, and compelling.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-callout">
+      <p><strong>Remember:</strong> You are analyzing texts of power—some wield it, some resist it. Your job is to expose how language, image, and design are never innocent. They build worlds. Your critique is a step toward dismantling oppressive ones and imagining those that are liberatory.</p>
+    </div>
+    <div class="ma-manifesto">
+      <p><strong>Analyze with rigor. Write with purpose. Intervene with courage.</strong></p>
+    </div>
+  </div>
+
+  <hr class="ma-divider">
+
+  <!-- ══ ASSIGNMENT 3 ══ -->
+  <div class="ma-block">
+    <div class="ma-head">
+      <span class="ma-num">Assignment 03</span>
+      <div class="ma-title-wrap">
+        <h3 class="ma-title">Final Project — From Critique to Liberation Imaginaries</h3>
+        <div class="ma-pills">
+          <span class="ma-pill ma-pill-r">150 Points Total</span>
+          <span class="ma-pill ma-pill-s">Final Project: 100 pts</span>
+          <span class="ma-pill ma-pill-s">Class Sharing: 50 pts</span>
+          <span class="ma-pill ma-pill-r">Due: May 7</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Purpose</div>
+      <div class="ma-body">
+        <p>This is your culminating intervention—the moment where analysis transforms into action. Building on your semester-long investigation of AI, power, and oppression, you will now propose, create, or enact an abolitionist alternative.</p>
+        <p>Your project must move beyond critique toward liberatory imagination, grounded in anti-racist, decolonial, and abolitionist frameworks.</p>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Two Deliverables</div>
+      <div class="ma-deliv">
+        <div class="ma-deliv-card primary">
+          <div class="ma-deliv-label">Part I</div>
+          <div class="ma-deliv-name">Final Project</div>
+          <div class="ma-deliv-pts">100 points</div>
+        </div>
+        <div class="ma-deliv-card secondary">
+          <div class="ma-deliv-label">Part II</div>
+          <div class="ma-deliv-name">Sharing about the project in the class</div>
+          <div class="ma-deliv-pts">50 points</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Final Project (100 Points) — Choose One or Mixed Format</div>
+      <div class="ma-options">
+
+        <div class="ma-option">
+          <div class="ma-opt-tag">Option A</div>
+          <div class="ma-opt-title">Academic Paper — Abolitionist Blueprint</div>
+          <div class="ma-opt-body">
+            <p style="margin-bottom:0.5rem;"><strong style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--gray-light);">Length:</strong> 10–12 pages, double-spaced</p>
+            <p style="margin-bottom:0.5rem;"><strong style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--gray-light);">Focus:</strong> Analyze existing abolitionist tech movements or community resistance. Propose concrete steps to dismantle oppressive systems and build liberatory alternatives.</p>
+            <p style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--red-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Sections:</p>
+            <ul class="ma-list">
+              <li>Introduction: Your topic + its stakes in abolitionist struggle</li>
+              <li>Analysis of Resistance: How are communities refusing or reimagining tech?</li>
+              <li>Abolitionist Proposals: 3–5 actionable steps for dismantling and rebuilding</li>
+              <li>Conclusion: Vision for a post-carceral technological future</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ma-option">
+          <div class="ma-opt-tag">Option B</div>
+          <div class="ma-opt-title">Action Research — Groundwork for Liberation</div>
+          <div class="ma-opt-body">
+            <p style="margin-bottom:0.5rem;">Engage directly with a community/organization resisting carceral tech.</p>
+            <p style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--red-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Submit:</p>
+            <ul class="ma-list">
+              <li>Fieldwork Journal (ongoing reflections)</li>
+              <li>Final Report (8–12 pages) detailing:
+                <ul class="ma-sublist">
+                  <li>The organization's abolitionist work</li>
+                  <li>Your role and contribution</li>
+                  <li>Analysis of their strategies</li>
+                  <li>Co-created recommendations</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ma-option" style="grid-column:1/-1;">
+          <div class="ma-opt-tag">Option C</div>
+          <div class="ma-opt-title">Multimodal Project — Liberatory Worldmaking</div>
+          <div class="ma-opt-body">
+            <p style="margin-bottom:0.5rem;">Create a public-facing work that educates, mobilizes, or prefigures abolitionist futures.</p>
+            <p style="margin-bottom:0.5rem;font-size:0.83rem;">Formats include: documentary, zine, toolkit, podcast, game design, PSA, workshop, digital archive, speculative art, counter-surveillance tool, abolitionist app prototype, etc.</p>
+            <p style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--red-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Deliverables:</p>
+            <ul class="ma-list">
+              <li>The creative work itself</li>
+              <li>Creator's Statement (1–2 pages): explains your political and aesthetic choices</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ma-sec">
+      <div class="ma-sec-lbl">Before Submitting — What to Look For</div>
+      <div class="ma-rubric">
+        <div class="ma-rrow ma-rhead">
+          <div class="ma-rcell">Criterion</div>
+          <div class="ma-rcell">What We're Looking For</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Abolitionist Alignment</div>
+          <div class="ma-rcell">Does the project reject reformist solutions and center dismantling + rebuilding?</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Political Clarity</div>
+          <div class="ma-rcell">Clear stakes, audience, and theory of change. Moves beyond awareness to action.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Rigor &amp; Creativity</div>
+          <div class="ma-rcell">Depth of research/engagement + innovative form/content. Thoughtful design choices.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Impact &amp; Feasibility</div>
+          <div class="ma-rcell">Recommendations are actionable; creative work is engaging and resonant. Shows understanding of real-world context.</div>
+        </div>
+        <div class="ma-rrow">
+          <div class="ma-rcell">Presentation &amp; Polish</div>
+          <div class="ma-rcell">Compelling, well-produced, professionally presented.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ma-manifesto">
+      <p>This is not the end of our learning. It is the beginning of our praxis. <strong>Build with intention. Imagine without limits. Interrupt what must be destroyed. Create what must live. Intervene for liberation.</strong></p>
+    </div>
+  </div>
+
+</section>
+
+<div class="red-bar"></div>
+
+<!-- ════ FOUR QUESTIONS ════ -->
+<section class="section fade-in" id="questions">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Four Core Questions We Will Wrestle With</h2>
+  </div>
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--gray-light);margin-bottom:2rem;">Source: Federal contracts — Digital Destroyers bigtechsellswar.com · Amazon DoD 38% · Google DoD 61% · Microsoft DoD 40%</p>
+
+  <div class="question-block fade-in">
+    <div class="q-num">Question 01</div>
+    <p class="q-text">How does artificial intelligence entrench existing systems of power—racial capitalism, cisheteropatriarchy, ableism, and settler colonialism—under the guise of neutrality and innovation? What forms of systemic violence does it automate, legitimize, or obscure?</p>
+  </div>
+  <div class="question-block fade-in">
+    <div class="q-num">Question 02</div>
+    <p class="q-text">In what ways are algorithmic systems—predictive policing, biometric surveillance, risk scoring—actively complicit in expanding the prison-industrial and military-industrial complexes? How do they refine the logics of captivity, war, and occupation?</p>
+  </div>
+  <div class="question-block fade-in">
+    <div class="q-num">Question 03</div>
+    <p class="q-text">How does the extraction and commodification of data—through digital profiling, surveillance capitalism, and data colonialism—undermine autonomy, erode collective power, and reproduce colonial domination? What is our role, as scholars, in either sustaining or refusing this system?</p>
+  </div>
+  <div class="question-block fade-in">
+    <div class="q-num">Question 04</div>
+    <p class="q-text">What radical pathways exist for resisting and dismantling AI infrastructures of domination? How might we imagine and co-create technologies in service of collective liberation, rather than control? What does abolitionist, decolonial, and life-affirming AI look like—if it is possible at all?</p>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ VIDEOS ════ -->
+<section class="section-full section-dark" id="videos">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Essential Viewing — Embedded Documentaries &amp; Lectures</h2>
+    </div>
+    <p>Every student must watch all of these before Week 4. Each runs under 30 minutes except where noted. Approach them as primary sources — treat what the experts say about their own systems as evidence.</p>
+
+    <div class="video-grid">
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=jZl55PsfZJQ" target="_blank" rel="noopener noreferrer" aria-label="Watch: Coded Bias (2020) — Official Trailer">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Documentary Trailer</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=jZl55PsfZJQ" target="_blank" rel="noopener noreferrer">Coded Bias (2020) — Official Trailer</a></div>
+          <div class="video-meta">Netflix · MIT Media Lab · Joy Buolamwini · 4 min</div>
+          <div class="video-desc">Joy Buolamwini discovers Amazon Rekognition cannot detect her dark-skinned face. MIT research, congressional testimony, global policy consequences. Full documentary on Netflix.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=VLbIiEMuMq8" target="_blank" rel="noopener noreferrer" aria-label="Watch: How Palantir Knows Everything About You">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Explainer</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=VLbIiEMuMq8" target="_blank" rel="noopener noreferrer">How Palantir Knows Everything About You</a></div>
+          <div class="video-meta">Vox · 14 min · 2022</div>
+          <div class="video-desc">Concrete technical breakdown of how Palantir's Gotham platform fuses government databases to build surveillance profiles on millions of people.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=TWWsW1w-BVo" target="_blank" rel="noopener noreferrer" aria-label="Watch: Gender Shades — Timnit Gebru & Joy Buolamwini">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Research Presentation</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=TWWsW1w-BVo" target="_blank" rel="noopener noreferrer">Gender Shades — Timnit Gebru & Joy Buolamwini</a></div>
+          <div class="video-meta">MIT Media Lab · 2018 · Landmark Research</div>
+          <div class="video-desc">The paper that exposed racial and gender bias in commercial facial recognition systems. IBM error rate: 0.3% on lighter men, 34.7% on darker women.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=fFAUsSmC9Qs" target="_blank" rel="noopener noreferrer" aria-label="Watch: Ruha Benjamin — Race After Technology">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Keynote Lecture</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=fFAUsSmC9Qs" target="_blank" rel="noopener noreferrer">Ruha Benjamin — Race After Technology</a></div>
+          <div class="video-meta">Harvard Institute of Politics · 30 min</div>
+          <div class="video-desc">Benjamin argues that discriminatory design is not a bug but a feature — "the New Jim Code" encodes racial hierarchy into algorithmic systems presented as neutral.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=Ug0E7ZBMN1w" target="_blank" rel="noopener noreferrer" aria-label="Watch: Clearview AI: The Company That Might End Privacy">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Investigative Journalism</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=Ug0E7ZBMN1w" target="_blank" rel="noopener noreferrer">Clearview AI: The Company That Might End Privacy</a></div>
+          <div class="video-meta">New York Times Visual Investigations · 2020</div>
+          <div class="video-desc">NYT investigation into Clearview's database of 30+ billion scraped faces. First major mainstream exposé of the company's reach into law enforcement.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=QxuyfWoVV98" target="_blank" rel="noopener noreferrer" aria-label="Watch: Protests Shine Light on Facial Recognition Problems">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Panel Discussion</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=QxuyfWoVV98" target="_blank" rel="noopener noreferrer">Protests Shine Light on Facial Recognition Problems</a></div>
+          <div class="video-meta">Science Friday · 24 min · Ruha Benjamin + Deborah Raji</div>
+          <div class="video-desc">Ruha Benjamin and Deborah Raji discuss how FRT failures are not technical accidents — they are predictable outcomes of building systems on biased data.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=HMnrl0tmd3k" target="_blank" rel="noopener noreferrer" aria-label="Watch: Calling Out Racism in the Scientific Community">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Interview</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=HMnrl0tmd3k" target="_blank" rel="noopener noreferrer">Calling Out Racism in the Scientific Community</a></div>
+          <div class="video-meta">Science Friday · 12 min</div>
+          <div class="video-desc">How racial bias operates not just in AI outputs but in who builds the systems, who funds the research, and who is imagined as the end user.</div>
+        </div>
+      </div>
+      <div class="video-card fade-in">
+        <a class="video-link-card" href="https://www.youtube.com/watch?v=uaaC57tcci0" target="_blank" rel="noopener noreferrer" aria-label="Watch: The Social Dilemma (2020) — Trailer">
+          <div class="video-link-inner">
+            <div class="video-play-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(192,57,43,0.7)" stroke-width="1.5"/><polygon points="11,9 21,14 11,19" fill="rgba(192,57,43,0.85)"/></svg>
+            </div>
+            <div class="video-tag">Documentary Trailer</div>
+          </div>
+        </a>
+        <div class="video-info">
+          <div class="video-title"><a href="https://www.youtube.com/watch?v=uaaC57tcci0" target="_blank" rel="noopener noreferrer">The Social Dilemma (2020) — Trailer</a></div>
+          <div class="video-meta">Netflix · 2020 · Engineers Speak Out</div>
+          <div class="video-desc">Former engineers at Facebook, Google, Twitter speak on the deliberate design of addictive systems. Context for understanding platform complicity in surveillance capitalism.</div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- ════ PROTOTYPE STUDENT WORK ════ -->
+<section class="section fade-in" id="student-prototype" style="padding-top: 4rem; padding-bottom: 4rem;">
+  <style>
+    .prototype-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    /* Notepad/Document card */
+    .prototype-card {
+      position: relative;
+      background: linear-gradient(to bottom, #F8F6F0 0%, #FDFBF5 100%);
+      padding: 0;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      overflow: hidden;
+      border: 2px solid #D4C4A8;
+      box-shadow: 
+        0 4px 6px rgba(0,0,0,0.05),
+        0 10px 30px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .prototype-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 
+        0 8px 12px rgba(0,0,0,0.08),
+        0 20px 40px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+      border-color: #C4A882;
+    }
+    
+    /* Top decorative bar with tape effect */
+    .tape-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    /* Horizontal line that goes across full width */
+    .tape-line {
+      position: absolute;
+      top: 30px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(196,168,130,0.4);
+    }
+    
+    .tape-left,
+    .tape-right {
+      position: absolute;
+      top: 18px;
+      width: 110px;
+      height: 28px;
+      background: rgba(232,213,176,0.6);
+      box-shadow: 
+        0 2px 4px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    
+    /* Left tape near the start of card */
+    .tape-left { 
+      left: 150px; 
+      transform: rotate(-2deg);
+    }
+    
+    /* Right tape near the end of card */
+    .tape-right { 
+      right: 150px; 
+      transform: rotate(2deg);
+    }
+    
+    .red-dot {
+      width: 16px;
+      height: 16px;
+      background: var(--red-bright);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(192,57,43,0.4);
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+    
+    /* Horizontal line decoration */
+    .top-line {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(196,168,130,0.3) 10%, rgba(196,168,130,0.3) 90%, transparent 100%);
+    }
+    
+    /* Content area */
+    .prototype-content {
+      padding: 5rem 5rem 4rem;
+      position: relative;
+    }
+    
+    /* Red stamp label */
+    .stamp-label {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 2px solid var(--red);
+      padding: 0.5rem 1.5rem;
+      margin-bottom: 2.5rem;
+      background: transparent;
+      position: relative;
+    }
+    
+    .stamp-label::before,
+    .stamp-label::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border: 2px solid var(--red);
+      background: transparent;
+    }
+    
+    .stamp-label::before {
+      top: -4px;
+      left: -4px;
+    }
+    
+    .stamp-label::after {
+      bottom: -4px;
+      right: -4px;
+    }
+    
+    /* Title styling */
+    .prototype-title-small {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .prototype-title-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      color: var(--black);
+      margin-bottom: 0.3rem;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+    
+    .prototype-title-sub {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      color: var(--red-bright);
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+    
+    /* Description text */
+    .prototype-desc {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: #2A2A2A;
+      line-height: 1.75;
+      max-width: 900px;
+      margin-bottom: 3rem;
+    }
+    
+    /* CTA Button */
+    .visit-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 1.2rem 2.5rem;
+      border: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .visit-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--red-deep);
+      transition: left 0.4s ease;
+      z-index: 0;
+    }
+    
+    .prototype-card:hover .visit-button::before {
+      left: 0;
+    }
+    
+    .visit-button span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .visit-arrow {
+      width: 20px;
+      height: 20px;
+      stroke: var(--cream);
+      stroke-width: 2;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    
+    .prototype-card:hover .visit-arrow {
+      transform: translateX(6px);
+    }
+    
+    /* Bottom right diamond decoration */
+    .diamond-accent {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--red);
+      transform: rotate(45deg);
+      pointer-events: none;
+      opacity: 0.6;
+      transition: all 0.4s ease;
+    }
+    
+    .prototype-card:hover .diamond-accent {
+      transform: rotate(45deg) scale(1.1);
+      opacity: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .prototype-content {
+        padding: 4rem 2.5rem 3rem;
+      }
+      .prototype-title-main,
+      .prototype-title-sub {
+        font-size: clamp(2rem, 10vw, 3rem);
+      }
+      .prototype-desc {
+        font-size: 1rem;
+      }
+      .tape-left { 
+        left: 40px;
+        width: 80px;
+        height: 24px;
+      }
+      .tape-right { 
+        right: 40px;
+        width: 80px;
+        height: 24px;
+      }
+      .diamond-accent {
+        bottom: 30px;
+        right: 30px;
+        width: 30px;
+        height: 30px;
+      }
+    }
+  </style>
+
+  <div class="prototype-container">
+    <a href="#" class="prototype-card">
+      <!-- Top decorative elements -->
+      <div class="tape-bar">
+        <div class="tape-line"></div>
+        <div class="tape-left"></div>
+        <div class="tape-right"></div>
+        <div class="red-dot"></div>
+      </div>
+      <div class="top-line"></div>
+      
+      <!-- Content -->
+      <div class="prototype-content">
+        <div class="stamp-label">Student Work</div>
+        
+        <h3 class="prototype-title-main">Student</h3>
+        <h3 class="prototype-title-sub">Contributions</h3>
+        
+        <p class="prototype-desc">
+          View the basic prototype of one of the student research projects from 'AI, biopolitics, and engineered oppression' course. This prototype demonstrates critical analysis of technological systems, data violence, and abolitionist frameworks in action. The final projects of all students will be available by the end of May 2026.
+        </p>
+        
+        <button class="visit-button">
+          <span>Visit Student Work</span>
+          <svg class="visit-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Bottom right diamond -->
+      <div class="diamond-accent"></div>
+    </a>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ CLASS POLICIES ════ -->
+<section id="policies-548">
+  <div class="pol-tit548">Class<br>Policies</div>
+  <div class="pgrid2">
+    <div class="pblock"><div class="pnum2" aria-hidden="true">01</div><div class="pstamp sbl">Class Policies</div><div class="phead">Attendance.</div><div class="pbody"><strong>Attendance:</strong> Students make all reasonable efforts to attend all class meetings. In the event of absence: inform the instructor as soon as possible. But hey! This class is not the only life you are living. It is just a tiny fraction of your life. So, let's talk.</div></div>
+    <div class="pblock" style="transition-delay:0.1s;"><div class="pnum2" aria-hidden="true">02</div><div class="pstamp sgd">Class Policies</div><div class="phead">Late Work.</div><div class="pbody"><strong>Late Work:</strong> Assignments submitted by posted deadlines — clearly listed here and in Canvas.<br><br><strong>Extension:</strong> Late assignments accepted without penalty if you email at least 2 days before the deadline and an alternative deadline is mutually agreed upon.<br><br>But again, this class is not the only life you are living. It is just a tiny fraction of your life. So, let's talk and figure out the alternatives.</div></div>
+    <div class="pblock" style="transition-delay:0.2s;"><div class="pnum2" aria-hidden="true">03</div><div class="pstamp sgr">Inclusion &amp; Accessibility</div><div class="phead">Every Body-Mind-Heart Learns Differently.</div><div class="pbody">No two people learn exactly the same way. If you find that the materials are difficult for you to absorb, don't assume right away that you don't understand the material. Perhaps you prefer to process information through speaking or listening, but all I am providing are written handouts, making it difficult for you to process. Please come speak with me if you would like to think through other options for engaging with the material and activities in the course.<br><br>Disabilities are visible and invisible, documented and undocumented: <strong>I do not distinguish between these designations.</strong> If you have a disability, or think you may have a disability, I encourage you to speak with me as soon as you can about your learning needs and how I can best accommodate them.<br><br>If there are aspects of the design, instruction, and/or experiences within this course that result in barriers to your inclusion or accurate assessment of achievement, please notify me as soon as possible and/or contact Student Accessibility Services. You may contact Accommodations and Services without notifying me if you wish; you may also speak with me without contacting Accommodations and Services at all. <strong>I do not require documentation for accessibility in my classroom.</strong></div></div>
+    <div class="pblock" style="transition-delay:0.3s;"><div class="pnum2" aria-hidden="true">04</div><div class="pstamp sr">Life First</div><div class="phead">This Is Just a Tiny Fraction of Your Life.</div><div class="pbody">Dear y'all, as we are here together, hopefully a transformative journey of exploration and reflection where we will engage in the radical work of anti-racism—a collective act of love, care, solidarity, critical thinking, and intellectual labor. Together, we will interrogate systems, cross intellectual and cultural borders, and examine anti-racism as a framework rooted in justice across intersecting identities and global contexts. Guided by and learning from scholars, artists, activists, and each other, we will envision transformations within ourselves and our communities (and if possible, beyond that). Your voices and perspectives will shape our space, teaching me as much as I hope to share with you. I am here to be with you every step of the way, so please don't hesitate to reach out with questions, concerns, or if you simply need to to de-stress. Don't let this encourage you to dehumanize yourself. Let's embark on this meaningful inquiry together by also keeping in mind that your emotional and mental wellbeing matters a lot.<br><br>And yes, this is also one of the class policies.</div></div>
+  </div>
+</section>
+
+<!-- AI POLICY -->
+<section id="ai-policy">
+  <div class="tbar"><div class="td tdr"></div><div class="td tdy"></div><div class="td tdg"></div><span style="margin-left:8px;font-size:12px;">AI_USE_POLICY.txt — opened</span></div>
+  <div class="ttit">AI USE<br>POLICY<span class="blink">_</span></div>
+  <div class="aigrid">
+    <div class="tblock"><div class="tprompt">ACCEPTABLE</div><div class="tbltit" style="color:#00ff46;">✓ Permitted Uses</div><div class="ti"><span class="til">LEARNING:</span> Personalized platforms, AI tutoring, study organization.</div><div class="ti"><span class="til">RESEARCH:</span> Brainstorming, ideation — critically assess and cite all AI output.</div><div class="ti"><span class="til">COLLAB:</span> Facilitating group tasks — never replacing human contribution.</div></div>
+    <div class="tblock"><div class="tprompt">UNACCEPTABLE</div><div class="tbltit" style="color:#ff3232;">✗ Prohibited Uses</div><div class="ti dn"><span class="til">PLAGIARISM:</span> AI-generated assignments presented as original work. Prohibited.</div><div class="ti dn"><span class="til">EXAM_MISUSE:</span> Unauthorized AI in assessments = academic misconduct.</div><div class="ti dn"><span class="til">PRIVACY:</span> Collecting others' data, generating impersonation content.</div></div>
+    <div class="tblock" style="grid-column:1/-1;"><div class="tprompt">DISCLOSURE REQUIRED</div><div class="tbltit">◎ Transparency Protocol</div><div class="ti">All AI use must be disclosed in submissions. (e.g. <em>"Generated using ChatGPT, edited for accuracy."</em>)</div><div class="ti">Paraphrased or quoted AI content must be cited per APA or MLA Style Guide.</div><div class="ti">Do not input sensitive personal data into AI systems. No deepfakes or misleading content.</div><div class="tnote">This AI use policy was itself generated using ChatGPT and edited for accuracy.</div></div>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ PLATFORMS ════ -->
+<section class="section-full section-dark" id="platforms">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <h2 class="section-title">Live Platforms — Explore These Directly</h2>
+    </div>
+    <p>These are the actual companies and platforms. Open them. Read their marketing copy. Then compare it to the investigative reporting and academic research. That gap is the course.</p>
+
+    <div class="platform-grid">
+      <div class="platform-card fade-in">
+        <div class="platform-name">Palantir Gotham</div>
+        <span class="platform-url">palantir.com/platforms/gotham</span>
+        <div class="platform-stat"><strong>$2.4B</strong> government contracts (2024) · ICE, FBI, LAPD, US Army · Founded with CIA In-Q-Tel funding</div>
+        <div class="platform-desc">Their law enforcement product. Read the product docs. Note the language: "data integration," "operational efficiency." Then read The Intercept's reporting on the same platform.</div>
+      </div>
+      <div class="platform-card fade-in">
+        <div class="platform-name">Palantir AIP (AI Platform)</div>
+        <span class="platform-url">palantir.com/platforms/aip</span>
+        <div class="platform-stat"><strong>$480M</strong> US Army contract (2024) · LLMs for military decision-making · Real-time battlefield AI</div>
+        <div class="platform-desc">Their newest product — large language models deployed for defense. This is the present frontier of AI and warfare.</div>
+      </div>
+      <div class="platform-card fade-in">
+        <div class="platform-name">Clearview AI</div>
+        <span class="platform-url">clearview.ai</span>
+        <div class="platform-stat"><strong>30B+</strong> scraped faces · <strong>3,100+</strong> agencies · Banned: EU, Canada, Australia, UK</div>
+        <div class="platform-desc">First Amendment as surveillance right. They scraped your face from every public photo on the internet. Still operating in the US. Read their FAQ — then read the ACLU complaint.</div>
+      </div>
+      <div class="platform-card fade-in">
+        <div class="platform-name">SoundThinking (ShotSpotter)</div>
+        <span class="platform-url">soundthinking.com/policing</span>
+        <div class="platform-stat"><strong>89%</strong> deployment in Black neighborhoods · <strong>40,000+</strong> false alerts Chicago (2019–21) · Secret contracts</div>
+        <div class="platform-desc">Acoustic surveillance. Explore their dashboard. Note who is described as a "customer." Read the Chicago OIG report on false alerts alongside the company website.</div>
+      </div>
+      <div class="platform-card fade-in">
+        <div class="platform-name">Atlas of Surveillance (EFF)</div>
+        <span class="platform-url">atlasofsurveillance.org</span>
+        <div class="platform-stat">Free · Built by journalists + students · Every US city mapped · Drones, FRT, ShotSpotter, ALPRs</div>
+        <div class="platform-desc">Search your city. Find which surveillance technologies are deployed in your neighborhood. Built using public records and crowdsourcing by the EFF and University of Nevada journalism school.</div>
+      </div>
+      <div class="platform-card fade-in">
+        <div class="platform-name">Algorithmic Justice League</div>
+        <span class="platform-url">ajl.org</span>
+        <div class="platform-stat">Joy Buolamwini · Gender Shades dataset · Congressional testimony · FRT bias audits</div>
+        <div class="platform-desc">Buolamwini's organization. Research, policy, art. The Gender Shades dataset is downloadable. Read the technical papers and the policy briefs.</div>
+      </div>
+    </div>
+
+    <div class="sub-h" style="margin-top:3rem;">GitHub Repositories — Read the Actual Code</div>
+    <div class="repo-card fade-in">
+      <div><span class="repo-url">github.com/propublica/compas-analysis</span><div class="repo-desc">ProPublica's full R analysis of COMPAS racial bias. Entire dataset, Jupyter notebooks, statistical methodology. The analysis that sparked the algorithmic sentencing debate. Run it yourself.</div></div>
+      <div class="repo-stars">★ 3.2k</div>
+    </div>
+    <div class="repo-card fade-in">
+      <div><span class="repo-url">github.com/Trusted-AI/AIF360</span><div class="repo-desc">IBM's AI Fairness 360 — the bias detection and mitigation toolkit corporations claim to use. Examine what it measures, what it can fix, and what it structurally cannot.</div></div>
+      <div class="repo-stars">★ 2.4k</div>
+    </div>
+    <div class="repo-card fade-in">
+      <div><span class="repo-url">github.com/MadhumitaSushil/llm-bias-survey</span><div class="repo-desc">Survey of LLM bias across race, gender, religion. Academic benchmark suite with full code. Relevant to critiquing every AI tool you use daily.</div></div>
+      <div class="repo-stars">★ 890</div>
+    </div>
+    <div class="repo-card fade-in">
+      <div><span class="repo-url">github.com/google/model-card-toolkit</span><div class="repo-desc">Google's model card documentation system. What "ethical AI" reporting looks like in practice. Critical exercise: evaluate what these cards do and do not disclose.</div></div>
+      <div class="repo-stars">★ 420</div>
+    </div>
+    <div class="repo-card fade-in">
+      <div><span class="repo-url">github.com/microsoft/responsible-ai-toolbox</span><div class="repo-desc">Microsoft's Responsible AI toolkit. Examine the technical definition of "responsible" a $3T company applies to its own AI systems. Note the limits.</div></div>
+      <div class="repo-stars">★ 1.8k</div>
+    </div>
+    <div class="repo-card fade-in">
+      <div><span class="repo-url">github.com/cleverhans-lab/cleverhans</span><div class="repo-desc">Adversarial attacks on ML models. Understanding how surveillance systems can be fooled is itself a form of resistance. Built by Ian Goodfellow and Nicolas Papernot.</div></div>
+      <div class="repo-stars">★ 6.1k</div>
+    </div>
+
+    <!-- DATASETS -->
+    <div class="sub-h" style="margin-top:3rem;">Key Datasets &amp; Databases</div>
+    <div class="dataset-card fade-in">
+      <div><div class="dataset-name">ProPublica COMPAS Dataset</div><span class="dataset-url">propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis</span></div>
+      <div class="dataset-desc">Full defendant data + COMPAS scores for Broward County. The primary dataset behind Machine Bias. Download, analyze, form your own conclusions.</div>
+    </div>
+    <div class="dataset-card fade-in">
+      <div><div class="dataset-name">AI Incident Database</div><span class="dataset-url">incidentdatabase.ai</span></div>
+      <div class="dataset-desc">Every documented AI harm and system failure globally. Searchable by harm type, technology, geography. The definitive catalogue of algorithmic violence.</div>
+    </div>
+    <div class="dataset-card fade-in">
+      <div><div class="dataset-name">Gender Shades Dataset</div><span class="dataset-url">gendershades.org</span></div>
+      <div class="dataset-desc">Buolamwini &amp; Gebru benchmark faces with full FRT accuracy results by skin tone and gender. The dataset that proved discrimination quantitatively.</div>
+    </div>
+    <div class="dataset-card fade-in">
+      <div><div class="dataset-name">Vera Institute: Incarceration Trends</div><span class="dataset-url">vera.org/projects/incarceration-trends</span></div>
+      <div class="dataset-desc">Incarceration by race, county, year. Interactive. The statistical foundation for understanding carceral AI's real-world scale.</div>
+    </div>
+    <div class="dataset-card fade-in">
+      <div><div class="dataset-name">Big Tech Sells War Database</div><span class="dataset-url">bigtechsellswar.com</span></div>
+      <div class="dataset-desc">Federal contracts between Amazon, Google, Microsoft and DoD, DHS, DoJ. Amazon: 38% DoD. Google: 61% DoD. Microsoft: 40% DoD.</div>
+    </div>
+    <div class="dataset-card fade-in">
+      <div><div class="dataset-name">Surveillance Technology Oversight Project</div><span class="dataset-url">stopspying.org</span></div>
+      <div class="dataset-desc">NYC surveillance tech documented by civil liberties lawyers. FOIA requests, contracts, legal challenges.</div>
+    </div>
+  </div>
+</section>
+
+<div class="thick-rule"></div>
+
+<!-- ════ READINGS ════ -->
+<section class="section fade-in" id="readings">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2 class="section-title">INDICATIVE COURSE MATERIAL</h2>
+  </div>
+  <div class="reading-entry"><em>Is artificial intelligence racist?</em> Adib-Moghaddam, A. (2023). Pluto Press.</div>
+  <div class="reading-entry"><em>Race After Technology.</em> Benjamin, R. (2019). Polity. <span class="reading-note">→ The New Jim Code</span></div>
+  <div class="reading-entry"><em>More than a glitch.</em> Broussard, M. (2023). MIT Press. <span class="reading-note">→ How bias enters ML pipelines technically</span></div>
+  <div class="reading-entry"><em>Dark matters: On the surveillance of Blackness.</em> Browne, S. (2015). Duke UP. <span class="reading-note">→ Surveillance as anti-Black technology from slave ships to biometrics</span></div>
+  <div class="reading-entry"><em>Eloquent rage.</em> Cooper, B. (2018). St. Martin's.</div>
+  <div class="reading-entry"><em>Biopolitics of security.</em> Dillon, M. (2015). Routledge.</div>
+  <div class="reading-entry"><em>Discipline and Punish.</em> Foucault, M. (1975). Vintage. <span class="reading-note">→ Historical root of algorithmic carceral logic</span></div>
+  <div class="reading-entry"><em>The History of Sexuality, Vol. 1.</em> Foucault, M. (1976). Pantheon.</div>
+  <div class="reading-entry"><em>Security, Territory, Population (Lectures 1977–78).</em> Foucault, M. (2004). Palgrave.</div>
+  <div class="reading-entry"><em>The Birth of Biopolitics (Lectures 1978–79).</em> Foucault, M. (2004). Palgrave. <span class="reading-note">→ Theoretical foundation of biopolitical AI critique</span></div>
+  <div class="reading-entry"><em>Security aesthetics of and beyond the biopolitical.</em> Ghertner et al. (Eds.). (2023). Duke UP.</div>
+  <div class="reading-entry"><em>No mercy here.</em> Haley, S. (2016). UNC Press.</div>
+  <div class="reading-entry"><em>Scenes of subjection.</em> Hartman, S. (1997). Oxford UP.</div>
+  <div class="reading-entry"><em>When they call you a terrorist.</em> Khan-Cullors &amp; Bandele. (2018). St. Martin's.</div>
+  <div class="reading-entry"><em>Racism and racial surveillance.</em> Khan et al. (Eds.). (2023). Palgrave.</div>
+  <div class="reading-entry"><em>Hidden in white sight.</em> Lawrence, C. (2023). LID Publishing.</div>
+  <div class="reading-entry"><em>Necropolitics.</em> Mbembe, A. (2019). Duke UP. <strong>— PRIMARY TEXT</strong> <span class="reading-note">→ Original 2003 essay: DOI 10.2307/3250559 (open access)</span></div>
+  <div class="reading-entry"><em>Algorithms of Oppression.</em> Noble, S.U. (2018). NYU Press.</div>
+  <div class="reading-entry"><em>So you want to talk about race.</em> Oluo, I. (2018). Seal Press.</div>
+  <div class="reading-entry"><em>Weapons of Math Destruction.</em> O'Neil, C. (2016). Crown. <span class="reading-note">→ Mathematical proof of how 'neutral' models cause targeted harm</span></div>
+  <div class="reading-entry"><em>Artificial Unintelligence.</em> O'Neil, C. (2019). Crown.</div>
+  <div class="reading-entry"><em>Terrorist assemblages.</em> Puar, J.K. (2007). Duke UP.</div>
+  <div class="reading-entry"><em>Weapons of the Weak.</em> Scott, J.C. (1985). Yale UP.</div>
+  <div class="reading-entry"><em>Against ecological sovereignty.</em> Smith, M. (2018). U Minnesota.</div>
+  <div class="reading-entry"><em>Captive genders.</em> Stanley &amp; Smith (Eds.). (2015). AK Press.</div>
+  <div class="reading-entry"><em>The Age of Surveillance Capitalism.</em> Zuboff, S. (2019). PublicAffairs. <span class="reading-note">→ THE technical anatomy of data extraction as economic model</span></div>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- ════ ARTICLES ════ -->
+<section class="section fade-in" id="articles">
+  <div class="section-header">
+    <span class="section-num">13</span>
+    <h2 class="section-title">Popular / News Articles &amp; Scholarly Sources</h2>
+  </div>
+
+  <div class="article-entry">
+    <div class="article-title">Machine Bias: There's software used across the country to predict future criminals. And it's biased against Blacks.</div>
+    <div class="article-byline">Angwin, Larson, Mattu, Kirchner · ProPublica · 2016</div>
+    <div class="article-url">propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">Dealing with Bias in Artificial Intelligence</div>
+    <div class="article-byline">Craig S. Smith · New York Times · 2019</div>
+    <div class="article-url">nytimes.com/2019/11/19/technology/artificial-intelligence-bias.html</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">Art Project Shows Racial Biases in Artificial Intelligence System</div>
+    <div class="article-byline">Meilan Solly · Smithsonian Magazine · 2019</div>
+    <div class="article-url">smithsonianmag.com/smart-news/art-project-reveals-racial-biases-ai-180972586</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">Artificial intelligence is creating a new colonial world order</div>
+    <div class="article-byline">MIT Technology Review · 2022</div>
+    <div class="article-url">technologyreview.com/2022/04/19/1049592/artificial-intelligence-colonialism/</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">How the AI industry profits from catastrophe</div>
+    <div class="article-byline">MIT Technology Review · 2022</div>
+    <div class="article-url">technologyreview.com/2022/04/20/1050392/ai-industry-appen-scale-data-labels/</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">The NYT Op-ed Page Just Published an AI Weapons Infomercial</div>
+    <div class="article-byline">Inkstick Media · 2023</div>
+    <div class="article-url">inkstickmedia.com/the-nyt-op-ed-page-just-published-an-ai-weapons-infomercial/</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">Depicting Palestine: What it means to witness a genocide</div>
+    <div class="article-byline">Alayyan, S. · June 12, 2024 · Middle East Eye</div>
+  </div>
+
+  <div class="sub-h">Scholarly / Academic Articles</div>
+  <div class="article-entry">
+    <div class="article-title">Dissecting racial bias in an algorithm used to manage the health of populations</div>
+    <div class="article-byline">Ziad Obermeyer et al. · Science · 2019 · DOI: 10.1126/science.aax2342</div>
+    <div class="article-url">science.org/doi/10.1126/science.aax2342</div>
+  </div>
+  <div class="article-entry">
+    <div class="article-title">Race and Rights in the Digital Age</div>
+    <div class="article-byline">Catherine Powell · AJIL unbound · 2018 · DOI: 10.1017/aju.2018.68</div>
+    <div class="article-url">cambridge.org/core/journals/ajil-unbound</div>
+  </div>
+</section>
+
+<!-- ════ WEEKLY CALENDAR ════ -->
+<section class="section fade-in" id="calendar">
+  <div class="section-header">
+    <span class="section-num">14</span>
+    <h2 class="section-title">Weekly Assigned Materials</h2>
+  </div>
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--gray-light);letter-spacing:0.08em;margin-bottom:1.5rem;">Two Weekly Tasks Due Every Wednesday Midnight (Unless Mentioned Otherwise): Scaffolding Assignment &amp; Reading Response &nbsp;·&nbsp; Three Major Assignments: Check Canvas for Due Dates</p>
+
+  <div style="margin-bottom:2.5rem;padding:1rem 1.2rem;border:1.5px solid var(--red);background:rgba(123,24,24,0.07);display:flex;align-items:flex-start;gap:0.8rem;">
+    <span style="font-size:1.1rem;line-height:1;margin-top:0.05rem;">⚠️</span>
+    <p style="font-family:'IBM Plex Sans',sans-serif;font-size:0.88rem;font-weight:400;color:var(--gray);margin:0;line-height:1.6;"><strong style="color:var(--red-deep);font-weight:700;">Note:</strong> Some links in the assigned materials may take you to the WSU library. Only WSU credentials will allow access to those materials.</p>
+  </div>
+
+  <style>
+    .cal-week {
+      margin-bottom: 2.5rem;
+      border-left: 3px solid var(--red);
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .cal-week-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    .cal-week-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red-mid);
+      background: rgba(123,24,24,0.08);
+      border: 1px solid rgba(123,24,24,0.2);
+      padding: 0.2rem 0.6rem;
+      white-space: nowrap;
+    }
+    .cal-week-theme {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--black);
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-color: rgba(123,24,24,0.3);
+      text-underline-offset: 3px;
+    }
+    .cal-week-note {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--gray-light);
+      font-style: italic;
+      margin-bottom: 0.6rem;
+    }
+    .cal-readings {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .cal-readings li {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--gray);
+      line-height: 1.6;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .cal-readings li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+    }
+    .cal-readings li a {
+      color: var(--red-deep);
+      text-decoration: underline;
+      text-decoration-color: rgba(123,24,24,0.3);
+      text-underline-offset: 2px;
+      transition: color 0.2s;
+    }
+    .cal-readings li a:hover { color: var(--red-bright); }
+    .cal-author {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--black);
+    }
+    .cal-source {
+      font-style: italic;
+      color: var(--gray-light);
+    }
+    .cal-break {
+      border-left: 3px solid var(--sand);
+      padding-left: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .cal-break-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+      border: 1px solid var(--sand);
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+    }
+    .cal-break-note {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--gray-light);
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+  </style>
+
+  <!-- WEEK 1 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 1</span>
+    </div>
+    <p class="cal-week-note">Let's take a look at this crucial work cursorily for our first day's conversation.</p>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Ruha Benjamin</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=5820427&ppg=54&c=RVBVQg" target="_blank">"Engineered Inequity,"</a> <span class="cal-source">Race After Technology: Abolitionist Tools for the New Jim Code</span></li>
+    </ul>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 2</span>
+      <span class="cal-week-theme">Foundations — Biopolitics, Necropolitics, and AI</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Achille Mbembe</span> — "Introduction," <span class="cal-source">Necropolitics</span></li>
+      <li><span class="cal-author">Michel Foucault</span> — <a href="https://grattoncourses.wordpress.com/wp-content/uploads/2014/08/part-v-power-over-life-and-death-from-michel-foucault-the-history-of-sexuality-volume-1-an-introduction-1-2.pdf" target="_blank">"Right of Death and Power over Life"</a></li>
+      <li><span class="cal-author">Simone Browne</span> — <a href="https://watermark02.silverchair.com/9780822375302-001.pdf" target="_blank">"Introduction,"</a> <span class="cal-source">Dark Matters</span> (2015)</li>
+      <li><span class="cal-author">Abeba Birhane</span> — <a href="https://script-ed.org/article/algorithmic-colonization-of-africa/" target="_blank">"Algorithmic Colonization of Africa"</a></li>
+      <li><span class="cal-author">Ruha Benjamin</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=5820427&ppg=13&c=RVBVQg" target="_blank">"Introduction: The New Jim Code,"</a> <span class="cal-source">Race After Technology: Abolitionist Tools for the New Jim Code</span></li>
+    </ul>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 3</span>
+      <span class="cal-week-theme">Colonial Legacies and Racial Science in Tech</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Achille Mbembe</span> — "Fanon's Pharmacy," <span class="cal-source">Necropolitics</span> (2019)</li>
+      <li><a href="https://research.ebsco.com/c/5vlwng/ebook-viewer/epub/fdnjfiv4bv/section/navPoint-8" target="_blank">"Introduction: The American Janus of Medicine and Race Science without conscience is the soul's perdition"</a> from <span class="cal-author">Harriet A. Washington</span> — <span class="cal-source">Medical Apartheid</span> (2007)</li>
+      <li><span class="cal-author">Patrick Wolfe</span> — <a href="https://www.kooriweb.org/foley/resources/pdfs/89.pdf" target="_blank">"Settler Colonialism and the Elimination of the Native"</a> <span class="cal-source">(Journal of Genocide Research, 2006)</span></li>
+      <li><span class="cal-author">Michael Kwet</span> — <a href="https://ohmigato.com/KENTUCKY/00-Kentucky_Classes/00-Informatic_Models/00-Kentucky_Classes/1-Information_Society/3-Module/Digital%20colonialism%20US%20empire%20.pdf" target="_blank">"Digital Colonialism: US Empire and the New Imperialism in the Global South"</a> <span class="cal-source">(Race &amp; Class, 2019)</span></li>
+      <li><span class="cal-author">Lorna Roth</span> — <a href="https://cjc.utppublishing.com/doi/full/10.22230/cjc.2009v34n1a2196" target="_blank">"Looking at Shirley, the Ultimate Norm: Colour Balance and Technological Bias"</a> <span class="cal-source">(Canadian Journal of Communication, 2009)</span></li>
+    </ul>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 4</span>
+      <span class="cal-week-theme">Surveillance of Blackness and Social Control</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Simone Browne</span> — <a href="https://research.ebsco.com/c/5vlwng/ebook-viewer/pdf/jumzvtviln/section/lp_63" target="_blank">"Everybody's Got a Little Light Under the Sun,"</a> <span class="cal-source">Dark Matters</span></li>
+      <li><span class="cal-author">Tamara K. Nopper</span> — <a href="https://www.jstor.org/stable/j.ctv11sn78h.12?seq=1" target="_blank">"Digital Character in a 'Scored' Society,"</a> <span class="cal-source">Captivating Technology</span>, 2019</li>
+      <li><span class="cal-author">Clare Garvie et al.</span> — <a href="https://www.perpetuallineup.org/" target="_blank">The Perpetual Line-Up: Unregulated Police Face Recognition in America</a> <span class="cal-source">(Georgetown Law Center on Privacy &amp; Technology, 2016)</span> (<a href="https://www.statewatch.org/media/documents/news/2016/oct/usa-perpetual-lineup-face-recognition-database-report-10-16.pdf" target="_blank">Complete work</a>)</li>
+      <li><span class="cal-author">Shoshana Zuboff</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=6967838&c=RVBVQg&ppg=12" target="_blank">"Home or Exile in the Digital Future,"</a> <span class="cal-source">The Age of Surveillance Capitalism</span> (2019)</li>
+      <li><span class="cal-author">Amnesty International</span> — <a href="https://banthescan.amnesty.org/nyc/index.html" target="_blank">"Ban the Scan: Facial Recognition and the Impacts of Surveillance on New York Communities"</a></li>
+      <li><span class="cal-author">W.E.B. Du Bois</span> — <a href="https://www.gutenberg.org/files/408/408-h/408-h.htm#chap00" target="_blank">"The Forethought"</a> and <a href="https://www.gutenberg.org/files/408/408-h/408-h.htm#chap01" target="_blank">"Of Our Spiritual Strivings,"</a> <span class="cal-source">The Souls of Black Folk</span> (1903)</li>
+    </ul>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 5</span>
+      <span class="cal-week-theme">From "Minority Report" to Reality — Predictive Policing &amp; Algorithmic Injustice</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Sarah Brayne</span> — <a href="https://www.asanet.org/wp-content/uploads/attach/journals/oct17asrfeature.pdf" target="_blank">"Big Data Surveillance: The Case of Policing"</a> <span class="cal-source">(American Sociological Review, 2017)</span></li>
+      <li><span class="cal-author">Sonja Starr</span> — <a href="https://repository.law.umich.edu/cgi/viewcontent.cgi?article=1200&context=law_econ_current" target="_blank">"Evidence-Based Sentencing and the Scientific Racism of Risk Assessment"</a> <span class="cal-source">(Stanford Law Review, 2014)</span></li>
+      <li><span class="cal-author">Jessica Saunders et al.</span> — <a href="https://www.nacdl.org/getattachment/9d276b57-0d3f-477a-90fb-5a00c003edff/rand-ssl-study.pdf" target="_blank">"Predictions put into practice: a quasi-experimental evaluation of Chicago's SDSC predictive policing program"</a> <span class="cal-source">(Journal of Experimental Criminology, 2016)</span></li>
+      <li><span class="cal-author">AI Now Institute Report</span> (2018) — <a href="https://ainowinstitute.org/wp-content/uploads/2023/04/litigatingalgorithms.pdf" target="_blank">Litigating Algorithms</a> 2018</li>
+      <li><span class="cal-author">Rashida Richardson, Jason Schultz, &amp; Kate Crawford</span> — <a href="https://download.ssrn.com/19/04/24/ssrn_id3377428_code3361828.pdf" target="_blank">"Dirty Data, Bad Predictions: How Civil Rights Violations Lead to Flawed Algorithmic Forecasts"</a> <span class="cal-source">(NYU Law Review, 2019)</span></li>
+    </ul>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 6</span>
+      <span class="cal-week-theme">The Carceral Continuum — From Prison Tech to Everyday Life</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Madison Van Oort</span> — <a href="https://www.jstor.org/stable/pdf/j.ctv11sn78h.14.pdf" target="_blank">"Employing the Carceral Imaginary: An Ethnography of Worker Surveillance in the Retail Industry,"</a> <span class="cal-source">Captivating Technology</span>, 2019</li>
+      <li><span class="cal-author">Shoshana Zuboff</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=6967838&c=RVBVQg&ppg=134" target="_blank">"The Elaboration of Surveillance Capitalism: Kidnap, Corner, Compete,"</a> <span class="cal-source">The Age of Surveillance Capitalism</span></li>
+      <li><span class="cal-author">Kate Weisburd</span> — <a href="https://virginialawreview.org/wp-content/uploads/2022/03/Weisburd_Book_108-1.pdf" target="_blank">"Punitive Surveillance"</a> <span class="cal-source">(Virginia Law Review, 2022, excerpts)</span></li>
+      <li><span class="cal-author">James Kilgore</span> — "Electronic Monitoring is Not the Answer" <span class="cal-source">(MoMA PS1 Abolition series, 2018)</span></li>
+      <li><span class="cal-author">Virginia Eubanks</span> — <a href="https://tetrazolelover.at.ua/virginia_eubanks-automating_inequality-how_high-te.pdf" target="_blank">"High-Tech Homelessness in the City of Angels,"</a> <span class="cal-source">Automating Inequality</span> (2018)</li>
+      <li><span class="cal-author">CHRGJ &amp; ISER</span> — <a href="https://iser-uganda.org/wp-content/uploads/2022/07/Chased_Away_and_Left_to_Die.pdf" target="_blank">Chased Away and Left to Die: How a National ID System Enhances Marginalization in Uganda</a> (2020, report excerpts)</li>
+    </ul>
+  </div>
+
+  <!-- WEEK 7 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 7</span>
+      <span class="cal-week-theme">Health, Medicine, and Biopower — Carceral Science and the Body</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Christopher Perreira</span> — <a href="https://www.jstor.org/stable/j.ctv11sn78h.7" target="_blank">"Consumed by Disease: Medical Archives, Latino Fictions, and Carceral Health Imaginaries,"</a> <span class="cal-source">Captivating Technology</span>, 2019</li>
+      <li><span class="cal-author">Ziad Obermeyer et al.</span> — <a href="https://www.ftc.gov/system/files/documents/public_events/1548288/privacycon-2020-ziad_obermeyer.pdf" target="_blank">"Dissecting Racial Bias in an Algorithm Used to Manage the Health of Populations"</a> <span class="cal-source">(Science, 2019)</span></li>
+      <li><span class="cal-author">Ruha Benjamin</span> — <a href="https://www.jstor.org/stable/j.ctv11sn78h.5?seq=1" target="_blank">"Introduction,"</a> <span class="cal-source">Captivating Technology</span> (2019)</li>
+      <li><span class="cal-author">Dorothy Roberts</span> — <a href="https://www.jstor.org/stable/10.1086/597132?seq=1" target="_blank">"Race, Gender, and Genetic Surveillance"</a> 2009</li>
+      <li><span class="cal-author">Harriet A. Washington</span> — <a href="https://research.ebsco.com/c/5vlwng/ebook-viewer/epub/fdnjfiv4bv/section/navPoint-20" target="_blank">"Caged Subjects: Research on Black Prisoners,"</a> <span class="cal-source">Medical Apartheid</span> (2007)</li>
+      <li><span class="cal-author">Jonathan M. Metzl</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=3118070&c=UERG&ppg=4" target="_blank">"Preface,"</a> <span class="cal-source">The Protest Psychosis</span> (2010)</li>
+    </ul>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 8</span>
+      <span class="cal-week-theme">Data Capitalism, Digital Profiling, and Inequality</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Safiya Umoja Noble</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=4834260&query=&c=RVBVQg&ppg=16" target="_blank">"Introduction: The Power of Algorithms,"</a> <span class="cal-source">Algorithms of Oppression</span> (2018)</li>
+      <li><span class="cal-author">Meredith Broussard</span> — "Ability and Technology," <span class="cal-source">More Than a Glitch</span> (2023) [<a href="https://searchit.libraries.wsu.edu/discovery/fulldisplay?docid=alma99901080828101842&context=L&vid=01ALLIANCE_WSU:WSU&lang=en&search_scope=WSU_everything&adaptor=Local%20Search%20Engine&tab=default_tab&query=any,contains,More%20Than%20a%20Glitch&offset=0" target="_blank">WSU library, physical copy only</a>]</li>
+      <li><span class="cal-author">Shoshana Zuboff</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=6967838&c=RVBVQg&ppg=375" target="_blank">"Big Other and The Rise of Instrumentarian Power,"</a> <span class="cal-source">The Age of Surveillance Capitalism</span> (2019)</li>
+      <li><span class="cal-author">Catherine Powell</span> — <a href="https://download.ssrn.com/19/11/14/ssrn_id3486939_code339387.pdf" target="_blank">"Race and Rights in the Digital Age"</a> <span class="cal-source">(AJIL Unbound, 2018)</span></li>
+    </ul>
+  </div>
+
+  <!-- WEEK 9 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 9</span>
+      <span class="cal-week-theme">Intersectionality — Gender, Sexuality, and the Carceral Tech Gaze</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Mitali Thakor</span> — <a href="https://www.jstor.org/stable/j.ctv11sn78h.13?seq=1" target="_blank">"Deception by Design: Digital Skin, Racial Matter, And the New Policing of Child Sexual Exploitation,"</a> <span class="cal-source">Captivating Technology</span>, 2019</li>
+      <li><span class="cal-author">Dean Spade</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=2096555&c=UERG&ppg=90" target="_blank">"Administrating Gender,"</a> <span class="cal-source">Normal Life</span>, 2015</li>
+      <li><span class="cal-author">Max Parks</span> — <a href="https://link.springer.com/article/10.1007/s44163-025-00257-1" target="_blank">"The ethics of AI at the intersection of transgender identity and neurodivergence,"</a> <span class="cal-source">Springer Nature</span>, 2025</li>
+      <li><span class="cal-author">Jasbir Puar</span> — <span class="cal-source">Terrorist Assemblages</span> (2007):
+        <ul style="list-style:none;padding-left:1rem;margin-top:0.4rem;display:flex;flex-direction:column;gap:0.4rem;">
+          <li style="padding-left:1rem;position:relative;font-size:0.85rem;color:var(--gray);"><span style="position:absolute;left:0;color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;">◦</span><a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=1170523&c=UERG&ppg=66" target="_blank">The Sexuality of Terrorism</a></li>
+          <li style="padding-left:1rem;position:relative;font-size:0.85rem;color:var(--gray);"><span style="position:absolute;left:0;color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;">◦</span><a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=1170523&c=UERG&ppg=195" target="_blank">Queer Diaspora and Practices of Profiling</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SPRING BREAK -->
+  <div class="cal-break">
+    <span class="cal-break-label">Spring Break</span>
+    <p class="cal-break-note">Nothing is due this week.</p>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 10</span>
+      <span class="cal-week-theme">Militarization, Borders, and Technoscientific Violence</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Achille Mbembe</span> — "The Society of Enmity," <span class="cal-source">Necropolitics</span> (2019)</li>
+      <li><span class="cal-author">Achille Mbembe</span> — "Necropolitics," <span class="cal-source">Necropolitics</span> (2019)</li>
+      <li><span class="cal-author">Visualizing Palestine</span> — <a href="https://visualizingpalestine.org/visual/watched/" target="_blank">"Watched: Israel's Elbit Systems on the U.S. Southern Border"</a></li>
+      <li><a href="https://bigtechsellswar.com/" target="_blank">Big Tech Sells War</a> (online project)</li>
+      <li><span class="cal-author">Brittany Dawson</span> — <a href="https://www.palestine-studies.org/en/node/232052" target="_blank">"U.S.-Mexico Border: An Israeli Tech Laboratory,"</a> <span class="cal-source">IPS</span> 2018</li>
+      <li><span class="cal-author">Elbit America</span> — <a href="https://www.elbitamerica.com/news/elbit-america-brings-proven-counter-intrusion-systems-to-u.s.-southern-border" target="_blank">"Elbit America brings proven counter-intrusion systems to U.S. Southern border,"</a> 2025</li>
+      <li><span class="cal-author">Neta Crawford</span> — <span class="cal-source">Accountability for Killing</span> (2013), [<a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=3055564&c=RVBVQg&ppg=436" target="_blank">Check index for "drone strike program" and "drop weapons"</a>]</li>
+    </ul>
+  </div>
+
+  <!-- WEEK 11 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 11</span>
+      <span class="cal-week-theme">Abolitionist Tech Movements and Digital Activism</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Matt Cagle &amp; Brady Hirsch</span> — <a href="https://www.aclunc.org/blog/fight-against-surveillance-san-francisco" target="_blank">"The Fight Against Surveillance in San Francisco,"</a> <span class="cal-source">ACLU</span> 2023</li>
+      <li><span class="cal-author">Coalition for Critical Technology</span> — <a href="https://medium.com/@CoalitionForCriticalTechnology/abolish-the-techtoprisonpipeline-9b5b14366b16" target="_blank">"Abolish the #TechToPrisonPipeline,"</a> 2020</li>
+      <li><span class="cal-author">Sasha Costanza-Chock</span> — <a href="https://dl.designresearchsociety.org/cgi/viewcontent.cgi?article=1554&context=drs-conference-papers" target="_blank">"Design Justice: Towards an intersectional feminist framework for design theory and practice,"</a> <span class="cal-source">MIT</span>, 2020</li>
+      <li><span class="cal-author">AESTRAEA, Lesbian Foundation For Justice</span> — <a href="https://archive.astraeafoundation.org/fundabolitiontech/movement/" target="_blank">"Technologies for Liberation: Toward Abolitionist Future"</a></li>
+    </ul>
+  </div>
+
+  <!-- WEEK 12 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 12</span>
+      <span class="cal-week-theme">Abolitionist Tech Movements and Digital Activism</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Ruha Benjamin</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=5820427&ppg=8&c=RVBVQg" target="_blank">"Retooling Solidarity, Reimagining Justice,"</a> <span class="cal-source">Race after Technology</span></li>
+      <li><a href="https://blogs.ubalt.edu/legaldatadesign/abolitionist-movements-the-carceral-tech-resistance-network/" target="_blank">"Abolitionist Movements: The Carceral Tech Resistance Network,"</a> <span class="cal-source">Legal Data and Design Clinic</span>, 2021</li>
+      <li><span class="cal-author">Simone Browne</span> — <a href="https://research.ebsco.com/c/5vlwng/ebook-viewer/pdf/jumzvtviln/section/lp_161" target="_blank">"Epilogue: When Blackness Enters the Frame,"</a> <span class="cal-source">Dark Matters</span>, 2015</li>
+      <li><span class="cal-author">Brittany Friedman</span> — <a href="https://www.aaihs.org/reckoning-with-carceral-technologies-through-abolition/" target="_blank">"Reckoning with Carceral Technologies Through Abolition,"</a> <span class="cal-source">Black Perspectives</span>, 2020</li>
+    </ul>
+  </div>
+
+  <!-- WEEK 13 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 13</span>
+      <span class="cal-week-theme">Speculative Futures — Afrofuturism, Indigeneity, and Imagination</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Jackie Wang</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=6371409&c=RVBVQg&ppg=161" target="_blank">"The Prison Abolitionist Imagination: A Conversation,"</a> <span class="cal-source">Carceral Capitalism</span>, 2018</li>
+      <li><span class="cal-author">Olivia Guntarik</span> — <span class="cal-source">Indigenous Resistance in the Digital Age on Radical Hope in Dark Times</span>, 2022:
+        <ul style="list-style:none;padding-left:1rem;margin-top:0.4rem;display:flex;flex-direction:column;gap:0.4rem;">
+          <li style="padding-left:1rem;position:relative;font-size:0.85rem;color:var(--gray);"><span style="position:absolute;left:0;color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;">◦</span><a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=7175153&c=RVBVQg&ppg=81" target="_blank">"Rematriation"</a></li>
+          <li style="padding-left:1rem;position:relative;font-size:0.85rem;color:var(--gray);"><span style="position:absolute;left:0;color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;">◦</span><a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=7175153&c=RVBVQg&ppg=165" target="_blank">"Gathering"</a></li>
+          <li style="padding-left:1rem;position:relative;font-size:0.85rem;color:var(--gray);"><span style="position:absolute;left:0;color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;">◦</span><a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=7175153&c=RVBVQg&ppg=233" target="_blank">"Song and Survival"</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- WEEK 14 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Week 14</span>
+      <span class="cal-week-theme">Conclusion — Ethics, Care, and Future Directions</span>
+    </div>
+    <ul class="cal-readings">
+      <li><span class="cal-author">Achille Mbembe</span> — "Conclusion: The Ethics of the Passerby," <span class="cal-source">Necropolitics</span> (2019)</li>
+      <li><span class="cal-author">Sage Agee</span> — <a href="https://www.earthisland.org/journal/index.php/magazine/entry/solarpunk-imagines-future-renewable-tech-socio-ecological-enlightenment/" target="_blank">"A Future Dream: How solarpunk helped alleviate my existential dread,"</a> <span class="cal-source">Earth Island Journal</span>, 2022</li>
+      <li><a href="https://stimpunks.org/glossary/solarpunk/" target="_blank">"Solarpunk"</a> [More on Solarpunk]</li>
+      <li><span class="cal-author">Autumn Brown</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=1996052&query=&c=RVBVQg&ppg=79" target="_blank">"Small and Bright,"</a> <span class="cal-source">Octavia's brood: science fiction stories from social justice movements</span>, 2015</li>
+      <li><span class="cal-author">Mumia Abu-Jamal</span> — <a href="https://ebookcentral.proquest.com/lib/wsu/reader.action?docID=1996052&query=&c=RVBVQg&ppg=224" target="_blank">"Star Wars and the American Imagination,"</a> <span class="cal-source">Octavia's brood</span>, 2015</li>
+    </ul>
+  </div>
+
+  <!-- WEEKS 15 & 16 -->
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <span class="cal-week-num">Weeks 15 &amp; 16</span>
+    </div>
+    <ul class="cal-readings">
+      <li>Y'all's chosen materials + Workshops</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ════ FOOTER QUOTES ════ -->
+<div class="binary-strip">
+  <div>01001110 01000101 01000011 01010010 01001111 00100000 01000001 01001001 00100000 01001011 01001001 01001100 01001100 01010011</div>
+  <div class="binary-decoded">NECRO AI KILLS — what systems do when we do not look.</div>
+</div>
+
+<div class="footer-quotes">
+  <div class="footer-quote">"The algorithm does not have a race problem. The problem is the algorithm." <cite>— Ruha Benjamin, Race After Technology (2019)</cite></div>
+  <div class="footer-quote">"If you're not in the database, you don't exist. If you are, you're a suspect." <cite>— Simone Browne, Dark Matters (2015)</cite></div>
+  <div class="footer-quote">"Necropolitics is the power to dictate who may live and who must die." <cite>— Achille Mbembe, Necropolitics (2019)</cite></div>
+</div>
+<div class="red-bar"></div>
+
+<div id="tooltip" class="tooltip"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════════════════
+// SCROLL FADE-IN
+// ══════════════════════════════════════════════
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ══════════════════════════════════════════════
+// TOOLTIP HELPER
+// ══════════════════════════════════════════════
+const tooltip = document.getElementById('tooltip');
+function showTip(e, text) {
+  tooltip.innerHTML = text;
+  tooltip.style.opacity = 1;
+  const x = e.clientX + 14;
+  const y = e.clientY - 10;
+  const tw = 240, th = 80;
+  tooltip.style.left = (x + tw > window.innerWidth ? x - tw - 28 : x) + 'px';
+  tooltip.style.top  = (y + th > window.innerHeight ? y - th : y) + 'px';
+}
+document.addEventListener('mousemove', (e) => {
+  if (tooltip.style.opacity === '1') {
+    const x = e.clientX + 14;
+    const y = e.clientY - 10;
+    const tw = 240, th = 80;
+    tooltip.style.left = (x + tw > window.innerWidth ? x - tw - 28 : x) + 'px';
+    tooltip.style.top  = (y + th > window.innerHeight ? y - th : y) + 'px';
+  }
+});
+function hideTip() { tooltip.style.opacity = 0; }
+
+// ══════════════════════════════════════════════
+// COMPAS BIAS CHART
+// ══════════════════════════════════════════════
+(function() {
+  const M = {top:48, right:170, bottom:52, left:62};
+  const W = 580, H = 290;
+  const svg = d3.select('#compas-chart').append('svg')
+    .attr('viewBox', `0 0 ${W+M.left+M.right} ${H+M.top+M.bottom}`)
+    .attr('style','max-width:100%;display:block;height:auto;')
+    .append('g').attr('transform',`translate(${M.left},${M.top})`);
+
+  const data = [
+    {cat:'Low Risk',    b:33.5, w:59.1},
+    {cat:'Medium Risk', b:22.5, w:20.7},
+    {cat:'High Risk',   b:44.0, w:20.2},
+  ];
+  const x0 = d3.scaleBand().domain(data.map(d=>d.cat)).range([0,W]).padding(0.32);
+  const x1 = d3.scaleBand().domain(['b','w']).range([0,x0.bandwidth()]).padding(0.1);
+  const y  = d3.scaleLinear().domain([0,68]).range([H,0]);
+  const cB = '#9B2335', cW = '#C4A882';
+
+  // Gridlines
+  svg.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(d=>d+'%'))
+    .call(g=>g.select('.domain').remove())
+    .call(g=>g.selectAll('.tick line').clone().attr('x2',W)
+      .attr('stroke','rgba(255,255,255,0.05)').attr('stroke-dasharray','3,3'))
+    .selectAll('text').attr('fill','#aaa').attr('font-size','11px');
+
+  svg.append('g').attr('transform',`translate(0,${H})`)
+    .call(d3.axisBottom(x0).tickSize(0))
+    .call(g=>g.select('.domain').attr('stroke','#555'))
+    .selectAll('text').attr('fill','#bbb').attr('font-size','12px').attr('dy','1.3em');
+
+  const grp = svg.selectAll('g.bg').data(data).enter().append('g')
+    .attr('transform',d=>`translate(${x0(d.cat)},0)`);
+
+  [{k:'b',c:cB,delay:0},{k:'w',c:cW,delay:80}].forEach(({k,c,delay})=>{
+    grp.append('rect')
+      .attr('x',x1(k)).attr('width',x1.bandwidth()).attr('y',H).attr('height',0)
+      .attr('fill',c).attr('rx',1)
+      .on('mouseover',(e,d)=>showTip(e,`<strong>${k==='b'?'Black':'White'} defendants — ${d.cat}</strong><br><strong style="color:${c}">${d[k]}%</strong><br><span style="color:#888;font-size:0.7rem">ProPublica COMPAS Analysis (2016)</span>`))
+      .on('mouseout',hideTip)
+      .transition().duration(800).delay((_,i)=>i*90+delay).ease(d3.easeCubicOut)
+      .attr('y',d=>y(d[k])).attr('height',d=>H-y(d[k]));
+
+    // Labels fade in AFTER bars finish — no animation conflict
+    grp.append('text')
+      .attr('x',d=>x1(k)+x1.bandwidth()/2)
+      .attr('y',d=>y(d[k])-7)
+      .attr('text-anchor','middle').attr('fill',c)
+      .attr('font-size','11px').attr('font-weight','700').attr('opacity',0)
+      .text(d=>d[k]+'%')
+      .transition().duration(300).delay((_,i)=>i*90+delay+850)
+      .attr('opacity',1);
+  });
+
+  // Bracket annotation for High Risk — drawn above chart, no bar conflict
+  const hx = x0('High Risk');
+  const bx = hx + x1('b') + x1.bandwidth()/2;
+  const wx = hx + x1('w') + x1.bandwidth()/2;
+  svg.append('line').attr('x1',bx).attr('x2',wx).attr('y1',-20).attr('y2',-20)
+    .attr('stroke','#FF6B6B').attr('stroke-width',1.5);
+  [bx,wx].forEach(cx=>{
+    svg.append('line').attr('x1',cx).attr('x2',cx).attr('y1',-20).attr('y2',-12)
+      .attr('stroke','#FF6B6B').attr('stroke-width',1.5);
+  });
+  svg.append('text').attr('x',(bx+wx)/2).attr('y',-26)
+    .attr('text-anchor','middle').attr('fill','#FF6B6B').attr('font-size','10px').attr('font-weight','600')
+    .text('2.18× disparity');
+
+  // Legend
+  const leg = svg.append('g').attr('transform',`translate(${W+22},20)`);
+  [['Black defendants',cB],['White defendants',cW]].forEach(([lbl,col],i)=>{
+    leg.append('rect').attr('y',i*26).attr('width',12).attr('height',12).attr('fill',col).attr('rx',1);
+    leg.append('text').attr('x',17).attr('y',i*26+10).attr('fill','#bbb').attr('font-size','11px').text(lbl);
+  });
+
+  svg.append('text').attr('x',W/2).attr('y',H+46)
+    .attr('text-anchor','middle').attr('fill','rgba(180,180,180,0.35)').attr('font-size','9px')
+    .text('ProPublica Machine Bias (2016) · github.com/propublica/compas-analysis · n=7,214');
+})();
+
+// ══════════════════════════════════════════════
+// BIG TECH FEDERAL CONTRACTS
+// ══════════════════════════════════════════════
+(function() {
+  const M = {top:28, right:110, bottom:52, left:58};
+  const W = 520, H = 270;
+  const svg = d3.select('#bigtech-chart').append('svg')
+    .attr('viewBox', `0 0 ${W+M.left+M.right} ${H+M.top+M.bottom}`)
+    .attr('style','max-width:100%;display:block;height:auto;')
+    .append('g').attr('transform',`translate(${M.left},${M.top})`);
+
+  const companies = ['Amazon','Google','Microsoft'];
+  const agencies  = ['DoD','DHS','State','DoJ','Other'];
+  const rawData = {
+    Amazon:    {DoD:38,DHS:19,State:16,DoJ:13,Other:14},
+    Google:    {DoD:61,DHS:8, State:5, DoJ:3, Other:23},
+    Microsoft: {DoD:40,DHS:14,State:17,DoJ:10,Other:19},
+  };
+  const colors = {DoD:'#7B1818',DHS:'#9B2335',State:'#C0392B',DoJ:'#A93226',Other:'#4A5568'};
+  const stacked = d3.stack().keys(agencies)(companies.map(c=>({company:c,...rawData[c]})));
+
+  const x = d3.scaleBand().domain(companies).range([0,W]).padding(0.38);
+  const y = d3.scaleLinear().domain([0,105]).range([H,0]);
+
+  svg.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+'%'))
+    .call(g=>g.select('.domain').remove())
+    .call(g=>g.selectAll('.tick line').clone().attr('x2',W)
+      .attr('stroke','rgba(255,255,255,0.05)').attr('stroke-dasharray','3,3'))
+    .selectAll('text').attr('fill','#aaa').attr('font-size','11px');
+
+  svg.append('g').attr('transform',`translate(0,${H})`)
+    .call(d3.axisBottom(x).tickSize(0))
+    .call(g=>g.select('.domain').attr('stroke','#555'))
+    .selectAll('text').attr('fill','#ccc').attr('font-size','13px').attr('dy','1.3em');
+
+  stacked.forEach(layer=>{
+    // bars
+    svg.selectAll(null).data(layer).enter().append('rect')
+      .attr('x',d=>x(d.data.company)).attr('width',x.bandwidth())
+      .attr('y',H).attr('height',0)
+      .attr('fill',colors[layer.key]).attr('opacity',0.9)
+      .on('mouseover',(e,d)=>showTip(e,`<strong>${d.data.company} → ${layer.key}</strong><br><strong style="color:#C0392B">${d[1]-d[0]}%</strong> of federal contracts<br><span style="color:#888;font-size:0.7rem">bigtechsellswar.com</span>`))
+      .on('mouseout',hideTip)
+      .transition().duration(880).ease(d3.easeCubicOut)
+      .attr('y',d=>y(d[1])).attr('height',d=>y(d[0])-y(d[1]));
+
+    // labels only on segments >= 7 percentage points (enough room)
+    svg.selectAll(null).data(layer).enter().append('text')
+      .attr('x',d=>x(d.data.company)+x.bandwidth()/2)
+      .attr('y',d=>y(d[1])+(y(d[0])-y(d[1]))/2+4)
+      .attr('text-anchor','middle').attr('pointer-events','none')
+      .attr('fill','rgba(232,213,176,0.9)').attr('font-size','9px').attr('font-weight','600')
+      .attr('opacity',0)
+      .text(d=>(d[1]-d[0])>=7?(d[1]-d[0])+'%':'')
+      .transition().duration(400).delay(920).attr('opacity',1);
+  });
+
+  // Legend
+  const leg = svg.append('g').attr('transform',`translate(${W+14},8)`);
+  agencies.forEach((a,i)=>{
+    leg.append('rect').attr('y',i*22).attr('width',10).attr('height',10).attr('fill',colors[a]).attr('rx',1);
+    leg.append('text').attr('x',15).attr('y',i*22+9).attr('fill','#bbb').attr('font-size','10px').text(a);
+  });
+
+  svg.append('text').attr('x',W/2).attr('y',H+46)
+    .attr('text-anchor','middle').attr('fill','rgba(180,180,180,0.35)').attr('font-size','9px')
+    .text('Source: bigtechsellswar.com · Digital Destroyers');
+})();
+
+// ══════════════════════════════════════════════
+// DRONE KILL CHAIN
+// ══════════════════════════════════════════════
+(function() {
+  const steps = [
+    {label:'DATA\nHARVEST',   sub:'Signals intel · Phone\nmetadata · GPS coords\nSocial graph mapping',   src:'NSA/GCHQ collection'},
+    {label:'AI\nPROFILING',  sub:'SKYNET algorithm\nPattern recognition\nThreat scoring',                  src:'NSA SKYNET — Pakistan/Somalia'},
+    {label:'PATTERN\nOF LIFE',sub:'30-day movement\nBehavioral analysis\nLocation clustering',              src:'SIGINT/GEOINT fusion'},
+    {label:'TARGET\nSELECT', sub:'Auto-ID system\nDisposition matrix\nJoint staff review',                  src:'JSOC/CIA authorization'},
+    {label:'STRIKE\nAUTH.',  sub:'Weapon deployed\nAutonomous/semi-auto\nBDA assessment',                   src:'The Intercept, Drone Papers 2015'},
+  ];
+
+  const n = steps.length;
+  const W = 780, H = 220, gap = 4;
+  const bw = (W - (n-1)*gap*3) / n;
+
+  const svg = d3.select('#killchain-chart').append('svg')
+    .attr('viewBox',`0 0 ${W} ${H}`)
+    .attr('style','max-width:100%;display:block;height:auto;');
+
+  const bgC  = ['#3A0808','#4A0A0A','#5C0C0C','#6E0E0E','#841111'];
+  const hovC = ['#5A1212','#6A1414','#7C1616','#8E1818','#A41414'];
+
+  steps.forEach((step,i)=>{
+    const x = i*(bw + gap*3);
+    const g = svg.append('g').attr('transform',`translate(${x},0)`).style('cursor','pointer');
+    const rect = g.append('rect').attr('width',bw).attr('height',H).attr('fill',bgC[i]).attr('rx',3);
+
+    // Arrow chevron between panels
+    if(i < n-1){
+      const ax = x+bw;
+      svg.append('polygon')
+        .attr('points',`${ax+1},${H/2-14} ${ax+gap*2.5+1},${H/2} ${ax+1},${H/2+14}`)
+        .attr('fill','#9B2335').attr('opacity',0.7);
+    }
+
+    // Step number
+    g.append('text').attr('x',bw/2).attr('y',16)
+      .attr('text-anchor','middle').attr('fill','rgba(232,213,176,0.2)')
+      .attr('font-size','8px').attr('letter-spacing','1px').text(`STEP 0${i+1}`);
+
+    // Title — big, bold, centered
+    step.label.split('\n').forEach((line,li)=>{
+      g.append('text').attr('x',bw/2).attr('y',38+li*17)
+        .attr('text-anchor','middle').attr('fill','#E8D5B0')
+        .attr('font-size','10px').attr('font-weight','700').attr('letter-spacing','0.8px')
+        .text(line);
+    });
+
+    // Divider
+    g.append('line').attr('x1',8).attr('x2',bw-8).attr('y1',76).attr('y2',76)
+      .attr('stroke','rgba(232,213,176,0.1)');
+
+    // Detail text — 3 lines max, fit to box
+    step.sub.split('\n').forEach((line,li)=>{
+      g.append('text').attr('x',bw/2).attr('y',90+li*15)
+        .attr('text-anchor','middle').attr('fill','rgba(232,213,176,0.45)')
+        .attr('font-size','7.5px')
+        .text(line);
+    });
+
+    // Hover
+    g.on('mouseover',(e)=>{
+      rect.attr('fill',hovC[i]);
+      showTip(e,`<strong>${step.label.replace('\n',' ')}</strong><br>${step.sub.replace(/\n/g,'<br>')}<br><span style="color:#9B2335;font-size:0.7rem">${step.src}</span>`);
+    }).on('mouseout',()=>{ rect.attr('fill',bgC[i]); hideTip(); });
+  });
+
+  svg.append('text').attr('x',W/2).attr('y',H-5)
+    .attr('text-anchor','middle').attr('fill','rgba(123,24,24,0.4)').attr('font-size','7.5px')
+    .text('The Intercept — The Drone Papers (2015) · theintercept.com/drone-papers/');
+})();
+
+// ══════════════════════════════════════════════
+// FRT ERROR RATES
+// ══════════════════════════════════════════════
+(function() {
+  const M = {top:44, right:155, bottom:58, left:62};
+  const W = 520, H = 270;
+  const svg = d3.select('#frt-chart').append('svg')
+    .attr('viewBox',`0 0 ${W+M.left+M.right} ${H+M.top+M.bottom}`)
+    .attr('style','max-width:100%;display:block;height:auto;')
+    .append('g').attr('transform',`translate(${M.left},${M.top})`);
+
+  const data = [
+    {sys:'Microsoft',lm:0.0, dm:6.2,  lf:1.6, df:20.8},
+    {sys:'IBM',      lm:0.3, dm:10.7, lf:1.6, df:34.7},
+    {sys:'Face++',   lm:0.8, dm:11.9, lf:4.1, df:22.3},
+  ];
+  const keys   = ['lm','dm','lf','df'];
+  const labels = ['Lighter Male','Darker Male','Lighter Female','Darker Female'];
+  const cols   = {lm:'#4A6FA5',dm:'#7B1818',lf:'#5D8A8A',df:'#C0392B'};
+
+  const x0 = d3.scaleBand().domain(data.map(d=>d.sys)).range([0,W]).padding(0.28);
+  const x1 = d3.scaleBand().domain(keys).range([0,x0.bandwidth()]).padding(0.1);
+  const y  = d3.scaleLinear().domain([0,40]).range([H,0]);
+
+  svg.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+'%'))
+    .call(g=>g.select('.domain').remove())
+    .call(g=>g.selectAll('.tick line').clone().attr('x2',W)
+      .attr('stroke','rgba(255,255,255,0.05)').attr('stroke-dasharray','3,3'))
+    .selectAll('text').attr('fill','#aaa').attr('font-size','11px');
+
+  svg.append('g').attr('transform',`translate(0,${H})`)
+    .call(d3.axisBottom(x0).tickSize(0))
+    .call(g=>g.select('.domain').attr('stroke','#555'))
+    .selectAll('text').attr('fill','#bbb').attr('font-size','13px').attr('dy','1.3em');
+
+  const grps = svg.selectAll('g.fg').data(data).enter().append('g')
+    .attr('transform',d=>`translate(${x0(d.sys)},0)`);
+
+  keys.forEach((k,ki)=>{
+    // bars
+    grps.append('rect')
+      .attr('x',x1(k)).attr('width',x1.bandwidth())
+      .attr('y',H).attr('height',0)
+      .attr('fill',cols[k]).attr('rx',1)
+      .on('mouseover',(e,d)=>showTip(e,`<strong>${d.sys} — ${labels[ki]}</strong><br>Error rate: <strong style="color:${cols[k]}">${d[k]}%</strong><br><span style="color:#888;font-size:0.7rem">Buolamwini & Gebru (2018) Gender Shades</span>`))
+      .on('mouseout',hideTip)
+      .transition().duration(820).delay(ki*70).ease(d3.easeCubicOut)
+      .attr('y',d=>y(d[k])).attr('height',d=>H-y(d[k]));
+
+    // Value labels: above bar always, fade in after animation, skip 0%
+    grps.append('text')
+      .attr('x',d=>x1(k)+x1.bandwidth()/2)
+      .attr('y',d=>y(d[k])-5)
+      .attr('text-anchor','middle').attr('fill',cols[k])
+      .attr('font-size','8px').attr('font-weight','700').attr('pointer-events','none')
+      .attr('opacity',0)
+      .text(d=>d[k]>0?d[k]+'%':'')
+      .transition().duration(300).delay(ki*70+880).attr('opacity',1);
+  });
+
+  // Worst-case annotation
+  svg.append('text').attr('x',W/2).attr('y',-26)
+    .attr('text-anchor','middle').attr('fill','#C0392B').attr('font-size','10px').attr('font-weight','600')
+    .text('IBM: 34.7% error on darker-skinned women vs 0.3% lighter-skinned men');
+
+  // Legend
+  const leg = svg.append('g').attr('transform',`translate(${W+18},10)`);
+  keys.forEach((k,i)=>{
+    leg.append('rect').attr('y',i*26).attr('width',11).attr('height',11).attr('fill',cols[k]).attr('rx',1);
+    leg.append('text').attr('x',16).attr('y',i*26+10).attr('fill','#bbb').attr('font-size','10px').text(labels[i]);
+  });
+
+  svg.append('text').attr('x',W/2).attr('y',H+50)
+    .attr('text-anchor','middle').attr('fill','rgba(180,180,180,0.35)').attr('font-size','9px')
+    .text('Buolamwini & Gebru (2018) Gender Shades · proceedings.mlr.press/v81/buolamwini18a.html');
+})();
+
+// ══════════════════════════════════════════════
+// SIDEBAR + PROGRESS BAR
+// ══════════════════════════════════════════════
+
+// Scroll progress bar
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('scrollProgress').style.width = progress + '%';
+});
+
+
+// ══════════════════════════════════════════════
+// CASE ITEM ACCORDION
+// ══════════════════════════════════════════════
+document.querySelectorAll('.case-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const wasOpen = item.classList.contains('expanded');
+    // Close all
+    document.querySelectorAll('.case-item').forEach(i => i.classList.remove('expanded'));
+    if (!wasOpen) item.classList.add('expanded');
+    const btn = item.querySelector('.case-expand-btn');
+    document.querySelectorAll('.case-expand-btn').forEach(b => b.textContent = '▸ expand context');
+    if (!wasOpen && btn) btn.textContent = '▾ collapse';
+  });
+});
+
+// ══════════════════════════════════════════════
+// POLICY BLOCK ACCORDION
+// ══════════════════════════════════════════════
+document.querySelectorAll('.policy-block h3').forEach(h3 => {
+  h3.addEventListener('click', () => {
+    const block = h3.closest('.policy-block');
+    block.classList.toggle('open');
+  });
+});
+// Open first policy block by default
+const firstPolicy = document.querySelector('.policy-block');
+if (firstPolicy) firstPolicy.classList.add('open');
+
+// ══════════════════════════════════════════════
+// READING ENTRY — click to copy citation
+// ══════════════════════════════════════════════
+document.querySelectorAll('.reading-entry').forEach(entry => {
+  entry.title = 'Click to copy citation';
+  entry.addEventListener('click', () => {
+    const text = entry.innerText.replace(/→.*$/m,'').trim();
+    navigator.clipboard.writeText(text).catch(()=>{});
+    const orig = entry.style.borderLeftColor;
+    entry.style.borderLeft = '3px solid var(--red)';
+    entry.style.paddingLeft = '2rem';
+    const indicator = document.createElement('span');
+    indicator.textContent = ' ✓ copied';
+    indicator.style.cssText = 'font-family:IBM Plex Mono,monospace;font-size:0.65rem;color:#7B1818;margin-left:0.5rem;';
+    entry.appendChild(indicator);
+    setTimeout(() => { indicator.remove(); entry.style.border = ''; }, 1800);
+  });
+});
+
+// ══════════════════════════════════════════════
+// ARTICLE ENTRY — click to open URL
+// ══════════════════════════════════════════════
+document.querySelectorAll('.article-entry').forEach(entry => {
+  const urlEl = entry.querySelector('.article-url');
+  if (urlEl) {
+    entry.style.cursor = 'pointer';
+    entry.title = 'Click to open article';
+    entry.addEventListener('click', () => {
+      let url = urlEl.textContent.trim();
+      if (!url.startsWith('http')) url = 'https://' + url;
+      window.open(url, '_blank', 'noopener');
+    });
+  }
+});
+
+// ══════════════════════════════════════════════
+// PLATFORM CARD — click to open
+// ══════════════════════════════════════════════
+document.querySelectorAll('.platform-card').forEach(card => {
+  const urlEl = card.querySelector('.platform-url');
+  if (urlEl) {
+    card.title = 'Click to visit platform';
+    card.addEventListener('click', () => {
+      let url = urlEl.textContent.trim();
+      if (!url.startsWith('http')) url = 'https://' + url;
+      window.open(url, '_blank', 'noopener');
+    });
+  }
+});
+
+// ══════════════════════════════════════════════
+// GRADE CALCULATOR — click grade cell to see score needed
+// ══════════════════════════════════════════════
+document.querySelectorAll('.grade-cell').forEach(cell => {
+  const pct = cell.querySelector('.g-pct');
+  const letter = cell.querySelector('.g-letter');
+  if (pct && letter) {
+    cell.title = `${letter.textContent}: ${pct.textContent} — out of 500 pts`;
+    const range = pct.textContent.trim().split('–');
+    if (range.length === 2) {
+      const low = Math.ceil(parseFloat(range[0]) * 5);
+      const high = Math.floor(parseFloat(range[1]) * 5);
+      cell.title = `${letter.textContent}: ${pct.textContent} (${low}–${high} pts out of 500)`;
+    }
+    cell.addEventListener('mouseenter', (e) => {
+      const range2 = pct.textContent.trim().split('–');
+      let tipText = `<strong>${letter.textContent}</strong><br>${pct.textContent}%`;
+      if (range2.length === 2) {
+        const low2 = Math.ceil(parseFloat(range2[0]) * 5);
+        const high2 = range2[1] === '100' ? 500 : Math.floor(parseFloat(range2[1]) * 5);
+        tipText += `<br><span style="color:var(--red-mid)">${low2}–${high2} pts / 500</span>`;
+      }
+      showTip(e, tipText);
+    });
+    cell.addEventListener('mouseleave', hideTip);
+  }
+});
+
+// Active sidebar link highlighting
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+const sections = document.querySelectorAll('section[id]');
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      sidebarLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + entry.target.id) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}, { threshold: 0.2, rootMargin: '-60px 0px -40% 0px' });
+sections.forEach(s => sectionObserver.observe(s));
+
+// ══════════════════════════════════════════════
+// HERO CANVAS — Surveillance targeting grid
+// Draws faint crosshair/reticle lines like a drone targeting system
+// Connects visually to NSA SKYNET, Lavender, drone kill chain
+// ══════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const hero = canvas.closest('.hero');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); draw(animPct); });
+
+  // Draw state
+  let animPct = 0;
+  let startTime = null;
+  const DURATION = 3200; // ms — full grid draws over 3.2s
+
+  function draw(pct) {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Color palette — deep red surveillance aesthetic
+    const lineCol = 'rgba(123,24,24,';
+    const accentCol = 'rgba(192,57,43,';
+
+    // 1. Horizontal scan lines — like a biometric sensor sweep
+    //    These draw in sequentially from left to right
+    const numH = 18;
+    for (let i = 0; i < numH; i++) {
+      const y = (H / (numH + 1)) * (i + 1);
+      const lineProgress = Math.max(0, Math.min(1, (pct * 1.4) - (i / numH) * 0.6));
+      if (lineProgress <= 0) continue;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W * lineProgress, y);
+      ctx.strokeStyle = lineCol + (0.06 * lineProgress) + ')';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    // 2. Vertical grid lines
+    const numV = 12;
+    for (let i = 0; i < numV; i++) {
+      const x = (W / (numV + 1)) * (i + 1);
+      const lineProgress = Math.max(0, Math.min(1, (pct * 1.3) - (i / numV) * 0.5));
+      if (lineProgress <= 0) continue;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H * lineProgress);
+      ctx.strokeStyle = lineCol + (0.05 * lineProgress) + ')';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    // 3. Targeting reticles — appear at key intersections as scan completes
+    //    Like the disposition matrix selecting targets
+    const reticles = [
+      { x: 0.72, y: 0.35, delay: 0.45 },
+      { x: 0.18, y: 0.62, delay: 0.65 },
+      { x: 0.55, y: 0.78, delay: 0.80 },
+    ];
+    reticles.forEach(r => {
+      const rPct = Math.max(0, Math.min(1, (pct - r.delay) / 0.25));
+      if (rPct <= 0) return;
+      const rx = W * r.x, ry = H * r.y;
+      const size = 18 * rPct;
+      const alpha = 0.25 * rPct;
+
+      ctx.beginPath();
+      ctx.arc(rx, ry, size, 0, Math.PI * 2);
+      ctx.strokeStyle = accentCol + alpha + ')';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+
+      // Crosshair arms — 4 partial lines radiating out
+      [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(rx + dx * (size + 4), ry + dy * (size + 4));
+        ctx.lineTo(rx + dx * (size + 10) * rPct, ry + dy * (size + 10) * rPct);
+        ctx.strokeStyle = accentCol + (alpha * 1.5) + ')';
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+      });
+    });
+
+    // 4. Corner brackets — like a security camera frame
+    if (pct > 0.3) {
+      const bracketAlpha = Math.min(1, (pct - 0.3) / 0.3) * 0.2;
+      const bSize = 40;
+      const bOff = 24;
+      const corners = [[bOff,bOff],[W-bOff,bOff],[bOff,H-bOff],[W-bOff,H-bOff]];
+      corners.forEach(([cx,cy], ci) => {
+        const xSign = ci % 2 === 0 ? 1 : -1;
+        const ySign = ci < 2 ? 1 : -1;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy + ySign * bSize);
+        ctx.lineTo(cx, cy);
+        ctx.lineTo(cx + xSign * bSize, cy);
+        ctx.strokeStyle = accentCol + bracketAlpha + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+    }
+
+    // 5. Coordinate readout text — like GPS targeting data
+    if (pct > 0.7) {
+      const textAlpha = Math.min(1, (pct - 0.7) / 0.2) * 0.18;
+      ctx.font = '9px IBM Plex Mono, monospace';
+      ctx.fillStyle = accentCol + textAlpha + ')';
+      ctx.letterSpacing = '0.1em';
+      ctx.fillText('47.6553° N  117.4260° W', W - 220, H - 40);
+      ctx.fillText('CLASSIFIED · NECRO-AI SURVEILLANCE · ENG-548', 30, H - 40);
+    }
+  }
+
+  function animate(ts) {
+    if (!startTime) startTime = ts;
+    animPct = Math.min(1, (ts - startTime) / DURATION);
+    draw(animPct);
+    if (animPct < 1) requestAnimationFrame(animate);
+  }
+
+  // Start after a brief pause — let the page load, then scan begins
+  setTimeout(() => requestAnimationFrame(animate), 300);
+
+  // Subtle parallax on mousemove — the grid reacts to cursor like tracking
+  hero.addEventListener('mousemove', (e) => {
+    if (animPct < 1) return;
+    const rect = hero.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) / rect.width;
+    const my = (e.clientY - rect.top) / rect.height;
+    // Draw extra reticle following cursor — the system tracks you
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+    draw(1);
+    // Cursor tracking reticle
+    const tx = W * mx, ty = H * my;
+    ctx.beginPath();
+    ctx.arc(tx, ty, 10, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(192,57,43,0.35)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy])=>{
+      ctx.beginPath();
+      ctx.moveTo(tx+dx*14,ty+dy*14);
+      ctx.lineTo(tx+dx*22,ty+dy*22);
+      ctx.strokeStyle = 'rgba(192,57,43,0.25)';
+      ctx.lineWidth=0.7;ctx.stroke();
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
