@@ -729,6 +729,8 @@ footer .footer-link {
   letter-spacing: 0.05em;
   border-bottom: 1px solid transparent;
   transition: color 0.2s, border-color 0.2s;
+  display: inline-block;
+  margin-top: 4px;
 }
 footer .footer-link:hover {
   color: var(--gold);
@@ -995,8 +997,6 @@ footer .footer-line {
 .nav-pill.open a:nth-child(4) { animation-delay: 0.2s; }
 .nav-pill.open a:nth-child(5) { animation-delay: 0.25s; }
 .nav-pill.open a:nth-child(6) { animation-delay: 0.3s; }
-.nav-pill.open a:nth-child(5) { animation-delay: 0.25s; }
-.nav-pill.open a:nth-child(6) { animation-delay: 0.3s; }
 @keyframes navItemIn {
   from { opacity: 0; transform: translateX(12px); }
   to { opacity: 1; transform: translateX(0); }
@@ -1074,7 +1074,7 @@ footer .footer-line {
 .ti.dn:hover{color:rgba(255,50,50,1);}
 .ti.dn .til{color:#ff3232;}
 .tnote{font-size:14px;color:rgba(0,255,70,0.35);margin-top:20px;}
-.tnote::before{content:'// ';}
+.tnote::before{content:'';}
 .aigrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 
 /* RECOMMENDED READINGS ACCORDION */
@@ -1107,12 +1107,12 @@ body,body *{cursor:none !important;}
 <body>
 <!-- TOP HEADER NAV -->
 <header class="top-header" id="topHeader">
-  <a href="/" class="top-header-logo">ENG-591 &bull; <span>Anti-Racist Pedagogies</span></a>
+  <a href="#home" class="top-header-logo">ENG-591 &bull; <span>Anti-Racist Pedagogies</span></a>
   <nav>
     <ul class="top-header-links">
-      <li><a href="/" data-section="home">Home</a></li>
-      <li><a href="/contributions" data-section="contributions">Contributions</a></li>
-      <li><a href="/pages/interactive-pedagogy.html" data-section="interactive-pedagogy">Interactive Pedagogy</a></li>
+      <li><a href="#home" data-section="home">Home</a></li>
+      <li><a href="#contributions" data-section="contributions">Contributions</a></li>
+      <li><a href="#interactive-pedagogy" data-section="interactive-pedagogy">Interactive Pedagogy</a></li>
     </ul>
   </nav>
 </header>
@@ -1136,10 +1136,10 @@ body,body *{cursor:none !important;}
 <!-- NAVIGATION -->
 <button class="nav-trigger" id="navTrigger" aria-label="Toggle navigation"><span></span></button>
 <nav class="nav-pill" id="navPill">
-  <a href="/">↑ Home</a>
-  <a href="#description">Course Description</a>
-  <a href="/contributions">Contributions</a>
-  <a href="/pages/interactive-pedagogy.html">Interactive Pedagogy</a>
+  <a href="#home">&#8593; Home</a>
+  <a href="#contributions">Weekly Materials</a>
+  <a href="#assignments">Assignments</a>
+  <a href="#interactive-pedagogy">Recommended Readings</a>
   <a href="#policies">Policies</a>
   <a href="#ai">AI Policy</a>
 </nav>
@@ -1626,7 +1626,6 @@ body,body *{cursor:none !important;}
 <div class="section-divider"></div>
 <section class="section section-dark" id="interactive-pedagogy">
   <div class="section-label reveal">Recommended Readings</div>
-  <h2 class="reveal">Interactive Pedagogy</h2>
   <p class="desc-text reveal" style="margin-bottom:48px;color:#ffffff;">The following are recommended readings organized thematically across the comparative anti-racist inquiry that structures this course.</p>
 
   <div class="readings-accordion">
@@ -1793,8 +1792,185 @@ body,body *{cursor:none !important;}
   </div>
 </section>
 
-<!-- ASSIGNMENTS -->
+<!-- MAJOR ASSIGNMENTS -->
+<div class="section-divider"></div>
+<section class="section section-elevated" id="assignments">
+  <div class="section-label reveal">Major Assignments</div>
+  <h2 class="reveal">Your Semester Work</h2>
+  <p class="schedule-note reveal">Three major assignments build on each other across the semester — from proposal to analysis to creation.</p>
 
+  <!-- ASSIGNMENT 1 -->
+  <div class="assignment-block reveal">
+    <div class="assignment-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="assignment-header-left">
+        <span class="assignment-number">Assignment 01</span>
+        <span class="assignment-title">Project Proposal &mdash; A Site of Anti-Racist Struggle &amp; Possibility</span>
+      </div>
+      <span class="assignment-points">50 pts &nbsp;</span>
+      <span class="assignment-toggle">+</span>
+    </div>
+    <div class="assignment-body">
+      <div class="assignment-inner">
+        <p><em>Length: 2&ndash;3 pages, single-spaced</em></p>
+        <h3>Purpose</h3>
+        <p>This assignment invites you to choose a site of anti-racist struggle, resistance, or worldmaking&mdash;a place where the questions of this course come alive. Your proposal will frame a semester-long investigation into how racism operates, how communities resist, and how anti-racist pedagogies might be imagined, practiced, and sustained. This is not a neutral exercise. It is an act of love, care, and solidarity. This proposal prepares you for deeper analysis and creation in Assignments 2 and 3.</p>
+        <h3>What to Include</h3>
+        <h4>Site of Anti-Racist Struggle or Possibility</h4>
+        <p>Select a specific site&mdash;a movement, a text, a practice, a community, an archive, a pedagogical experiment&mdash;where questions of racism and anti-racism are being taken up with urgency. Your site can be local or transnational, historical or contemporary, institutional or grassroots.</p>
+        <p>Examples (but not limited to):</p>
+        <ul>
+          <li>A grassroots anti-racist movement organizing across borders (Black Lives Matter, Dalit resistance, Palestinian liberation, climate justice led by Global South communities)</li>
+          <li>A community-led archive or digital storytelling project preserving silenced racial histories</li>
+          <li>An artist, musician, or cultural worker whose work enacts anti-racist worldmaking</li>
+          <li>A political speech, biographical narrative, or manifesto that articulates anti-racist vision</li>
+          <li>A pedagogical experiment inside or outside institutional walls: a course, a workshop, a mutual aid project, a freedom school</li>
+          <li>A social media campaign or digital community building anti-racist solidarity transnationally</li>
+          <li>A policy or institutional practice you wish to interrogate through an anti-racist lens</li>
+          <li>A moment of refusal, rebellion, or reimagination in your own educational experience</li>
+        </ul>
+        <h4>Context &amp; Stakes</h4>
+        <p>Briefly explain: Where and when does this site emerge? Who is involved? Who does it center? What forms of racism, colonialism, or interlocking oppression does it confront? What historical systems does it reckon with or refuse?</p>
+        <h4>Why It Matters</h4>
+        <ul>
+          <li>Why should this site matter to the world, this planet, and the people we co-exist with?</li>
+          <li>What kinds of transformation does it dare to envision&mdash;in society, in ourselves?</li>
+          <li>How might it help us design courses, assessments, and conversations that value the humanity and dignity in each of us?</li>
+        </ul>
+        <h4>Guiding Questions</h4>
+        <p>Pose 2&ndash;3 critical questions to guide your inquiry. These should be analytical, political, and pedagogical.</p>
+        <h4>Initial Approach</h4>
+        <p>Describe what materials or methods you might use: movement publications, manifestos, zines, social media archives; oral histories, interviews; scholarly texts; art, music, performance; participant observation.</p>
+        <h4>Formatting</h4>
+        <ul>
+          <li>2&ndash;3 pages, single-spaced &bull; Times New Roman, 12 pt &bull; Citations: MLA or APA &bull; Submit via Canvas</li>
+        </ul>
+        <h3>Before Submitting: What to Look For</h3>
+        <table class="rubric-table">
+          <thead><tr><th>Category</th><th>What We&rsquo;re Looking For</th></tr></thead>
+          <tbody>
+            <tr><td>Clarity &amp; Specificity</td><td>Is the site clearly identified and focused? Can it sustain deep inquiry across the semester?</td></tr>
+            <tr><td>Political Urgency</td><td>Does the topic confront systems of racial harm and interlocking oppression?</td></tr>
+            <tr><td>Theoretical Grounding</td><td>Is the topic informed by anti-racist, decolonial, feminist, queer, and other radical frameworks?</td></tr>
+            <tr><td>Pedagogical Imagination</td><td>Does the proposal open questions about teaching, learning, and transformation?</td></tr>
+            <tr><td>Feasibility</td><td>Are materials available? Can you engage ethically with the site?</td></tr>
+            <tr><td>Voice &amp; Commitment</td><td>Does the proposal reflect authentic care, curiosity, and investment in anti-racism as a radical act of love and solidarity?</td></tr>
+          </tbody>
+        </table>
+        <h3>A Note</h3>
+        <p>Choose a site you care about deeply. Let your inquiry be rigorous, your analysis intersectional, and your vision unbound. Anti-racism is not a single-issue struggle. Neither is this course.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSIGNMENT 2 -->
+  <div class="assignment-block reveal">
+    <div class="assignment-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="assignment-header-left">
+        <span class="assignment-number">Assignment 02</span>
+        <span class="assignment-title">Comparative Analysis &mdash; Racist Structures &amp; Anti-Racist Pedagogies in Practice</span>
+      </div>
+      <span class="assignment-points">100 pts &nbsp;</span>
+      <span class="assignment-toggle">+</span>
+    </div>
+    <div class="assignment-body">
+      <div class="assignment-inner">
+        <p><em>Length: 10&ndash;12 pages, double-spaced (excluding citations)</em></p>
+        <h3>Why This Assignment?</h3>
+        <p>This assignment is an act of critical excavation and deep listening. You will analyze how racism operates through educational structures, discourses, and practices&mdash;and how anti-racist pedagogies emerge to confront, refuse, and transform them. Building on your project proposal, you will now examine 2&ndash;3 pedagogical artifacts or practices alongside the racist trends they respond to. This analysis directly prepares you for your final project.</p>
+        <h3>What You&rsquo;ll Do</h3>
+        <p>Select 2&ndash;3 pedagogical artifacts, practices, or sites connected to your semester topic. Pedagogical artifacts can include:</p>
+        <ul>
+          <li>Syllabi, course materials, or assignments designed with anti-racist commitments</li>
+          <li>Grassroots educational initiatives: freedom schools, community workshops, mutual aid education projects</li>
+          <li>Digital pedagogies: social media campaigns that teach, TikTok abolitionist classrooms, YouTube series</li>
+          <li>Cultural texts as pedagogy: music, art, film, zines, podcasts that function as sites of learning</li>
+          <li>Institutional interventions: diversity training, curriculum reform efforts, student-led transformations</li>
+          <li>Movement pedagogy: how movements teach their members and the public</li>
+          <li>Personal narratives or testimonies that enact pedagogical power</li>
+          <li>Your own teaching or learning experiences, analyzed with theoretical rigor</li>
+        </ul>
+        <h3>Required Sections</h3>
+        <h4>1. Introduction (1&ndash;2 pages)</h4>
+        <p>Re-state your topic and its stakes. For each artifact: what it is, where it emerges, who created it; its intended audience; the racist trend it responds to; why you chose it.</p>
+        <h4>2. Comparative Pedagogical Analysis (5&ndash;7 pages)</h4>
+        <p>Examine how each artifact functions as pedagogy in relation to the racism it confronts, comparing across: Racist Context &bull; Vision of Anti-Racism &bull; Relationship to Learners &bull; Crossing Borders &bull; Methods &amp; Materials &bull; Site &amp; Context &bull; Transformative Potential. Cite course thinkers&mdash;Lorde, Mignolo, hooks, Freire, Patel, Love, Simpson&mdash;to deepen your analysis.</p>
+        <h4>3. Discussion: Tensions &amp; Possibilities (2&ndash;3 pages)</h4>
+        <p>Synthesize what your comparative analysis reveals about racist structures, the tensions within anti-racist pedagogies, and what these pedagogies make possible&mdash;and cannot yet dismantle.</p>
+        <h4>4. Conclusion: Lessons for Our Pedagogies (1&ndash;2 pages)</h4>
+        <p>Reflect on what you have learned. Pose lingering questions. Explain how this analysis informs your final project vision.</p>
+        <h4>5. Works Cited</h4>
+        <p>MLA or APA style. Not included in page count.</p>
+        <h3>Before Submitting: What to Look For</h3>
+        <table class="rubric-table">
+          <thead><tr><th>Category</th><th>What We&rsquo;re Looking For</th></tr></thead>
+          <tbody>
+            <tr><td>Clarity &amp; Focus</td><td>Clear topic, well-chosen artifacts, sharp comparative frame that includes analysis of both racist structures and anti-racist responses</td></tr>
+            <tr><td>Analytical Depth</td><td>Goes beyond description to expose how racism operates and how each pedagogy teaches, challenges, and transforms</td></tr>
+            <tr><td>Use of Evidence</td><td>Artifacts and racist trends analyzed with care; quotes, images, or descriptions woven in critically</td></tr>
+            <tr><td>Course Engagement</td><td>Uses anti-racist, decolonial, feminist, queer frameworks; engages course texts and questions</td></tr>
+            <tr><td>Comparative Insight</td><td>Illuminates similarities, differences, and tensions across sites of struggle and resistance</td></tr>
+            <tr><td>Pedagogical Imagination</td><td>Opens questions about teaching, learning, and transformation in and beyond the classroom</td></tr>
+          </tbody>
+        </table>
+        <h3>A Final Reminder</h3>
+        <p>Listen carefully, name the violence they resist, compare rigorously. Let your inquiry be humble, your analysis be sharp, and your imagination be bold.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSIGNMENT 3 -->
+  <div class="assignment-block reveal">
+    <div class="assignment-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="assignment-header-left">
+        <span class="assignment-number">Assignment 03</span>
+        <span class="assignment-title">Final Project &mdash; Teaching Otherwise: From Critique to Liberatory Pedagogy</span>
+      </div>
+      <span class="assignment-points">150 pts &nbsp;</span>
+      <span class="assignment-toggle">+</span>
+    </div>
+    <div class="assignment-body">
+      <div class="assignment-inner">
+        <p><em>Two Parts: I. Final Project (100 pts) &nbsp;|&nbsp; II. In-Class Presentation/Sharing (50 pts)</em></p>
+        <h3>Purpose</h3>
+        <p>This is your culminating intervention&mdash;the moment where critical analysis of antiracist pedagogies transforms into educational worldmaking. Building on your semester-long investigation, you will now propose, create, or enact a pedagogical project that teaches otherwise. Your work must move beyond critique toward liberatory practice.</p>
+        <p>Your project must answer: What does it mean to teach as an act of solidarity? To build classrooms that heal rather than harm? To enact pedagogies that demand the impossible?</p>
+        <h3>Final Project (100 points)</h3>
+        <h4>Option A: Academic Paper &mdash; Blueprint for Liberatory Pedagogy</h4>
+        <p><em>10&ndash;12 pages, double-spaced.</em> Analyze an existing antiracist pedagogical practice or community teaching initiative. Propose frameworks for building educational futures rooted in justice and collective liberation. Sections: Introduction &bull; Analysis of Resistance &bull; Liberatory Proposals (3&ndash;5 principles) &bull; Conclusion.</p>
+        <h4>Option B: Action Research &mdash; Groundwork with an Educational Initiative</h4>
+        <p><em>Fieldwork Journal + Final Report (8&ndash;12 pages).</em> Engage directly with a grassroots educational initiative, freedom school, or organization doing antiracist pedagogical work. Deliverables: ongoing fieldwork journal + final report detailing pedagogical practices, your role, analysis of strategies, and co-created recommendations.</p>
+        <h4>Option C: Multimodal Project &mdash; Pedagogical Worldmaking</h4>
+        <p>Create a public-facing educational work that teaches toward liberation. Formats include:</p>
+        <ul>
+          <li>A syllabus for a course that doesn&rsquo;t yet exist but should</li>
+          <li>A zine or curriculum guide for community teaching</li>
+          <li>A podcast or video series amplifying antiracist pedagogical practices</li>
+          <li>A workshop or toolkit for educators committed to antiracist teaching</li>
+          <li>A digital teaching resource or open educational materials</li>
+          <li>A speculative classroom design imagining what liberatory learning spaces could look like</li>
+          <li>An artist&rsquo;s book or creative work that teaches through form and content</li>
+        </ul>
+        <p>Deliverables: The creative work itself + Creator&rsquo;s Statement (2&ndash;3 pages) explaining your pedagogical, political, and aesthetic choices.</p>
+        <h3>In-Class Presentation/Sharing (50 points)</h3>
+        <p>Share your final project in a format that invites dialogue and collective learning. This is not a defense but an offering&mdash;a pedagogical act in itself. Introduce your project, showcase your process, reflect on what this work taught you, and invite collective imagining.</p>
+        <h3>Evaluation Criteria</h3>
+        <table class="rubric-table">
+          <thead><tr><th>Category</th><th>What We&rsquo;re Looking For</th></tr></thead>
+          <tbody>
+            <tr><td>Antiracist Alignment</td><td>Refuses racist logics; centers liberatory, decolonial, abolitionist pedagogies</td></tr>
+            <tr><td>Political Clarity</td><td>Clear stakes, audience, relationship to communities; moves beyond critique to practice</td></tr>
+            <tr><td>Rigor &amp; Creativity</td><td>Deep engagement with course frameworks + innovative form/content</td></tr>
+            <tr><td>Ethics &amp; Reciprocity</td><td>Respectful, consensual, non-extractive engagement with educational initiatives</td></tr>
+            <tr><td>Impact &amp; Accessibility</td><td>Accessible to intended audience; invites use, adaptation, or continuation</td></tr>
+          </tbody>
+        </table>
+        <h3>A Final Invitation</h3>
+        <p>This is not the end of our learning. It is the beginning of our practice. Teach with courage. Practice solidarity. Demand the impossible.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
 
 <!-- CLASS POLICIES -->
 <div class="section-divider"></div>
@@ -1999,6 +2175,7 @@ document.querySelectorAll('a,button,[role="button"],input,select,textarea,.nav-t
 });
 </script>
 
+<script>
 // TOP NAV active section highlight
 (function() {
   const sections = ['home','contributions','interactive-pedagogy','description','policies','ai'];
@@ -2016,6 +2193,7 @@ document.querySelectorAll('a,button,[role="button"],input,select,textarea,.nav-t
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 })();
+</script>
 
 </body>
 </html>
