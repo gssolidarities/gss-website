@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Food Archive Representing Osage Nation — Alli Riechman-Bennett</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
+<style>@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
   :root {
+--red:#C0190F;
     --fog:       #e8eae6;
     --deep:      #0d1a0f;
     --moss:      #2d4a2a;
@@ -29,12 +31,7 @@
     cursor: none;
     overflow-x: hidden;
   }
-
-  /* ── Cursor ── */
-  .cur { position:fixed; width:10px; height:10px; background:var(--fern); border-radius:50%; pointer-events:none; z-index:9999; mix-blend-mode:multiply; }
-  .cur-ring { position:fixed; width:38px; height:38px; border:1.5px solid var(--fern); border-radius:50%; pointer-events:none; z-index:9998; mix-blend-mode:multiply; transition:all 0.32s cubic-bezier(.16,1,.3,1); }
-
-  /* ── Progress ── */
+/* ── Progress ── */
   .prog { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--fern),var(--mist)); z-index:9997; transition:width 0.1s; }
 
   /* All images display fully - no cropping ever */
@@ -255,74 +252,29 @@
     .nav-links { display:none; }
     .acc-content { padding-left:0; }
   }
-</style>
-<!-- Custom Cursor + Floating Nav Styles -->
-<style id="cursor-nav-styles">
+
 /* === CUSTOM CURSOR === */
-body, body * { cursor: none; }
-#cursor-dot {
-  position: fixed;
-  width: 10px; height: 10px;
-  background: #c0190f;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1px #c0190f;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s;
-}
-#cursor-ring {
-  position: fixed;
-  width: 32px; height: 32px;
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 0 1px rgba(192, 25, 15, 0.3);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99998;
-  transform: translate(-50%, -50%);
-  transition: left 0.15s ease-out, top 0.15s ease-out, width 0.2s, height 0.2s;
-}
-/* === FLOATING NAV === */
-.floating-nav { position: fixed; bottom: 28px; right: 28px; z-index: 8000; }
-.floating-nav-btn {
-  width: 56px; height: 56px; border-radius: 50%; border: none;
-  background: #c0190f; box-shadow: 0 4px 18px rgba(192, 25, 15, 0.35);
-  display: flex; align-items: center; justify-content: center;
-  cursor: none; transition: transform 0.2s, box-shadow 0.2s;
-}
-.floating-nav-btn:hover { transform: scale(1.12); box-shadow: 0 6px 24px rgba(192, 25, 15, 0.5); }
-.floating-nav-btn svg {
-  width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2;
-  stroke-linecap: round; transition: transform 0.32s cubic-bezier(0.4, 1.6, 0.5, 1);
-}
-.floating-nav.open .floating-nav-btn svg { transform: rotate(45deg); }
-.floating-nav-menu {
-  position: absolute; bottom: 68px; right: 0;
-  background: #0d0800; border: 1px solid rgba(240, 230, 200, 0.18);
-  border-radius: 28px; padding: 14px 8px; min-width: 170px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-  opacity: 0; pointer-events: none; transform: translateY(14px) scale(0.92);
-  transition: all 0.32s cubic-bezier(0.4, 1.6, 0.5, 1);
-}
-.floating-nav.open .floating-nav-menu {
-  opacity: 1; pointer-events: auto; transform: translateY(0) scale(1);
-}
-.floating-nav-menu a {
-  font-family: monospace; font-size: 12px; letter-spacing: 3px;
-  text-transform: uppercase; color: #f0e6c8; padding: 10px 22px;
-  border-radius: 20px; text-decoration: none; display: block;
-  text-align: center; white-space: nowrap; cursor: none;
-  transition: background 0.2s;
-}
-.floating-nav-menu a:hover { background: #c0190f; color: #f0e6c8; }
+#cur{width:10px;height:10px;border-radius:50%;position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);transition:width 0.18s,height 0.18s,box-shadow 0.18s;background:var(--red);box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--red)}
+#cur.h{width:14px;height:14px;box-shadow:0 0 0 2.5px #fff,0 0 0 4px var(--red)}
+#cur-ring{width:32px;height:32px;border:1.5px solid rgba(255,255,255,0.45);border-radius:50%;position:fixed;z-index:9998;pointer-events:none;transform:translate(-50%,-50%);transition:width 0.28s,height 0.28s,border-color 0.28s,box-shadow 0.28s;box-shadow:0 0 0 1px rgba(192,25,15,0.25)}
+body.cur-h #cur-ring{width:42px;height:42px;border-color:rgba(255,255,255,0.6);box-shadow:0 0 0 1px rgba(192,25,15,0.4)}
+
+/* === TOP HEADER NAV === */
+nav:not(#gss-topnav){display:none}
+#gss-topnav{position:fixed;top:0;left:0;right:0;z-index:7000;display:flex;align-items:center;justify-content:center;gap:32px;padding:0 24px;height:44px;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,230,200,0.08);font-family:'Special Elite',monospace}
+#gss-topnav a{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(253,251,245,0.7);text-decoration:none;padding:6px 14px;border-radius:14px;transition:all .22s;cursor:none;white-space:nowrap}
+#gss-topnav a:hover{background:var(--red);color:#FDFBF5}
+
 </style>
 </head>
 <body>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<nav id="gss-topnav">
+  <a href="../index.html">Home</a>
+  <a href="../pages/contributions.html">Contributions</a>
+  <a href="../pages/interactive-pedagogy.html">Interactive Pedagogy</a>
+</nav>
 
 <div class="prog" id="prog"></div>
 
@@ -841,48 +793,15 @@ body, body * { cursor: none; }
     btn.textContent=open?'View Full Recipe':'Hide Recipe';
   }
 </script>
-<!-- Floating Nav -->
-<nav class="floating-nav" id="floatingNav">
-  <div class="floating-nav-menu">
-    <a href="/">Home</a>
-    <a href="/pages/contributions.html">Contributions</a>
-  </div>
-  <button class="floating-nav-btn" aria-label="Navigation menu">
-    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-  </button>
-</nav>
-<script id="cursor-nav-script">
-/* === CUSTOM CURSOR === */
-(function() {
-  var dot = document.getElementById('cursor-dot');
-  var ring = document.getElementById('cursor-ring');
-  document.addEventListener('mousemove', function(e) {
-    dot.style.left = e.clientX + 'px';
-    dot.style.top = e.clientY + 'px';
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-  });
-  var interactiveSelectors = 'a, button, [role="button"], .clickable, input, select, textarea, .floating-nav-btn, .floating-nav-menu a';
-  document.querySelectorAll(interactiveSelectors).forEach(function(el) {
-    el.addEventListener('mouseenter', function() {
-      dot.style.width = '14px'; dot.style.height = '14px';
-      ring.style.width = '44px'; ring.style.height = '44px';
-    });
-    el.addEventListener('mouseleave', function() {
-      dot.style.width = '10px'; dot.style.height = '10px';
-      ring.style.width = '32px'; ring.style.height = '32px';
-    });
-  });
-})();
-/* === FLOATING NAV === */
-(function() {
-  var nav = document.getElementById('floatingNav');
-  var btn = nav.querySelector('.floating-nav-btn');
-  btn.addEventListener('click', function() { nav.classList.toggle('open'); });
-  nav.querySelectorAll('.floating-nav-menu a').forEach(function(link) {
-    link.addEventListener('click', function() { nav.classList.remove('open'); });
-  });
-})();
+
+<script>
+const curEl=document.getElementById('cur');
+const curRing=document.getElementById('cur-ring');
+let cmx=0,cmy=0,crx=0,cry=0;
+document.addEventListener('mousemove',e=>{cmx=e.clientX;cmy=e.clientY;curEl.style.left=cmx+'px';curEl.style.top=cmy+'px';});
+(function curLoop(){crx+=(cmx-crx)*0.15;cry+=(cmy-cry)*0.15;curRing.style.left=crx+'px';curRing.style.top=cry+'px';requestAnimationFrame(curLoop)})();
+document.querySelectorAll('a,button,[onclick],input,select,textarea,label,#gss-topnav a').forEach(el=>{el.addEventListener('mouseenter',()=>{curEl.classList.add('h');document.body.classList.add('cur-h')});el.addEventListener('mouseleave',()=>{curEl.classList.remove('h');document.body.classList.remove('cur-h')});});
 </script>
+
 </body>
 </html>
