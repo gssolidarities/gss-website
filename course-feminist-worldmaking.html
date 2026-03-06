@@ -185,6 +185,62 @@ body::after {
   clip-path: polygon(0% 100%, 2% 60%, 5% 90%, 8% 50%, 12% 80%, 15% 40%, 19% 75%, 22% 55%, 26% 85%, 30% 45%, 33% 70%, 37% 50%, 40% 80%, 44% 35%, 47% 65%, 50% 45%, 54% 75%, 57% 40%, 61% 80%, 64% 50%, 68% 70%, 71% 35%, 75% 65%, 78% 50%, 82% 80%, 85% 40%, 89% 70%, 92% 55%, 95% 80%, 98% 45%, 100% 100%);
 }
 
+
+/* ================================================================
+   TOP NAV BAR
+   ================================================================ */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(12,11,9,0.95);
+  backdrop-filter: blur(12px);
+  z-index: 50000;
+  padding: 0.8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(214,40,40,0.4);
+}
+.top-nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--vermillion);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.top-nav-logo .nav-dot {
+  width: 6px; height: 6px;
+  background: #00ff46;
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+.top-nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+.top-nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.top-nav-links a:hover { color: var(--vermillion); }
+.top-nav-links a.nav-active { color: var(--vermillion); border-bottom: 1px solid var(--vermillion); padding-bottom: 2px; }
+@media (max-width: 768px) {
+  .top-nav-links { display: none; }
+  .top-nav { padding: 0.6rem 1rem; }
+}
+
 /* ================================================================
    HERO SECTION
    ================================================================ */
@@ -195,6 +251,7 @@ body::after {
   display: flex;
   align-items: flex-end;
   background: var(--black);
+  padding-top: 50px;
 }
 
 #hero-canvas {
@@ -320,10 +377,10 @@ body::after {
 }
 .hero-meta-item {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(232,226,212,0.8);
+  color: #FFFFFF;
 }
 .hero-meta-divider {
   width: 40px;
@@ -454,9 +511,9 @@ body::after {
 }
 .desc-para {
   font-family: 'Source Serif 4', serif;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 2;
-  color: rgba(232,226,212,1);
+  color: #FFFFFF;
   margin-bottom: 28px;
 }
 .desc-para:last-child { margin-bottom: 0; }
@@ -582,9 +639,9 @@ body::after {
 }
 .out-cell-text {
   font-family: 'Source Serif 4', serif;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.8;
-  color: rgba(232,226,212,0.9);
+  color: #FFFFFF;
 }
 
 /* ================================================================
@@ -643,7 +700,7 @@ body::after {
 .film-strip-num {
   font-family: 'Space Mono', monospace;
   font-size: 12px;
-  color: rgba(232,226,212,0.65);
+  color: rgba(255,255,255,0.75);
   padding-top: 4px;
 }
 .film-strip-name {
@@ -657,8 +714,8 @@ body::after {
 }
 .film-strip-meta {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: rgba(232,226,212,0.7);
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
   text-align: right;
   padding-top: 6px;
   position: relative;
@@ -785,8 +842,8 @@ body::after {
 }
 .gr-pct {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: rgba(232,226,212,0.82);
+  font-size: 12px;
+  color: #FFFFFF;
 }
 
 /* ================================================================
@@ -867,9 +924,9 @@ body::after {
 }
 .assign-sidebar-item {
   font-family: 'Source Serif 4', serif;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
-  color: rgba(232,226,212,0.88);
+  color: #FFFFFF;
   margin-bottom: 8px;
 }
 .assign-sidebar-item strong {
@@ -878,9 +935,9 @@ body::after {
 }
 .assign-body {
   font-family: 'Source Serif 4', serif;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 2;
-  color: rgba(232,226,212,1);
+  color: #FFFFFF;
 }
 .assign-body h3 {
   font-family: 'Playfair Display', serif;
@@ -917,9 +974,9 @@ body::after {
 }
 .assign-body .a-list li {
   font-family: 'Source Serif 4', serif;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.9;
-  color: rgba(232,226,212,0.95);
+  color: #FFFFFF;
   margin-bottom: 8px;
   list-style: none;
   padding-left: 22px;
@@ -940,7 +997,7 @@ body::after {
   margin: 32px 0;
   background: rgba(214,40,40,0.04);
   font-style: italic;
-  color: rgba(232,226,212,0.95);
+  color: #FFFFFF;
 }
 
 /* Light background variant for assign sections */
@@ -949,8 +1006,8 @@ body::after {
 }
 .assign-section.light .assign-title,
 .assign-section.light .assign-body h3 { color: var(--black); }
-.assign-section.light .assign-body { color: #1a1916; }
-.assign-section.light .assign-body .a-list li { color: #2a2926; }
+.assign-section.light .assign-body { color: #1a1916; font-size: 19px; }
+.assign-section.light .assign-body .a-list li { color: #2a2926; font-size: 18px; }
 .assign-section.light .assign-sidebar-item { color: #2a2926; }
 .assign-section.light .assign-sidebar-item strong { color: #1a1916; }
 
@@ -992,18 +1049,18 @@ body::after {
 }
 .disc-block-body {
   font-family: 'Source Serif 4', serif;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.9;
-  color: rgba(232,226,212,0.92);
+  color: #FFFFFF;
 }
 .disc-block-body .a-list {
   padding-left: 0;
   margin-top: 16px;
 }
 .disc-block-body .a-list li {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.8;
-  color: rgba(232,226,212,0.88);
+  color: #FFFFFF;
   margin-bottom: 6px;
   list-style: none;
   padding-left: 18px;
@@ -1086,8 +1143,8 @@ body::after {
 .week-desc {
   font-family: 'Source Serif 4', serif;
   font-style: italic;
-  font-size: 15px;
-  color: rgba(232,226,212,0.85);
+  font-size: 17px;
+  color: #FFFFFF;
   padding: 0 0 16px 120px;
   max-width: 850px;
   line-height: 1.8;
@@ -1110,9 +1167,9 @@ body::after {
 }
 .week-reading {
   font-family: 'Source Serif 4', serif;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.8;
-  color: rgba(232,226,212,0.92);
+  color: #FFFFFF;
   padding: 8px 0 8px 20px;
   position: relative;
   border-bottom: 1px solid rgba(232,226,212,0.03);
@@ -1128,9 +1185,9 @@ body::after {
 }
 .week-media {
   font-family: 'Source Serif 4', serif;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.8;
-  color: rgba(232,226,212,0.82);
+  color: #FFFFFF;
   padding: 6px 0 6px 20px;
   position: relative;
 }
@@ -1580,6 +1637,16 @@ body::after {
   <a href="#instructor" class="nav-link">Instructor</a>
 </nav>
 
+<!-- ===================== TOP NAV ===================== -->
+<nav class="top-nav">
+  <div class="top-nav-logo"><span class="nav-dot"></span>Sample Undergrad Course</div>
+  <ul class="top-nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pages/contributions.html">Contributions</a></li>
+    <li><a href="pages/interactive-pedagogy.html">Interactive Pedagogy</a></li>
+  </ul>
+</nav>
+
 <!-- ===================== HERO ===================== -->
 <section id="hero">
   <canvas id="hero-canvas"></canvas>
@@ -1599,9 +1666,8 @@ body::after {
     </div>
     <p class="hero-sub" id="heroSub">Intersectional rhetorics of racism, resistance, and feminist world-making.</p>
     <div class="hero-meta-row" id="heroMeta">
-      <span class="hero-meta-item">Washington State University</span>
-      <div class="hero-meta-divider"></div>
-      <span class="hero-meta-item">Cross-listed: English & WGSS</span>
+      <span class="hero-meta-item">Sample Undergrad Course</span>
+
     </div>
   </div>
 
@@ -2558,9 +2624,9 @@ body::after {
 <!-- ===================== INSTRUCTOR ===================== -->
 <section id="instructor">
   <div class="inst-tag">Instructor</div>
-  <div class="inst-name">Dr. Bibhushana Poudyal</div>
+  <div class="inst-name">Bibhushana Poudyal</div>
   <div class="inst-role">Assistant Professor</div>
-  <div class="inst-dept">Department of English · Washington State University</div>
+  <div class="inst-dept">Sample Undergrad Course</div>
 </section>
 
 <!-- ===================== FOOTER ===================== -->
