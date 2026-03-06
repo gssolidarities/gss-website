@@ -12,7 +12,8 @@
     { "source": "/syllabi", "destination": "/pages/syllabi.html" },
     { "source": "/students", "destination": "/pages/student-researchers.html" },
     { "source": "/timeline", "destination": "/pages/timeline.html" },
-    { "source": "/contact", "destination": "/pages/contact.html" }
+    { "source": "/contact", "destination": "/pages/contact.html" },
+    { "source": "/contributions", "destination": "/contributions.html" }
   ],
   "headers": [
     {
