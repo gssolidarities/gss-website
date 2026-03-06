@@ -174,6 +174,81 @@ a:hover {
   background: rgba(196,76,40,0.08);
 }
 
+
+/* TOP HEADER NAV */
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(24px, 5vw, 80px);
+  height: 60px;
+  background: rgba(13,13,13,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(196,76,40,0.12);
+  transition: background 0.3s;
+}
+.top-header-logo {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sienna);
+  text-decoration: none;
+}
+.top-header-logo span {
+  color: var(--gold);
+}
+.top-header-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+.top-header-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.25s;
+}
+.top-header-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--sienna);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.top-header-links a:hover {
+  color: var(--white);
+}
+.top-header-links a:hover::after {
+  width: 100%;
+}
+.top-header-links a.active {
+  color: var(--sienna);
+}
+.top-header-links a.active::after {
+  width: 100%;
+}
+
+/* push hero down so header doesn't overlap */
+body { padding-top: 60px; }
+.hero { min-height: calc(100vh - 60px); }
+
+/* FLOATING NAV PILL — update to have all course sections */
+
 /* HERO */
 .hero {
   min-height: 100vh;
@@ -907,8 +982,8 @@ footer .footer-line {
 .nav-pill.open a:nth-child(4) { animation-delay: 0.2s; }
 .nav-pill.open a:nth-child(5) { animation-delay: 0.25s; }
 .nav-pill.open a:nth-child(6) { animation-delay: 0.3s; }
-.nav-pill.open a:nth-child(7) { animation-delay: 0.35s; }
-.nav-pill.open a:nth-child(8) { animation-delay: 0.4s; }
+.nav-pill.open a:nth-child(5) { animation-delay: 0.25s; }
+.nav-pill.open a:nth-child(6) { animation-delay: 0.3s; }
 @keyframes navItemIn {
   from { opacity: 0; transform: translateX(12px); }
   to { opacity: 1; transform: translateX(0); }
@@ -1017,6 +1092,18 @@ body,body *{cursor:none !important;}
 </style>
 </head>
 <body>
+<!-- TOP HEADER NAV -->
+<header class="top-header" id="topHeader">
+  <a href="/" class="top-header-logo">ENG-591 &bull; <span>Anti-Racist Pedagogies</span></a>
+  <nav>
+    <ul class="top-header-links">
+      <li><a href="/" data-section="home">Home</a></li>
+      <li><a href="/contributions" data-section="contributions">Contributions</a></li>
+      <li><a href="/pages/interactive-pedagogy.html" data-section="interactive-pedagogy">Interactive Pedagogy</a></li>
+    </ul>
+  </nav>
+</header>
+
 <div id="cdot"></div>
 <div id="cring"></div>
 
@@ -1036,8 +1123,12 @@ body,body *{cursor:none !important;}
 <!-- NAVIGATION -->
 <button class="nav-trigger" id="navTrigger" aria-label="Toggle navigation"><span></span></button>
 <nav class="nav-pill" id="navPill">
-  <a href="#home">Home</a>
-  <a href="#interactive-pedagogy">Interactive Pedagogy</a>
+  <a href="/">↑ Home</a>
+  <a href="#description">Course Description</a>
+  <a href="/contributions">Contributions</a>
+  <a href="/pages/interactive-pedagogy.html">Interactive Pedagogy</a>
+  <a href="#policies">Policies</a>
+  <a href="#ai">AI Policy</a>
 </nav>
 
 <!-- HERO -->
@@ -1890,5 +1981,24 @@ document.querySelectorAll('a,button,[role="button"],input,select,textarea,.nav-t
   el.addEventListener('mouseleave',()=>{cdot.classList.remove('h');cring.classList.remove('h');});
 });
 </script>
+
+// TOP NAV active section highlight
+(function() {
+  const sections = ['home','contributions','interactive-pedagogy','description','policies','ai'];
+  const links = document.querySelectorAll('.top-header-links a[data-section]');
+  function onScroll() {
+    let current = 'home';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 80) current = id;
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.dataset.section === current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
 </body>
 </html>
