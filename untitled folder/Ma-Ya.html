@@ -108,7 +108,7 @@ nav.visible { transform: translateY(0); }
   text-align: center;
   padding: 80px 40px;
   position: relative;
-  background: var(--charcoal);
+  background: #0a0806;
   overflow: hidden;
 }
 .hero::before {
@@ -116,8 +116,9 @@ nav.visible { transform: translateY(0); }
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(92, 107, 79, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 30%, rgba(139, 37, 0, 0.08) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(92, 107, 79, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(139, 37, 0, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 60%, rgba(255,255,255,0.03) 0%, transparent 70%);
   z-index: 1;
 }
 .hero-content {
@@ -127,7 +128,7 @@ nav.visible { transform: translateY(0); }
 }
 .hero-label {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--olive-light);
@@ -152,19 +153,19 @@ nav.visible { transform: translateY(0); }
 }
 .hero-subtitle {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(18px, 2.5vw, 26px);
+  font-size: clamp(22px, 3vw, 32px);
   font-weight: 300;
   font-style: italic;
-  color: var(--earth-light);
+  color: #ffffff;
   margin-bottom: 40px;
   opacity: 0;
   animation: fadeUp 1s 0.9s forwards;
 }
 .hero-meta {
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
+  font-size: 15px;
   letter-spacing: 0.1em;
-  color: var(--warm-grey);
+  color: #ffffff;
   opacity: 0;
   animation: fadeUp 1s 1.2s forwards;
 }
@@ -175,9 +176,9 @@ nav.visible { transform: translateY(0); }
 .hero-meta .divider { color: var(--olive); }
 .hero-date {
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
+  font-size: 15px;
   letter-spacing: 0.1em;
-  color: var(--olive-light);
+  color: #ffffff;
   margin-top: 12px;
   opacity: 0;
   animation: fadeUp 1s 1.4s forwards;
@@ -220,7 +221,7 @@ nav.visible { transform: translateY(0); }
 }
 .epigraph {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(22px, 3vw, 34px);
+  font-size: clamp(26px, 3.5vw, 38px);
   font-weight: 400;
   font-style: italic;
   color: var(--charcoal);
@@ -365,23 +366,24 @@ blockquote cite {
 }
 .poem-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 400;
   margin-bottom: 8px;
-  color: var(--earth-light);
+  color: #ffffff;
 }
 .poem-author {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.1em;
-  color: var(--olive-light);
+  color: rgba(255,255,255,0.8);
   margin-bottom: 30px;
 }
 .poem-text {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 19px;
+  font-size: 22px;
   line-height: 1.9;
   font-style: italic;
+  color: #ffffff;
 }
 .poem-text br { content: ''; display: block; margin-top: 6px; }
 
@@ -450,8 +452,8 @@ blockquote cite {
 }
 .dark-band .section-label { color: var(--olive-light); }
 .dark-band .section-label::before { background: var(--olive-light); }
-.dark-band .section-heading { color: var(--parchment); }
-.dark-band .body-text { color: var(--earth-light); }
+.dark-band .section-heading { color: #ffffff; }
+.dark-band .body-text { color: #ffffff; }
 
 /* ===== KEYWORDS ===== */
 .keywords {
