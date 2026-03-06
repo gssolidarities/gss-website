@@ -36,8 +36,14 @@ opacity:0.5;}
 .rv{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease;}
 .rv.vis{opacity:1;transform:translateY(0);}
 
+/* ===================== TOP NAV ===================== */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:10001;display:flex;justify-content:center;gap:48px;padding:18px 40px;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(240,230,200,0.06);}
+.top-nav-link{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:rgba(240,230,200,0.5);border-bottom:none;transition:color 0.3s,letter-spacing 0.3s;}
+.top-nav-link:hover{color:var(--gold);letter-spacing:6px;border-bottom:none;}
+@media(max-width:600px){.top-nav{gap:20px;padding:14px 16px;}.top-nav-link{font-size:11px;letter-spacing:3px;}}
+
 /* ===================== HERO ===================== */
-#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden;}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px;padding-top:100px;position:relative;overflow:hidden;}
 #hero::before{content:'362';position:absolute;top:-80px;right:-40px;font-family:'Bebas Neue',sans-serif;font-size:clamp(200px,40vw,500px);color:rgba(196,43,43,0.04);line-height:1;pointer-events:none;}
 .hero-tag{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
 .hero-tag::before{content:'';width:40px;height:1px;background:var(--gold);}
@@ -109,11 +115,11 @@ opacity:0.5;}
 #grading{padding:90px 80px;position:relative;}
 .grade-table{width:100%;border-collapse:collapse;margin-top:36px;max-width:800px;}
 .grade-table th{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold);text-align:left;padding:14px 18px;border-bottom:2px solid rgba(201,150,44,0.3);}
-.grade-table td{font-family:'Libre Baskerville',serif;font-size:14px;color:#ffffff;padding:12px 18px;border-bottom:1px solid rgba(240,230,200,0.06);}
+.grade-table td{font-family:'Libre Baskerville',serif;font-size:15px;color:#ffffff;padding:12px 18px;border-bottom:1px solid rgba(240,230,200,0.06);}
 .grade-table tr:hover td{background:rgba(240,230,200,0.02);}
 .grade-note{font-family:'Special Elite',monospace;font-size:13px;color:var(--red);margin-top:24px;}
 .grade-schema{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:500px;margin-top:36px;}
-.gs-row{display:flex;justify-content:space-between;padding:8px 18px;border-bottom:1px solid rgba(240,230,200,0.04);font-family:'Libre Baskerville',serif;font-size:13px;color:#ffffff;}
+.gs-row{display:flex;justify-content:space-between;padding:8px 18px;border-bottom:1px solid rgba(240,230,200,0.04);font-family:'Libre Baskerville',serif;font-size:14px;color:#ffffff;}
 .gs-row .gl{color:var(--paper);font-weight:700;}
 .total-pts{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,10vw,120px);color:rgba(196,43,43,0.08);position:absolute;top:80px;right:80px;pointer-events:none;}
 
@@ -130,8 +136,8 @@ opacity:0.5;}
 .assign-toggle.open{transform:rotate(45deg);}
 .assign-content{max-height:0;overflow:hidden;transition:max-height 0.6s ease;}
 .assign-content.open{max-height:10000px;}
-.assign-inner{padding:32px 0 32px 88px;font-family:'Libre Baskerville',serif;font-size:14px;line-height:2;color:#ffffff;}
-.assign-inner h4{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--paper);margin:28px 0 12px;letter-spacing:1px;}
+.assign-inner{padding:32px 0 32px 88px;font-family:'Libre Baskerville',serif;font-size:16px;line-height:2;color:#ffffff;}
+.assign-inner h4{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--paper);margin:28px 0 12px;letter-spacing:1px;}
 .assign-inner h4:first-child{margin-top:0;}
 .assign-inner p{margin-bottom:16px;}
 .assign-inner ul,.assign-inner ol{margin:12px 0 16px 24px;}
@@ -144,12 +150,12 @@ opacity:0.5;}
 .week-row{display:grid;grid-template-columns:100px 1fr 200px;gap:24px;padding:28px 0;border-bottom:1px solid rgba(240,230,200,0.05);transition:background 0.3s;}
 .week-row:hover{background:rgba(240,230,200,0.015);}
 .week-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--red);line-height:1;}
-.week-content{font-family:'Libre Baskerville',serif;font-size:14px;line-height:1.9;color:#ffffff;}
-.week-topic{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--paper);margin-bottom:10px;letter-spacing:1px;}
-.week-readings{color:#ffffff;font-size:13px;}
-.week-readings a{font-size:13px;}
-.week-due{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:2px;color:var(--gold);text-align:right;}
-.week-due .due-type{display:block;color:rgba(240,230,200,0.5);margin-top:4px;font-size:11px;}
+.week-content{font-family:'Libre Baskerville',serif;font-size:15px;line-height:1.9;color:#ffffff;}
+.week-topic{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--paper);margin-bottom:10px;letter-spacing:1px;}
+.week-readings{color:#ffffff;font-size:15px;line-height:2;}
+.week-readings a{font-size:15px;}
+.week-due{font-family:'Special Elite',monospace;font-size:14px;letter-spacing:2px;color:var(--gold);text-align:right;}
+.week-due .due-type{display:block;color:rgba(240,230,200,0.5);margin-top:4px;font-size:13px;}
 
 /* ===================== INSTRUCTOR ===================== */
 #instructor{padding:90px 80px;position:relative;}
@@ -176,7 +182,7 @@ opacity:0.5;}
 .sbl{color:#5a8ab5;border-color:#5a8ab5;}
 .sgd{color:var(--gold);border-color:var(--gold);}
 .phead{font-family:'IM Fell English',serif;font-size:22px;color:#ffffff;margin-bottom:14px;}
-.pbody{font-family:'Libre Baskerville',serif;font-size:14px;line-height:1.9;color:#ffffff;}
+.pbody{font-family:'Libre Baskerville',serif;font-size:15px;line-height:1.9;color:#ffffff;}
 .pbody strong{color:#ffffff;}
 .pq{font-family:'Trebuchet MS',sans-serif;font-style:italic;font-size:14px;color:#ffffff;margin-top:14px;padding-top:14px;border-top:1px solid rgba(201,150,44,0.18);}
 @media(max-width:768px){
@@ -195,7 +201,7 @@ opacity:0.5;}
 .tprompt::before{content:'> ';}
 .tblock{background:rgba(0,255,70,0.025);border:1px solid rgba(0,255,70,0.13);padding:28px;margin-bottom:20px;}
 .tbltit{font-size:20px;color:#00ff46;margin-bottom:14px;letter-spacing:2px;}
-.ti{font-size:15px;color:rgba(0,255,70,0.68);padding:7px 0;border-bottom:1px solid rgba(0,255,70,0.07);transition:color 0.18s,padding-left 0.18s;cursor:none;}
+.ti{font-size:16px;color:rgba(0,255,70,0.68);padding:7px 0;border-bottom:1px solid rgba(0,255,70,0.07);transition:color 0.18s,padding-left 0.18s;cursor:none;}
 .ti:last-child{border-bottom:none;}
 .ti:hover{color:#00ff46;padding-left:10px;}
 .ti .til{color:#00ff46;}
@@ -275,6 +281,13 @@ a:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
 </head>
 <body>
 <a href="#description" class="skip-link">Skip to main content</a>
+
+<!-- ==================== TOP NAV ==================== -->
+<nav class="top-nav" aria-label="Site navigation">
+<a href="index.html" class="top-nav-link">Home</a>
+<a href="pages/contributions.html" class="top-nav-link">Contributions</a>
+<a href="pages/interactive-pedagogy.html" class="top-nav-link">Interactive Pedagogy</a>
+</nav>
 
 <!-- ==================== HERO ==================== -->
 <section id="hero" aria-label="Course introduction">
@@ -376,7 +389,6 @@ Just come back…
 <p>This course is designed as a hypertext. This means that any reading or project that I assign is intended to be just one node in a broader network of connections and relations that I hope you build throughout our time together. Rather than being situated in one discipline, sub-discipline, or any discipline for that matter, this course provides nodes to different trans/outer/disciplinary conversations that I hope you continue to engage with based on your own interests. I will still ask you to make those engagements and explorations through the framework of <strong>comparative anti-racist rhetorics</strong> as much as possible (and we will talk more about it in the class). I will also work individually with you as much you need me to make that exploration easier and more meaningful to you. Therefore, I have designed each project as a continuum of one another.</p>
 </div>
 <div class="struct-quote rv">"THE LEARNING PROCESS IS SOMETHING YOU CAN INCITE, LITERALLY INCITE, LIKE A RIOT."<cite>—Audre Lorde</cite></div>
-<div class="struct-note rv">"Why I, as a Native American, support the Palestinian people," explains the following: As a Native person of this country, I've come to the conclusion that we are related. The parallels to the plight of the Palestinian people and Native Americans have been drawn by many. Speaking in San Francisco, Tony Gonzales of the American Indian Movement (AIM), "With a common legacy of Bantustans (homelands) – Indian reservations and encircled Palestinian territories – Native Americans understand well the situation of Palestinians." (Image &amp; Text Source: Indigenous Peoples Literature)</div>
 </section>
 
 <div class="section-divider"></div>
@@ -999,7 +1011,7 @@ Just come back…
 <div class="sec-label rv">Course Calendar</div>
 <h2 class="sec-title rv">WEEKLY<br>SCHEDULE</h2>
 <p class="desc-body rv" style="margin-bottom:12px;">Eng-362 Course Calendar | Spring 2025</p>
-<p class="desc-body rv" style="margin-bottom:36px;font-size:13px;color:#ffffff;">Notes: Except for the textbook, other assigned materials will be provided in a PDF format or with a hyperlink on Canvas. The calendar is subject to change. So, please make sure you check this calendar and Canvas every week. If you encounter a broken link or notice any inconsistency or discrepancy, please notify me right away and I will fix it.<br><br>3 Major assignments due dates: 1st major assignment: Jan 26 · 2nd major assignment: March 9 · Final major assignment: April 27</p>
+<p class="desc-body rv" style="margin-bottom:36px;font-size:15px;color:#ffffff;">Notes: Except for the textbook, other assigned materials will be provided in a PDF format or with a hyperlink on Canvas. The calendar is subject to change. So, please make sure you check this calendar and Canvas every week. If you encounter a broken link or notice any inconsistency or discrepancy, please notify me right away and I will fix it.<br><br>3 Major assignments due dates: 1st major assignment: Jan 26 · 2nd major assignment: March 9 · Final major assignment: April 27</p>
 
 <div class="week-row rv">
 <div class="week-num">01</div>
@@ -1233,6 +1245,7 @@ Ch. 14: International Alliance, Black Against Empire
 <section id="footer">
 <div class="footer-course">ENGLISH-362: RHETORICS OF RACISM</div>
 <div class="footer-uni">Spring 2025</div>
+<div style="margin-top:20px;font-family:'Libre Baskerville',serif;font-size:14px;color:rgba(240,230,200,0.5);line-height:1.8;">Bibhushana Poudyal · Assistant Professor · WSU<br><a href="https://bibhushanapoudyal.com" target="_blank" style="color:var(--gold);font-size:13px;letter-spacing:1px;">bibhushanapoudyal.com</a></div>
 </section>
 
 <!-- ==================== NAV ==================== -->
