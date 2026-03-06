@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICE + AI Surveillance - Interactive Research Sketchboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Share+Tech+Mono&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0c10;
+            --bg-card: #0f1219;
+            --bg-card2: #121720;
+            --border: #c8a84b;
+            --border-dim: #3a3010;
+            --red: #c0392b;
+            --red-bright: #e74c3c;
+            --amber: #c8a84b;
+            --amber-bright: #f0c93a;
+            --blue: #1a6fa8;
+            --blue-bright: #2196f3;
+            --green: #1e6b45;
+            --green-bright: #27ae60;
+            --text: #d4cdb8;
+            --text-dim: #7a7260;
+            --text-bright: #f0e8d0;
+            --stamp-red: rgba(192,57,43,0.12);
+            --stamp-green: rgba(30,107,69,0.15);
+            --glow-amber: 0 0 20px rgba(200,168,75,0.15);
+            --glow-red: 0 0 20px rgba(192,57,43,0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--bg-deep);
+            color: var(--text);
+            overflow-x: hidden;
+            cursor: crosshair;
+            padding-bottom: 70px;
+        }
+
+        /* Grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.6;
+        }
+
+        .sketch-container {
+            position: relative;
+            width: 100%;
+            min-height: 500vh;
+        }
+
+        .fixed-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            z-index: 1;
+        }
+
+        canvas { width: 100%; height: 100%; }
+
+        .scroll-section {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .content-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--amber);
+            padding: 32px 36px;
+            max-width: 620px;
+            width: 90%;
+            box-shadow: var(--glow-amber), 12px 12px 0px rgba(0,0,0,0.5), inset 0 0 40px rgba(0,0,0,0.3);
+            transform: rotate(-0.8deg);
+            pointer-events: all;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Corner brackets */
+        .content-box::before,
+        .content-box::after {
+            content: '';
+            position: absolute;
+            width: 18px; height: 18px;
+            border-color: var(--amber);
+            border-style: solid;
+            opacity: 0.6;
+        }
+        .content-box::before {
+            top: 8px; left: 8px;
+            border-width: 2px 0 0 2px;
+        }
+        .content-box::after {
+            bottom: 8px; right: 8px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .content-box.right {
+            transform: rotate(0.8deg);
+        }
+
+        /* Classified watermark */
+        .content-box .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-family: 'Oswald', sans-serif;
+            font-size: 5em;
+            font-weight: 700;
+            color: rgba(192,57,43,0.06);
+            white-space: nowrap;
+            pointer-events: none;
+            letter-spacing: 0.1em;
+            user-select: none;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--amber-bright);
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--amber);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-dim);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        p { line-height: 1.6; color: var(--text); }
+
+        .timeline-item {
+            margin: 14px 0;
+            padding: 12px 12px 12px 18px;
+            border-left: 3px solid var(--red);
+            background: rgba(192,57,43,0.05);
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '▶';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--red);
+            font-size: 0.6em;
+        }
+        .timeline-item strong {
+            color: var(--amber-bright);
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95em;
+            letter-spacing: 0.1em;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .arrow {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1em;
+            margin: 8px 0;
+            text-align: center;
+            color: var(--red-bright);
+            letter-spacing: 0.2em;
+        }
+
+        .highlight {
+            background: rgba(200,168,75,0.15);
+            color: var(--amber-bright);
+            padding: 1px 5px;
+            border-bottom: 1px solid var(--amber);
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            padding: 10px 14px;
+            background: rgba(26,111,168,0.08);
+            border-left: 3px solid var(--blue-bright);
+            border-bottom: 1px solid rgba(33,150,243,0.1);
+            text-decoration: none;
+            color: #6ab4e8;
+            transition: all 0.25s ease;
+            font-size: 0.9em;
+            letter-spacing: 0.02em;
+        }
+        .resource-link:hover {
+            transform: translateX(8px);
+            background: rgba(26,111,168,0.18);
+            color: #a8d4f5;
+            border-left-color: #6ab4e8;
+            box-shadow: 0 0 10px rgba(33,150,243,0.15);
+        }
+
+        .key-point {
+            background: var(--stamp-red);
+            border: 1px dashed rgba(192,57,43,0.4);
+            padding: 14px 16px;
+            margin: 14px 0;
+            transform: rotate(-0.3deg);
+            position: relative;
+        }
+        .key-point strong {
+            color: var(--red-bright);
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.1em;
+            font-size: 0.9em;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .key-point.green {
+            background: var(--stamp-green);
+            border-color: rgba(30,107,69,0.4);
+        }
+        .key-point.green strong { color: #4caf89; }
+
+        .sketch-note {
+            font-size: 0.82em;
+            font-style: italic;
+            color: var(--text-dim);
+            margin-top: 12px;
+            padding-left: 14px;
+            border-left: 2px solid #333;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--red), var(--amber));
+            z-index: 1000;
+            transition: width 0.1s;
+            box-shadow: 0 0 8px var(--amber);
+        }
+
+        /* Scan line effect */
+        .scan-line {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(200,168,75,0.08);
+            z-index: 9998;
+            pointer-events: none;
+            animation: scanDown 8s linear infinite;
+        }
+        @keyframes scanDown {
+            0% { top: -2px; }
+            100% { top: 100vh; }
+        }
+
+        /* Section number badge */
+        .section-badge {
+            position: absolute;
+            top: -1px; right: 20px;
+            background: var(--red);
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.7em;
+            padding: 2px 10px;
+            letter-spacing: 0.15em;
+        }
+
+        ul {
+            margin-left: 0;
+            list-style: none;
+        }
+        ul li {
+            padding: 3px 0 3px 16px;
+            position: relative;
+            color: var(--text);
+        }
+        ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--amber);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.7s ease-out; }
+
+        /* Disclaimer banner */
+        .disclaimer-banner {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            z-index: 10000;
+            background: linear-gradient(135deg, #0f1219 0%, #13181f 100%);
+            border-top: 2px solid var(--amber);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 -4px 30px rgba(200,168,75,0.12);
+            flex-wrap: wrap;
+        }
+        .disclaimer-tag {
+            background: var(--amber);
+            color: #0a0c10;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 0.85em;
+            letter-spacing: 0.18em;
+            padding: 4px 14px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .disclaimer-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.92em;
+            color: #d4cbb8;
+            line-height: 1.5;
+            flex: 1;
+            min-width: 200px;
+        }
+        .disclaimer-text strong {
+            color: var(--amber-bright);
+        }
+        .disclaimer-author {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95em;
+            color: var(--amber-bright);
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+            flex-shrink: 0;
+            text-align: right;
+            line-height: 1.4;
+        }
+        .disclaimer-author span {
+            display: block;
+            color: #b8ad9a;
+            font-size: 0.88em;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+        @media (max-width: 600px) {
+            .disclaimer-author { text-align: left; }
+        }
+
+        /* Blinking cursor on title */
+        .cursor-blink::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+            color: var(--amber);
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(192,57,43,0.2);
+            border: 1px solid var(--red);
+            color: var(--red-bright);
+            font-size: 0.7em;
+            padding: 1px 8px;
+            letter-spacing: 0.15em;
+            margin-right: 6px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        /* Step indicator */
+        .step {
+            display: flex;
+            gap: 14px;
+            margin: 10px 0;
+            align-items: flex-start;
+        }
+        .step-num {
+            background: var(--red);
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            min-width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content { flex: 1; line-height: 1.5; }
+        .step-content em {
+            color: var(--text-dim);
+            font-size: 0.85em;
+        }
+        .step-content .step-title {
+            color: var(--amber-bright);
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95em;
+            display: block;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="gss-topnav" style="position:fixed;top:0;left:0;right:0;z-index:7000;display:flex;align-items:center;justify-content:center;gap:32px;padding:0 24px;height:44px;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,230,200,0.08);font-family:'Space Mono','Share Tech Mono',monospace;">
+  <a href="/" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(240,230,200,0.7);text-decoration:none;padding:6px 14px;border-radius:14px;transition:all .22s;" onmouseover="this.style.background='#c0190f';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(240,230,200,0.7)'">Home</a>
+  <a href="/contributions" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(240,230,200,0.7);text-decoration:none;padding:6px 14px;border-radius:14px;transition:all .22s;" onmouseover="this.style.background='#c0190f';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(240,230,200,0.7)'">Contributions</a>
+</nav>
+
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="scan-line"></div>
+
+    <!-- Disclaimer Banner -->
+    <div class="disclaimer-banner">
+        <div class="disclaimer-tag">PROTOTYPE</div>
+        <div class="disclaimer-text">
+            <strong>Disclaimer:</strong> This is only a very basic prototype of one of the students' projects for the course <strong>"AI, Biopolitics, &amp; Engineered Oppression."</strong> The final projects of all the students will be available by the end of May 2026.
+        </div>
+        <div class="disclaimer-author">
+            Anastasia Garcia
+            <span>PhD Student, Literary Studies · WSU</span>
+        </div>
+    </div>
+
+    <div class="sketch-container">
+        <div class="fixed-canvas">
+            <canvas id="sketchCanvas"></canvas>
+        </div>
+
+        <!-- Section 1: Title -->
+        <div class="scroll-section" data-section="0">
+            <div class="content-box">
+                <div class="watermark">CLASSIFIED</div>
+                <span class="tag">RESEARCH DOSSIER</span>
+                <span class="tag">2025</span>
+                <h1 class="cursor-blink" style="margin-top:12px">ICE + AI Surveillance</h1>
+                <p style="font-size: 1.05em; margin-top: 14px; line-height: 1.7;">
+                    From Slave Catchers to Flock Cameras:<br>
+                    <span class="highlight">The Continuum of American State Violence</span>
+                </p>
+                <p class="sketch-note" style="margin-top:20px">▼ &nbsp;SCROLL TO EXPLORE THE RESEARCH FRAMEWORK &nbsp;▼</p>
+            </div>
+        </div>
+
+        <!-- Section 2: Historical Timeline Start -->
+        <div class="scroll-section" data-section="1">
+            <div class="content-box right">
+                <span class="section-badge">FILE 01</span>
+                <h2>📜 The Historical Continuum</h2>
+                <div class="timeline-item">
+                    <strong>1850s — SLAVE CATCHERS</strong>
+                    Papers &amp; passes / Physical tracking<br>
+                    Hunting racialized bodies<br>
+                    Protecting "white property"
+                </div>
+                <div class="arrow">▼ ▼ ▼</div>
+                <div class="key-point">
+                    <strong>⚠ KEY INSIGHT</strong>
+                    This isn't Nazi Germany.<br>
+                    This is <span class="highlight">specifically American violence</span> with roots in slavery.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Historical Timeline Middle -->
+        <div class="scroll-section" data-section="2">
+            <div class="content-box">
+                <span class="section-badge">FILE 02</span>
+                <h2>📜 Escalation Timeline</h2>
+                <div class="timeline-item">
+                    <strong>1950s — OPERATION WETBACK</strong>
+                    Mass racial roundups / Deportation campaigns<br>
+                    Border militarization begins
+                </div>
+                <div class="arrow">▼ ▼ ▼</div>
+                <div class="timeline-item">
+                    <strong>2008 — SECURE COMMUNITIES</strong>
+                    Fingerprint databases<br>
+                    ICE access to local arrests<br>
+                    Digital surveillance infrastructure
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Current System -->
+        <div class="scroll-section" data-section="3">
+            <div class="content-box right">
+                <span class="section-badge">FILE 03</span>
+                <h2>📷 Present Day: 2025</h2>
+                <div class="timeline-item">
+                    <strong>2025 — AI + FLOCK CAMERAS</strong>
+                    Real-time facial recognition<br>
+                    License plate tracking<br>
+                    Automated deportation pipeline<br>
+                    No warrants, no consent
+                </div>
+                <div class="key-point">
+                    <strong>◈ SAME LOGIC. BETTER TECHNOLOGY.</strong>
+                    Each era uses "best available tech" but serves the same purpose:
+                    <span class="highlight">control racialized bodies &amp; protect whiteness as property</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: How Flock Works -->
+        <div class="scroll-section" data-section="4">
+            <div class="content-box">
+                <span class="section-badge">FILE 04</span>
+                <h2>🎥 How Flock + ICE Works</h2>
+
+                <div class="step">
+                    <div class="step-num">01</div>
+                    <div class="step-content">
+                        <span class="step-title">CITIES BUY CAMERAS</span>
+                        $2,500/year each — <em>"For public safety"</em>
+                    </div>
+                </div>
+                <div class="arrow">▼</div>
+                <div class="step">
+                    <div class="step-num">02</div>
+                    <div class="step-content">
+                        <span class="step-title">FLOCK COLLECTS DATA 24/7</span>
+                        License plates · Facial scans · Movement patterns
+                    </div>
+                </div>
+                <div class="arrow">▼</div>
+                <div class="step">
+                    <div class="step-num">03</div>
+                    <div class="step-content">
+                        <span class="step-title">ICE QUERIES DATABASE</span>
+                        <span class="highlight">WITHOUT WARRANTS</span>
+                    </div>
+                </div>
+                <div class="arrow">▼</div>
+                <div class="step">
+                    <div class="step-num">04</div>
+                    <div class="step-content">
+                        <span class="step-title">RAIDS &amp; ARRESTS</span>
+                        Person never knew they were tracked
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Who Profits / Who Suffers -->
+        <div class="scroll-section" data-section="5">
+            <div class="content-box right">
+                <span class="section-badge">FILE 05</span>
+                <h2>💰 Follow the Money</h2>
+                <div class="key-point green">
+                    <strong>▲ WHO PROFITS</strong>
+                    Flock Safety Inc.<br>
+                    Investors (Thiel, Andreessen Horowitz)<br>
+                    Private prison companies<br>
+                    Defense contractors
+                </div>
+                <div class="key-point">
+                    <strong>▼ WHO SUFFERS</strong>
+                    Immigrant families separated<br>
+                    Communities terrorized<br>
+                    People deported to danger<br>
+                    Children orphaned
+                </div>
+                <p class="sketch-note">This is racial capitalism: profiting from racialized state violence</p>
+            </div>
+        </div>
+
+        <!-- Section 7: Research Framework -->
+        <div class="scroll-section" data-section="6">
+            <div class="content-box">
+                <span class="section-badge">FILE 06</span>
+                <h2>📚 Research Framework</h2>
+
+                <p style="color:var(--amber); margin-bottom:6px; font-family:'Oswald',sans-serif; letter-spacing:0.1em; font-size:0.85em;">THEORY (WHY?)</p>
+                <a href="#" class="resource-link">📖 Simone Browne — "Dark Matters"</a>
+                <a href="#" class="resource-link">📖 Nick Estes — "Our History Is the Future"</a>
+                <a href="#" class="resource-link">📖 Ruth Wilson Gilmore — "Golden Gulag"</a>
+
+                <p style="color:var(--amber); margin: 14px 0 6px; font-family:'Oswald',sans-serif; letter-spacing:0.1em; font-size:0.85em;">EVIDENCE (WHAT?)</p>
+                <a href="#" class="resource-link">🔍 FOIA Flock contracts from local PD</a>
+                <a href="#" class="resource-link">🗺️ Map camera locations (Atlas of Surveillance)</a>
+                <a href="#" class="resource-link">📊 Georgetown: "American Dragnet" report</a>
+
+                <p style="color:var(--amber); margin: 14px 0 6px; font-family:'Oswald',sans-serif; letter-spacing:0.1em; font-size:0.85em;">RESISTANCE (HOW?)</p>
+                <a href="#" class="resource-link">✊ Mijente — No Tech for ICE campaign</a>
+                <a href="#" class="resource-link">✊ United We Dream — Know Your Rights</a>
+                <a href="#" class="resource-link">✊ Immigrant Defense Project resources</a>
+            </div>
+        </div>
+
+        <!-- Section 8: Key Sources -->
+        <div class="scroll-section" data-section="7">
+            <div class="content-box right">
+                <span class="section-badge">FILE 07</span>
+                <h2>🔗 Essential Sources</h2>
+                <div class="key-point">
+                    <strong>◈ START HERE — ALL FREE</strong>
+                </div>
+                <a href="https://www.law.georgetown.edu/privacy-technology-center/publications/american-dragnet-data-driven-deportation-in-the-21st-century/"
+                   class="resource-link" target="_blank">
+                    📄 Georgetown: "American Dragnet" (PDF)
+                </a>
+                <a href="https://notechforice.com/" class="resource-link" target="_blank">
+                    🌐 Mijente: No Tech for ICE
+                </a>
+                <a href="https://atlasofsurveillance.org/" class="resource-link" target="_blank">
+                    🗺️ EFF: Atlas of Surveillance (Map Tool)
+                </a>
+                <a href="https://www.eff.org/deeplinks/2024/01/community-guide-flock-safety-automated-license-plate-readers"
+                   class="resource-link" target="_blank">
+                    🎥 EFF: How Flock Cameras Work
+                </a>
+                <a href="https://www.immigrantdefenseproject.org/" class="resource-link" target="_blank">
+                    ⚖️ Immigrant Defense Project
+                </a>
+            </div>
+        </div>
+
+        <!-- Section 9: The Argument -->
+        <div class="scroll-section" data-section="8">
+            <div class="content-box">
+                <span class="section-badge">FILE 08</span>
+                <h2>💡 The Core Argument</h2>
+                <div class="key-point">
+                    <strong>✗ COMMON MISCONCEPTIONS</strong>
+                    "Trump is doing something NEW"<br>
+                    "This is like Nazi Germany"<br>
+                    "Better AI will fix it"<br>
+                    "We just need regulation"
+                </div>
+                <div class="arrow">VS.</div>
+                <div class="key-point green">
+                    <strong>✓ THE CORRECT FRAMEWORK</strong>
+                    "America has ALWAYS done this"<br>
+                    "Slave patrols → ICE raids"<br>
+                    "Tech makes it WORSE, not better"<br>
+                    "Must ABOLISH, not reform"
+                </div>
+                <p class="sketch-note">
+                    The problem isn't the algorithm's accuracy.<br>
+                    The problem is using ANY technology to hunt and deport people.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 10: What to Do -->
+        <div class="scroll-section" data-section="9">
+            <div class="content-box right">
+                <span class="section-badge">FILE 09</span>
+                <h2>✊ Research Action Plan</h2>
+
+                <div class="timeline-item">
+                    <strong>1. DOCUMENT THE HARM</strong>
+                    FOIA your city's Flock contracts<br>
+                    Map cameras in immigrant neighborhoods<br>
+                    Count arrests linked to surveillance<br>
+                    Interview people who've been tracked
+                </div>
+                <div class="timeline-item">
+                    <strong>2. BUILD HISTORICAL ANALYSIS</strong>
+                    Show continuity: Slave Catchers → ICE<br>
+                    This is AMERICAN violence, not imported<br>
+                    Each era adapts tech to the same purpose
+                </div>
+                <div class="timeline-item">
+                    <strong>3. CENTER COMMUNITY VOICES</strong>
+                    Partner with Mijente, UWD, IDP<br>
+                    Don't speak FOR — amplify those targeted<br>
+                    Provide practical resistance tools
+                </div>
+                <div class="timeline-item">
+                    <strong>4. DEMAND ABOLITION</strong>
+                    Not "better AI" — NO AI for deportation<br>
+                    Dismantle ICE + surveillance infrastructure<br>
+                    Community safety without state violence
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 11: Final Message -->
+        <div class="scroll-section" data-section="10">
+            <div class="content-box">
+                <div class="watermark">URGENT</div>
+                <span class="section-badge">FILE 10</span>
+                <h2>🎯 Why This Matters NOW</h2>
+                <div class="key-point" style="border-color:rgba(192,57,43,0.6); background:rgba(192,57,43,0.1);">
+                    <strong>⚠ URGENT — REAL TIME</strong>
+                    This is happening NOW.<br>
+                    People are being raided TODAY.<br>
+                    Families are being separated NOW.
+                </div>
+                <p style="margin-top: 18px; font-size: 1.05em; line-height:1.7;">
+                    Your research isn't just academic.<br>
+                    It can <span class="highlight">save lives</span>.
+                </p>
+                <p style="margin-top: 16px; color: var(--text);">
+                    <strong style="color:var(--amber-bright);">Your strongest insight:</strong><br>
+                    Connecting AI surveillance to Slave Catchers.<br>
+                    That's the framework. Build everything from there.
+                </p>
+                <div class="key-point green" style="margin-top: 24px; text-align:center; padding: 20px;">
+                    <strong>◈ AI SURVEILLANCE = HIGH-TECH SLAVE CATCHING</strong>
+                    Not a bug. Working as designed.<br>
+                    Must abolish, not reform.
+                </div>
+                <p class="sketch-note" style="margin-top: 24px; text-align: center; font-size: 1em; color:var(--amber);">
+                    ✊ &nbsp;Research with communities, not on them &nbsp;✊
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('sketchCanvas');
+        const ctx = canvas.getContext('2d');
+        const progressBar = document.getElementById('progressBar');
+
+        let canvasWidth, canvasHeight;
+
+        function resizeCanvas() {
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Color palette
+        const C = {
+            bg: '#0a0c10',
+            line: '#c8a84b',
+            lineDim: '#3a3010',
+            red: '#c0392b',
+            amber: '#c8a84b',
+            blue: '#2196f3',
+            green: '#27ae60',
+            text: '#d4cdb8',
+            textDim: '#5a5244',
+        };
+
+        function drawHandDrawnLine(x1, y1, x2, y2, color = C.line, width = 1.5) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.lineCap = 'round';
+            const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            const steps = Math.floor(distance / 4);
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            for (let i = 1; i <= steps; i++) {
+                const t = i / steps;
+                const x = x1 + (x2 - x1) * t + (Math.random() - 0.5) * 1.5;
+                const y = y1 + (y2 - y1) * t + (Math.random() - 0.5) * 1.5;
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        function drawGlowCircle(x, y, r, color) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r * 2);
+            grad.addColorStop(0, color + '33');
+            grad.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r * 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#0a0c10';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function drawArrow(x, y, size, progress) {
+            const s = size * progress;
+            ctx.fillStyle = C.red;
+            ctx.shadowColor = C.red;
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.moveTo(x, y - s);
+            ctx.lineTo(x - s / 2, y - s * 1.5);
+            ctx.lineTo(x + s / 2, y - s * 1.5);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillRect(x - 2.5, y - s * 1.5, 5, s * 2);
+            ctx.shadowBlur = 0;
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = 'rgba(200,168,75,0.04)';
+            ctx.lineWidth = 1;
+            const spacing = 60;
+            for (let x = 0; x < canvasWidth; x += spacing) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0); ctx.lineTo(x, canvasHeight);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvasHeight; y += spacing) {
+                ctx.beginPath();
+                ctx.moveTo(0, y); ctx.lineTo(canvasWidth, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawTimeline(progress) {
+            const startX = canvasWidth * 0.1;
+            const endX = canvasWidth * 0.9;
+            const y = canvasHeight / 2;
+
+            // Draw track
+            ctx.strokeStyle = C.lineDim;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath();
+            ctx.moveTo(startX, y);
+            ctx.lineTo(endX, y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Animated fill line
+            drawHandDrawnLine(startX, y, startX + (endX - startX) * progress, y, C.amber, 2);
+
+            const nodes = [
+                { pos: 0.18, label: ['1850s', 'SLAVE', 'CATCHERS'], icon: '📋', col: C.red },
+                { pos: 0.38, label: ['1950s', 'OPERATION', 'WETBACK'], icon: '🚔', col: '#e67e22' },
+                { pos: 0.62, label: ['2008', 'SECURE', 'COMM.'], icon: '💾', col: C.blue },
+                { pos: 0.82, label: ['2025', 'FLOCK', '+ ICE'], icon: '📷', col: C.red }
+            ];
+
+            nodes.forEach((node, ni) => {
+                if (progress >= node.pos) {
+                    const x = startX + (endX - startX) * node.pos;
+                    const alpha = Math.min((progress - node.pos) / 0.06, 1);
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    // Glow
+                    const grd = ctx.createRadialGradient(x, y, 0, x, y, 40);
+                    grd.addColorStop(0, node.col + '22');
+                    grd.addColorStop(1, 'transparent');
+                    ctx.fillStyle = grd;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 40, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    drawGlowCircle(x, y, 10, node.col);
+
+                    // Vertical line
+                    ctx.strokeStyle = node.col + '66';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([3, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - 14);
+                    ctx.lineTo(x, y - 50);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    // Icon
+                    ctx.font = '22px serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(node.icon, x, y - 60);
+
+                    // Label
+                    ctx.fillStyle = C.text;
+                    ctx.font = 'bold 11px "Share Tech Mono", monospace';
+                    node.label.forEach((line, i) => {
+                        if (i === 0) {
+                            ctx.fillStyle = node.col;
+                            ctx.font = 'bold 10px "Oswald", sans-serif';
+                        } else {
+                            ctx.fillStyle = C.text;
+                            ctx.font = '9px "Share Tech Mono", monospace';
+                        }
+                        ctx.fillText(line, x, y + 28 + i * 13);
+                    });
+
+                    ctx.restore();
+                }
+            });
+        }
+
+        function drawSystemDiagram(progress) {
+            const cx = canvasWidth / 2;
+            const cy = canvasHeight / 2;
+            const bw = 110, bh = 70;
+            const sp = 190;
+
+            const boxes = [
+                { dx: -sp, label: ['CITY', 'BUYS'], sub: '$2,500/cam', color: C.green },
+                { dx: 0,   label: ['FLOCK', 'SCANS'], sub: '24/7', color: C.blue },
+                { dx: sp,  label: ['ICE', 'RAIDS'], sub: 'No warrant', color: C.red }
+            ];
+
+            boxes.forEach((box, i) => {
+                if (progress > i * 0.28) {
+                    const alpha = Math.min((progress - i * 0.28) / 0.25, 1);
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+
+                    const x = cx + box.dx;
+                    const bx = x - bw / 2, by = cy - bh / 2;
+
+                    // Glow behind box
+                    const grd = ctx.createRadialGradient(x, cy, 0, x, cy, 90);
+                    grd.addColorStop(0, box.color + '1a');
+                    grd.addColorStop(1, 'transparent');
+                    ctx.fillStyle = grd;
+                    ctx.fillRect(bx - 30, by - 30, bw + 60, bh + 60);
+
+                    // Box fill
+                    ctx.fillStyle = box.color + '22';
+                    ctx.fillRect(bx, by, bw, bh);
+
+                    // Box border
+                    ctx.strokeStyle = box.color;
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeRect(bx, by, bw, bh);
+
+                    // Corner accents
+                    ctx.strokeStyle = box.color + 'cc';
+                    ctx.lineWidth = 2;
+                    const cs = 8;
+                    [[bx, by, 1, 1], [bx + bw, by, -1, 1], [bx, by + bh, 1, -1], [bx + bw, by + bh, -1, -1]].forEach(([cx2, cy2, dx, dy]) => {
+                        ctx.beginPath();
+                        ctx.moveTo(cx2 + dx * cs, cy2);
+                        ctx.lineTo(cx2, cy2);
+                        ctx.lineTo(cx2, cy2 + dy * cs);
+                        ctx.stroke();
+                    });
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 15px "Oswald", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.letterSpacing = '0.1em';
+                    box.label.forEach((line, j) => {
+                        ctx.fillText(line, x, cy - 8 + j * 18);
+                    });
+
+                    ctx.fillStyle = box.color;
+                    ctx.font = '10px "Share Tech Mono", monospace';
+                    ctx.fillText(box.sub, x, cy + 26);
+
+                    // Arrow between boxes
+                    if (i < 2 && progress > (i + 0.5) * 0.28) {
+                        const ap = Math.min((progress - (i + 0.5) * 0.28) / 0.15, 1);
+                        const ax1 = x + bw / 2 + 4;
+                        const ax2 = cx + boxes[i + 1].dx - bw / 2 - 4;
+                        const ay = cy;
+                        // Arrow line
+                        ctx.strokeStyle = C.amber;
+                        ctx.lineWidth = 1.5;
+                        ctx.globalAlpha = alpha * ap;
+                        const ax2draw = ax1 + (ax2 - ax1) * ap;
+                        ctx.beginPath();
+                        ctx.moveTo(ax1, ay);
+                        ctx.lineTo(ax2draw, ay);
+                        ctx.stroke();
+                        // Arrowhead
+                        if (ap > 0.8) {
+                            ctx.fillStyle = C.amber;
+                            ctx.beginPath();
+                            ctx.moveTo(ax2draw + 8, ay);
+                            ctx.lineTo(ax2draw, ay - 5);
+                            ctx.lineTo(ax2draw, ay + 5);
+                            ctx.closePath();
+                            ctx.fill();
+                        }
+                    }
+
+                    ctx.restore();
+                }
+            });
+        }
+
+        function drawConnections(progress) {
+            const points = [
+                { x: canvasWidth * 0.22, y: canvasHeight * 0.32, label: 'PROFIT', col: C.green },
+                { x: canvasWidth * 0.78, y: canvasHeight * 0.32, label: 'HARM', col: C.red },
+                { x: canvasWidth * 0.5,  y: canvasHeight * 0.62, label: 'STATE\nVIOLENCE', col: '#e67e22' }
+            ];
+
+            if (progress > 0.4) {
+                points.forEach((pt, i) => {
+                    const alpha = Math.min((progress - 0.4 - i * 0.12) / 0.12, 1);
+                    if (alpha > 0) {
+                        ctx.save();
+                        ctx.globalAlpha = alpha;
+
+                        const grd = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, 60);
+                        grd.addColorStop(0, pt.col + '33');
+                        grd.addColorStop(1, 'transparent');
+                        ctx.fillStyle = grd;
+                        ctx.beginPath();
+                        ctx.arc(pt.x, pt.y, 60, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        drawGlowCircle(pt.x, pt.y, 36, pt.col + 'aa');
+
+                        ctx.fillStyle = '#fff';
+                        ctx.font = 'bold 13px "Oswald", sans-serif';
+                        ctx.textAlign = 'center';
+                        pt.label.split('\n').forEach((l, j) => {
+                            ctx.fillText(l, pt.x, pt.y + 4 + (j - (pt.label.split('\n').length - 1) / 2) * 16);
+                        });
+
+                        ctx.restore();
+                    }
+                });
+
+                if (progress > 0.78) {
+                    const la = (progress - 0.78) / 0.22;
+                    ctx.save();
+                    ctx.globalAlpha = la * 0.5;
+                    drawHandDrawnLine(points[0].x, points[0].y, points[2].x, points[2].y, C.amber, 1.5);
+                    drawHandDrawnLine(points[1].x, points[1].y, points[2].x, points[2].y, C.amber, 1.5);
+                    drawHandDrawnLine(points[0].x, points[0].y, points[1].x, points[1].y, C.lineDim, 1);
+                    ctx.restore();
+                }
+            }
+        }
+
+        let currentSection = 0;
+
+        function updateCanvas() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = scrollTop / scrollHeight;
+
+            progressBar.style.width = (scrollProgress * 100) + '%';
+
+            const sections = document.querySelectorAll('.scroll-section');
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight / 2 && rect.bottom > window.innerHeight / 2) {
+                    currentSection = index;
+                }
+            });
+
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            drawGrid();
+
+            if (currentSection <= 3) {
+                drawTimeline(Math.min(scrollProgress * 3, 1));
+            } else if (currentSection >= 4 && currentSection <= 5) {
+                drawSystemDiagram((scrollProgress - 0.3) * 2);
+            } else if (currentSection >= 6) {
+                drawConnections((scrollProgress - 0.5) * 1.5);
+            }
+
+            requestAnimationFrame(updateCanvas);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.content-box').forEach(box => observer.observe(box));
+
+        updateCanvas();
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
