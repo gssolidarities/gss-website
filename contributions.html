@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contributions — Global South Solidarities Anarchive</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Bebas+Neue&family=Space+Mono:ital@0;1&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0604;--paper:#f0e6c8;--aged:#d4c4a0;
+  --red:#c0190f;--redink:#8b0000;--gold:#b8860b;
+  --stamp:#1a3a1a;--muted:#e8d8b4;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--paper);font-family:'Cormorant Garamond',Georgia,serif;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#cdot{width:10px;height:10px;background:var(--red);border:2px solid #fff;box-shadow:0 0 0 1px var(--red);border-radius:50%;position:fixed;z-index:99999;pointer-events:none;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s;}
+#cring{width:32px;height:32px;background:transparent;border:2px solid rgba(255,255,255,0.5);box-shadow:0 0 0 1px rgba(192,25,15,0.3);border-radius:50%;position:fixed;z-index:99998;pointer-events:none;transform:translate(-50%,-50%);transition:left 0.15s ease-out,top 0.15s ease-out,width 0.2s,height 0.2s;}
+#cdot.h{width:14px;height:14px;}
+#cring.h{width:44px;height:44px;}
+
+/* GRAIN */
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E");opacity:0.6;}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:99990;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+#ltxt{font-family:'VT323',monospace;font-size:22px;color:var(--paper);letter-spacing:4px;}
+#lbar-w{width:200px;height:2px;background:rgba(255,255,255,0.06);}
+#lbar{height:100%;width:0;background:var(--red);}
+.blink{animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;padding:80px 80px 120px;overflow:hidden;}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 45% at 15% 70%,rgba(192,25,15,0.25) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 20%,rgba(184,134,11,0.1) 0%,transparent 55%);}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:32px;position:relative;z-index:1;}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,220px);line-height:0.85;color:var(--paper);position:relative;z-index:1;letter-spacing:-3px;}
+.hero-title .ghost{-webkit-text-stroke:1px rgba(240,230,200,0.15);color:transparent;}
+.hero-title .accent{color:var(--red);}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,28px);color:rgba(240,230,200,0.5);max-width:680px;margin-top:36px;line-height:1.6;position:relative;z-index:1;}
+.hero-line{width:120px;height:2px;background:var(--red);margin-top:48px;position:relative;z-index:1;}
+.scroll-cue{position:absolute;bottom:36px;left:80px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;color:rgba(240,230,200,0.2);text-transform:uppercase;animation:pulse 2.5s ease-in-out infinite;z-index:1;}
+@keyframes pulse{0%,100%{opacity:0.2;transform:translateY(0);}50%{opacity:0.5;transform:translateY(6px);}}
+
+/* SECTION DIVIDER */
+.torn{height:24px;width:100%;clip-path:polygon(0 100%,1.5% 30%,3% 80%,5% 10%,7% 70%,9% 25%,12% 85%,15% 15%,18% 75%,21% 40%,24% 90%,27% 20%,30% 65%,34% 35%,37% 80%,40% 10%,44% 60%,47% 25%,51% 75%,54% 40%,57% 90%,61% 20%,64% 70%,68% 30%,71% 85%,74% 15%,77% 65%,81% 35%,84% 80%,87% 10%,91% 60%,94% 25%,97% 75%,100% 45%,100% 100%);}
+
+/* PROGRAM SECTION */
+.program{padding:100px 80px;position:relative;overflow:hidden;}
+.program-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(180px,22vw,320px);color:rgba(240,230,200,0.025);position:absolute;top:-40px;right:-20px;line-height:0.85;pointer-events:none;}
+.program-tag{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:5px;text-transform:uppercase;display:inline-block;padding:5px 14px;border:2px solid;margin-bottom:28px;transform:rotate(-1deg);}
+.program-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,9vw,100px);line-height:0.88;margin-bottom:20px;}
+.program-subtitle{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:3px;color:rgba(240,230,200,0.45);text-transform:uppercase;margin-bottom:56px;}
+.program-body{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.85;max-width:860px;}
+.program-body strong{color:#ffffff;}
+
+/* CONTRIBUTOR GRID */
+.contrib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:3px;margin-top:56px;}
+.contrib-card{padding:32px 28px;border:1px solid rgba(240,230,200,0.08);position:relative;overflow:hidden;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);text-decoration:none;display:block;cursor:none;}
+.contrib-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--red);transform:scaleY(0);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);transform-origin:bottom;}
+.contrib-card:hover::before{transform:scaleY(1);}
+.contrib-card:hover{border-color:rgba(240,230,200,0.2);background:rgba(240,230,200,0.03);transform:translateX(6px);}
+.contrib-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:rgba(240,230,200,0.04);position:absolute;top:-6px;right:12px;line-height:1;pointer-events:none;}
+.contrib-name{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--paper);line-height:1.1;transition:color 0.28s;}
+.contrib-card:hover .contrib-name{color:#ffffff;}
+.contrib-star{color:var(--red);font-weight:bold;}
+.contrib-status{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-top:8px;}
+
+/* STAR NOTE */
+.star-note{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(240,230,200,0.5);margin-top:28px;padding-left:4px;}
+.star-note .sn-star{color:var(--red);font-weight:bold;font-size:18px;}
+
+/* FELLOWSHIP INTRO */
+.fellowship-body{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px;}
+.fellowship-body p{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.85;color:#ffffff;}
+
+/* COMING SOON */
+.coming-soon{border:1px dashed rgba(240,230,200,0.15);padding:56px 44px;text-align:center;margin-top:56px;}
+.coming-soon-title{font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(240,230,200,0.25);margin-bottom:12px;}
+.coming-soon-sub{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;color:rgba(240,230,200,0.2);text-transform:uppercase;}
+
+/* SECTION COLORS */
+.s-dark{background:var(--ink);color:var(--paper);}
+.s-deep{background:#060302;color:var(--paper);}
+.s-paper{background:var(--paper);color:var(--ink);}
+.s-muted{background:var(--muted);color:var(--ink);}
+
+/* Dark section text */
+.s-dark .program-body,.s-deep .program-body{color:#ffffff;}
+.s-dark .program-subtitle,.s-deep .program-subtitle{color:rgba(240,230,200,0.45);}
+
+/* Light section overrides */
+.s-paper .contrib-card{border-color:rgba(13,8,0,0.1);}
+.s-paper .contrib-card:hover{background:rgba(13,8,0,0.04);border-color:rgba(13,8,0,0.2);}
+.s-paper .contrib-card::before{background:var(--red);}
+.s-paper .contrib-name{color:var(--ink);}
+.s-paper .contrib-card:hover .contrib-name{color:var(--red);}
+.s-paper .contrib-num{color:rgba(13,8,0,0.05);}
+.s-paper .program-num{color:rgba(13,8,0,0.03);}
+.s-paper .star-note{color:rgba(13,8,0,0.5);}
+
+/* FOOTER */
+footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:28px;border-top:1px solid rgba(240,230,200,0.06);}
+.f-brand{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,9vw,84px);line-height:0.85;color:#ffffff;}
+.f-info{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:#ffffff;text-align:right;line-height:2.2;}
+
+/* FLOATING NAV */
+#fnav{position:fixed;bottom:28px;right:28px;z-index:8000;}
+#fnav-btn{width:56px;height:56px;border-radius:50%;background:var(--red);border:none;cursor:none;display:flex;align-items:center;justify-content:center;transition:all 0.35s cubic-bezier(0.4,1.6,0.5,1);box-shadow:0 4px 18px rgba(192,25,15,0.35);}
+#fnav-btn:hover{transform:scale(1.12);box-shadow:0 6px 24px rgba(192,25,15,0.5);}
+#fnav-btn svg{width:22px;height:22px;fill:var(--paper);transition:transform 0.35s;}
+#fnav.open #fnav-btn svg{transform:rotate(45deg);}
+#fnav-menu{position:absolute;bottom:68px;right:0;background:var(--ink);border:1px solid rgba(240,230,200,0.18);border-radius:28px;padding:14px 8px;display:flex;flex-direction:column;gap:4px;opacity:0;pointer-events:none;transform:translateY(14px) scale(0.92);transition:all 0.32s cubic-bezier(0.4,1.6,0.5,1);min-width:170px;box-shadow:0 8px 32px rgba(0,0,0,0.45);}
+#fnav.open #fnav-menu{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+.fnav-link{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--paper);text-decoration:none;padding:10px 22px;border-radius:20px;transition:all 0.22s;cursor:none;display:block;text-align:center;white-space:nowrap;}
+.fnav-link:hover{background:var(--red);color:var(--paper);}
+
+
+
+/* HERO SUBHEADING FILL */
+.hero-fill{display:inline-block;position:relative;-webkit-text-stroke:1px rgba(240,230,200,0.15);color:transparent;cursor:none;transition:color 0.5s;}
+.hero-fill::after{content:attr(data-text);position:absolute;left:0;top:0;-webkit-text-stroke:0;color:var(--red);clip-path:inset(0 100% 0 0);transition:clip-path 0.6s cubic-bezier(0.4,0,0.2,1);}
+.hero-fill:hover{color:transparent;}
+.hero-fill:hover::after{clip-path:inset(0 0 0 0);}
+/* CARD HOVER FILL ANIMATIONS */
+.card-stamp{font-family:'Space Mono',monospace;font-size:14px;letter-spacing:5px;text-transform:uppercase;color:var(--red);border:2px solid var(--red);display:inline-block;padding:6px 16px;margin-bottom:24px;transform:rotate(-1deg);position:relative;overflow:hidden;cursor:none;transition:color 0.4s;}
+.card-stamp::before{content:'';position:absolute;inset:0;background:var(--red);transform:translateX(-101%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:0;}
+.card-stamp:hover::before{transform:translateX(0);}
+.card-stamp:hover{color:#ffffff;}
+.card-stamp span{position:relative;z-index:1;}
+.card-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,7vw,72px);line-height:0.9;color:var(--ink);margin-bottom:24px;cursor:none;}
+.card-heading .fill-word{display:inline-block;position:relative;transition:color 0.35s;}
+.card-heading .fill-word::after{content:attr(data-text);position:absolute;left:0;top:0;color:var(--red);clip-path:inset(0 100% 0 0);transition:clip-path 0.5s cubic-bezier(0.4,0,0.2,1);}
+.card-heading .fill-word:hover::after{clip-path:inset(0 0 0 0);}
+.card-heading .accent-word{color:var(--red);}
+.card-heading .accent-word::after{color:var(--ink);}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+.rvl{opacity:0;transform:translateX(-32px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.rvl.vis{opacity:1;transform:translateX(0);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  #hero,.program,footer{padding-left:24px;padding-right:24px;}
+  .contrib-grid{grid-template-columns:1fr;}
+  .fellowship-body{grid-template-columns:1fr;}
+  .hero-title{letter-spacing:-1px;}
+  .scroll-cue{left:24px;}
+}
+</style>
+</head>
+<body>
+
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div id="ltxt">LOADING THE ANARCHIVE<span class="blink">_</span></div>
+  <div id="lbar-w"><div id="lbar"></div></div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow rv">Global South Solidarities Anarchive</div>
+  <h1 class="hero-title">
+    <span class="rv" style="display:block;">CONTRIBUTIONS</span>
+    <span class="rv" style="display:block;transition-delay:0.24s;font-size:0.45em;margin-top:8px;"><span class="hero-fill" data-text="& STUDENT WORK">& STUDENT WORK</span></span>
+  </h1>
+  <p class="hero-sub rv" style="transition-delay:0.36s;">A living archive of resistance, memory, and collective worldmaking — where every contribution rewrites the record.</p>
+  <div class="hero-line rv" style="transition-delay:0.48s;"></div>
+  <div class="scroll-cue">↓ explore the archive ↓</div>
+</section>
+
+<div class="torn" style="background:var(--paper);"></div>
+
+<!-- PROGRAM 1: ENG 548 -->
+<section class="program s-paper" id="eng548">
+  <div class="program-num rv" aria-hidden="true">01</div>
+  <div class="program-tag rv" style="color:var(--red);border-color:var(--red);">Fall 2024 · ENG 548</div>
+  <h2 class="program-title rv" style="color:var(--ink);">ARCHIVES, RHETORICITY<br>OF TECHNOLOGIES, &amp;<br>ANTI-OPPRESSIVE<br>INTERVENTIONS</h2>
+  <div class="program-subtitle rv" style="color:var(--ink);opacity:0.4;">13 Graduate Student Contributors</div>
+
+  <div class="contrib-grid">
+    <a href="#" class="contrib-card rv"><div class="contrib-num">01</div><div class="contrib-name">Cheyanne Brown</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.04s;"><div class="contrib-num">02</div><div class="contrib-name">Josie Cohen-Rodriguez</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.08s;"><div class="contrib-num">03</div><div class="contrib-name">Corita Fernando</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.12s;"><div class="contrib-num">04</div><div class="contrib-name">Myra Henderson<span class="contrib-star">*</span></div><div class="contrib-status">Project unavailable</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.16s;"><div class="contrib-num">05</div><div class="contrib-name">Brigette Hinnant</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.2s;"><div class="contrib-num">06</div><div class="contrib-name">Daman Khalid</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.24s;"><div class="contrib-num">07</div><div class="contrib-name">Grace No</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.28s;"><div class="contrib-num">08</div><div class="contrib-name">Prakash Paudel</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.32s;"><div class="contrib-num">09</div><div class="contrib-name">Allison Riechman-Bennett</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.36s;"><div class="contrib-num">10</div><div class="contrib-name">Ma-Ya</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.4s;"><div class="contrib-num">11</div><div class="contrib-name">Genoveva Vega Gastelum</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.44s;"><div class="contrib-num">12</div><div class="contrib-name">Valanci Villa<span class="contrib-star">*</span></div><div class="contrib-status">Project unavailable</div></a>
+    <a href="#" class="contrib-card rv" style="transition-delay:0.48s;"><div class="contrib-num">13</div><div class="contrib-name">Sezin Zorlu</div></a>
+  </div>
+
+  <div class="star-note rv"><span class="sn-star">*</span> Indicates that the project of the individual is not available at the moment.</div>
+</section>
+
+<div class="torn" style="background:var(--ink);transform:rotate(180deg);"></div>
+
+<!-- PROGRAM 2: AI CLASS -->
+<section class="program s-deep" id="aiclass">
+  <div class="program-num rv" aria-hidden="true">02</div>
+  <div class="program-tag rv" style="color:var(--gold);border-color:var(--gold);">Ongoing</div>
+  <h2 class="program-title rv" style="color:var(--paper);">AI, NECROPOLITICS,<br>&amp; ENGINEERED<br>OPPRESSION</h2>
+  <div class="program-subtitle rv">Contributors forthcoming</div>
+
+  <div class="rv" style="margin-top:56px;position:relative;">
+    <!-- Tape corners -->
+    <div style="position:absolute;top:-12px;left:60px;width:80px;height:24px;background:rgba(218,200,160,0.5);transform:rotate(-3deg);z-index:2;"></div>
+    <div style="position:absolute;top:-12px;right:60px;width:80px;height:24px;background:rgba(218,200,160,0.5);transform:rotate(3deg);z-index:2;"></div>
+    <!-- Pin -->
+    <div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:16px;height:16px;background:var(--red);border-radius:50%;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>
+    <!-- Card -->
+    <div style="background:#f5f0e6;padding:60px 56px 48px;border-bottom:4px solid var(--red);position:relative;box-shadow:0 4px 24px rgba(0,0,0,0.2);">
+      <!-- Torn bottom edge -->
+      <div style="position:absolute;bottom:-16px;left:0;right:0;height:16px;background:#f5f0e6;clip-path:polygon(0 0,2% 60%,4% 20%,6% 70%,8% 30%,10% 80%,13% 15%,16% 65%,19% 35%,22% 75%,25% 20%,28% 60%,32% 30%,35% 80%,38% 10%,42% 55%,45% 25%,48% 70%,52% 40%,55% 85%,58% 20%,62% 65%,65% 30%,68% 75%,72% 15%,75% 60%,78% 35%,82% 80%,85% 10%,88% 55%,92% 25%,95% 70%,98% 40%,100% 0);"></div>
+      
+      <div class="card-stamp"><span>Student Work</span></div>
+      
+      <div class="card-heading"><span class="fill-word" data-text="STUDENT">STUDENT</span><br><span class="fill-word accent-word" data-text="CONTRIBUTIONS">CONTRIBUTIONS</span></div>
+
+      <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:16px;font-weight:bold;">[ Prototype ]</div>
+      
+      <div style="font-family:'Trebuchet MS',sans-serif;font-size:19px;line-height:1.75;color:rgba(10,6,4,0.8);max-width:700px;margin-bottom:36px;">View the basic prototype of one of the student research projects from AI, Necropolitics, &amp; Engineered Oppression course. This prototype demonstrates critical analysis of technological systems, data, violence, and abolitionist framing in action. The final projects of all students will be available by the end of May 2026.</div>
+      
+      <a href="/contributions.html" style="display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:#f5f0e6;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;padding:18px 36px;transition:all 0.28s;cursor:none;" onmouseover="this.style.background='#c0190f'" onmouseout="this.style.background='#0a0604'">Visit Student Work&nbsp;&nbsp;→</a>
+    </div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--muted);transform:scaleX(-1);"></div>
+
+<!-- PROGRAM 3: FELLOWSHIP -->
+<section class="program s-muted" id="fellowship">
+  <div class="program-num rv" aria-hidden="true">03</div>
+  <div class="program-tag rv" style="color:var(--stamp);border-color:var(--stamp);">2025–2026 Fellowship</div>
+  <h2 class="program-title rv" style="color:var(--ink);">DIGITAL STORYTELLING<br>&amp; GLOBAL SOUTH<br>SOLIDARITIES</h2>
+  <div class="program-subtitle rv" style="color:var(--ink);opacity:0.4;">A South Asia Chapter</div>
+
+  <div class="fellowship-body rv">
+    <p style="color:var(--ink);font-family:'Trebuchet MS',sans-serif;">Launched in 2025-2026 as part of the Digital Storytelling and Global South Solidarities project supported by a New Faculty Seed Grant, the fellowship is a year-long program designed for South Asian scholars committed to decolonial, feminist, queer, and anticolonial knowledge production. The inaugural cohort brought together South Asian scholars from South Asian, from Washington State University, across the United States, and around the world—graduate students, early-career researchers, and community-engaged intellectuals whose work had long been marginalized within conventional academic structures.</p>
+    <p style="color:var(--ink);font-family:'Trebuchet MS',sans-serif;">The fellowship operates on a simple but radical premise: that the scholars most qualified to document and theorize Global South struggles are often the ones least supported by academic institutions. Fellows receive modest compensation for their contributions—an acknowledgment that intellectual labor, especially when it emerges from minoritized and diasporic communities, deserves material recognition. Over the course of the year, fellows develop multimodal, public-facing projects that will be housed on the open-access Global South Solidarities anarchive website. These projects take many forms: digital narratives, curated archival materials, pedagogical resources, multimedia essays, and creative works that refuse the boundaries between scholarship and art, between theory and practice.</p>
+  </div>
+
+  <div class="coming-soon rv" style="border-color:rgba(13,8,0,0.12);margin-top:56px;">
+    <div class="coming-soon-title" style="color:var(--ink);">FELLOWS FORTHCOMING</div>
+    <div class="coming-soon-sub" style="color:var(--ink);">Individual fellow pages will be added as projects develop</div>
+  </div>
+</section>
+
+<div class="torn" style="background:var(--ink);transform:rotate(180deg) scaleX(-1);"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">ARCHIVE<br>RESIST<br>LIBERATE</div>
+  <div class="f-info">Global South Solidarities<br>Digital-Multimodal Humanities<br>&amp; Memory Justice<br><br>The anarchive is a living document.</div>
+</footer>
+
+<!-- FLOATING NAV -->
+<nav id="fnav" aria-label="Quick navigation">
+  <div id="fnav-menu">
+    <a href="/" class="fnav-link" onclick="document.getElementById('fnav').classList.remove('open')">Home</a>
+    <a href="#eng548" class="fnav-link" onclick="document.getElementById('fnav').classList.remove('open')">ENG 548</a>
+    <a href="#aiclass" class="fnav-link" onclick="document.getElementById('fnav').classList.remove('open')">AI Class</a>
+    <a href="#fellowship" class="fnav-link" onclick="document.getElementById('fnav').classList.remove('open')">Fellowship</a>
+  </div>
+  <button id="fnav-btn" onclick="document.getElementById('fnav').classList.toggle('open')" aria-label="Toggle navigation">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+  </button>
+</nav>
+
+<script>
+// LOADER
+const lbar=document.getElementById('lbar'),loaderEl=document.getElementById('loader'),ltEl=document.getElementById('ltxt');
+const phrases=['LOADING THE ANARCHIVE_','GATHERING VOICES_','RESISTING ERASURE_','BUILDING OTHERWISE_'];
+let lpi=0,lw=0;
+const lpi_int=setInterval(()=>{lpi++;if(lpi<phrases.length)ltEl.innerHTML=phrases[lpi]+'<span class="blink">_</span>';},380);
+const lb_int=setInterval(()=>{lw+=2.5;lbar.style.width=lw+'%';if(lw>=100){clearInterval(lb_int);clearInterval(lpi_int);setTimeout(()=>{loaderEl.style.transition='opacity 0.5s';loaderEl.style.opacity='0';setTimeout(()=>loaderEl.style.display='none',500);},200);}},16);
+
+// CURSOR
+const dot=document.getElementById('cdot'),ring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+function lerpRing(){rx+=(mx-rx)*0.15;ry+=(my-ry)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lerpRing);}
+lerpRing();
+document.querySelectorAll('a,button,.contrib-card,.fnav-link,#fnav-btn,.card-stamp,.fill-word,.hero-fill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.classList.add('h');ring.classList.add('h');});
+  el.addEventListener('mouseleave',()=>{dot.classList.remove('h');ring.classList.remove('h');});
+});
+
+// SCROLL REVEAL
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rv,.rvl').forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>
