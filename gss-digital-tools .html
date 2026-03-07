@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Digital & Multimodal Tools — GSS Initiative</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #e8000d;
+    --bg: #0a0a0a;
+    --surface: #121212;
+    --surface2: #181818;
+    --border: #1e1e1e;
+    --border2: #2a2a2a;
+    --text: #ffffff;
+    --muted: #ffffff;
+    --muted2: #cccccc;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  #cursor {
+    width: 9px; height: 9px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.15s, height 0.15s, opacity 0.15s;
+  }
+  #cursor.grow { width: 18px; height: 18px; opacity: 0.5; }
+
+  /* HEADER */
+  header {
+    position: relative;
+    padding: 70px 64px 52px;
+    border-bottom: 1px solid var(--border2);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 40px;
+    align-items: start;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(232,0,13,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .gss-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 24px;
+  }
+  .gss-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+  }
+  h1 {
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    max-width: 780px;
+  }
+  h1 em { color: var(--red); font-style: normal; }
+  .subtitle {
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: #cccccc;
+    max-width: 620px;
+    line-height: 1.7;
+  }
+  .header-right {
+    padding-top: 4px;
+    border-left: 1px solid var(--border2);
+    padding-left: 32px;
+  }
+  .meta-block { margin-bottom: 20px; }
+  .meta-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .meta-value { font-size: 0.8rem; color: var(--text); line-height: 1.5; }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2);
+    padding: 14px 0;
+    background: var(--surface);
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 50s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  .marquee-item {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    flex-shrink: 0;
+    padding: 0 28px;
+    border-right: 1px solid var(--border2);
+  }
+  .marquee-item:hover { color: var(--red); }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* CONTROLS */
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border2);
+    padding: 12px 64px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  #search {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 0.78rem;
+    padding: 8px 16px;
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s;
+  }
+  #search::placeholder { color: var(--muted2); }
+  #search:focus { border-color: var(--red); }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted2);
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--red); color: var(--red); }
+  .word-count { margin-left: auto; font-size: 0.7rem; color: var(--muted2); letter-spacing: 0.06em; }
+  .word-count b { color: var(--red); }
+
+  /* LAYOUT */
+  main { padding: 0 64px 80px; max-width: 1400px; }
+
+  /* DOC SECTION */
+  .doc-section { border-bottom: 1px solid var(--border); padding: 52px 0; }
+  .doc-section.hidden { display: none; }
+
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 36px; }
+  .section-num {
+    font-size: 0.65rem;
+    color: var(--red);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid var(--red);
+    padding: 2px 7px;
+    flex-shrink: 0;
+  }
+  .section-title-big { font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 700; letter-spacing: -0.01em; }
+  .section-title-big em { color: var(--red); font-style: normal; }
+
+  /* DOC TABLE */
+  .doc-table { width: 100%; border-collapse: collapse; }
+  .doc-table tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .doc-table tr:hover { background: var(--surface); }
+  .doc-table td { padding: 18px 0; vertical-align: top; }
+  .doc-table td:first-child { width: 220px; padding-right: 32px; }
+  .source-name { font-size: 0.78rem; font-weight: 700; color: var(--text); line-height: 1.4; }
+  .source-sub { font-size: 0.68rem; color: #cccccc; margin-top: 3px; line-height: 1.5; }
+  .source-link {
+    display: inline-block; font-size: 0.65rem; color: var(--red);
+    letter-spacing: 0.05em; margin-top: 4px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .source-link:hover { border-color: var(--red); }
+
+  /* CATEGORY TAGS */
+  .cat-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
+  .cat-tag {
+    font-size: 0.72rem;
+    color: #ffffff;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    padding: 4px 10px;
+    cursor: none;
+    transition: all 0.18s;
+    line-height: 1.3;
+  }
+  .cat-tag:hover { color: var(--red); border-color: var(--red); background: rgba(232,0,13,0.06); }
+  .cat-tag.highlight { color: var(--red) !important; border-color: var(--red) !important; background: rgba(232,0,13,0.08) !important; }
+  .cat-tag.dim { opacity: 0.15; }
+
+  /* BULLET LIST */
+  .bullet-cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .bullet-item {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 5px 12px 5px 0;
+    font-size: 0.75rem; color: #ffffff;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.18s; cursor: none;
+  }
+  .bullet-item::before { content: '●'; color: var(--red); font-size: 0.45rem; flex-shrink: 0; position: relative; top: -1px; }
+  .bullet-item:hover { color: var(--text); }
+  .bullet-item.highlight { color: var(--text) !important; }
+  .bullet-item.dim { opacity: 0.15; }
+
+  /* INLINE TEXT */
+  .inline-text { font-size: 0.78rem; color: #ffffff; line-height: 1.85; max-width: 820px; }
+  .inline-text strong { color: var(--text); font-weight: 700; }
+  .inline-text em { color: var(--red); font-style: normal; font-weight: 700; }
+
+  /* URL GRID */
+  .url-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px; }
+  .url-item {
+    font-size: 0.68rem; color: #ffffff;
+    padding: 6px 10px; border: 1px solid var(--border);
+    background: var(--surface2); transition: all 0.18s; cursor: none;
+    word-break: break-all; line-height: 1.4;
+  }
+  .url-item:hover { color: var(--red); border-color: var(--red); }
+  .url-item.highlight { color: var(--red) !important; border-color: var(--red) !important; }
+  .url-item.dim { opacity: 0.15; }
+
+  /* METHOD GROUPS */
+  .method-group { margin-bottom: 28px; }
+  .method-group-title {
+    font-size: 0.65rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border2);
+  }
+
+  /* FLOATING NAV */
+  #float-nav {
+    position: fixed; right: 24px; top: 50%;
+    transform: translateY(-50%); z-index: 500;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .nav-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--border2); cursor: none; transition: all 0.2s; position: relative;
+  }
+  .nav-dot:hover { background: var(--red); transform: scale(1.6); }
+  .nav-dot.active { background: var(--red); }
+  .nav-dot::before {
+    content: attr(data-label); position: absolute;
+    right: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 0.62rem; color: var(--red); white-space: nowrap;
+    opacity: 0; transition: opacity 0.2s; letter-spacing: 0.1em;
+    text-transform: uppercase; pointer-events: none;
+  }
+  .nav-dot:hover::before { opacity: 1; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border2); padding: 36px 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .footer-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
+  .footer-title span { color: var(--red); }
+  .footer-sub { font-size: 0.72rem; color: var(--muted); margin-top: 5px; line-height: 1.6; }
+  .footer-right { text-align: right; font-size: 0.72rem; color: var(--muted); line-height: 1.9; }
+  .footer-right strong { color: var(--text); font-size: 0.82rem; }
+
+  .no-results { display: none; padding: 60px 0; text-align: center; color: var(--muted2); font-size: 0.9rem; }
+
+  /* ── TOP NAV BAR ── */
+  #top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+  }
+  .top-nav-logo {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .top-nav-logo::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+  }
+  .top-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .top-nav-link {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #aaa;
+    text-decoration: none;
+    padding: 0 20px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border2);
+    transition: color 0.2s, background 0.2s;
+    position: relative;
+    cursor: none;
+  }
+  .top-nav-link:first-child { border-left: 1px solid var(--border2); }
+  .top-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+  }
+  .top-nav-link:hover { color: #fff; background: rgba(232,0,13,0.06); }
+  .top-nav-link:hover::after { transform: scaleX(1); }
+  .top-nav-link.active { color: var(--red); }
+  .top-nav-link.active::after { transform: scaleX(1); }
+
+  /* push content below top nav */
+  body { padding-top: 52px; }
+
+  /* ── FLOATING BOTTOM-RIGHT NAV ── */
+  #fab-nav {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 8000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+  #fab-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    margin-bottom: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  #fab-menu.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+  .fab-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: none;
+    text-decoration: none;
+  }
+  .fab-item-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(20,20,20,0.97);
+    border: 1px solid var(--border2);
+    padding: 6px 14px;
+    white-space: nowrap;
+    transition: background 0.2s, border-color 0.2s;
+    backdrop-filter: blur(10px);
+  }
+  .fab-item:hover .fab-item-label {
+    background: rgba(232,0,13,0.15);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .fab-item-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border2);
+    border: 1px solid #444;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .fab-item.current .fab-item-dot { background: var(--red); border-color: var(--red); }
+  .fab-item:hover .fab-item-dot { background: var(--red); border-color: var(--red); }
+
+  #fab-btn {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--red);
+    border: none;
+    cursor: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(232,0,13,0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex-shrink: 0;
+  }
+  #fab-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(232,0,13,0.55); }
+  #fab-btn svg { transition: transform 0.35s; }
+  #fab-btn.open svg { transform: rotate(45deg); }
+
+  /* remove old right-side dot nav */
+  #float-nav { display: none !important; }
+
+  @media (max-width: 900px) {
+    header { grid-template-columns: 1fr; }
+    .header-right { border-left: none; padding-left: 0; border-top: 1px solid var(--border2); padding-top: 24px; }
+    main, header, footer { padding-left: 24px; padding-right: 24px; }
+    .controls { padding: 12px 24px; }
+    #search { width: 100%; }
+    #top-nav { padding: 0 20px; }
+    .top-nav-link { padding: 0 12px; font-size: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- TOP NAV -->
+<nav id="top-nav">
+  <div class="top-nav-logo">GSS — Global South Solidarities</div>
+  <div class="top-nav-links">
+    <a href="/" class="top-nav-link">Home</a>
+    <a href="/contributions" class="top-nav-link">Contributions</a>
+    <a href="/pedagogy.html" class="top-nav-link">Interactive Pedagogy</a>
+    <a href="/gss-about-v2.html" class="top-nav-link">About GSS</a>
+  </div>
+</nav>
+
+<nav id="float-nav">
+  <div class="nav-dot active" data-label="Top" onclick="scrollTo({top:0,behavior:'smooth'})"></div>
+  <div class="nav-dot" data-label="Part 1" data-target="s1"></div>
+  <div class="nav-dot" data-label="Part 2" data-target="s2"></div>
+  <div class="nav-dot" data-label="Institutions" data-target="s3"></div>
+  <div class="nav-dot" data-label="Tools Lists" data-target="s4"></div>
+  <div class="nav-dot" data-label="Narratives" data-target="s5"></div>
+  <div class="nav-dot" data-label="Platforms" data-target="s6"></div>
+  <div class="nav-dot" data-label="UX" data-target="s7"></div>
+</nav>
+
+<header id="top">
+  <div class="header-left">
+    <div class="gss-badge">Global South Solidarities — GSS Initiative</div>
+    <h1>List of <em>Digital</em> and Multimodal Tools, Methods, and Resources</h1>
+    <p class="subtitle">Curators List of Digital and Multimodal Tools, Methods, and Resources — Digital Humanities Resources for Project Building</p>
+  </div>
+  <div class="header-right">
+    <div class="meta-block">
+      <span class="meta-label">Collected by</span>
+      <div class="meta-value">Bibhushana Poudyal<br>Assistant Professor, WSU</div>
+    </div>
+    <div class="meta-block">
+      <span class="meta-label">Initiative</span>
+      <div class="meta-value">Global South Solidarities</div>
+    </div>
+    <div class="meta-block">
+      <span class="meta-label">Focus</span>
+      <div class="meta-value">Digital Humanities<br>Resources for Project Building</div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="Search tools, methods, resources…" autocomplete="off" />
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="s1">Part 1</button>
+    <button class="filter-btn" data-filter="s2">Part 2</button>
+    <button class="filter-btn" data-filter="s3">Institutions</button>
+    <button class="filter-btn" data-filter="s4">Tools Lists</button>
+    <button class="filter-btn" data-filter="s5">Narratives</button>
+    <button class="filter-btn" data-filter="s6">Platforms</button>
+    <button class="filter-btn" data-filter="s7">UX</button>
+  </div>
+  <div class="word-count">Showing <b id="visibleCount">—</b> items</div>
+</div>
+
+<main>
+<div class="no-results" id="noResults">No results match your search.</div>
+
+<!-- S1 -->
+<div class="doc-section" id="s1">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2 class="section-title-big">Tutorials for DH Tools and Methods — <em>Part 1</em></h2>
+  </div>
+  <table class="doc-table">
+    <tr>
+      <td>
+        <div class="source-name">Digital Humanities Resources for Project Building</div>
+        <div class="source-sub">Curated by Alan Liu</div>
+      </td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Animation &amp; Storyboarding</span>
+          <span class="cat-tag">Audio Tools</span>
+          <span class="cat-tag">Authoring / Annotation</span>
+          <span class="cat-tag">Code Versioning</span>
+          <span class="cat-tag">Command Line Tools</span>
+          <span class="cat-tag">Content Management Systems</span>
+          <span class="cat-tag">Crowdsourcing</span>
+          <span class="cat-tag">Exhibition / Collection</span>
+          <span class="cat-tag">Internet Research (tools for studying the Internet)</span>
+          <span class="cat-tag">Mapping</span>
+          <span class="cat-tag">Network / Social Network Analysis</span>
+          <span class="cat-tag">Programming Languages Tools</span>
+          <span class="cat-tag">Simulation</span>
+          <span class="cat-tag">Text Analysis</span>
+          <span class="cat-tag">Text Encoding</span>
+          <span class="cat-tag">Text Collation</span>
+          <span class="cat-tag">Text Preparation</span>
+          <span class="cat-tag">Topic Modeling</span>
+          <span class="cat-tag">Video Tools</span>
+          <span class="cat-tag">Video &amp; Film Analysis</span>
+          <span class="cat-tag">Visualization — General</span>
+          <span class="cat-tag">Diagrams &amp; Graphs</span>
+          <span class="cat-tag">Image</span>
+          <span class="cat-tag">Infographics</span>
+          <span class="cat-tag">Network Viz</span>
+          <span class="cat-tag">Text Viz</span>
+          <span class="cat-tag">Time Lines</span>
+          <span class="cat-tag">Twitter Viz</span>
+          <span class="cat-tag">Deformance Tools</span>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- S2 -->
+<div class="doc-section" id="s2">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2 class="section-title-big">Tutorials for DH Tools and Methods — <em>Part 2</em></h2>
+  </div>
+  <table class="doc-table">
+    <tr>
+      <td>
+        <div class="source-name">General or Omnibus Technical Tutorials</div>
+      </td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Audio Editing</span>
+          <span class="cat-tag">Code Versioning (Github)</span>
+          <span class="cat-tag">Command Line (Bash / Powershell)</span>
+          <span class="cat-tag">Content Management Systems</span>
+          <span class="cat-tag">Curation</span>
+          <span class="cat-tag">Data Science</span>
+          <span class="cat-tag">Digitization</span>
+          <span class="cat-tag">Linked Data</span>
+          <span class="cat-tag">Mapping</span>
+          <span class="cat-tag">Network / Social Network Analysis</span>
+          <span class="cat-tag">Programming Languages Tools (Python · R)</span>
+          <span class="cat-tag">Simulation</span>
+          <span class="cat-tag">Text Analysis</span>
+          <span class="cat-tag">Text Collation</span>
+          <span class="cat-tag">Text Encoding</span>
+          <span class="cat-tag">Text Preparation</span>
+          <span class="cat-tag">Topic Modeling</span>
+          <span class="cat-tag">Visualization</span>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- S3 -->
+<div class="doc-section" id="s3">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2 class="section-title-big">Institutions, Curators &amp; <em>Project Examples</em></h2>
+  </div>
+  <table class="doc-table">
+    <tr>
+      <td><div class="source-name">Digital Humanities at University of Minnesota Duluth</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Text Analysis and Data Mining</span>
+          <span class="cat-tag">Digital Tools Repositories</span>
+          <span class="cat-tag">Story Telling Tools</span>
+          <span class="cat-tag">Data Visualization</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="source-name">Anastasia Salter &amp; Mel Stanfill</div>
+        <a class="source-link" href="https://understandingdigitalculture.hcommons.org" target="_blank">understandingdigitalculture.hcommons.org</a>
+      </td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Understanding Digital Culture</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Carolina Digital Humanities</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Multi-use Toolkits</span>
+          <span class="cat-tag">Collaboration Tools</span>
+          <span class="cat-tag">CMS / Web Publishing</span>
+          <span class="cat-tag">Data Visualization</span>
+          <span class="cat-tag">Timeline Tools</span>
+          <span class="cat-tag">Mapping Tools</span>
+          <span class="cat-tag">Network Analysis</span>
+          <span class="cat-tag">Text Resources for Valuing / Evaluating DH Practices</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">MIT</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Web Publishing</span>
+          <span class="cat-tag">Text Data Mining</span>
+          <span class="cat-tag">Text Encoding</span>
+          <span class="cat-tag">Text / Corpus Analysis</span>
+          <span class="cat-tag">Research Workflows</span>
+          <span class="cat-tag">Tools</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Union College</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Mapping / GIS</span>
+          <span class="cat-tag">Computational Text Analysis</span>
+          <span class="cat-tag">Social Network Analysis</span>
+          <span class="cat-tag">3D / AR / VR</span>
+          <span class="cat-tag">Digital Exhibitions</span>
+          <span class="cat-tag">DSi Team</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Purdue University</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Text Analysis Resources</span>
+          <span class="cat-tag">Social Media Analysis</span>
+          <span class="cat-tag">Spatial Analysis Resources</span>
+          <span class="cat-tag">Network Analysis Resources</span>
+          <span class="cat-tag">Data Management / Visualization</span>
+          <span class="cat-tag">Python / R</span>
+          <span class="cat-tag">TAPoR</span>
+          <span class="cat-tag">The Programming Historian</span>
+          <span class="cat-tag">Digital Humanities Now</span>
+          <span class="cat-tag">The Digital Humanities Literacy Guidebook</span>
+          <span class="cat-tag">The Carpentries</span>
+          <span class="cat-tag">Coursera</span>
+          <span class="cat-tag">W3Schools</span>
+          <span class="cat-tag">Hathi Trust Research Center Analytics</span>
+          <span class="cat-tag">Gale Digital Scholar Lab</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Miriam Posner</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">A Gallery of Primary Sources — Making the History of 1989</span>
+          <span class="cat-tag">A Digital Scholarly Edition — The Willa Cather Archive</span>
+          <span class="cat-tag">A Mapping Project — The Negro Travelers' Green Book</span>
+          <span class="cat-tag">A Network Visualization — A Co-Citation Network for Philosophy</span>
+          <span class="cat-tag">Computer-Aided Text Analysis — Topic Modeling Martha Ballard's Diary</span>
+          <span class="cat-tag">A Historical 3D Model — Digital Magnesia</span>
+          <span class="cat-tag">A Longform, Media-Rich Narrative — The Nicest Kids in Town</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">The University of Virginia</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Jumpstart Your DH Project: Identify your dataset</span>
+          <span class="cat-tag">Select methodology</span>
+          <span class="cat-tag">Choose your tool</span>
+          <span class="cat-tag">Execute your project</span>
+          <span class="cat-tag">Present your project</span>
+          <span class="cat-tag">Network Visualization of DH Projects with their Technical Approaches</span>
+          <span class="cat-tag">Tools</span>
+          <span class="cat-tag">Resource Page: Text Technologies</span>
+          <span class="cat-tag">Examples of DH Projects</span>
+          <span class="cat-tag">Assignment Ideas</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Digital Humanities Collaborative of North Carolina</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">DH Projects from different institutions</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">The University of Virginia's DH webpage</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Computational Humanities Research 2020</span>
+          <span class="cat-tag">The Page Image: Toward a Visual History of Digital Documents</span>
+          <span class="cat-tag">New Approach to Digital Scholarly Editions</span>
+          <span class="cat-tag">The Programming Historian</span>
+          <span class="cat-tag">Miriam Posner's Blog: How did they make that?</span>
+          <span class="cat-tag">DHCommons</span>
+          <span class="cat-tag">Debates in the Digital Humanities (open access edition)</span>
+          <span class="cat-tag">#alt-academy: a mediacommons project</span>
+          <span class="cat-tag">The Digital in the Humanities: A Special Interview Series</span>
+          <span class="cat-tag">CenterNet: An International Network of Humanities Centers</span>
+          <span class="cat-tag">MLA Guidelines for Evaluating Work in Digital Humanities and Digital Media</span>
+          <span class="cat-tag">MLA Digital Pedagogy: Concepts, Models, and Experiments</span>
+          <span class="cat-tag">DH+Lib — where the digital humanities and librarianship meet</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">The Digital Humanities Toolkit at Gettysburg College</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Tools: CMS, Storytelling, Visualization, Analysis</span>
+          <span class="cat-tag">Design: Planning and Usability</span>
+          <span class="cat-tag">Media Library</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Some more</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">GS Digital Fellows / CUNY Academic Commons by Stefano Morello</span>
+          <span class="cat-tag">Digitizing Collections: Digital Collection Platforms at Atla</span>
+          <span class="cat-tag">DH101: A Highly Opinionated Resource Guide by Miriam Posner</span>
+          <span class="cat-tag">An Overview of Digital Collections and Exhibitions Platforms in 2022 at Mused</span>
+          <span class="cat-tag">Workshop on Humanities in the Semantic Web 2020</span>
+          <span class="cat-tag">Lexos API: Text Analysis Tool</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">Created by the WE1S project</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Reflections on the Methodology of the WE1S Project</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><div class="source-name">The University of Minnesota's Department of Writing and Rhetoric</div></td>
+      <td>
+        <div class="cat-list">
+          <span class="cat-tag">Video Projects</span>
+          <span class="cat-tag">Web Projects</span>
+          <span class="cat-tag">Audio Projects</span>
+          <span class="cat-tag">Graphic Design Tools</span>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- S4 -->
+<div class="doc-section" id="s4">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2 class="section-title-big">The University of Tennessee, Knoxville — <em>Tools Lists</em></h2>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Popular Tools</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">DH Box</div><div class="bullet-item">Drupal</div>
+      <div class="bullet-item">HistoryPin</div><div class="bullet-item">Mukurtu</div>
+      <div class="bullet-item">NeatLine</div><div class="bullet-item">Omeka</div>
+      <div class="bullet-item">ViewShare</div><div class="bullet-item">Wordpress</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Coding &amp; Programming Resources</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">20 Fresh JavaScript Data Visualization Libraries</div>
+      <div class="bullet-item">Eloquent Javascript</div>
+      <div class="bullet-item">Getting Started With Adobe Flash Professional</div>
+      <div class="bullet-item">Hour of Code</div>
+      <div class="bullet-item">HTML5Up</div>
+      <div class="bullet-item">Learning the Java Language</div>
+      <div class="bullet-item">Lynda.com</div>
+      <div class="bullet-item">A Programmer's Guide to Data Mining</div>
+      <div class="bullet-item">Stack Exchange</div>
+      <div class="bullet-item">Stack Overflow</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">E-Book Creation Tools</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">How to Create an eBook the Open Source Way</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">General Directories of Tools / Apps / Software</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">TAPoR 3</div>
+      <div class="bullet-item">DiRT — Digital Research Tools Directory</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Interactive Timelines &amp; Displays</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">MIT HyperStudio's Chronos Timeline</div>
+      <div class="bullet-item">SIMILE Widgets</div>
+      <div class="bullet-item">Timeline JS</div>
+      <div class="bullet-item">TimeToast</div>
+      <div class="bullet-item">Tiki-Toki</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Visualization Apps &amp; Tools</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">D3js</div><div class="bullet-item">Gapminder</div>
+      <div class="bullet-item">Gephi</div><div class="bullet-item">Google Fusion Tables (Beta)</div>
+      <div class="bullet-item">Palladio</div>
+      <div class="bullet-item">Prefuse Information Visualization Toolkit</div>
+      <div class="bullet-item">Tableau</div>
+      <div class="bullet-item">Twitter Analytics and Visualization Tools</div>
+      <div class="bullet-item">US Census Data Visualization Gallery</div>
+      <div class="bullet-item">Visual Understanding Environment (VUE)</div>
+      <div class="bullet-item">Voyant Tools</div><div class="bullet-item">Walrus</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Oral Histories</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Oral History in the Digital Age</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Web Design &amp; Prototyping</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Drupal For Humanists</div>
+      <div class="bullet-item">HTML5Up</div>
+      <div class="bullet-item">invisionapp</div>
+      <div class="bullet-item">Tumult Hype 3</div>
+      <div class="bullet-item">Wordpress</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">GIS Apps &amp; Sites</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">ArcGIS</div><div class="bullet-item">Cartagen</div>
+      <div class="bullet-item">CARTO</div><div class="bullet-item">ESRI StoryMaps</div>
+      <div class="bullet-item">Google Earth Pro</div><div class="bullet-item">Leaflet</div>
+      <div class="bullet-item">MapBox Studio</div><div class="bullet-item">Open Street Map</div>
+      <div class="bullet-item">QGIS</div>
+      <div class="bullet-item">Scholar's Lab: Spatial Humanities</div>
+      <div class="bullet-item">StoryMap JS</div>
+      <div class="bullet-item">Transportation Explorer. OECD</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Open Image &amp; Multimedia Collections</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Best Practices for Attribution</div>
+      <div class="bullet-item">British Library Image Collection on Flickr</div>
+      <div class="bullet-item">Flickr — Creative Commons</div>
+      <div class="bullet-item">Freesound</div>
+      <div class="bullet-item">Internet Archive</div>
+      <div class="bullet-item">US Library of Congress Flickr Stream</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Easy Animations</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Animoto</div>
+      <div class="bullet-item">Explain Everything</div>
+      <div class="bullet-item">VideoScribe — Whiteboard Video Animations</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Text &amp; Video Annotation</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Annotation Studio</div>
+      <div class="bullet-item">AntVid</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Project Management &amp; Workflow</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Basecamp</div><div class="bullet-item">Github</div>
+      <div class="bullet-item">Slack</div><div class="bullet-item">Trello</div>
+      <div class="bullet-item">Redbooth</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Text Corpora</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Google N-Grams Viewer</div>
+      <div class="bullet-item">Culturomics</div>
+      <div class="bullet-item">Chronicling America — Historic American Newspapers</div>
+      <div class="bullet-item">Time Magazine</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Text Mining Tools</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Calibre</div>
+      <div class="bullet-item">HathiTrust Research Center</div>
+      <div class="bullet-item">Hermeneutica</div>
+      <div class="bullet-item">TAPoR 3</div>
+      <div class="bullet-item">Laurence Anthony Suite of Text Analysis Tools</div>
+      <div class="bullet-item">Voyant Tools</div>
+      <div class="bullet-item">Mallet: MAchine Learning for LanguagE</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Boatwright Memorial Library</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Exhibitions and Digital Publishing</div>
+      <div class="bullet-item">Mapping</div>
+      <div class="bullet-item">Image Analysis and Annotation</div>
+      <div class="bullet-item">Visualizations and Timelines</div>
+      <div class="bullet-item">Textual Analysis and Annotation</div>
+      <div class="bullet-item">Modeling</div>
+      <div class="bullet-item">Finding, Creating, and Storing Images</div>
+      <div class="bullet-item">Copyright and Images</div>
+      <div class="bullet-item">DiRT — Digital Research Tools</div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 -->
+<div class="doc-section" id="s5">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2 class="section-title-big">Interactive Narratives &amp; <em>Storytelling Tools</em></h2>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Some Examples — Interactive Narratives</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Gone Home</div>
+      <div class="bullet-item">Highrise</div>
+      <div class="bullet-item">Prison Valley</div>
+      <div class="bullet-item">The Works of Chris Milk</div>
+      <div class="bullet-item">Star Wars Uncut</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Tools, Apps, &amp; Software for Storytelling</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Conducttr</div><div class="bullet-item">Cowbird</div>
+      <div class="bullet-item">Findery</div>
+      <div class="bullet-item">Games for Change Resource Center</div>
+      <div class="bullet-item">Getty Images's 5 Elements for Successful Transmedia Storytelling</div>
+      <div class="bullet-item">IFTTT</div><div class="bullet-item">Inform</div>
+      <div class="bullet-item">Korsakow</div><div class="bullet-item">Omeka</div>
+      <div class="bullet-item">Popcorn JS</div><div class="bullet-item">Scalar</div>
+      <div class="bullet-item">Stellar</div><div class="bullet-item">Storybird</div>
+      <div class="bullet-item">Transmedia Storytelling 101</div>
+      <div class="bullet-item">Tumblr</div><div class="bullet-item">Twine</div>
+    </div>
+  </div>
+</div>
+
+<!-- S6 -->
+<div class="doc-section" id="s6">
+  <div class="section-head">
+    <span class="section-num">06</span>
+    <h2 class="section-title-big">Digital Archiving, Storytelling &amp; <em>Social Platforms</em></h2>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Digital Archiving and Storytelling Platforms</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Omeka</div><div class="bullet-item">Wordpress</div>
+      <div class="bullet-item">Drupal</div><div class="bullet-item">Mukurtu</div>
+      <div class="bullet-item">Gather</div><div class="bullet-item">Collective Access</div>
+      <div class="bullet-item">Preservica</div><div class="bullet-item">CollectionBuilder</div>
+      <div class="bullet-item">Scalar</div><div class="bullet-item">Shorthand</div>
+      <div class="bullet-item">Medium</div><div class="bullet-item">Storify</div>
+      <div class="bullet-item">Maptia</div><div class="bullet-item">Atavist</div>
+      <div class="bullet-item">Steller</div><div class="bullet-item">Pageflow</div>
+      <div class="bullet-item">Weebly</div><div class="bullet-item">Wix</div>
+      <div class="bullet-item">Wax (Jekyll-based): a minimal computing project for producing digital exhibitions focused on longevity, low costs, and flexibility</div>
+      <div class="bullet-item">Ushahidi</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">Social Networking and Content Sharing Platforms</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Facebook</div><div class="bullet-item">Flickr</div>
+      <div class="bullet-item">Foursquare</div><div class="bullet-item">Giphy</div>
+      <div class="bullet-item">Historypin</div><div class="bullet-item">Instagram</div>
+      <div class="bullet-item">Pinterest</div><div class="bullet-item">Reddit</div>
+      <div class="bullet-item">Twitter</div><div class="bullet-item">Tumblr</div>
+      <div class="bullet-item">YouTube</div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;">
+    <p class="inline-text">
+      The U.S. National Archives and Records Administration has <strong>"signed agreements with social networks, publishing platforms, and content sharing sites with the goal of sharing our mission and connecting with more people than ever before."</strong> If we go to their <strong>"Social Media at the National Archives"</strong> page, we can see that they are using almost all of the above listed platforms to disseminate their materials, discourses, and rhetorics. So, why not we do the same? The point is not about using what the mainstream institutions are using. Far from it. The point is using whatever we can use to tell our stories ourselves. <em>Let's see if master's tool can dismantle master's house.</em>
+    </p>
+  </div>
+</div>
+
+<!-- S7 -->
+<div class="doc-section" id="s7">
+  <div class="section-head">
+    <span class="section-num">07</span>
+    <h2 class="section-title-big">UX Tools, Methods &amp; <em>Resources</em></h2>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">UX Design Tools &amp; URLs</div>
+    <div class="url-grid">
+      <div class="url-item">https://uxtools.co</div>
+      <div class="url-item">18F Methods</div>
+      <div class="url-item">UX Design Tools</div>
+      <div class="url-item">http://Designresearchtechniques.com</div>
+      <div class="url-item">http://Opendesignkit.org</div>
+      <div class="url-item">"UX methods &amp; projects" base</div>
+      <div class="url-item">http://Medialabamsterdam.com</div>
+      <div class="url-item">http://Servicedesigntools.org</div>
+      <div class="url-item">https://servicedesigntools.org/tools</div>
+      <div class="url-item">https://www.designkit.org/methods</div>
+      <div class="url-item">https://toolbox.hyperisland.com</div>
+      <div class="url-item">https://gamestorming.com</div>
+      <div class="url-item">https://www.curiositytank.com/ux-lexicon</div>
+      <div class="url-item">https://www.interaction-design.org/literature/topics/ux-tools</div>
+      <div class="url-item">https://uxdesign.cc/a-comprehensive-list-of-ux-design-methods-deliverables-2021</div>
+      <div class="url-item">https://uxmastery.com/resources/techniques/</div>
+      <div class="url-item">https://www.hotjar.com/ux-design/tools/</div>
+      <div class="url-item">https://usabilitygeek.com/user-experience-ux-tools/</div>
+      <div class="url-item">UX Process: https://uxmastery.com/resources/process/</div>
+      <div class="url-item">Human Factor Methods + Design Factor: http://hfmethods.weebly.com</div>
+      <div class="url-item">https://www.toptal.com/designers/ux-research/ux-research-techniques</div>
+      <div class="url-item">https://www.toptal.com/designers/user-research/guide-to-ux-research-methods</div>
+      <div class="url-item">UX Design Institute</div>
+      <div class="url-item">UI / UX Design Tools Resources</div>
+      <div class="url-item">Key UX design concepts and techniques</div>
+      <div class="url-item">UX Checklist tools</div>
+      <div class="url-item">http://uxchecklist.github.io</div>
+      <div class="url-item">https://www.nngroup.com/articles/ux-research-cheat-sheet/</div>
+      <div class="url-item">http://uxrecipe.github.io</div>
+    </div>
+  </div>
+
+  <div class="method-group" style="margin-top:32px;">
+    <div class="method-group-title">The Usability Body of Knowledge — I. Methods</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Planning</div>
+      <div class="bullet-item">User Research</div>
+      <div class="bullet-item">Requirements Methods</div>
+      <div class="bullet-item">Cognitive Models</div>
+      <div class="bullet-item">Task Analysis and Modeling Methods</div>
+      <div class="bullet-item">Design Methods</div>
+      <div class="bullet-item">Usability Evaluation Methods</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">The Usability Body of Knowledge — II. Design</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Design Basics</div>
+      <div class="bullet-item">Foundations</div>
+      <div class="bullet-item">Design Stages</div>
+      <div class="bullet-item">Platform and Domain-Specific Design Issues</div>
+      <div class="bullet-item">International Design</div>
+      <div class="bullet-item">Methodologies</div>
+      <div class="bullet-item">Standards</div>
+    </div>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title">The Usability Body of Knowledge — III.</div>
+    <div class="bullet-cols">
+      <div class="bullet-item">Managing UX</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div>
+    <div class="footer-title">Global South <span>Solidarities</span></div>
+    <div class="footer-sub">Digital Humanities Resources for Project Building</div>
+  </div>
+  <div class="footer-right">
+    <strong>Bibhushana Poudyal</strong><br>
+    Assistant Professor, WSU<br>
+    Global South Solidarities Initiative
+  </div>
+</footer>
+
+<!-- FLOATING BOTTOM-RIGHT NAV -->
+<div id="fab-nav">
+  <div id="fab-menu">
+    <a class="fab-item" href="#top" data-section="top">
+      <span class="fab-item-label">Top of Page</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s1" data-section="s1">
+      <span class="fab-item-label">01 · Tutorials Part 1</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s2" data-section="s2">
+      <span class="fab-item-label">02 · Tutorials Part 2</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s3" data-section="s3">
+      <span class="fab-item-label">03 · Institutions</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s4" data-section="s4">
+      <span class="fab-item-label">04 · Tools Lists</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s5" data-section="s5">
+      <span class="fab-item-label">05 · Narratives</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s6" data-section="s6">
+      <span class="fab-item-label">06 · Platforms</span>
+      <span class="fab-item-dot"></span>
+    </a>
+    <a class="fab-item" href="#s7" data-section="s7">
+      <span class="fab-item-label">07 · UX Resources</span>
+      <span class="fab-item-dot"></span>
+    </a>
+  </div>
+  <button id="fab-btn" aria-label="Toggle navigation">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <line x1="9" y1="2" x2="9" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('button,.cat-tag,.bullet-item,.url-item,.top-nav-link,.fab-item,a').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+});
+
+// Marquee
+const terms = ['Animation','Mapping','Network Analysis','Text Mining','Visualization','Crowdsourcing','Storytelling','GIS','Digital Humanities','Data Mining','Omeka','Python','Scalar','Twine','D3js','Voyant Tools','Gephi','Github','Drupal','Wordpress','Tableau','QGIS','ArcGIS','Transmedia','Annotation','Encoding','Collation','Oral Histories','UX Design','3D','AR','VR','Calibre','HathiTrust','TAPoR','Mallet','Leaflet','CARTO','Palladio','Basecamp','Slack','Trello','Redbooth','Freesound','Culturomics'];
+const track = document.getElementById('marqueeTrack');
+[...terms,...terms].forEach(t => {
+  const s = document.createElement('span');
+  s.className = 'marquee-item';
+  s.textContent = t;
+  track.appendChild(s);
+});
+
+// Search
+const searchInput = document.getElementById('search');
+const noResults = document.getElementById('noResults');
+const visibleCount = document.getElementById('visibleCount');
+function getAllItems() { return document.querySelectorAll('.cat-tag,.bullet-item,.url-item'); }
+function updateCount() {
+  let v = 0;
+  getAllItems().forEach(el => { if (!el.classList.contains('dim')) v++; });
+  visibleCount.textContent = v;
+}
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  let found = 0;
+  getAllItems().forEach(el => {
+    if (!q) { el.classList.remove('highlight','dim'); found++; }
+    else if (el.textContent.toLowerCase().includes(q)) { el.classList.add('highlight'); el.classList.remove('dim'); found++; }
+    else { el.classList.add('dim'); el.classList.remove('highlight'); }
+  });
+  noResults.style.display = found === 0 ? 'block' : 'none';
+  updateCount();
+});
+
+// Filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.doc-section').forEach(sec => {
+      sec.classList.toggle('hidden', f !== 'all' && sec.id !== f);
+    });
+    searchInput.value = '';
+    getAllItems().forEach(el => el.classList.remove('highlight','dim'));
+    noResults.style.display = 'none';
+    updateCount();
+    if (f !== 'all') setTimeout(() => document.getElementById(f)?.scrollIntoView({behavior:'smooth',block:'start'}), 60);
+  });
+});
+
+// FAB nav
+const fabBtn = document.getElementById('fab-btn');
+const fabMenu = document.getElementById('fab-menu');
+fabBtn.addEventListener('click', () => {
+  const isOpen = fabMenu.classList.toggle('open');
+  fabBtn.classList.toggle('open', isOpen);
+});
+document.querySelectorAll('.fab-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.getElementById(item.dataset.section);
+    fabMenu.classList.remove('open');
+    fabBtn.classList.remove('open');
+    if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    else scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+// Highlight current section in FAB
+const fabObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      document.querySelectorAll('.fab-item').forEach(item => {
+        item.classList.toggle('current', item.dataset.section === id);
+      });
+    }
+  });
+}, { threshold: 0.25 });
+document.querySelectorAll('.doc-section').forEach(el => fabObs.observe(el));
+
+updateCount();
+</script>
+</body>
+</html>
