@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENG 548 — CLASSIFIED READING DOSSIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#14120E;
+  --bg-card:#1C1A14;
+  --amber:#C3A87F;
+  --amber-dim:rgba(195,168,127,0.12);
+  --amber-glow:rgba(96,108,56,0.08);
+  --red:#606C38;
+  --blue:#C3A87F;
+  --green:#606C38;
+  --text:#FEFAE0;
+  --text-dim:#C3A87F;
+  --font-head:'Bebas Neue',sans-serif;
+  --font-body:'Trebuchet MS','Lucida Grande','Lucida Sans Unicode',sans-serif;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  font-size:16px;
+  cursor:crosshair;
+  overflow-x:hidden;
+}
+
+::selection{background:#606C38;color:#FEFAE0}
+
+/* === GRAIN + SCANLINES === */
+/* Bibhushana animated grain */
+.grain-overlay {
+  position:fixed;top:-50%;left:-50%;width:200%;height:200%;
+  z-index:9998;pointer-events:none;opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  animation:grainShift 0.5s steps(4) infinite;
+}
+@keyframes grainShift {
+  0%{transform:translate(0,0)}
+  25%{transform:translate(-2%,-1%)}
+  50%{transform:translate(1%,2%)}
+  75%{transform:translate(-1%,-2%)}
+  100%{transform:translate(2%,1%)}
+}
+
+/* === PROGRESS BAR === */
+.progress-bar{
+  position:fixed;top:0;left:0;width:100%;height:3px;z-index:10000;
+  background:#14120E;
+}
+.progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#606C38,#C3A87F);
+  transition:width 0.15s;
+}
+
+/* === DISCLAIMER === */
+.disclaimer{
+  position:fixed;bottom:0;left:0;right:0;z-index:10000;
+  background:rgba(20,18,14,0.97);
+  border-top:1px solid var(--red);
+  padding:6px 24px;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#606C38;
+  text-align:center;
+}
+
+/* === SIDEBAR === */
+.sidebar{
+  position:fixed;left:0;top:3px;bottom:24px;width:260px;
+  background:rgba(20,18,14,0.97);border-right:1px solid var(--amber-dim);
+  overflow-y:auto;z-index:100;padding:20px 0;
+  transition:transform 0.3s;
+}
+.sidebar-title{
+  font-family:var(--font-head);font-size:13px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--amber);
+  padding:12px 20px;border-bottom:1px solid var(--amber-dim);
+  margin-bottom:12px;
+}
+.nav-link{
+  display:block;padding:8px 20px;color:var(--text-dim);
+  text-decoration:none;font-size:13px;letter-spacing:0.5px;
+  border-left:2px solid transparent;transition:all 0.2s;
+}
+.nav-link:hover{color:var(--amber);border-left-color:var(--amber);background:var(--amber-glow)}
+.nav-link .nav-num{
+  display:inline-block;width:60px;color:var(--red);font-size:9px;letter-spacing:1.5px;
+}
+.nav-map-link{
+  display:block;padding:10px 20px;color:var(--amber);
+  text-decoration:none;font-family:var(--font-head);font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;
+  border-bottom:1px solid var(--amber-dim);margin-bottom:8px;
+}
+.nav-map-link:hover{background:var(--amber-glow)}
+
+/* === MAIN === */
+.main{margin-left:260px;padding:0 0 60px}
+.container{max-width:920px;margin:0 auto;padding:40px 40px 0}
+
+/* === HERO === */
+.hero{
+  padding:100px 0 80px;text-align:center;position:relative;
+  border-bottom:1px solid var(--amber-dim);margin-bottom:60px;
+}
+.hero::after{
+  content:'CLASSIFIED';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);
+  font-family:var(--font-head);font-size:120px;font-weight:700;
+  letter-spacing:20px;color:rgba(200,168,75,0.06);
+  white-space:nowrap;pointer-events:none;
+}
+.hero-code{
+  font-family:var(--font-body);font-size:11px;letter-spacing:4px;
+  color:var(--red);display:block;margin-bottom:16px;
+}
+.hero h1{
+  font-family:var(--font-head);font-size:42px;font-weight:700;
+  letter-spacing:6px;text-transform:uppercase;color:var(--amber);
+  line-height:1.15;margin-bottom:12px;
+}
+.hero-sub{
+  font-family:var(--font-head);font-size:16px;font-weight:400;
+  letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);
+}
+.hero-meta{
+  font-size:11px;color:var(--text-dim);margin-top:24px;letter-spacing:1px;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:40px;margin-top:28px;
+}
+.stat-val{font-family:var(--font-head);font-size:32px;font-weight:700;color:var(--amber);display:block}
+.stat-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
+
+/* === WEEK BLOCKS === */
+.week-block{
+  margin-bottom:64px;scroll-margin-top:20px;
+  position:relative;
+}
+.week-block::before{
+  content:'';position:absolute;top:0;left:-40px;bottom:0;
+  width:2px;background:linear-gradient(180deg,var(--amber-dim),transparent);
+}
+.week-label{margin-bottom:8px}
+.week-num{
+  font-family:var(--font-body);font-size:12px;letter-spacing:3px;
+  color:var(--red);margin-right:12px;
+}
+.week-date{font-size:12px;letter-spacing:2px;color:#FEFAE0}
+.week-title{
+  font-family:var(--font-head);font-size:22px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--red);
+  margin-bottom:28px;padding-bottom:12px;
+  border-bottom:1px solid var(--amber-dim);
+}
+
+/* === CONTENT BOX (CARD) === */
+.cards-grid{display:flex;flex-direction:column;gap:28px}
+
+.content-box{
+  background:#1C1A14;
+  border:1px solid var(--amber);
+  border-top-width:3px;
+  padding:28px 32px;
+  position:relative;
+  transform:rotate(var(--rot,0deg));
+  box-shadow:10px 10px 0 rgba(0,0,0,0.5);
+  transition:transform 0.3s,box-shadow 0.3s;
+}
+.content-box:hover{
+  transform:rotate(0deg) translateY(-2px);
+  box-shadow:6px 6px 24px rgba(200,168,75,0.1),10px 10px 0 rgba(0,0,0,0.4);
+}
+
+/* Corner brackets */
+.content-box::before{
+  content:'';position:absolute;top:8px;left:8px;
+  width:16px;height:16px;
+  border-top:2px solid var(--amber);border-left:2px solid var(--amber);
+}
+.content-box::after{
+  content:'';position:absolute;bottom:8px;right:8px;
+  width:16px;height:16px;
+  border-bottom:2px solid var(--amber);border-right:2px solid var(--amber);
+}
+
+/* FILE badge */
+.file-badge{
+  position:absolute;top:10px;right:12px;
+  font-family:var(--font-head);font-size:10px;font-weight:700;
+  letter-spacing:2px;color:#FEFAE0;background:#606C38;
+  padding:3px 10px;
+}
+
+.cb-header{margin-bottom:16px}
+.cb-author{
+  font-family:var(--font-head);font-size:16px;font-weight:700;
+  letter-spacing:3px;color:var(--red);
+}
+.cb-work{
+  font-size:13px;color:var(--text);margin-top:4px;
+  font-style:italic;
+}
+.cb-source{color:#FEFAE0!important;
+  font-size:12px;letter-spacing:1.5px;color:#FEFAE0;
+  margin-top:4px;text-transform:uppercase;
+}
+
+.cb-body{
+  padding:16px 0;
+  border-top:1px dashed var(--amber-dim);
+  border-bottom:1px dashed var(--amber-dim);
+}
+.cb-body p{
+  font-size:15.5px;line-height:1.8;color:var(--text);
+}
+
+.cb-tags{
+  margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;
+}
+.tag{
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--red);border:1px solid var(--red);
+  padding:3px 8px;border-radius:2px;
+}
+
+.highlight{
+  background:linear-gradient(180deg,transparent 60%,rgba(200,168,75,0.25) 60%);
+  color:var(--amber);
+}
+
+/* === VISUALIZATION SECTION === */
+.viz-section{
+  margin:60px 0;padding:40px 0;
+  border-top:1px solid var(--amber-dim);
+  border-bottom:1px solid var(--amber-dim);
+  position:relative;
+}
+.viz-section::after{
+  content:'TOP SECRET';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);
+  font-family:var(--font-head);font-size:80px;font-weight:700;
+  letter-spacing:16px;color:rgba(200,16,46,0.035);
+  white-space:nowrap;pointer-events:none;
+}
+
+.viz-tabs{
+  display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--amber-dim);
+  overflow-x:auto;
+}
+.viz-tab{
+  font-family:var(--font-head);font-size:11px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);background:transparent;border:none;
+  padding:12px 18px;cursor:crosshair;
+  border-bottom:2px solid transparent;transition:all 0.2s;
+}
+.viz-tab:hover{color:var(--text)}
+.viz-tab.active{color:var(--amber);border-bottom-color:var(--amber);background:var(--amber-glow)}
+
+.viz-panel{display:none;padding:20px 0}
+.viz-panel.active{display:block}
+.viz-title{
+  font-family:var(--font-head);font-size:13px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--amber);margin-bottom:4px;
+}
+.viz-subtitle{font-size:14px;color:#FEFAE0;margin-bottom:16px;font-style:italic}
+
+.viz-controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.viz-ctrl-btn{
+  font-family:var(--font-body);font-size:10px;letter-spacing:1px;
+  color:var(--text-dim);background:var(--bg-card);border:1px solid var(--amber-dim);
+  padding:5px 12px;cursor:crosshair;transition:all 0.2s;
+}
+.viz-ctrl-btn:hover{border-color:var(--amber);color:var(--amber)}
+.viz-select{
+  font-family:var(--font-body);font-size:10px;color:var(--text-dim);
+  background:var(--bg-card);border:1px solid var(--amber-dim);
+  padding:5px 10px;outline:none;cursor:crosshair;
+}
+.viz-select option{background:var(--bg)}
+
+canvas{
+  display:block;width:100%;
+  background:#1C1A14;border:1px solid var(--amber-dim);
+  cursor:crosshair;
+}
+
+.viz-tooltip{
+  display:none;position:fixed;background:#1C1A14;
+  border:1px solid var(--amber);padding:12px 16px;
+  font-size:12px;color:var(--text);max-width:300px;
+  z-index:1000;pointer-events:none;
+  box-shadow:8px 8px 0 rgba(0,0,0,0.5);
+}
+.viz-tooltip .tt-author{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--amber);letter-spacing:1px}
+.viz-tooltip .tt-work{font-size:11px;color:var(--text-dim);margin-bottom:4px;font-style:italic}
+.viz-tooltip .tt-concept{font-size:11px;color:var(--text)}
+.viz-tooltip .tt-cluster{font-family:var(--font-body);font-size:9px;letter-spacing:1.5px;color:var(--red);margin-top:4px;text-transform:uppercase}
+
+.flow-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}
+.flow-legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-dim);cursor:crosshair}
+.flow-legend-item:hover{color:var(--text)}
+.flow-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* === THREADS === */
+.threads-section{margin-top:40px;padding-top:28px;border-top:1px solid var(--amber-dim)}
+.threads-title{
+  font-family:var(--font-head);font-size:12px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--amber);margin-bottom:20px;
+}
+.thread-item{
+  margin-bottom:20px;padding:22px 28px;background:var(--bg-card);
+  border:1px solid var(--amber-dim);cursor:crosshair;transition:all 0.3s;
+  transform:rotate(-0.3deg);
+}
+.thread-item:nth-child(even){transform:rotate(0.3deg)}
+.thread-item:hover{border-color:var(--amber);transform:rotate(0deg)}
+.thread-name{
+  font-family:var(--font-head);font-size:16px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:6px;
+}
+.thread-trace{font-size:17px;line-height:1.75;font-style:italic;color:#FEFAE0!important}
+
+/* === PDF EMBED === */
+.pdf-section{
+  margin-top:80px;padding-top:40px;border-top:2px solid var(--amber-dim);
+}
+.pdf-section-title{
+  font-family:var(--font-head);font-size:18px;font-weight:700;
+  letter-spacing:6px;text-transform:uppercase;color:var(--amber);
+  margin-bottom:28px;text-align:center;
+}
+.pdf-embed-card{
+  background:var(--bg-card);border:1px solid var(--amber);border-top-width:3px;
+  padding:20px;margin-bottom:32px;position:relative;
+  box-shadow:10px 10px 0 rgba(0,0,0,0.5);
+}
+.pdf-embed-card::before{
+  content:'';position:absolute;top:8px;left:8px;width:14px;height:14px;
+  border-top:2px solid var(--amber);border-left:2px solid var(--amber);
+}
+.pdf-embed-card::after{
+  content:'';position:absolute;bottom:8px;right:8px;width:14px;height:14px;
+  border-bottom:2px solid var(--amber);border-right:2px solid var(--amber);
+}
+.pdf-label{
+  font-family:var(--font-head);font-size:13px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--amber);
+  margin-bottom:12px;
+}
+.pdf-embed-card iframe,.pdf-embed-card object{
+  width:100%;height:600px;border:1px solid var(--amber-dim);background:#14120E;
+}
+
+/* === RESPONSIVE === */
+.hamburger{
+  display:none;position:fixed;top:8px;left:8px;z-index:200;
+  background:var(--bg-card);border:1px solid var(--amber-dim);
+  color:var(--amber);width:40px;height:40px;
+  font-size:18px;cursor:crosshair;
+  align-items:center;justify-content:center;
+}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .container{padding:24px 16px 0}
+  .hamburger{display:flex}
+  .hero h1{font-size:26px;letter-spacing:3px}
+  .content-box{padding:20px;transform:none!important}
+}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#14120E}
+::-webkit-scrollbar-thumb{background:var(--amber-dim)}
+::-webkit-scrollbar-thumb:hover{background:#606C38}
+
+/* === SUMMARY SECTION === */
+.summary-section{margin-top:80px;padding-top:40px;border-top:2px solid var(--amber-dim)}
+.summary-header{text-align:center;margin-bottom:32px}
+.sum-controls{display:flex;justify-content:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+.sum-filter.active{border-color:var(--amber);color:var(--amber)}
+.summary-grid{display:flex;flex-direction:column;gap:24px}
+.summary-divider{text-align:center;margin:48px 0 32px;display:flex;align-items:center;gap:20px}
+.divider-line{flex:1;height:2px;background:linear-gradient(90deg,transparent,#C3A87F,transparent)}
+.divider-title{font-family:var(--font-head);font-size:18px;font-weight:700;letter-spacing:5px;color:#C3A87F;white-space:nowrap}
+
+.sum-card{padding:24px 28px}
+.sum-card .sum-title{
+  font-family:var(--font-head);font-size:16px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--amber);
+  line-height:1.35;padding-right:60px;
+}
+.sum-card.resist .sum-title{color:var(--amber)}
+.sum-card .file-badge.resist{background:var(--amber)}
+.sum-card.resist{border-color:var(--amber);border-top-color:var(--amber)}
+.sum-card.resist::before{border-top-color:var(--amber);border-left-color:var(--amber)}
+.sum-card.resist::after{border-bottom-color:var(--amber);border-right-color:var(--amber)}
+
+.sum-content{padding-top:16px;border-top:1px dashed var(--amber-dim);margin-top:12px}
+.sum-subhead{
+  font-family:var(--font-head);font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;margin:20px 0 8px;
+}
+.sum-subhead.argument{color:#606C38}
+.sum-subhead.resist{color:var(--green)}
+.sum-para{font-size:15px;line-height:1.85;margin-bottom:12px;color:#FEFAE0}
+.sum-para .src-ref{color:#C3A87F;font-weight:500}
+
+.sum-toggle{
+  display:block;margin-top:12px;background:none;border:1px solid var(--amber-dim);
+  color:var(--text-dim);font-family:var(--font-body);font-size:11px;
+  letter-spacing:2px;padding:6px 16px;cursor:crosshair;transition:all 0.2s;width:100%;
+}
+.sum-toggle:hover{border-color:var(--amber);color:var(--amber)}
+.sum-toggle.expanded{color:var(--amber);border-color:var(--amber)}
+
+
+/* === PDF EMBED === */
+.pdf-archive{margin-top:80px;padding-top:48px;border-top:2px solid var(--amber-dim)}
+.pdf-header{text-align:center;margin-bottom:32px}
+.pdf-title{
+  font-family:var(--font-head);font-size:22px;font-weight:700;
+  letter-spacing:6px;text-transform:uppercase;color:var(--amber);margin-bottom:8px;
+}
+.pdf-desc{font-size:14px;color:#FEFAE0;font-style:italic}
+.pdf-frame-wrap{
+  position:relative;
+  transform:rotate(-0.4deg);
+  transition:transform 0.3s;
+}
+.pdf-frame-wrap:hover{transform:rotate(0deg)}
+.pdf-frame{
+  background:var(--bg-card);
+  border:2px solid var(--amber);border-top-width:4px;
+  padding:16px;position:relative;
+  box-shadow:12px 12px 0 rgba(0,0,0,0.5);
+}
+.pdf-frame::before{
+  content:'';position:absolute;top:10px;left:10px;
+  width:20px;height:20px;
+  border-top:3px solid var(--amber);border-left:3px solid var(--amber);
+}
+.pdf-frame::after{
+  content:'';position:absolute;bottom:10px;right:10px;
+  width:20px;height:20px;
+  border-bottom:3px solid var(--amber);border-right:3px solid var(--amber);
+}
+.pdf-frame iframe{
+  width:100%;height:700px;border:1px solid var(--amber-dim);
+  background:#14120E;display:block;
+}
+
+
+/* === ALTERNATING HEADING COLORS === */
+.week-block:nth-child(odd) .week-title{color:#606C38}
+.week-block:nth-child(even) .week-title{color:#C3A87F}
+.week-block:nth-child(odd) .week-block::before{background:linear-gradient(180deg,rgba(192,57,43,0.3),transparent)}
+.week-block:nth-child(even) .week-block::before{background:linear-gradient(180deg,rgba(39,174,96,0.3),transparent)}
+
+/* Card authors alternate */
+.content-box:nth-child(odd) .cb-author{color:#606C38}
+.content-box:nth-child(even) .cb-author{color:#C3A87F}
+.content-box:nth-child(odd) .file-badge{background:#606C38}
+.content-box:nth-child(even) .file-badge{background:#C3A87F}
+.content-box:nth-child(odd){border-color:var(--red);border-top-color:var(--red)}
+.content-box:nth-child(even){border-color:var(--amber);border-top-color:var(--amber)}
+.content-box:nth-child(odd)::before{border-top-color:var(--red);border-left-color:var(--red)}
+.content-box:nth-child(odd)::after{border-bottom-color:var(--red);border-right-color:var(--red)}
+.content-box:nth-child(even)::before{border-top-color:var(--amber);border-left-color:var(--amber)}
+.content-box:nth-child(even)::after{border-bottom-color:var(--amber);border-right-color:var(--amber)}
+
+/* Summary cards already have argument=red, resist=green — also alternate within each */
+.sum-card.argument:nth-child(odd) .sum-title{color:var(--red)}
+.sum-card.argument:nth-child(even) .sum-title{color:var(--amber)}
+.sum-card.argument:nth-child(even){border-color:var(--amber);border-top-color:var(--amber)}
+.sum-card.argument:nth-child(even)::before{border-top-color:var(--amber);border-left-color:var(--amber)}
+.sum-card.argument:nth-child(even)::after{border-bottom-color:var(--amber);border-right-color:var(--amber)}
+.sum-card.argument:nth-child(even) .file-badge{background:#606C38}
+
+/* Viz section titles alternate */
+.viz-title{color:#606C38!important}
+.threads-title{color:#C3A87F!important;font-size:18px!important;letter-spacing:5px!important;margin-bottom:28px!important}
+.thread-item:nth-child(odd) .thread-name{color:#606C38}
+.thread-item:nth-child(even) .thread-name{color:#C3A87F}
+
+/* Hero title mix */
+.hero h1{background:linear-gradient(135deg,#606C38,#C3A87F,#606C38);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Nav alternating */
+.nav-link:nth-child(odd):hover{color:var(--red);border-left-color:var(--red)}
+.nav-link:nth-child(even):hover{color:var(--green);border-left-color:var(--amber)}
+
+/* PDF section title */
+.pdf-title{color:#606C38!important}
+.pdf-section-title{color:var(--green)!important}
+
+/* Ensure body text is BLACK everywhere */
+.cb-body p, .sum-para, .thread-trace, .node-thread, .viz-subtitle, p{color:#FEFAE0!important}
+.cb-work{color:#FEFAE0!important}
+.tag{color:#606C38!important}
+
+</style>
+</head>
+<body>
+
+<!-- Bibhushana Grain Overlay -->
+<div class="grain-overlay"></div>
+
+<!-- WebGL Background Canvas -->
+<canvas id="bgShader" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none"></canvas>
+
+<!-- Progress Bar -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- Disclaimer -->
+<div class="disclaimer">▲ CLASSIFIED — ENG 548 READING DOSSIER — AUTHORIZED PERSONNEL ONLY — BIBHUSHANA POUDYAL ▲</div>
+
+<!-- Hamburger -->
+<button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">◆ DOSSIER INDEX</div>
+  <a class="nav-map-link" href="#vizSection">⬡ INTEL MAPS</a>
+  <a class="nav-link" href="#week-jan22"><span class="nav-num">WEEK 02</span>COLONIAL LEGACIES & RACIAL S...</a>
+<a class="nav-link" href="#week-jan29"><span class="nav-num">WEEK 03</span>BIOPOWER, SURVEILLANCE & DIG...</a>
+<a class="nav-link" href="#week-health"><span class="nav-num">MODULE</span>HEALTH, MEDICINE & BIOPOWER</a>
+<a class="nav-link" href="#week-march26"><span class="nav-num">WEEK 10</span>MILITARIZATION, BORDERS & TE...</a>
+<a class="nav-link" href="#week-april2"><span class="nav-num">WEEK 11</span>ABOLITIONIST TECH MOVEMENTS ...</a>
+<a class="nav-link" href="#week-april9"><span class="nav-num">WEEK 12</span>ABOLITIONIST TECH MOVEMENTS ...</a>
+<a class="nav-link" href="#week-april16"><span class="nav-num">WEEK 13</span>SPECULATIVE FUTURES — AFROFU...</a>
+  <a class="nav-map-link" href="#summaryDossier" style="margin-top:8px;border-top:1px solid var(--amber-dim);border-bottom:none">◉ ARGUMENTS DOSSIER</a>
+  <a class="nav-map-link" href="#pdfArchive" style="border-bottom:none">◉ SOURCE PDF</a>
+</nav>
+
+<!-- Main -->
+<main class="main">
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-code">▼ OPERATION CODENAME: OVERWATCH ▼</span>
+    <h1>AI, Biopolitics &<br>the Body in the<br>Digital Age</h1>
+    <div class="hero-sub">COMPLETE READING DOSSIER — SPRING 2025</div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val">27</span><span class="stat-lbl">Files</span></div>
+      <div class="stat"><span class="stat-val">7</span><span class="stat-lbl">Modules</span></div>
+      <div class="stat"><span class="stat-val">21</span><span class="stat-lbl">Authors</span></div>
+      <div class="stat"><span class="stat-val">4</span><span class="stat-lbl">Threads</span></div>
+    </div>
+    <div class="hero-meta">WASHINGTON STATE UNIVERSITY · GLOBAL SOUTH SOLIDARITIES · BIBHUSHANA POUDYAL</div>
+  </div>
+
+  <!-- INTERACTIVE MAPS -->
+  <section class="viz-section" id="vizSection">
+    <div class="viz-tabs">
+      <button class="viz-tab active" data-tab="network">Network Graph</button>
+      <button class="viz-tab" data-tab="flow">Concept Flow</button>
+      <button class="viz-tab" data-tab="timeline">Timeline</button>
+      <button class="viz-tab" data-tab="clusters">Thematic Clusters</button>
+    </div>
+
+    <div class="viz-panel active" id="panel-network">
+      <div class="viz-title">INTERTEXTUAL NETWORK</div>
+      <div class="viz-subtitle">Drag nodes. Hover for connections. Click to jump to file.</div>
+      <div class="viz-controls">
+        <button class="viz-ctrl-btn" onclick="resetNetwork()">Reset</button>
+        <button class="viz-ctrl-btn" onclick="toggleLabels()">Labels</button>
+        <select class="viz-select" onchange="filterCluster(this.value)">
+          <option value="all">All Clusters</option>
+          <option value="colonial">Colonial</option>
+          <option value="surveillance">Surveillance</option>
+          <option value="digital">Digital Colonial</option>
+          <option value="medical">Medical</option>
+          <option value="abolition">Abolition</option>
+          <option value="futures">Futures</option>
+        </select>
+      </div>
+      <canvas id="networkCanvas" width="1200" height="900"></canvas>
+      <div id="networkTooltip" class="viz-tooltip"></div>
+    </div>
+
+    <div class="viz-panel" id="panel-flow">
+      <div class="viz-title">CONCEPT FLOW</div>
+      <div class="viz-subtitle">How key concepts migrate across texts. Hover a thread to trace.</div>
+      <canvas id="flowCanvas" width="860" height="520"></canvas>
+      <div id="flowTooltip" class="viz-tooltip"></div>
+      <div class="flow-legend" id="flowLegend"></div>
+    </div>
+
+    <div class="viz-panel" id="panel-timeline">
+      <div class="viz-title">INTELLECTUAL TIMELINE</div>
+      <div class="viz-subtitle">Publication dates and connections. Hover for lineage.</div>
+      <canvas id="timelineCanvas" width="860" height="480"></canvas>
+      <div id="timelineTooltip" class="viz-tooltip"></div>
+    </div>
+
+    <div class="viz-panel" id="panel-clusters">
+      <div class="viz-title">THEMATIC CLUSTERS</div>
+      <div class="viz-subtitle">Six interconnected clusters. Hover for cross-links.</div>
+      <canvas id="clusterCanvas" width="860" height="540"></canvas>
+      <div id="clusterTooltip" class="viz-tooltip"></div>
+    </div>
+
+    <!-- Threads -->
+    <div class="threads-section">
+      <div class="threads-title">▼ LONGITUDINAL THREADS</div>
+      <div class="thread-item">
+        <div class="thread-name">THE BODY AS SITE</div>
+        <div class="thread-trace">Fanon's colonized psyche → Washington's experimented-upon body → Metzl's diagnosed body → Foucault's disciplined body → Browne's surveilled body → Obermeyer's algorithmically-scored body → Benjamin's coded body → Guntarik's dancing body reclaiming Country</div>
+      </div>
+      <div class="thread-item">
+        <div class="thread-name">THE CAMP AS STRUCTURE</div>
+        <div class="thread-trace">Mbembe's colonial camp → Wolfe's reservation → Mbembe's death-world → Dawson's border laboratory → Crawford's drone strike zone → Washington's prison laboratory → Browne's plantation → Wang's naturalized prison → Guntarik's digital terra nullius</div>
+      </div>
+      <div class="thread-item">
+        <div class="thread-name">THE PROXY VARIABLE</div>
+        <div class="thread-trace">Roth's Shirley card (light skin = default) → Obermeyer's cost-as-need → Benjamin's "neutral" algorithm → Birhane's "data mining" rhetoric → Crawford's "military-age male" → Coalition's "criminal face" → Kwet's "Fourth Industrial Revolution"</div>
+      </div>
+      <div class="thread-item">
+        <div class="thread-name">REFUSAL &amp; COUNTER-PRACTICE</div>
+        <div class="thread-trace">Fanon's regenerative violence → Browne's dark sousveillance → Benjamin's abolitionist tools → Costanza-Chock's design justice → Wang's imprisoned imagination → Guntarik's rematriation → Morris's communal fire</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEEK SECTIONS -->
+  
+    <section class="week-block" id="week-jan22">
+      <div class="week-label">
+        <span class="week-num">WEEK 02</span>
+        <span class="week-date">JANUARY 22</span>
+      </div>
+      <h2 class="week-title">COLONIAL LEGACIES & RACIAL SCIENCE IN TECH</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 01</div>
+        <div class="cb-header">
+          <div class="cb-author">ACHILLE MBEMBE</div>
+          <div class="cb-work">"Fanon's Pharmacy"</div>
+          <div class="cb-source">Necropolitics, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>Colonial rule operates through racism, hatred, and dehumanization. Colonial racism does not just oppress the body; it invades and poisons the psyche. The colonized person internalizes the white world's view of them as inferior, ugly, or monstrous. The colonized are reduced to objects — phantasmic, sexualized, or despised — denied full human subjectivity. They are psychic systems that produce a specific form of social death. The racialized subject is trapped in a double bind: externally, managed as a dangerous or useful object (the logic of the camp, the plantation); internally, their psyche is colonized, leading to a split self, shame, and the impossibility of 'authentic' being under a gaze that only sees a phantasm.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">colonial psyche</span><span class="tag">dehumanization</span><span class="tag">social death</span><span class="tag">Fanon</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 02</div>
+        <div class="cb-header">
+          <div class="cb-author">HARRIET A. WASHINGTON</div>
+          <div class="cb-work">"The American Janus of Medicine and Race"</div>
+          <div class="cb-source">Medical Apartheid, 2007</div>
+        </div>
+        <div class="cb-body">
+          <p>Dangerous, involuntary, and nontherapeutic experimentation upon African Americans has been practiced widely and documented extensively at least since the eighteenth century. African Americans have been subjected to non-consensual, nontherapeutic medical experiments — the Tuskegee Syphilis Study (1932–1972), radiation experiments on poor Black patients, surgical experiments on enslaved women, use of Black bodies for dissection and medical training. These abuses were often documented in medical journals but hidden from public view. African Americans' deep mistrust of medicine (iatrophobia) is rooted in historical abuse, not paranoia.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">medical exploitation</span><span class="tag">Tuskegee</span><span class="tag">iatrophobia</span><span class="tag">Black bodies</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 03</div>
+        <div class="cb-header">
+          <div class="cb-author">PATRICK WOLFE</div>
+          <div class="cb-work">"Settler Colonialism and the Elimination of the Native"</div>
+          <div class="cb-source">Journal of Genocide Research, 2006</div>
+        </div>
+        <div class="cb-body">
+          <p>Settler colonialism is an inclusive, land-centred project that coordinates a comprehensive range of agencies, from the metropolitan centre to the frontier encampment, with a view to eliminating Indigenous societies. Its primary logic is elimination of the native — not just for labor but for access to land. This drive is permanent and structures the entire society. Elimination can take many forms: physical genocide, spatial removal, and biocultural assimilation. Assimilation policies (boarding schools, blood quantum laws) are core eliminatory strategies. Settler colonialism is a structure rather than an event.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">settler colonialism</span><span class="tag">elimination</span><span class="tag">land</span><span class="tag">structure not event</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 04</div>
+        <div class="cb-header">
+          <div class="cb-author">MICHAEL KWET</div>
+          <div class="cb-work">"Digital Colonialism: US Empire and the New Imperialism in the Global South"</div>
+          <div class="cb-source">Race & Class, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>A new form of colonialism is exercised through control of the digital ecosystem: software, hardware, and network connectivity. Led by U.S. multinational corporations (GAFAM: Google, Amazon, Facebook, Apple, Microsoft) and intelligence agencies like the NSA, it results in economic extraction, political control, cultural domination, and surveillance in the Global South. Like the railroads of empire, surveillance capitalists extract data out of the Global South, process it in the metropolitan centre, and spit back information services to colonial subjects, who cannot compete.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">digital colonialism</span><span class="tag">GAFAM</span><span class="tag">data extraction</span><span class="tag">Global South</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 05</div>
+        <div class="cb-header">
+          <div class="cb-author">LORNA ROTH</div>
+          <div class="cb-work">"Looking at Shirley, the Ultimate Norm"</div>
+          <div class="cb-source">Canadian Journal of Communication, 2009</div>
+        </div>
+        <div class="cb-body">
+          <p>Film chemistry, photo lab procedures, video screen colour balancing practices, and digital cameras in general were originally developed with a global assumption of 'Whiteness' embedded within their architectures. Problems for the African-American community have included reproduction of facial images without details, lighting challenges, and ashen-looking facial skin colours. The bias was not deliberately racist but reflected the 'technological unconscious' — unquestioned assumptions of (mostly white, male) designers. Roth proposes 'cognitive equity': embedding multiracial inclusivity directly into technologies and products.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">Shirley card</span><span class="tag">technological unconscious</span><span class="tag">cognitive equity</span><span class="tag">whiteness as default</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="week-block" id="week-jan29">
+      <div class="week-label">
+        <span class="week-num">WEEK 03</span>
+        <span class="week-date">JANUARY 29</span>
+      </div>
+      <h2 class="week-title">BIOPOWER, SURVEILLANCE & DIGITAL COLONIALISM</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 06</div>
+        <div class="cb-header">
+          <div class="cb-author">MICHEL FOUCAULT</div>
+          <div class="cb-work">"Right of Death and Power over Life"</div>
+          <div class="cb-source">History of Sexuality Vol. 1, 1976</div>
+        </div>
+        <div class="cb-body">
+          <p>The ancient right to take life or let live was replaced by a power to foster life or disallow it to the point of death. Biopower operates through two poles: anatomo-politics of the human body (disciplines that optimize the body's capabilities, docility, and integration into systems) and biopolitics of the population (regulatory controls over biological processes — birth, death, health, reproduction). A normalizing society is the historical outcome of a technology of power centered on life. Power no longer operates primarily through law and punishment, but through norms, regulations, and corrective mechanisms.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">biopower</span><span class="tag">anatomo-politics</span><span class="tag">biopolitics</span><span class="tag">normalizing society</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 07</div>
+        <div class="cb-header">
+          <div class="cb-author">SIMONE BROWNE</div>
+          <div class="cb-work">"Introduction — Dark Matters"</div>
+          <div class="cb-source">Dark Matters, Duke UP, 2015</div>
+        </div>
+        <div class="cb-body">
+          <p>Surveillance is nothing new to black folks. It is the fact of antiblackness. Racializing surveillance is a technology of social control where surveillance practices, policies, and performances concern the production of norms pertaining to race — moments when enactments of surveillance reify boundaries, borders, and bodies along racial lines. If we take transatlantic slavery as antecedent to contemporary surveillance technologies — inventories of ships' cargo, biometric identification by branding, slave passes and patrols, fugitive slave notices — it is to the archives and black expressive practices that we can look for moments of refusal and critique.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">racializing surveillance</span><span class="tag">dark sousveillance</span><span class="tag">slavery as antecedent</span><span class="tag">antiblackness</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 08</div>
+        <div class="cb-header">
+          <div class="cb-author">ABEBA BIRHANE</div>
+          <div class="cb-work">"Algorithmic Colonization of Africa"</div>
+          <div class="cb-source">2020</div>
+        </div>
+        <div class="cb-body">
+          <p>Western tech monopolies exercise control over Africa's digital ecosystems in ways that echo historical colonialism. Instead of military force, domination now occurs through 'state-of-the-art algorithms,' AI solutions, and digital infrastructure control. The discourse around 'data mining,' 'abundance of data,' and 'data rich continent' shows the extent to which the individual behind each data point is disregarded. This discourse of 'mining' people for data is reminiscent of the coloniser attitude that declares humans as raw material free for the taking. AI tools developed in the West are often culturally irrelevant and technically unsuitable for African contexts.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">algorithmic colonialism</span><span class="tag">data mining</span><span class="tag">context mismatch</span><span class="tag">Africa</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 09</div>
+        <div class="cb-header">
+          <div class="cb-author">RUHA BENJAMIN</div>
+          <div class="cb-work">"The New Jim Code"</div>
+          <div class="cb-source">Race After Technology, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>The New Jim Code encompasses the employment of new technologies that reflect and reproduce existing inequities but that are promoted and perceived as more objective or progressive than the discriminatory systems of a previous era. Tech fixes often hide, speed up, and even deepen discrimination, while appearing to be neutral or benevolent. The animating force is that tech designers encode judgments into technical systems but claim that the racist results of their designs are entirely exterior to the encoding process. Race itself is a kind of tool — designed to stratify and sanctify social injustice as part of the architecture of everyday life.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">New Jim Code</span><span class="tag">coded inequity</span><span class="tag">race as technology</span><span class="tag">default discrimination</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="week-block" id="week-health">
+      <div class="week-label">
+        <span class="week-num">MODULE</span>
+        <span class="week-date">CARCERAL SCIENCE</span>
+      </div>
+      <h2 class="week-title">HEALTH, MEDICINE & BIOPOWER</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 10</div>
+        <div class="cb-header">
+          <div class="cb-author">CHRISTOPHER PERREIRA</div>
+          <div class="cb-work">"Consumed by Disease"</div>
+          <div class="cb-source">Captivating Technology, MIT Press, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>The carceral health imaginary is the set of assumptions that links racialized bodies to disease, disease to criminality, and criminality to the need for containment. This imaginary operates in medical archives and in cultural representation. When a doctor, hospital, or public health authority encounters a Latino body, the carceral health imaginary primes them to see pathology and risk rather than a patient deserving of care. The medical archive is not a neutral repository of facts about bodies but a site where racial categories are produced, disease is racially attributed, and the figure of the Latino/a as a vector of contagion is iteratively constructed.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">carceral health imaginary</span><span class="tag">medical archive</span><span class="tag">contagion as racial logic</span><span class="tag">Latino bodies</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 11</div>
+        <div class="cb-header">
+          <div class="cb-author">ZIAD OBERMEYER ET AL.</div>
+          <div class="cb-work">"Dissecting Racial Bias in an Algorithm"</div>
+          <div class="cb-source">Science, Vol. 366, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>The algorithm uses healthcare cost as a proxy for healthcare need. Black patients in the United States, because of structural racism, socioeconomic inequality, and historical exclusion from healthcare, have historically spent less money on healthcare than white patients with equivalent illness. When the algorithm reads 'lower costs' as 'lower need,' it systematically underestimates the actual illness burden of Black patients. The algorithm didn't need explicitly racial variables to produce racist outcomes — it inherited racial inequality from the data it was trained on. This is algorithmic laundering of structural racism: making inequality appear to be a neutral technical output.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">proxy variable</span><span class="tag">algorithmic laundering</span><span class="tag">cost ≠ need</span><span class="tag">structural racism</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 12</div>
+        <div class="cb-header">
+          <div class="cb-author">RUHA BENJAMIN</div>
+          <div class="cb-work">"Discriminatory Design, Liberating Imagination"</div>
+          <div class="cb-source">Captivating Technology, MIT Press, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>Carceral technoscience refers to the ways in which science, technology, and incarceration co-constitute one another, such that the tools developed to manage imprisoned populations migrate into the broader society, and the logic of the prison shapes how technology is designed and deployed. The New Jim Code creates racial inequality through facially neutral technical language ('objective algorithms,' 'data-driven decisions'). But Benjamin insists equally that imagination — the human capacity to envision different worlds — is a form of power, and that liberatory imagination is essential to resistance.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">carceral technoscience</span><span class="tag">New Jim Code</span><span class="tag">liberatory imagination</span><span class="tag">prison logic migration</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 13</div>
+        <div class="cb-header">
+          <div class="cb-author">DOROTHY ROBERTS</div>
+          <div class="cb-work">"Race, Gender, and Genetic Surveillance"</div>
+          <div class="cb-source">2009</div>
+        </div>
+        <div class="cb-body">
+          <p>Genetic surveillance reinscribes racial categories as biological facts, lending scientific authority to social arrangements that have always rested on political power rather than natural difference. The CODIS DNA database means Black individuals are much more likely to be connected to a crime by familial DNA matching, even for crimes they did not commit, simply because their DNA — or the DNA of a relative — is already in the database. Genetics has become a vehicle for the re-biologization of race — making the social appear natural, and making historically-constructed racial hierarchy appear to be written in DNA.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">genetic surveillance</span><span class="tag">CODIS</span><span class="tag">re-biologization of race</span><span class="tag">reproductive surveillance</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 14</div>
+        <div class="cb-header">
+          <div class="cb-author">HARRIET A. WASHINGTON</div>
+          <div class="cb-work">"Caged Subjects: Research on Black Prisoners"</div>
+          <div class="cb-source">Medical Apartheid, 2007</div>
+        </div>
+        <div class="cb-body">
+          <p>The American prison has functioned historically as a medical laboratory — a site where the normal ethical protections surrounding research on human subjects did not apply. The racial disproportionality of the prison population meant this experimentation fell overwhelmingly on Black men. Experimentation on Black bodies generated 'knowledge' that was then used to justify further racialized medical practice — the idea that Black people had different pain thresholds, different disease patterns. This knowledge was false, but it was authoritative. It traveled from plantation and prison into the medical mainstream, where it persisted for generations.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">prison as laboratory</span><span class="tag">consent under coercion</span><span class="tag">racial science feedback loop</span><span class="tag">Holmesburg</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 15</div>
+        <div class="cb-header">
+          <div class="cb-author">JONATHAN M. METZL</div>
+          <div class="cb-work">"The Protest Psychosis"</div>
+          <div class="cb-source">Beacon Press, 2010</div>
+        </div>
+        <div class="cb-body">
+          <p>Schizophrenia became, in the context of the civil rights era, a diagnosis applied to angry Black men — a way of rendering Black political agency as pathology, Black resistance as symptom, and incarceration as treatment. The DSM definition was revised in ways that emphasized 'hostile' and 'aggressive' symptoms — language that mapped onto racialized anxieties about Black masculinity and Black political mobilization. Pharmaceutical ads showed Black men with raised fists above copy suggesting Haldol was the appropriate treatment. 'Demanding equal rights' appeared in diagnostic notes as a clinical symptom.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">diagnostic racism</span><span class="tag">schizophrenia weaponized</span><span class="tag">Haldol ads</span><span class="tag">protest as pathology</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="week-block" id="week-march26">
+      <div class="week-label">
+        <span class="week-num">WEEK 10</span>
+        <span class="week-date">MARCH 26</span>
+      </div>
+      <h2 class="week-title">MILITARIZATION, BORDERS & TECHNOSCIENTIFIC VIOLENCE</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 16</div>
+        <div class="cb-header">
+          <div class="cb-author">ACHILLE MBEMBE</div>
+          <div class="cb-work">"The Society of Enmity"</div>
+          <div class="cb-source">Necropolitics, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>The central psychological driver of the current era is the 'desire for an enemy.' This desire functions as a master-desire that invents its own object (today: the Muslim, the immigrant, the refugee) because the 'terrifying object' does not actually exist. The security state thrives on a state of insecurity, which it participates in fomenting and to which it claims to be the solution. Because the security state presupposes that a 'cessation of hostilities' is impossible, this war is henceforth permanent. The camp has not only become a structural feature of our globalized condition. It has ceased to scandalize. The camp is not just our present. It is our future.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">desire for enemy</span><span class="tag">security state</span><span class="tag">nanoracism</span><span class="tag">permanent war</span><span class="tag">camp as future</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 17</div>
+        <div class="cb-header">
+          <div class="cb-author">ACHILLE MBEMBE</div>
+          <div class="cb-work">"Necropolitics"</div>
+          <div class="cb-source">Necropolitics, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>The ultimate expression of sovereignty largely resides in the power and capacity to dictate who is able to live and who must die. Necropolitics accounts for the various ways in which weapons are deployed in the interest of maximally destroying persons and creating death-worlds — new and unique forms of social existence in which vast populations are subjected to living conditions that confer upon them the status of the living dead. The most accomplished form of necropower is the contemporary colonial occupation of Palestine: territorial fragmentation, vertical sovereignty, and infrastructural warfare.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">necropower</span><span class="tag">death-worlds</span><span class="tag">sovereignty</span><span class="tag">Palestine</span><span class="tag">living dead</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 18</div>
+        <div class="cb-header">
+          <div class="cb-author">BRITTANY DAWSON</div>
+          <div class="cb-work">"U.S.-Mexico Border: An Israeli Tech Laboratory"</div>
+          <div class="cb-source">IPS, 2018</div>
+        </div>
+        <div class="cb-body">
+          <p>In 2004, Hermes drones manufactured by Israel's Elbit Systems were the first unmanned aerial vehicles deployed at the U.S. southern border. The armed Hermes drones have been conducting killings of civilians en masse in Gaza for years; at the U.S.-Mexico border, the Hermes drones were unarmed. Elbit's surveillance towers are billed as 'preventing infiltrators' (Palestinian civilians) in Israeli discourse; in the United States, it's 'preventing illegal immigrants.' Both share the stated claim of preventing 'terrorism and weapons of mass destruction.' The U.S.-Mexico borderlands function as a 'laboratory' where Israeli boundary-building technologies are tested and refined.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">Elbit Systems</span><span class="tag">border laboratory</span><span class="tag">Hermes drones</span><span class="tag">Israel-Palestine-Mexico nexus</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 19</div>
+        <div class="cb-header">
+          <div class="cb-author">NETA CRAWFORD</div>
+          <div class="cb-work">"Accountability for Killing"</div>
+          <div class="cb-source">2013</div>
+        </div>
+        <div class="cb-body">
+          <p>The Obama administration counts all military age males in the zone of a drone strike as combatants 'unless there is explicit intelligence posthumously proving them innocent.' David Kilcullen testified: 'Since 2006 we've killed 14 senior al Qaeda leaders using drone strikes. In the same time period we've killed 700 Pakistani civilians in the same area.' Many soldiers in Iraq and Afghanistan learned to keep 'drop weapons' — AK-47s or shovels to plant on innocent people they accidentally killed. A Stanford/NYU study stated simply: 'The dominant narrative about the use of drones in Pakistan is of a surgically precise and effective tool. This narrative is false.'</p>
+        </div>
+        <div class="cb-tags"><span class="tag">drone strikes</span><span class="tag">drop weapons</span><span class="tag">collateral damage</span><span class="tag">military-age male</span><span class="tag">precision myth</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="week-block" id="week-april2">
+      <div class="week-label">
+        <span class="week-num">WEEK 11</span>
+        <span class="week-date">APRIL 2</span>
+      </div>
+      <h2 class="week-title">ABOLITIONIST TECH MOVEMENTS & DIGITAL ACTIVISM</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 20</div>
+        <div class="cb-header">
+          <div class="cb-author">MATT CAGLE & BRADY HIRSCH</div>
+          <div class="cb-work">"The Fight Against Surveillance in San Francisco"</div>
+          <div class="cb-source">ACLU, 2023</div>
+        </div>
+        <div class="cb-body">
+          <p>In 2019, San Francisco passed a groundbreaking anti-surveillance model that banned facial recognition and wrested decision-making power away from exclusive police control. In summer 2020, the SFPD illegally accessed hundreds of private surveillance cameras to place protests for police accountability under live surveillance — without democratic approval. Thankfully, the facial recognition ban stopped the SFPD from scanning faces and logging identities of those who marched. A citywide poll showed 60% of San Franciscans opposed giving SFPD access to private cameras. San Franciscans overwhelmingly prefer alternatives that do not rely on surveillance or police.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">facial recognition ban</span><span class="tag">SF surveillance</span><span class="tag">police oversight</span><span class="tag">community resistance</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 21</div>
+        <div class="cb-header">
+          <div class="cb-author">COALITION FOR CRITICAL TECHNOLOGY</div>
+          <div class="cb-work">"Abolish the #TechToPrisonPipeline"</div>
+          <div class="cb-source">2020</div>
+        </div>
+        <div class="cb-body">
+          <p>There is no way to develop a system that can predict or identify 'criminality' that is not racially biased — because the category of 'criminality' itself is racially biased. Historical court and arrest data reflect who police choose to arrest, how judges choose to rule, and which people are granted longer or more lenient sentences. Any software built within the existing criminal legal framework will inevitably echo those same prejudices. These fundamental issues of data validity cannot be solved with better data cleaning or more data collection. No 'physical features to criminality' function exists in nature.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">#TechToPrisonPipeline</span><span class="tag">criminality as proxy for race</span><span class="tag">data validity crisis</span><span class="tag">physiognomy AI</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 22</div>
+        <div class="cb-header">
+          <div class="cb-author">SASHA COSTANZA-CHOCK</div>
+          <div class="cb-work">"Design Justice"</div>
+          <div class="cb-source">MIT Press, 2020</div>
+        </div>
+        <div class="cb-body">
+          <p>Design justice is concerned with how the design of objects and systems influences the distribution of risks, harms, and benefits among various groups of people. It focuses on the ways that design reproduces, is reproduced by, and/or challenges the matrix of domination (white supremacy, heteropatriarchy, capitalism, and settler colonialism). We center the voices of those who are directly impacted. We prioritize design's impact on the community over the intentions of the designer. We see the role of the designer as a facilitator rather than an expert. We believe that everyone is an expert based on their own lived experience.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">design justice</span><span class="tag">matrix of domination</span><span class="tag">intersectionality</span><span class="tag">Nothing About Us Without Us</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="week-block" id="week-april9">
+      <div class="week-label">
+        <span class="week-num">WEEK 12</span>
+        <span class="week-date">APRIL 9</span>
+      </div>
+      <h2 class="week-title">ABOLITIONIST TECH MOVEMENTS II</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 23</div>
+        <div class="cb-header">
+          <div class="cb-author">RUHA BENJAMIN</div>
+          <div class="cb-work">"Retooling Solidarity, Reimagining Justice"</div>
+          <div class="cb-source">Race After Technology, 2019</div>
+        </div>
+        <div class="cb-body">
+          <p>Calls for abolition are never simply about bringing harmful systems to an end but also about envisioning new ones. The etymology of 'abolition' includes Latin root words for 'destroy' (abolere) and 'grow' (olere). Emancipatory designs are not only possible, they already exist. Story and narrative are the code for humanity's operating system. This master narrative must be abolished — including the subplot that says 'technology is loyal to the master.' The point is not simply to help others who have been less fortunate but to question the very idea of 'fortune': Who defines it, distributes it, hoards it, and how was it obtained?</p>
+        </div>
+        <div class="cb-tags"><span class="tag">abolition = destroy + grow</span><span class="tag">abolitionist tools</span><span class="tag">co-liberation</span><span class="tag">narrative as code</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 24</div>
+        <div class="cb-header">
+          <div class="cb-author">SIMONE BROWNE</div>
+          <div class="cb-work">"When Blackness Enters the Frame"</div>
+          <div class="cb-source">Dark Matters, 2015</div>
+        </div>
+        <div class="cb-body">
+          <p>Prototypical whiteness is the cultural logic that informs much of biometric information technology. It sees whiteness as privileged in enrollment, measurement, and recognition processes. Dark matter being those bodies that trouble some biometric technology — like dark irises or cameras that 'can't see black people.' When particular surveillance technologies leave out some subjects for optimum usage, this leaves open the possibility of reproducing existing inequalities. But if algorithms can be troubled, could there be some potential in going about unknown — remaining unbothered — where facial recognition and other computer vision technologies are in use?</p>
+        </div>
+        <div class="cb-tags"><span class="tag">prototypical whiteness</span><span class="tag">dark matter</span><span class="tag">algorithmic refusal</span><span class="tag">HP webcam</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 25</div>
+        <div class="cb-header">
+          <div class="cb-author">BRITTANY FRIEDMAN</div>
+          <div class="cb-work">"Reckoning with Carceral Technologies Through Abolition"</div>
+          <div class="cb-source">Black Perspectives, 2020</div>
+        </div>
+        <div class="cb-body">
+          <p>Abolition is a reckoning against the dialectic of carceral technologies and liberal reform. Liberal reform seeks to revise within the carceral rather than imagine a world without it. The carceral state evolves when faced with a direct challenge and further entrenches within our social institutions — undergirded with the ultimate white liberal savior complex. Reforming the carceral state is where the racial contract goes to receive diversity and inclusion training, curtail the most obvious thorns, and emerge with new, often less overt, though deadlier carceral technologies. Abolition is the only place Charles Mills' racial contract goes to die.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">dialectics of discipline</span><span class="tag">liberal reform trap</span><span class="tag">racial contract</span><span class="tag">abolition as reckoning</span></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="week-block" id="week-april16">
+      <div class="week-label">
+        <span class="week-num">WEEK 13</span>
+        <span class="week-date">APRIL 16</span>
+      </div>
+      <h2 class="week-title">SPECULATIVE FUTURES — AFROFUTURISM, INDIGENEITY & IMAGINATION</h2>
+      <div class="cards-grid">
+        
+      <div class="content-box" style="--rot:-0.6deg">
+        <div class="file-badge">FILE 26</div>
+        <div class="cb-header">
+          <div class="cb-author">JACKIE WANG</div>
+          <div class="cb-work">"The Prison Abolitionist Imagination"</div>
+          <div class="cb-source">Carceral Capitalism, 2018</div>
+        </div>
+        <div class="cb-body">
+          <p>It is easier to imagine the end of the world than it is to imagine a world without prisons. Prisons don't just hold bodies — they hold imaginations captive. At the same moment indigenous people were confined to reservations, 'our imaginations are also confined. All of us.' But imagination is also 'excess' — that which could never be contained by the prison. Dreams and reality are opposites. Action synthesizes them. At Attica, prisoners who hadn't seen stars in twenty-two years looked up and knew: 'no matter what happened later on, they couldn't take this night away from us.' Chilean political prisoners under Pinochet observed stars and found 'great freedom' — the military banned astronomy lessons, fearing escape by constellations.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">imprisoned imagination</span><span class="tag">dreams + action</span><span class="tag">stars as freedom</span><span class="tag">Attica</span><span class="tag">abolition</span></div>
+      </div>
+
+      <div class="content-box" style="--rot:0.5deg">
+        <div class="file-badge">FILE 27</div>
+        <div class="cb-header">
+          <div class="cb-author">OLIVIA GUNTARIK & NEIL MORRIS</div>
+          <div class="cb-work">"Rematriation / Gathering / Song and Survival"</div>
+          <div class="cb-source">Indigenous Resistance in the Digital Age, 2022</div>
+        </div>
+        <div class="cb-body">
+          <p>Rematriation means returning the earth to Mother Nature to heal and regenerate. We have not lost. We do not need things returned to us as they were never taken from us. We were always here and the voices of our ancestors are our original source. The archive is holistic and feeds my soul. I cradle this archive in my arms like a baby, feed it so that it may grow and become a Living Being. It is not an extractive relationship. For us, no difference exists between the physical and digital terra nullius. The material, digital and sacred can all potentially be stolen, silenced and erased. I listen to stand awake. I listen to stand alive. We need this to survive.</p>
+        </div>
+        <div class="cb-tags"><span class="tag">rematriation</span><span class="tag">living archive</span><span class="tag">digital terra nullius</span><span class="tag">communal fire</span><span class="tag">songkeeping</span></div>
+      </div>
+      </div>
+    </section>
+
+  <!-- SUMMARY DOSSIER -->
+  <section class="summary-section" id="summaryDossier">
+    <div class="summary-header">
+      <div class="file-badge" style="position:relative;top:0;right:0;display:inline-block;margin-bottom:12px">MASTER FILE</div>
+      <h2 class="pdf-section-title">◉ COMPLETE ARGUMENTS DOSSIER</h2>
+      <p class="viz-subtitle" style="text-align:center;margin-bottom:8px">16 Arguments Against AI + 17 Forms of Resistance — Full Evidence Base</p>
+      <div class="sum-controls">
+        <button class="viz-ctrl-btn" onclick="expandAllSum()">▼ EXPAND ALL</button>
+        <button class="viz-ctrl-btn" onclick="collapseAllSum()">▲ COLLAPSE ALL</button>
+        <button class="viz-ctrl-btn sum-filter active" data-filter="all" onclick="filterSum('all',this)">ALL</button>
+        <button class="viz-ctrl-btn sum-filter" data-filter="argument" onclick="filterSum('argument',this)">ARGUMENTS</button>
+        <button class="viz-ctrl-btn sum-filter" data-filter="resist" onclick="filterSum('resist',this)">RESISTANCE</button>
+      </div>
+    </div>
+    <div class="summary-grid">
+      
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-1">
+      <div class="file-badge argument">A-01</div>
+      <div class="sum-title">Argument 1: AI is Never Neutral – It Encodes Existing Bias Under a Veneer of Objectivity</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">AI systems are marketed as objective, scientific, and progressive, but they actually reproduce and amplify existing racial, gender, and class hierarchies. The &quot;New Jim Code&quot; describes how technology appears neutral while automating discrimination.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Beauty AI <span class="src-ref">(Benjamin)</span>: All 44 winners across age groups except six were White; only one finalist had visibly dark skin. The algorithm was trained on biased data that privileged White features.</p>
+<p class="sum-para">Obermeyer et al. <span class="src-ref">(Health Algorithm)</span>: A widely used commercial health algorithm systematically underestimated the health needs of Black patients because it used healthcare costs as a proxy for need. Black patients had lower costs due to historical healthcare discrimination, so the algorithm read &quot;lower cost&quot; as &quot;lower need&quot; — even when they were actually sicker.</p>
+<p class="sum-para">COMPAS Recidivism Algorithm <span class="src-ref">(Benjamin)</span>: ProPublica found COMPAS was nearly twice as likely to falsely flag Black defendants as &quot;high risk&quot; compared to white defendants, and twice as likely to falsely flag white defendants as &quot;low risk.&quot;</p>
+<p class="sum-para">Amazon&#x27;s Facial Recognition <span class="src-ref">(Benjamin)</span>: The ACLU tested Amazon&#x27;s Rekognition on members of Congress. The system misidentified 28 members as criminal suspects — 39% of false matches were people of color, though people of color make up only 20% of Congress.</p>
+<p class="sum-para">HP Webcam <span class="src-ref">(Browne)</span>: Black Desi Cryer&#x27;s video showed an HP webcam that could track &quot;white Wanda&quot; but could not detect or follow his face. HP responded that the technology &quot;is built on standard algorithms that measure the difference in intensity of contrast between the eyes and the upper cheek and nose&quot; — meaning the algorithm was optimized for lighter skin.</p>
+<p class="sum-para">Credit Scoring <span class="src-ref">(Nopper)</span>: The FICO score was marketed as taking &quot;prejudice out of the equation,&quot; yet it systematically disadvantages Black and brown communities who have been denied access to credit through redlining and other discriminatory practices.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-2">
+      <div class="file-badge argument">A-02</div>
+      <div class="sum-title">Argument 2: AI Depends on &quot;Dirty Data&quot; – Historical Racism Pollutes Training Data</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Predictive systems are trained on data generated by biased policing, discriminatory courts, and unequal institutions. The algorithms inherit and amplify these biases, creating feedback loops that deepen inequality.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Chicago&#x27;s Strategic Subjects List <span class="src-ref">(RAND study)</span>: The SSL was built using arrest data from periods when the Chicago Police Department was under federal investigation for unconstitutional stops, racial bias, and data manipulation. The model identified less than 1% of actual homicide victims but increased arrests for shootings — not through prevention, but because police used the list as a suspect checklist after crimes occurred.</p>
+<p class="sum-para">New Orleans Palantir System <span class="src-ref">(Richardson et al.)</span>: The NOPD secretly contracted with Palantir for predictive analytics using data from 2005-2011, when officers targeted Black and transgender residents and fabricated evidence. The predictive outputs described perpetrators as &quot;overwhelmingly young, African American, male&quot; — directly mirroring the department&#x27;s biased enforcement patterns.</p>
+<p class="sum-para">Maricopa County <span class="src-ref">(Richardson et al.)</span>: The Maricopa County Sheriff&#x27;s Office was found guilty of racial profiling against Latinos. Multiple cities in the county use predictive policing and share data via regional platforms, meaning dirty MCSO data contaminated systems in neighboring jurisdictions.</p>
+<p class="sum-para">PredPol&#x27;s False Claims <span class="src-ref">(Richardson et al.)</span>: PredPol claims to exclude drug arrests and traffic stops to avoid bias, but still uses 911 call data — which is influenced by racial bias in reporting <span class="src-ref">(e.g., &quot;shopping while Black&quot; calls)</span>. Vendors do not independently validate police data.</p>
+<p class="sum-para">The Confirmation Feedback Loop <span class="src-ref">(Richardson et al.)</span>: Biased data leads police to revisit over-policed neighborhoods, generating more data from those areas, which then justifies further policing. In NYC, 311 calls for &quot;quality of life&quot; offenses spiked in gentrifying neighborhoods, leading to more police presence and arrests in Black and Latino areas — reinforcing the data loop.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-3">
+      <div class="file-badge argument">A-03</div>
+      <div class="sum-title">Argument 3: AI Expands the Carceral State Under the Guise of Reform</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Technologies marketed as &quot;public safety,&quot; &quot;decarbonization,&quot; or &quot;efficiency&quot; actually expand police power, deepen surveillance, and create new mechanisms of social control. &quot;Reform&quot; often means making the carceral system more efficient, not shrinking it.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Promise vs. Appolition <span class="src-ref">(Benjamin)</span>: Promise is Jay-Z&#x27;s &quot;decarceration&quot; startup that uses app-based tracking and GPS monitoring as an alternative to pretrial detention. Benjamin critiques it because it charges $17.80 per day <span class="src-ref">(creating a &quot;digital cell&quot;)</span>, collaborates with law enforcement, extends surveillance into everyday life, and is part of the &quot;technocorrections&quot; industry. In contrast, Appolition is a bail crowdfunding app that actually frees people — raising $230,000 and freeing over 65 people.</p>
+<p class="sum-para">NYPD Protest Surveillance <span class="src-ref">(Cagle &amp; Hirsch)</span>: In summer 2020, the SFPD illegally accessed hundreds of private surveillance cameras to place Black Lives Matter protests under live surveillance without democratic approval. The city&#x27;s facial recognition ban stopped the SFPD from scanning faces and logging identities, but surveillance of protected First Amendment activity still occurred.</p>
+<p class="sum-para">Israeli Border Technology <span class="src-ref">(Dawson)</span>: Hermes drones manufactured by Israel&#x27;s Elbit Systems conduct killings of civilians en masse in Gaza. The same drones were deployed at the U.S.-Mexico border <span class="src-ref">(unarmed, but the technology is identical)</span>. Elbit&#x27;s surveillance towers are marketed as preventing &quot;infiltrators&quot; in Palestine and &quot;illegal immigrants&quot; in the United States — both share the stated justification of preventing &quot;terrorism.&quot;</p>
+<p class="sum-para">Palantir in LAPD <span class="src-ref">(Brayne)</span>: The LAPD uses Palantir, a data integration platform originally designed for national security, to merge data from police records, license plate readers, field interview cards, and non-police sources like utility bills, social media, and pizza delivery records. This blurs the line between traditional policing and intelligence-style surveillance.</p>
+<p class="sum-para">Automatic License Plate Readers <span class="src-ref">(Brayne)</span>: ALPRs capture data on every passing car, not just suspects. A person whose car is recorded near a crime scene can be added to a database without ever having police contact. ALPRs are deployed more in high-crime <span class="src-ref">(often minority)</span> areas, so residents there are more likely to be tracked.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-4">
+      <div class="file-badge argument">A-04</div>
+      <div class="sum-title">Argument 4: AI Systems Lack Accountability and Transparency</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Algorithms are often proprietary &quot;trade secrets,&quot; making it impossible to audit them for bias or error. When systems fail, no one is held responsible — accountability is displaced onto &quot;the algorithm&quot; itself.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Houston Teacher Evaluation Algorithm <span class="src-ref">(AI Litigation Report)</span>: The Houston school district refused to show teachers the algorithm evaluating them, claiming it was a trade secret owned by a third-party vendor. Teachers won a constitutional due process argument forcing disclosure.</p>
+<p class="sum-para">Idaho Medicaid Algorithm <span class="src-ref">(AI Litigation Report)</span>: A secret algorithm was used to cut Medicaid benefits for people with disabilities. Recipients were given no notice, explanation, or appeal. The algorithm&#x27;s design specifications were considered trade secrets.</p>
+<p class="sum-para">Arkansas Medicaid Algorithm <span class="src-ref">(AI Litigation Report)</span>: An algorithmic system allocating home health care failed to recognize cerebral palsy and diabetes due to flawed design and coding errors. This was only discovered during litigation when experts examined the code.</p>
+<p class="sum-para">D.C. Juvenile Risk Assessment <span class="src-ref">(AI Litigation Report)</span>: A judge rejected a violence risk assessment tool for lacking scientific validity. The tool used factors like &quot;parental criminality&quot; and &quot;community disorganization&quot; — proxies for race — resulting in biased &quot;high risk&quot; scores for youth of color. The tool was based on only two outdated, non-peer-reviewed studies.</p>
+<p class="sum-para">FBI Face Recognition <span class="src-ref">(Garvie et al.)</span>: Maryland&#x27;s face recognition system, which includes the license photos of over two million residents, was launched in 2011 and had never been audited. Only 9 of 52 agencies audit searches. The FBI hasn&#x27;t audited its system either.</p>
+<p class="sum-para">Drone Strike Secrecy <span class="src-ref">(Crawford)</span>: The CIA has secretly conducted hundreds of drone strikes in Pakistan and Yemen. The criteria for choosing targets, procedures to protect civilians, and the actual number of civilian casualties are all concealed. The Obama administration counted all military-age males in a strike zone as combatants &quot;unless there is explicit intelligence posthumously proving them innocent.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-5">
+      <div class="file-badge argument">A-05</div>
+      <div class="sum-title">Argument 5: AI Enables and Displaces Accountability for Violence</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Automated systems allow institutions to distance themselves from violent outcomes. When an algorithm makes a decision, no individual feels responsible — &quot;the computer did it.&quot;</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">&quot;Drop Weapons&quot; in Iraq and Afghanistan <span class="src-ref">(Crawford)</span>: Soldiers were encouraged to carry &quot;drop weapons&quot; <span class="src-ref">(AK-47s or shovels)</span> so that if they accidentally killed an innocent person, they could plant the weapon to make the victim look like an insurgent. In Afghanistan, soldiers from the Fifth Stryker Brigade attacked civilians, planted weapons next to victims, and some took body parts as trophies. Staff Sergeant Hensley said: &quot;Was it a good kill? It&#x27;s a good kill because I say it&#x27;s a good kill.&quot;</p>
+<p class="sum-para">Automated Welfare Decisions <span class="src-ref">(Benjamin)</span>: &quot;Automated welfare decisions are not magically fairer than their human counterparts. Discrimination is displaced and accountability is outsourced.&quot;</p>
+<p class="sum-para">Risk Assessment in Sentencing <span class="src-ref">(Starr)</span>: EBS instruments produce higher risk estimates for poor, young, male, and minority defendants, exacerbating existing disparities. The &quot;scientific&quot; veneer makes discrimination appear objective.</p>
+<p class="sum-para">China&#x27;s Social Credit System <span class="src-ref">(Benjamin)</span>: &quot;The system not only investigates behaviour — it shapes it.&quot; Residents of Xinjiang are forced to download an app tracking &quot;terrorist and illegal content&quot; — targeting Muslim minorities.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-6">
+      <div class="file-badge argument">A-06</div>
+      <div class="sum-title">Argument 6: AI Extracts Value from Marginalized Communities Without Consent</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Data is extracted from poor and minority communities as &quot;raw material&quot; for profit, while those communities receive no benefit and suffer increased surveillance and control. This mirrors historical colonialism.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">FinTech in Africa <span class="src-ref">(Birhane)</span>: Microfinancing apps like Tala and Branch use smartphone data <span class="src-ref">(browsing history, likes, locations)</span> to assess creditworthiness. Rather than &quot;lifting people out of poverty,&quot; FinTech profits from poverty. Safaricom reported $620 million in annual profit directed to investors while leaving Kenya&#x27;s poorest in perpetual debt. As Bateman says: &quot;Like the colonial era mining operations that exploited Africa&#x27;s mineral wealth, the microcredit industry in Africa essentially exists today for no other reason than to extract value from the poorest communities.&quot;</p>
+<p class="sum-para">Kenya&#x27;s Biometric ID System <span class="src-ref">(Birhane)</span>: The national biometric ID system risks excluding racial, ethnic, and religious minorities who have historically faced challenges acquiring documentation. If implemented, these minority groups would be rendered stateless and face challenges registering a business, getting a job, or traveling.</p>
+<p class="sum-para">Digital Colonialism <span class="src-ref">(Kwet)</span>: U.S. tech monopolies <span class="src-ref">(GAFAM)</span> control the three core pillars of the digital ecosystem: software, hardware, and network connectivity. Facebook Free Basics offers limited, curated internet to the poor, violates net neutrality, and funnels users into Facebook&#x27;s ecosystem. The NSA partners with tech corporations for mass surveillance in the Global South.</p>
+<p class="sum-para">The &quot;Scored Society&quot; <span class="src-ref">(Nopper)</span>: Marketplace lenders mine social media data <span class="src-ref">(Facebook, Twitter, LinkedIn)</span> and texting patterns to assess creditworthiness. This profiling often happens without explicit consent and can include data from before the loan application. The &quot;scored society&quot; makes algorithmic scoring a condition of economic survival.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-7">
+      <div class="file-badge argument">A-07</div>
+      <div class="sum-title">Argument 7: Facial Recognition Technology Is Inherently Racist and Dangerous</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Facial recognition systems misidentify people of color at dramatically higher rates than white people, and law enforcement uses them to target activists, protesters, and minority communities.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">NYPD Misidentification <span class="src-ref">(Amnesty International)</span>: Facial recognition has been used 22,000 times in New York City since 2017. Black and minority communities are at risk of being misidentified and falsely arrested — in some instances, facial recognition has been 95% inaccurate.</p>
+<p class="sum-para">Detroit False Arrests <span class="src-ref">(Amnesty International)</span>: Examples include false arrests of Black men in Detroit, where facial recognition led to wrongful arrests.</p>
+<p class="sum-para">Black Lives Matter Activist <span class="src-ref">(Amnesty International)</span>: NYPD officers attempted to arrest Derrick &quot;Dwirek&quot; Ingram by besieging his apartment for five hours after seemingly using facial recognition to identify and locate him. A reporter caught a facial recognition query report print-out in an officer&#x27;s hand with Ingram&#x27;s face and name on it.</p>
+<p class="sum-para">Atlantic Plaza Towers <span class="src-ref">(Amnesty International)</span>: Residents of a Black-majority complex in Brooklyn successfully resisted attempts to install facial recognition cameras. In response, the landlord sent tenants full-color surveillance print-outs of them standing in the lobby with their apartment numbers and time and date written on the photos — an act of intimidation through surveillance.</p>
+<p class="sum-para">FBI Co-authored Study <span class="src-ref">(Garvie et al.)</span>: FBI co-authored research suggests face recognition may be less accurate on Black people. Also, due to disproportionately high arrest rates, systems that rely on mug shot databases include a disproportionate number of African Americans.</p>
+<p class="sum-para">San Francisco Ban <span class="src-ref">(Cagle &amp; Hirsch)</span>: In 2019, San Francisco passed the nation&#x27;s first ban on municipal facial recognition. In 2022, Mayor Breed proposed a ballot measure to gut the law, but withdrew it after a citywide poll showed 60% of San Franciscans opposed giving SFPD access to private cameras for live surveillance.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-8">
+      <div class="file-badge argument">A-08</div>
+      <div class="sum-title">Argument 8: AI Reinscribes Race as a Biological Category</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Despite the scientific consensus that race is a social construct, genetic surveillance and biometric technologies treat race as a biological fact, re-racializing populations under the authority of science.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">CODIS DNA Database <span class="src-ref">(Roberts)</span>: The FBI&#x27;s national DNA database <span class="src-ref">(CODIS)</span> vastly over-represents Black people because they are overrepresented in the criminal justice system. This means Black individuals are much more likely to be connected to a crime by familial DNA matching — even for crimes they did not commit — simply because their DNA or a relative&#x27;s DNA is already in the database.</p>
+<p class="sum-para">Grim Sleeper Case <span class="src-ref">(Roberts)</span>: California&#x27;s DNA database is 40% Black <span class="src-ref">(while Black people make up 6% of the state population)</span>, meaning familial DNA searching in California is inherently targeted at Black families. Every Black person with a relative who has been arrested is effectively enrolled in a genetic surveillance database without consent.</p>
+<p class="sum-para">Ferguson v. City of Charleston <span class="src-ref">(Roberts)</span>: A public hospital in Charleston implemented a policy of drug testing pregnant women and reporting positive results to police. Almost all women arrested under this policy were Black. The hospital was functioning as a law enforcement arm specifically targeting Black women&#x27;s pregnancies.</p>
+<p class="sum-para">The Shirley Card <span class="src-ref">(Roth)</span>: The Shirley card — a color reference card featuring a light-skinned Caucasian woman — was the industry standard for calibrating skin tones in photography and television. Film emulsions, digital sensors, and TV cameras were designed with Caucasian skin tones as the default &quot;norm,&quot; resulting in poor reproduction of darker skin tones.</p>
+<p class="sum-para">The Pain Treatment Disparity <span class="src-ref">(Washington)</span>: A 2016 study in PNAS found that medical students and residents held false beliefs about biological differences between Black and white patients — including beliefs that Black people have thicker skin, less sensitive nerve endings, and higher pain tolerance. These beliefs, traceable to 19th-century race science developed through experimentation on enslaved people, predicted racial disparities in pain treatment.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-9">
+      <div class="file-badge argument">A-09</div>
+      <div class="sum-title">Argument 9: The &quot;Criminality Prediction&quot; Research Agenda Is Pseudoscience</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Research claiming to predict criminality from facial features is based on unsound premises, uses biased data, and creates dangerous feedback loops that justify the repression of marginalized populations.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Harrisburg University Study <span class="src-ref">(Coalition for Critical Technology)</span>: Researchers claimed to &quot;predict if someone is a criminal based solely on a picture of their face&quot; with &quot;80 percent accuracy and with no racial bias.&quot; The Coalition for Critical Technology responded: &quot;there is no way to develop a system that can predict or identify &#x27;criminality&#x27; that is not racially biased — because the category of &#x27;criminality&#x27; itself is racially biased.&quot;</p>
+<p class="sum-para">No Such Pattern Exists <span class="src-ref">(Coalition for Critical Technology)</span>: &quot;No such pattern exists for facial features and criminality, because having a face that looks a certain way does not cause an individual to commit a crime — there simply is no &#x27;physical features to criminality&#x27; function in nature.&quot;</p>
+<p class="sum-para">Dangerous Feedback Loops <span class="src-ref">(Coalition for Critical Technology)</span>: Because &quot;criminality&quot; operates as a proxy for race due to racially discriminatory policing, research of this nature creates dangerous feedback loops. Policing based on algorithmic recommendations generates more data fed back into the system, reproducing biased results.</p>
+<p class="sum-para">The Drapetomania Precedent <span class="src-ref">(Metzl)</span>: In 1851, Louisiana physician Samuel Cartwright proposed a psychiatric diagnosis called &quot;drapetomania&quot; — a supposed mental illness that caused enslaved people to flee captivity. The &quot;treatment&quot; was whipping. The criminality prediction research is the direct descendant of this tradition — the same logic, applied through new technical mechanisms.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-10">
+      <div class="file-badge argument">A-10</div>
+      <div class="sum-title">Argument 10: AI&#x27;s Harms Fall Disproportionately on the Most Vulnerable</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Marginalized communities — the poor, racial minorities, Indigenous peoples, women, and disabled people — bear the brunt of harmful AI deployments, while the benefits accrue to the wealthy and powerful.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">The Poor <span class="src-ref">(Birhane)</span>: &quot;The harms of digitization and &#x27;technological solutions&#x27; affect individuals and communities that are already at the margins of society.&quot; Utilitarian AI ethics focus on &quot;the greatest good for the greatest number,&quot; which by definition means solutions that centre minorities are never sought.</p>
+<p class="sum-para">Indigenous Peoples <span class="src-ref">(Dawson)</span>: Israeli surveillance technology deployed at the U.S.-Mexico border explicitly targets low-income communities, migrant groups, and indigenous peoples. Israel casts a &quot;long shadow over migrant and refugee trails that are traveled by mostly low-income and indigenous peoples.&quot;</p>
+<p class="sum-para">People with Disabilities <span class="src-ref">(AI Litigation Report)</span>: In Arkansas, an algorithmic system allocating home health care to Medicaid patients failed to accurately understand the care needs of patients with cerebral palsy or diabetes. In Idaho, a secret algorithm cut Medicaid benefits for people with disabilities without explanation or appeal.</p>
+<p class="sum-para">Transgender People <span class="src-ref">(Benjamin)</span>: Appolition was created by Dr. Kortney Ziegler, a Black trans tech developer. The carceral system disproportionately targets and incarcerates trans people, especially Black trans women.</p>
+<p class="sum-para">Prisoners <span class="src-ref">(Washington)</span>: Under dermatologist Albert Kligman at Holmesburg Prison in Philadelphia, massive pharmaceutical and cosmetic testing was conducted on prisoners — overwhelmingly Black men. Companies including Johnson &amp; Johnson, Dow Chemical, and the US Army tested products including dioxin <span class="src-ref">(Agent Orange)</span>, radioactive isotopes, mind-altering drugs, and experimental skin treatments. Kligman described his first visit as seeing &quot;acres of skin.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-11">
+      <div class="file-badge argument">A-11</div>
+      <div class="sum-title">Argument 11: Predictive Policing Does Not Reduce Crime — It Increases Arrests and Surveillance</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Predictive policing programs have not been shown to reduce gun violence or crime. Instead, they increase police contact with flagged individuals, generate more arrests, and expand surveillance without delivering public safety benefits.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Chicago SSL Pilot <span class="src-ref">(RAND study)</span>: The SSL pilot did not reduce gun violence. Individuals on the SSL were 2.88 times more likely to be arrested for a shooting — not because of increased police contact, but because police used the list as a suspect checklist after shootings occurred. The model identified less than 1% of homicide victims <span class="src-ref">(3 out of 405)</span>. Even &quot;high-risk&quot; individuals had only a 0.7% homicide rate over 12 months.</p>
+<p class="sum-para">Poor Implementation <span class="src-ref">(RAND study)</span>: In over two-thirds <span class="src-ref">(68.8%)</span> of presentations observed, there was no mention of the SSL. Prevention strategies were vague — mainly &quot;increased contact&quot; without clear guidance. One commander said: &quot;We didn&#x27;t know what to do with the list — so we just made more stops.&quot;</p>
+<p class="sum-para">No Reduction in Gun Violence <span class="src-ref">(RAND study)</span>: Out of 405 homicides in Chicago during the study period, only 3 victims were on the SSL — less than 1%. The SSL did not lower citywide murder rates.</p>
+<p class="sum-para">Confirmation Bias <span class="src-ref">(RAND study)</span>: The RAND study found that the SSL had a direct effect on increasing arrests for shootings that did not work through police contact. Police used the SSL as a suspect lead after shootings occurred, creating a self-fulfilling prophecy.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-12">
+      <div class="file-badge argument">A-12</div>
+      <div class="sum-title">Argument 12: The &quot;Tech Solutionist&quot; Narrative Obscures Structural Change</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">The belief that technology can solve social problems <span class="src-ref">(tech solutionism)</span> distracts from the structural changes needed to address inequality. &quot;Fixing&quot; algorithms leaves the underlying unjust systems intact.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Algorithmic Laundering <span class="src-ref">(Obermeyer et al.)</span>: The health algorithm laundered existing structural inequalities — making them appear to be neutral technical outputs rather than the products of historical racism. The algorithm didn&#x27;t say &quot;this patient is Black, give them less care.&quot; It said &quot;this patient has lower predicted costs, give them lower priority.&quot;</p>
+<p class="sum-para">The Myth of Neutrality <span class="src-ref">(Benjamin)</span>: &quot;Technology is not neutral. It is always designed within social contexts that encode existing power relations, and in the American context, that means technology encodes anti-Blackness, racial capitalism, and carceral logic.&quot;</p>
+<p class="sum-para">Reform vs. Abolition <span class="src-ref">(Friedman)</span>: &quot;Liberal reform seeks to revise within the carceral rather than imagine a world without it. Rather than die a swift death or even slowly, the carceral state evolves when faced with a direct challenge and further entrenches within our social institutions.&quot; Reforming the carceral state is &quot;where the racial contract goes to receive diversity and inclusion training.&quot;</p>
+<p class="sum-para">The Dialectics of Discipline <span class="src-ref">(Friedman)</span>: Felber&#x27;s &quot;dialectics of discipline&quot; describes how the carceral state morphed alongside the Black Freedom Movement, refining its technologies of surveillance and control when met with a coordinated attack. In times of distress, the carceral state responded with liberal reform — interpreting legal victories as opportunities to develop new carceral technologies.</p>
+<p class="sum-para">The Double Bind of History Work <span class="src-ref">(Guntarik, &quot;Gathering&quot;)</span>: The FIG project used gamified incentives <span class="src-ref">(free coffee, treasure hunts)</span> to encourage participation. Guntarik acknowledges: &quot;In no way did I wish to dwarf these histories through the playing of a game. And yet this blurring of the lines between play and provocation and between people&#x27;s histories and painful memories can have limitations. This is the double bind of history work.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-13">
+      <div class="file-badge argument">A-13</div>
+      <div class="sum-title">Argument 13: Surveillance Capitalism Threatens Human Autonomy and Democracy</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Surveillance capitalism unilaterally claims human experience as free raw material for profit, predicting and shaping behavior at scale. This &quot;instrumentarian power&quot; threatens democracy, autonomy, and the right to a future tense.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Definition <span class="src-ref">(Zuboff)</span>: &quot;Surveillance capitalism unilaterally claims human experience as free raw material for translation into behavioral data. . . . With this reorientation from knowledge to power, it is no longer enough to automate information flows about us; the goal now is to automate us.&quot;</p>
+<p class="sum-para">The Aware Home Lost Vision <span class="src-ref">(Zuboff)</span>: In 2000, the Aware Home project envisioned a &quot;human-home symbiosis&quot; where data would empower individuals and remain under their control. By 2018, this vision was &quot;gone with the wind.&quot; Today&#x27;s smart-home devices extract and monetize personal data with oppressive terms of service.</p>
+<p class="sum-para">Instrumentarian Power <span class="src-ref">(Zuboff)</span>: &quot;Instrumentarian power knows and shapes human behavior toward others&#x27; ends. Instead of armaments and armies, it works its will through the automated medium of an increasingly ubiquitous computational architecture of &#x27;smart&#x27; networked devices, things, and spaces.&quot;</p>
+<p class="sum-para">The Right to the Future Tense <span class="src-ref">(Zuboff)</span>: Surveillance capitalism threatens &quot;the elemental right to the future tense, which accounts for the individual&#x27;s ability to imagine, intend, promise, and construct a future. It is an essential condition of free will and, more poignantly, of the inner resources from which we draw the will to will.&quot;</p>
+<p class="sum-para">Google as Pioneer <span class="src-ref">(Zuboff)</span>: &quot;Google invented and perfected surveillance capitalism in much the same way that a century ago General Motors invented and perfected managerial capitalism.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-14">
+      <div class="file-badge argument">A-14</div>
+      <div class="sum-title">Argument 14: AI Is a Form of Digital Colonialism</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">U.S. tech monopolies exercise control over the Global South through software, hardware, and network connectivity — a twenty-first-century form of colonization that extracts data and wealth while leaving dependent economies.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Definition <span class="src-ref">(Kwet)</span>: &quot;In an insidious new phenomenon, digital colonialism, casts a shadow on the Global South. This structural form of domination is exercised through the centralised ownership and control of the three core pillars of the digital ecosystem: software, hardware, and network connectivity.&quot;</p>
+<p class="sum-para">Nigeria&#x27;s Software Imports <span class="src-ref">(Birhane)</span>: &quot;Nigeria, one of the more technically developed countries in Africa, imports 90% of all software used in the country. The local production of software is reduced to add-ons or extensions creation for mainstream packaged software.&quot;</p>
+<p class="sum-para">Algorithmic Colonialism <span class="src-ref">(Birhane)</span>: &quot;Political, economic, and ideological domination in the age of AI takes the form of &#x27;technological innovation,&#x27; &#x27;state-of-the-art algorithms,&#x27; and &#x27;AI solutions&#x27; to social problems. Algorithmic colonialism, driven by profit maximization at any cost, assumes that the human soul, behaviour, and action is raw material free for the taking.&quot;</p>
+<p class="sum-para">Free Basics as Gatekeeping <span class="src-ref">(Kwet)</span>: &quot;Free Basics not only has Facebook playing Internet gatekeeper of the poor, it also violates net neutrality laws.&quot; Facebook controls what internet content poor people can access.</p>
+<p class="sum-para">Data Extraction as Human Resource Mining <span class="src-ref">(Birhane)</span>: &quot;Knowledge, authority, and power to sort, categorize, and order human activity rests with the technologist, for which we are merely data producing &#x27;human natural resources.&#x27;&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:0.4deg" id="sum-15">
+      <div class="file-badge argument">A-15</div>
+      <div class="sum-title">Argument 15: Risk Assessment in Sentencing Is Unconstitutional and Discriminatory</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Algorithmic risk assessment tools used in sentencing and parole explicitly use demographic and socioeconomic variables <span class="src-ref">(gender, age, employment, education)</span> that correlate with race and class, violating equal protection principles.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Gender Discrimination <span class="src-ref">(Starr)</span>: EBS tools give all men higher risk scores than women solely based on group averages — even though individual men may not pose higher risk. The Supreme Court in Craig v. Boren rejected using statistical differences between young men and women to justify gender-based drinking ages. The same principle applies to sentencing.</p>
+<p class="sum-para">Poverty as Aggravating Factor <span class="src-ref">(Starr)</span>: EBS tools assign higher risk to unemployed or less-educated defendants, treating poverty as an aggravating factor. In Bearden v. Georgia, the Supreme Court forbade revoking probation for failure to pay restitution based on poverty — even if data showed a correlation between poverty and recidivism.</p>
+<p class="sum-para">Racial Proxy Variables <span class="src-ref">(Starr)</span>: Although race is not directly included, variables like unemployment, low education, and neighborhood crime are highly correlated with race. A young Black man from a high-poverty neighborhood will score higher on risk tools than a white college graduate with the same crime — leading to longer sentences.</p>
+<p class="sum-para">Imprecise Individual Predictions <span class="src-ref">(Starr)</span>: A model might predict that men aged 20-24 with no high school diploma have a 40% recidivism rate on average. But the 95% prediction interval for an individual could range from 5% to 90% — so the instrument cannot reliably say whether a specific person will reoffend.</p>
+<p class="sum-para">Wrong Question Asked <span class="src-ref">(Starr)</span>: Risk prediction tools do not answer what judges need to know: &quot;Will two years in prison reduce his future crime more than probation would?&quot; They only predict who is risky, not whether incarceration reduces that risk.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card argument" style="--rot:-0.5deg" id="sum-16">
+      <div class="file-badge argument">A-16</div>
+      <div class="sum-title">Argument 16: Diversity Initiatives Do Not Fix Structural Racism in Tech</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead argument">The Core Claim</div>
+<p class="sum-para">Focusing on individual identity and &quot;diversity&quot; without changing the norms and structures of the tech industry offers little more than cosmetic change. The problem is not just who designs technology, but the logic of extraction and control embedded in the industry.</p>
+<div class="sum-subhead argument">Examples from Readings</div>
+<p class="sum-para">Cosmetic Diversity <span class="src-ref">(Benjamin)</span>: &quot;Cosmetic diversity too easily stands in for substantive change, with a focus on feel-good differences like food, language, and dress, not on systemic disadvantages.&quot;</p>
+<p class="sum-para">The Default Imagined User <span class="src-ref">(Costanza-Chock)</span>: &quot;Designers most frequently assume that the unmarked user has access to a number of very powerful privileges, such as U.S. citizenship, English language proficiency, access to broadband internet, a smartphone, no disabilities, and so on.&quot;</p>
+<p class="sum-para">Diversifying the Workforce Is Not Enough <span class="src-ref">(Costanza-Chock)</span>: &quot;Diversifying the software workforce, unfortunately, will not automatically produce a more diverse default imagined user. Unless the gender identity, sexual orientation, race/ethnicity, age, nationality, language, immigration status, and other aspects of end user identity are specified in advance, the imagined user for whom technology design teams develop products tends to default to the dominant social group.&quot;</p>
+<p class="sum-para">From Equity to Accountability <span class="src-ref">(Costanza-Chock)</span>: &quot;Ultimately, we have moved from an argument for equity <span class="src-ref">(we need diverse designers, and diverse users)</span> to an argument for accountability <span class="src-ref">(those most affected by the outcomes should lead and own digital design processes and products)</span>.&quot;</p>
+<p class="sum-para">Single-Axis Analysis <span class="src-ref">(Costanza-Chock)</span>: &quot;Universalist design principles and practices, and even evaluations of fairness or equity in design that are single-axis, erase certain groups of people, specifically those who are intersectionally disadvantaged or multiply-burdened under white supremacist heteropatriarchy, capitalism, and settler colonialism.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="summary-divider">
+      <div class="divider-line"></div>
+      <h2 class="divider-title">Resistance: Liberatory Imaginaries</h2>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-1">
+      <div class="file-badge resist">R-01</div>
+      <div class="sum-title">Resistance Argument 1: Banning and Restricting Harmful Technologies Through Legislation</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Communities and advocates have successfully pushed for outright bans on dangerous surveillance technologies, particularly facial recognition, and for laws requiring democratic oversight of police technology purchases.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">San Francisco Facial Recognition Ban <span class="src-ref">(Cagle &amp; Hirsch)</span>: In 2019, San Francisco passed the nation&#x27;s first-ever ban on municipal facial recognition, following years of grassroots advocacy led by the ACLU and a diverse alliance. The law also forced every city department to report and receive approval for surveillance technology they used, preventing secret stockpiling without public consent.</p>
+<p class="sum-para">Boston and Portland Bans <span class="src-ref">(Amnesty International)</span>: Boston became the second largest city to ban facial recognition in June 2020. Portland, Oregon, instated the widest ban to date in September 2020, prohibiting police, city departments, and public-facing businesses from using the technology.</p>
+<p class="sum-para">New York State School Ban <span class="src-ref">(Amnesty International)</span>: In December 2020, New York State banned facial recognition in schools.</p>
+<p class="sum-para">San Francisco Surveillance Ordinance <span class="src-ref">(Cagle &amp; Hirsch)</span>: The ordinance forced every city department to report and receive approval for surveillance technology, meaning the government could no longer secretly stockpile tech without public consent. In January 2022, when Mayor Breed proposed gutting the law, a citywide poll showed 60% of San Franciscans opposed giving SFPD access to private cameras for live surveillance. Breed withdrew the proposal.</p>
+<p class="sum-para">San Francisco Poll Results <span class="src-ref">(Cagle &amp; Hirsch)</span>: The poll showed San Franciscans overwhelmingly prefer alternative approaches that do not rely on surveillance or police, such as more resources for drug and mental health programs, more health care providers and social workers, and more streetlights.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-2">
+      <div class="file-badge resist">R-02</div>
+      <div class="sum-title">Resistance Argument 2: Grassroots Organizing and Community-Based Advocacy</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Local communities, tenant associations, and grassroots organizations have successfully resisted the installation of surveillance technologies in their neighborhoods and homes through collective action.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Atlantic Plaza Towers <span class="src-ref">(Amnesty International)</span>: Residents of a Black-majority complex in Brownsville, Brooklyn successfully resisted attempts by Nelson Management Group to install facial recognition cameras. Floor captains Tranae Moran and Fabian Rogers led tenants to challenge the installation. When the landlord retaliated by sending tenants surveillance print-outs with their apartment numbers and time stamps, the community continued organizing and won.</p>
+<p class="sum-para">Stop LAPD Spying Coalition <span class="src-ref">(Benjamin)</span>: A community-based organization engaged in participatory action research to understand community members&#x27; experiences of intensifying surveillance. They distinguished their efforts from carceral reforms like police body cameras, which one presenter called &quot;an empty reform to extend the stalker state.&quot;</p>
+<p class="sum-para">Carceral Tech Resistance Network <span class="src-ref">(Friedman)</span>: CTRN is a coalition organizing against the design, experimentation, and deployment of carceral technologies <span class="src-ref">(CCTV, drones, electronic monitoring, facial recognition)</span> by building community archives, community knowledge, community defense, and community power. The network organizes in communities that have a long history of fighting these practices and acquired knowledge about how to fight and build safety.</p>
+<p class="sum-para">CTRN Knowledge Sharing <span class="src-ref">(Friedman)</span>: The network recognized that technologies rolled out at a local scale have afterlives — they travel to other contexts where communities may have less familiarity with them. There was a need to knowledge-share and foster mentorship between community organizations.</p>
+<p class="sum-para">Tech Parks Arizona Resistance Context <span class="src-ref">(Dawson)</span>: While not a resistance example per se, the article documents that low-income, migrant, and indigenous communities are explicitly targeted by border surveillance technology — and these same communities have organized against it.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-3">
+      <div class="file-badge resist">R-03</div>
+      <div class="sum-title">Resistance Argument 3: Litigation and Legal Challenges to Algorithmic Systems</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Lawyers, public defenders, and civil rights organizations have successfully challenged algorithmic systems in court using procedural due process claims, challenges to scientific validity, and constitutional arguments.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Houston Teacher Evaluation Case <span class="src-ref">(AI Litigation Report)</span>: The Houston Federation of Teachers sued the school district over a proprietary algorithm used for teacher evaluations. Teachers won the right to go to trial on a constitutional procedural due process claim focusing on the district&#x27;s failure to give teachers meaningful access to the algorithmic system.</p>
+<p class="sum-para">D.C. Juvenile Risk Assessment <span class="src-ref">(AI Litigation Report)</span>: A public defender successfully raised a Daubert challenge to a violence risk assessment tool, obtaining a ruling that the risk assessment was not sufficiently validated to be admissible. The tool was based on only two outdated, non-peer-reviewed studies.</p>
+<p class="sum-para">Idaho Medicaid Case <span class="src-ref">(AI Litigation Report)</span>: Plaintiffs argued that algorithmic benefit cuts violated the 14th Amendment&#x27;s due process clause because recipients weren&#x27;t given meaningful notice. The case led to co-designing a new Medicaid assessment tool with the state agency.</p>
+<p class="sum-para">Arkansas Medicaid Case <span class="src-ref">(AI Litigation Report)</span>: Lawyers and experts uncovered software bugs in the Medicaid algorithm that miscalculated patient needs, leading to a court victory. The flaws were only discovered during litigation when the system&#x27;s code and technical documentation were carefully examined.</p>
+<p class="sum-para">K.W. v. Armstrong <span class="src-ref">(AI Litigation Report)</span>: The ACLU challenged a secret algorithm used to cut Medicaid benefits in Idaho. The case demonstrated the importance of expert witnesses — technical and social science experts were critical to analyzing algorithms and explaining flaws to judges.</p>
+<p class="sum-para">Role of Experts <span class="src-ref">(AI Litigation Report)</span>: Experts were crucial both within litigation and as part of building broader consensus that algorithmic systems were inherently flawed. Successful teams included lawyers, data scientists, social scientists, and community advocates working together.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-4">
+      <div class="file-badge resist">R-04</div>
+      <div class="sum-title">Resistance Argument 4: Transparency and Audit Demands</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Activists and researchers demand that algorithms be opened to public scrutiny, that vendors cannot hide behind trade secrecy when public rights are at stake, and that independent audits be conducted before and during deployment.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Algorithmic Justice League Safe Face Pledge <span class="src-ref">(Benjamin)</span>: A public pledge calling on organizations to mitigate abuse of facial recognition analysis technology. Prohibitions include lethal use of the technology, lawless police use, and require transparency in any government use. As of the book&#x27;s writing, none of the major tech companies had been willing to sign.</p>
+<p class="sum-para">Dataset Nutrition Label Project <span class="src-ref">(Benjamin)</span>: A project riffing off food nutrition labels, measuring and presenting key ingredients of a dataset <span class="src-ref">(where, when, and by whom data were produced)</span> to create standard quality measures as a prerequisite to developing more inclusive datasets.</p>
+<p class="sum-para">Auditing Algorithms Initiative <span class="src-ref">(Benjamin)</span>: A research community developing practices for auditing algorithmic decision-making. Key questions include: What are unintended consequences of designing systems at scale on existing social patterns? When should AI prioritize individuals over society and vice versa? When is introducing an AI system the right answer — and when is it not?</p>
+<p class="sum-para">FBI Transparency Demands <span class="src-ref">(Garvie et al.)</span>: The report urged that the FBI be transparent about its use of face recognition, and that all face recognition use should be subject to public reporting and internal audits. Citizens are paying for these systems and have a right to know how they are being used.</p>
+<p class="sum-para">Trade Secrecy Challenge <span class="src-ref">(AI Litigation Report)</span>: Lawyers recommend routinely filing public records requests and demanding expert access to proprietary systems during discovery. Procedural due process arguments were particularly adept at dismantling claims that algorithmic decision systems are proprietary trade secrets, especially when used for public benefits determinations.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-5">
+      <div class="file-badge resist">R-05</div>
+      <div class="sum-title">Resistance Argument 5: Worker and Employee Organizing Within Tech Companies</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Tech workers have organized protests and refused to be complicit in the use of their labor for military, surveillance, and deportation purposes.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Google Employee Protests <span class="src-ref">(Benjamin)</span>: Thousands of Google employees condemned the company&#x27;s collaboration on a Pentagon program using AI to make drone strikes more effective. Workers publicly opposed their employer&#x27;s military contracts.</p>
+<p class="sum-para">Microsoft Employee Protests <span class="src-ref">(Benjamin)</span>: Microsoft employees opposed the company&#x27;s contract with ICE <span class="src-ref">(Immigration and Customs Enforcement)</span>, stating: &quot;As the people who build the technologies that Microsoft profits from, we refuse to be complicit.&quot;</p>
+<p class="sum-para">Selective Outrage Critique <span class="src-ref">(Benjamin)</span>: Benjamin cautions that there is selective outrage — where is comparable fury over surveillance that has torn Black families apart long before Trump&#x27;s administration? This is both a resistance example and a critique of its limits.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-6">
+      <div class="file-badge resist">R-06</div>
+      <div class="sum-title">Resistance Argument 6: Design Justice and Community-Led Design</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Design justice is a framework and movement that centers the voices of those most affected by design outcomes, prioritizes community impact over designer intentions, and sees designers as facilitators rather than experts.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Design Justice Principles <span class="src-ref">(Costanza-Chock)</span>: &quot;We center the voices of those who are directly impacted by the outcomes of the design process. We prioritize design&#x27;s impact on the community over the intentions of the designer. We see the role of the designer as a facilitator rather than an expert. We believe that everyone is an expert based on their own lived experience.&quot;</p>
+<p class="sum-para">&quot;Nothing About Us Without Us&quot; <span class="src-ref">(Costanza-Chock)</span>: Design justice draws from the disability justice movement. Involving members of the community most directly affected is crucial both because it&#x27;s ethical and because their tacit and experiential knowledge produces ideas that a non-member would be very unlikely to come up with.</p>
+<p class="sum-para">Before Seeking New Solutions <span class="src-ref">(Costanza-Chock)</span>: &quot;Before seeking new design solutions, we look for what is already working at the community level. We honor and uplift traditional, indigenous, and local knowledge and practices.&quot;</p>
+<p class="sum-para">Advocacy-Based Algorithms <span class="src-ref">(AI Litigation Report)</span>: The report called for exploring what an &quot;advocacy-based algorithm&quot; might look like that is oriented around the needs of individuals or communities impacted by these systems. In Idaho, plaintiffs co-designed a new Medicaid assessment tool with the state agency.</p>
+<p class="sum-para">Design Justice as Social Movement <span class="src-ref">(Costanza-Chock)</span>: &quot;Design justice is also a growing social movement that aims to ensure a more equitable distribution of design&#x27;s benefits and burdens; fair and meaningful participation in design decisions; and recognition of community-based design traditions, knowledge, and practices.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-7">
+      <div class="file-badge resist">R-07</div>
+      <div class="sum-title">Resistance Argument 7: Abolitionist Technology and Mutual Aid Tools</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Communities are building and using technology not to extend the carceral state but to actually free people, redirect resources, and create alternatives to policing and imprisonment.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Appolition Bail Crowdfunding App <span class="src-ref">(Benjamin)</span>: Created by Dr. Kortney Ziegler <span class="src-ref">(Black trans tech developer)</span> and Tiffany Mikell. The mobile app converts users&#x27; daily spare change into bail money to free Black people from pretrial detention. Launched November 2017, it garnered 8,000 enrollments, raised $230,000, freeing over 65 people. Money is returned to depositors after cases conclude, so donations are continuously recycled. Many White users see it as a form of reparation. Partners with the National Bail Out movement.</p>
+<p class="sum-para">Appolition vs. Promise <span class="src-ref">(Benjamin)</span>: Benjamin contrasts Appolition <span class="src-ref">(abolitionist tool that directs resources to getting people literally free)</span> with Promise <span class="src-ref">(Jay-Z&#x27;s startup that creates a &quot;digital cell&quot; and collaborates with law enforcement)</span>. Appolition is &quot;a technology with an emancipatory ethos, a tool of solidarity.&quot;</p>
+<p class="sum-para">National Bail Out Network <span class="src-ref">(Benjamin)</span>: &quot;Everyday an average of 700,000 people are condemned to local jails and separated from their families. A majority of them are there simply because they cannot afford to pay bail.&quot;</p>
+<p class="sum-para">Turkopticon <span class="src-ref">(Benjamin)</span>: An activist tool developed by Lilly Irani and M. Six Silberman to help crowdworkers <span class="src-ref">(Amazon Mechanical Turk workers)</span> watch out for each other. Illustrates solidaristic design, though Benjamin notes it also raises questions about who gets credited for innovation.</p>
+<p class="sum-para">BYP100 <span class="src-ref">(Benjamin)</span>: BYP100 extends the critique of abolitionist organizations like Critical Resistance, which describes &quot;the overlapping interests of government and industry that use surveillance, policing, and imprisonment as solutions to what are, in actuality, economic, social, and political &#x27;problems&#x27;&quot; under the description prison-industrial complex.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-8">
+      <div class="file-badge resist">R-08</div>
+      <div class="sum-title">Resistance Argument 8: Data for Black Lives and Black Data Justice</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Black data scientists, organizers, and scholars are building collective power to challenge how data and algorithms are used against Black communities, drawing on a long tradition of Black data activism from Du Bois to Ida B. Wells.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Data for Black Lives <span class="src-ref">(D4BL)</span> <span class="src-ref">(Benjamin)</span>: A collective of organizers, scholars, and data scientists. Yeshimabeit Milner wrote an open letter to Mark Zuckerberg calling for a Public Data Trust, a Data Code of Ethics, and hiring Black data scientists. The collective emphasizes that data justice issues today are predicated on a longer history of systematic injustice.</p>
+<p class="sum-para">Historical Forebears <span class="src-ref">(Benjamin)</span>: D4BL highlights W.E.B. Du Bois <span class="src-ref">(data visualizations of Black life at the 1900 Paris Exposition)</span> and Ida B. Wells-Barnett <span class="src-ref">(The Red Record documenting lynching statistics)</span> as historical figures who used data for liberation.</p>
+<p class="sum-para">Black in AI <span class="src-ref">(Benjamin)</span>: Timnit Gebru, computer scientist and founder of Black in AI, urges companies to give more information not just to users but also to researchers — including recommended usage, what the pitfalls are, and how biased the data set is.</p>
+<p class="sum-para">Algorithmic Justice League <span class="src-ref">(Benjamin)</span>: The organization works to highlight bias in AI and advocate for accountability.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-9">
+      <div class="file-badge resist">R-09</div>
+      <div class="sum-title">Resistance Argument 9: Subversive Art, Fashion, and Tactical Resistance</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Artists and activists use fashion, makeup, and creative practices to subvert surveillance technologies — making themselves invisible to facial recognition or turning surveillance tools back on power.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">CV Dazzle Project <span class="src-ref">(Browne)</span>: Adam Harvey&#x27;s CV Dazzle project suggests applying makeup that contrasts with your skin tone in unusual tones and directions — light colors on dark skin, dark colors on light skin — to decrease the possibilities of facial recognition detection.</p>
+<p class="sum-para">Jillian Mayer&#x27;s Makeup Tutorial <span class="src-ref">(Browne)</span>: Mayer demonstrates how to use black lipstick, clear tape, scissors, white cream, glitter, and black eyeliner to distort one&#x27;s face to make it indiscernible to cameras. She says the most important thing &quot;is to really break up your face&quot; and that facial recognition &quot;isn&#x27;t about blending in&quot; but &quot;sticking out, yet remaining undetected.&quot;</p>
+<p class="sum-para">Hyphen-Labs <span class="src-ref">(Benjamin)</span>: An international team of women of color working at the intersection of technology, art, science, and futurism. They created earrings for recording police altercations and visors and clothing that prevent facial recognition. This recasts what counts as technoscience and who counts as an innovator.</p>
+<p class="sum-para">White-Collar Crime Risk Zones <span class="src-ref">(Benjamin)</span>: A parody project that flips predictive policing techniques. It creates a heat map flagging city blocks where financial crimes are likely to occur, includes an app alerting users when they enter high-risk areas to encourage &quot;citizen policing,&quot; and uses facial recognition trained on 7,000 corporate executive photos from LinkedIn. The &quot;averaged&quot; face of a criminal is White and male. This subverts anti-Black logics in crime prevention tech.</p>
+<p class="sum-para">Dark Sousveillance <span class="src-ref">(Browne)</span>: Browne coins &quot;dark sousveillance&quot; to describe tactics employed to render oneself out of sight and strategies used in the flight to freedom from slavery — situating contemporary surveillance resistance within the long history of Black escape and resistance.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-10">
+      <div class="file-badge resist">R-10</div>
+      <div class="sum-title">Resistance Argument 10: The Right to Silence, Non-Knowledge, and Refusal</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Resistance includes the refusal to make knowledge transparent and accessible to oppressive systems. Communities keep their survival strategies secret, and Indigenous knowledge systems insist on the right to silence and sacred knowledge.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Digital Defense Playbook <span class="src-ref">(Benjamin)</span>: Tawana Petty, Detroit-based digital justice activist, said: &quot;Let me be real, y&#x27;all gettin the Digital Defense Playbook, but we didn&#x27;t tell you all their strategies and we never will, because we want our community members to continue to survive and to thrive.&quot; Oppressed people do not need &quot;allies&quot; but &quot;co-liberation&quot; — an aspirational relationship that emphasizes linked fate.</p>
+<p class="sum-para">Omission of Reference List <span class="src-ref">(Guntarik, &quot;Rematriation&quot;)</span>: Guntarik&#x27;s deliberate omission of a reference list is a political and epistemological choice — a refusal of citational politics as extractive practice, the demand that knowledge be traceable, auditable, reducible to sources that can be checked, owned, cited.</p>
+<p class="sum-para">Silence as Method <span class="src-ref">(Guntarik, &quot;Gathering&quot;)</span>: N&#x27;arweet <span class="src-ref">(Elder)</span> tells her: &quot;Just listen and don&#x27;t ask questions. There is something about non-speech and allowing the silence to reign that proffers something more.&quot; Drawing on Agamben: &quot;maintaining oneself in the right relationship to ignorance, allowing absence of knowledge to guide and accompany our gestures.&quot;</p>
+<p class="sum-para">Non-Knowledge as Zone <span class="src-ref">(Guntarik, &quot;Gathering&quot;)</span>: &quot;Articulating a zone of nonknowledge does not mean simply not knowing... It means, on the contrary, maintaining oneself in the right relationship to ignorance, allowing absence of knowledge to guide and accompany our gestures, letting a stubborn silence clearly respond for our words.&quot;</p>
+<p class="sum-para">Sacred Knowledge <span class="src-ref">(Guntarik, &quot;Rematriation&quot;)</span>: &quot;Knowledge can be silent and sacred.&quot; &quot;If knowledge looks strange to you, can&#x27;t be contained or reduced, that&#x27;s because Indigenous knowledge is always moving.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-11">
+      <div class="file-badge resist">R-11</div>
+      <div class="sum-title">Resistance Argument 11: Free Software, Decentralization, and Technological Sovereignty</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">The free software movement offers an alternative to proprietary, extractive technology by ensuring four essential freedoms: to run, study, modify, and share software. Decentralized technologies can break the monopoly of corporate and state surveillance.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Four Essential Freedoms <span class="src-ref">(Kwet)</span>: Free Software ensures the freedom to run the program as you wish; the freedom to study how the program works and change it; the freedom to redistribute verbatim copies; and the freedom to distribute copies of your modified versions to others. Desmond Tutu: &quot;There are those who will take the fruits of the human mind and lock them up, dishing them out to us in meted amounts for a fee that locks most of our people out.&quot;</p>
+<p class="sum-para">FreedomBox Project <span class="src-ref">(Kwet)</span>: In February 2010, Eben Moglen and colleagues launched the FreedomBox project in reaction to cloud centralization. The project runs a secure, personal server that protects privacy and provides infrastructure for communities to network their online activities without centralized intermediaries.</p>
+<p class="sum-para">Seize the Means of Communication <span class="src-ref">(Kwet)</span>: Edward Snowden: &quot;We&#x27;re very rapidly approaching a point in human history where we will need to seize the means of our communication.&quot;</p>
+<p class="sum-para">People&#x27;s Tech for People&#x27;s Power <span class="src-ref">(Kwet)</span>: Kwet calls for a global movement against digital colonialism and for technology built for freedom. &quot;New technologies are often viewed as something that &#x27;comes out&#x27; on the market rather than products designed with particular values and power relations embedded in them. From an engineering perspective, it does not have to be this way: digital technology can be owned and controlled by the popular classes.&quot;</p>
+<p class="sum-para">Free Software, Free Hardware, Free Spectrum <span class="src-ref">(Kwet)</span>: True digital sovereignty requires Free Software, Free Hardware, and Free Spectrum <span class="src-ref">(neutral internet)</span>.</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-12">
+      <div class="file-badge resist">R-12</div>
+      <div class="sum-title">Resistance Argument 12: Walking, Place-Based Knowledge, and Reclaiming Space</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Walking is a political act and a method of resistance. Indigenous communities use walking tours, mobile apps, and place-based storytelling to reclaim history, counter colonial narratives, and build alternative relationships to land and technology.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Walking as Political Act <span class="src-ref">(Guntarik, &quot;Gathering&quot;)</span>: &quot;Walking is a political act&quot; and &quot;a way of thinking about time and place, and how we stand across our differences.&quot; Guntarik writes &quot;from and out of exile&quot; to trace &quot;the kinaesthetic lines that connect us to different places.&quot;</p>
+<p class="sum-para">The FIG Project <span class="src-ref">(Guntarik, &quot;Gathering&quot;)</span>: A digital walking tour project at the Old Fig Tree adjacent to the Old Melbourne Gaol. Uses mobile app technology <span class="src-ref">(AR, GPS, locative media)</span> to generate place-based renderings of historical material. Users could upload images, stories, audio recordings in response to the site.</p>
+<p class="sum-para">Talking Country Project <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: Located in Kalimna Park <span class="src-ref">(Yorta Yorta language: &quot;Kalimna&quot; means beautiful)</span> — Dja Dja Wurrung/Djaara traditional Country. Led by young Indigenous leaders who wanted to &quot;bring the digital world into dialogue with place-politics.&quot; The app automatically triggers listening experiences so eyes are not fixed on phones. Goal: &quot;Feel, walk, see, sense and smell Country.&quot;</p>
+<p class="sum-para">The Burke and Wills Monument <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: The cultural walk deliberately ends at a Burke and Wills statue — a &quot;major monument to colonialism.&quot; Uncle Rick Nelson <span class="src-ref">(Djaara elder)</span> greets participants: &quot;Ahhhh, I think you&#x27;re beginning to understand now why you&#x27;re here.&quot; The walk asks: what if we started with First Nations history? &quot;Where might we be in the world in terms of progress, if we had done this from the start?&quot;</p>
+<p class="sum-para">Sitting with Difficult Feelings <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: The reflection after the walk allowed people to sit with grief, guilt, denial, anger, arrogance of power, complacency, indifference, insensitivity. &quot;Part of this &#x27;sitting with&#x27; was about allowing ourselves to not always rush forward to try to fix problems.&quot; The walk asks: &quot;Where am I in all of this?&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-13">
+      <div class="file-badge resist">R-13</div>
+      <div class="sum-title">Resistance Argument 13: Rematriation and Non-Extractive Relationships to Knowledge</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Rematriation — returning the earth to Mother Nature to heal and regenerate — is a framework for non-extractive relationships to land, knowledge, and technology. Unlike repatriation <span class="src-ref">(returning objects)</span>, rematriation focuses on keeping &quot;the living archive living.&quot;</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Definition of Rematriation <span class="src-ref">(Guntarik, &quot;Rematriation&quot;)</span>: &quot;Rematriation means returning the earth to Mother Nature to heal and regenerate.&quot; Core assertion: &quot;We have not lost. We do not need things returned to us as they were never taken from us. We were always here and the voices of our ancestors are our original source.&quot;</p>
+<p class="sum-para">Non-Extractive Language <span class="src-ref">(Guntarik, &quot;Rematriation&quot;)</span>: Guntarik seeks &quot;a non-extractive language built on love, impulse and free will.&quot; Language is &quot;exploratory and experimental <span class="src-ref">(a form of improvisation)</span>.&quot;</p>
+<p class="sum-para">The Archive as Living Being <span class="src-ref">(Guntarik, &quot;Gathering&quot;)</span>: &quot;The archive is holistic and feeds my soul. It is nurturing and giving and caring. It keeps me safe and whole and honest like nothing else. I cradle this archive in my arms like a baby, feed it so that it may grow and become a Living Being full of promise and humanity. It is not an extractive relationship.&quot;</p>
+<p class="sum-para">Custodianship Not Ownership <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: Elders speak of being &quot;custodians of Country&quot; — not owners. &quot;If we think of ourselves as carers and custodians of Country, we might learn to see the land from Indigenous ways of knowing, being and practising Country.&quot; &quot;Country will always be sovereign... laws in space, laws in time, never ceded.&quot;</p>
+<p class="sum-para">Grounded Normativity <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: Drawing on Glen Sean Coulthard: &quot;the modalities of Indigenous land-connected practices and longstanding experiential knowledge that inform and structure our ethical engagements with the world and our relationships with human and nonhuman others over time.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-14">
+      <div class="file-badge resist">R-14</div>
+      <div class="sum-title">Resistance Argument 14: Language Reclamation Through Digital Tools</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Digital technologies can be repurposed for cultural survival and language reclamation. The question is not whether to use technology but whose values and structures it serves.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Learning First Language via WhatsApp <span class="src-ref">(Guntarik, &quot;Rematriation&quot;)</span>: Guntarik learns her First language via WhatsApp voice notes from her Aunt. She uses digital platforms <span class="src-ref">(YouTube, WhatsApp, Vimeo)</span> for cultural transmission. &quot;Going back is a metaphor for restoring what was lost.&quot;</p>
+<p class="sum-para">Non-Extractive Technology Use <span class="src-ref">(Guntarik, &quot;Rematriation&quot;)</span>: Technology is not inherently colonial. It becomes colonial when structured by extractive logics. Repurposed toward rematriation, it can carry song, dance, ceremony, memory.</p>
+<p class="sum-para">Technology in the Background <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: The Talking Country app automatically triggers listening experiences so participants&#x27; eyes are not fixed on phones. The key principle: technology should not take away from what is important. &quot;We asked people not to have any judgment at all and just to listen to the stories.&quot;</p>
+<p class="sum-para">Digital Terra Nullius Warning <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: &quot;For us, no difference exists between the physical and digital terra nullius. The material, digital and sacred can all potentially be stolen, silenced and erased.&quot; Caution against &quot;unseeing practices that devalue &#x27;space&#x27;, &#x27;place&#x27; and &#x27;content&#x27; in the digital economy.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-15">
+      <div class="file-badge resist">R-15</div>
+      <div class="sum-title">Resistance Argument 15: The Prison Abolitionist Imagination</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Imagination is a political terrain. Prison abolition requires not just dismantling the carceral state but dreaming and building alternative worlds. Imagination becomes real through action.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Imagination as Political Terrain <span class="src-ref">(Wang)</span>: Prisons don&#x27;t just hold bodies — they hold imaginations captive. Drawing on Sylvia Wynter: at the same moment indigenous people were confined to reservations, &quot;our imaginations are also confined. All of us.&quot; The prison shapes how we imagine &quot;work, our relationships, the future, family, everything.&quot;</p>
+<p class="sum-para">Imagination as Excess <span class="src-ref">(Wang)</span>: Imagination is also &quot;excess&quot; — &quot;that which could never be contained by the prison.&quot;</p>
+<p class="sum-para">Dialectic of Dreaming and Action <span class="src-ref">(Wang)</span>: Michael Hardt: imagination is &quot;constitutive&quot; — it &quot;becomes real through its intensification and articulation.&quot; Assata Shakur: &quot;Dreams and reality are opposites. Action synthesizes them.&quot; Prophetic dreams must be acted upon to &quot;give them flesh.&quot;</p>
+<p class="sum-para">The Stars as Freedom <span class="src-ref">(Wang)</span>: Attica prisoners <span class="src-ref">(1971)</span>: &quot;no matter what happened later on, they couldn&#x27;t take this night away from us.&quot; A prisoner named Owl: &quot;I haven&#x27;t seen the stars in twenty-two years.&quot; Chilean political prisoners under Pinochet: observing stars produced &quot;great freedom&quot; — the military banned astronomy lessons fearing escape by constellations.</p>
+<p class="sum-para">Closing Question <span class="src-ref">(Wang)</span>: Robin D.G. Kelley asks: &quot;What shall we build on the ashes of a nightmare?&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:-0.5deg" id="sum-16">
+      <div class="file-badge resist">R-16</div>
+      <div class="sum-title">Resistance Argument 16: Collective Protest and Refusal to Dance the Dialectic</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Mass protests following police murders are a direct confrontation against the racial capitalist system. Unlike liberal reform, which the carceral state absorbs and uses to evolve, abolition refuses to &quot;dance the dialectic&quot; of reform and expansion.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Ferguson Uprising <span class="src-ref">(Wang)</span>: After police crushed the memorial to Mike Brown, &quot;an uprising bloomed out of the ground where the memorial flowers had been crushed.&quot;</p>
+<p class="sum-para">George Floyd Protests <span class="src-ref">(Friedman)</span>: &quot;We are witnessing collective protest led by Black communities wielded to discipline the carceral state at its root. The protests following the murders of Breonna Taylor, Ahmaud Arbery, and George Floyd are a direct confrontation against the U.S. racial capitalist system, calling it out as the vile soul of the rotten carceral state.&quot;</p>
+<p class="sum-para">Refusal to Dance the Dialectic <span class="src-ref">(Friedman)</span>: &quot;Abolition recognizes the dialectics of carceral technologies and liberal reform and responds not only with disciplining and dismantling the old, but with dreaming, imagining, and creating what Ruth Wilson Gilmore refers to as &#x27;vital systems&#x27; in the present.&quot;</p>
+<p class="sum-para">Nation of Islam Resistance <span class="src-ref">(Friedman)</span>: &quot;Not only did the Nation of Islam refuse the carceral state&#x27;s deadly promises for partial inclusion, but its members organized and risked their lives from within its darkest corners, revolutionizing solitary confinement cells and rigged courtrooms as sites of Black revolutionary challenges to the root of the carceral state.&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+
+    <div class="content-box sum-card resist" style="--rot:0.4deg" id="sum-17">
+      <div class="file-badge resist">R-17</div>
+      <div class="sum-title">Resistance Argument 17: Songkeeping, Fire, and Ancestral Transmission</div>
+      <div class="sum-content" style="display:none">
+        <div class="sum-subhead resist">The Core Claim</div>
+<p class="sum-para">Resistance is not only about opposing harmful systems but about maintaining and transmitting life-sustaining cultural practices — song, story, fire, ceremony — that have survived centuries of colonialism.</p>
+<div class="sum-subhead resist">Examples from Readings</div>
+<p class="sum-para">Songkeeping as Survival <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: Neil Morris <span class="src-ref">(Djaara)</span>: &quot;I listen to stand awake. I listen to stand alive, I listen to be always with communal fire, lit by ancestors. We need this to survive. Ancestors&#x27; songs will always speak now. They tell us what they did — walking mother country, in good ways.&quot;</p>
+<p class="sum-para">The Communal Fire <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: &quot;The communal fire is a source of light and heat on cold dark nights and in dark times... We tell stories around the fire. The fire expresses a promise, reignites memory, signals a way to be together. Our words are contracts. We honour the words shared as the warmth of the fire brightens our face.&quot;</p>
+<p class="sum-para">Imaginary Plentitude <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: Drawing on Stuart Hall: &quot;Such texts restore an imaginary fullness or plentitude, to set against the broken rubric of our past. They are resources of resistance and identity, with which to confront the fragmented and pathological ways in which that experience has been reconstructed within the dominant regimes.&quot;</p>
+<p class="sum-para">The Will to Return <span class="src-ref">(Guntarik &amp; Morris, &quot;Song and Survival&quot;)</span>: &quot;We can no longer return to the original precolonial state <span class="src-ref">(of being Indigenous)</span> or to the mother <span class="src-ref">(the original precolonial homeland)</span>. Yet it is the will to return that stirs a desire and a purpose for being, a coming together around the communal fire in ways that build an &#x27;imaginary coherence.&#x27;&quot;</p>
+      </div>
+      <button class="sum-toggle" onclick="toggleSum(this)">▼ EXPAND DOSSIER</button>
+    </div>
+    </div>
+  </section>
+
+
+  <!-- EMBEDDED ORIGINAL DOCUMENT -->
+  <section class="pdf-archive" id="pdfArchive">
+    <div class="pdf-header">
+      <div class="file-badge" style="position:relative;top:0;right:0;display:inline-block;margin-bottom:12px;font-size:12px;padding:5px 14px">SOURCE DOCUMENT</div>
+      <h2 class="pdf-title">◉ ORIGINAL DOCUMENT</h2>
+      <p class="pdf-desc">Summary Notes from the Course — Full Dossier PDF (36 Pages)</p>
+    </div>
+    <div class="pdf-frame-wrap">
+      <div class="pdf-frame">
+        <iframe src="Summary_Dossier.pdf" title="Summary Notes from the Course — Complete Dossier"></iframe>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+});
+
+// Close sidebar on mobile nav
+document.querySelectorAll('.nav-link,.nav-map-link').forEach(a=>{
+  a.addEventListener('click',()=>{
+    if(window.innerWidth<=900) document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+document.querySelectorAll('.viz-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.viz-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.viz-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    const panel = document.getElementById('panel-' + this.dataset.tab);
+    if (panel) panel.classList.add('active');
+    // Initialize canvas on first show
+    if (this.dataset.tab === 'network' && !window._networkInit) initNetwork();
+    if (this.dataset.tab === 'flow' && !window._flowInit) initFlow();
+    if (this.dataset.tab === 'timeline' && !window._timelineInit) initTimeline();
+    if (this.dataset.tab === 'clusters' && !window._clusterInit) initClusters();
+  });
+});
+
+// ============================================================
+// SHARED DATA
+// ============================================================
+const COLORS = {
+  colonial: '#606C38',
+  surveillance: '#C3A87F',
+  digital: '#606C38',
+  medical: '#C3A87F',
+  abolition: '#606C38',
+  futures: '#C3A87F'
+};
+
+const AUTHORS = [
+  { id: 'mbembe', name: 'Achille Mbembe', works: ["Fanon's Pharmacy","Society of Enmity","Necropolitics"], cluster: 'colonial', year: 2019, x: 0, y: 0, card: 'card-mbembe-fanon' },
+  { id: 'washington', name: 'Harriet A. Washington', works: ["Medical Apartheid (Intro)","Caged Subjects"], cluster: 'medical', year: 2007, x: 0, y: 0, card: 'card-washington-intro' },
+  { id: 'wolfe', name: 'Patrick Wolfe', works: ["Settler Colonialism"], cluster: 'colonial', year: 2006, x: 0, y: 0, card: 'card-wolfe' },
+  { id: 'kwet', name: 'Michael Kwet', works: ["Digital Colonialism"], cluster: 'digital', year: 2019, x: 0, y: 0, card: 'card-kwet' },
+  { id: 'roth', name: 'Lorna Roth', works: ["Looking at Shirley"], cluster: 'surveillance', year: 2009, x: 0, y: 0, card: 'card-roth' },
+  { id: 'foucault', name: 'Michel Foucault', works: ["Right of Death & Power over Life"], cluster: 'surveillance', year: 1976, x: 0, y: 0, card: 'card-foucault' },
+  { id: 'browne', name: 'Simone Browne', works: ["Dark Matters (Intro)","Epilogue"], cluster: 'surveillance', year: 2015, x: 0, y: 0, card: 'card-browne-intro' },
+  { id: 'birhane', name: 'Abeba Birhane', works: ["Algorithmic Colonization of Africa"], cluster: 'digital', year: 2020, x: 0, y: 0, card: 'card-birhane' },
+  { id: 'benjamin', name: 'Ruha Benjamin', works: ["New Jim Code","Captivating Tech","Retooling Solidarity"], cluster: 'abolition', year: 2019, x: 0, y: 0, card: 'card-benjamin-njc' },
+  { id: 'perreira', name: 'Christopher Perreira', works: ["Consumed by Disease"], cluster: 'medical', year: 2019, x: 0, y: 0, card: 'card-perreira' },
+  { id: 'obermeyer', name: 'Ziad Obermeyer', works: ["Dissecting Racial Bias"], cluster: 'medical', year: 2019, x: 0, y: 0, card: 'card-obermeyer' },
+  { id: 'roberts', name: 'Dorothy Roberts', works: ["Genetic Surveillance"], cluster: 'medical', year: 2009, x: 0, y: 0, card: 'card-roberts' },
+  { id: 'metzl', name: 'Jonathan Metzl', works: ["Protest Psychosis"], cluster: 'medical', year: 2010, x: 0, y: 0, card: 'card-metzl' },
+  { id: 'dawson', name: 'Brittany Dawson', works: ["Border: Israeli Tech Lab"], cluster: 'digital', year: 2018, x: 0, y: 0, card: 'card-dawson' },
+  { id: 'crawford', name: 'Neta Crawford', works: ["Accountability for Killing"], cluster: 'digital', year: 2013, x: 0, y: 0, card: 'card-crawford' },
+  { id: 'cagle', name: 'Cagle & Hirsch', works: ["Fight Against Surveillance"], cluster: 'abolition', year: 2023, x: 0, y: 0, card: 'card-cagle' },
+  { id: 'coalition', name: 'Coalition for Critical Tech', works: ["#TechToPrisonPipeline"], cluster: 'abolition', year: 2020, x: 0, y: 0, card: 'card-coalition' },
+  { id: 'costanza', name: 'Sasha Costanza-Chock', works: ["Design Justice"], cluster: 'abolition', year: 2020, x: 0, y: 0, card: 'card-costanza' },
+  { id: 'friedman', name: 'Brittany Friedman', works: ["Carceral Technologies"], cluster: 'abolition', year: 2020, x: 0, y: 0, card: 'card-friedman' },
+  { id: 'wang', name: 'Jackie Wang', works: ["Abolitionist Imagination"], cluster: 'futures', year: 2018, x: 0, y: 0, card: 'card-wang' },
+  { id: 'guntarik', name: 'Olivia Guntarik', works: ["Rematriation","Gathering","Song & Survival"], cluster: 'futures', year: 2022, x: 0, y: 0, card: 'card-guntarik-remat' },
+];
+
+const EDGES = [
+  ['mbembe','foucault','biopower/necropolitics'],
+  ['mbembe','wolfe','colonial structure'],
+  ['mbembe','browne','surveillance + colonialism'],
+  ['foucault','browne','biopower → racializing surveillance'],
+  ['foucault','benjamin','normalizing society → New Jim Code'],
+  ['browne','benjamin','dark sousveillance → abolitionist tools'],
+  ['browne','roth','prototypical whiteness in tech'],
+  ['washington','obermeyer','medical exploitation → algorithmic bias'],
+  ['washington','metzl','false race science → diagnostic racism'],
+  ['washington','roberts','experimentation → genetic surveillance'],
+  ['washington','perreira','medical archive → carceral health'],
+  ['obermeyer','benjamin','algorithmic laundering → New Jim Code'],
+  ['obermeyer','perreira','algorithmic bias → carceral health'],
+  ['roberts','benjamin','genetic surveillance → carceral technoscience'],
+  ['metzl','benjamin','diagnostic racism → carceral technoscience'],
+  ['benjamin','costanza','New Jim Code → design justice'],
+  ['benjamin','coalition','coded inequity → #TechToPrisonPipeline'],
+  ['benjamin','friedman','carceral tech → abolition'],
+  ['benjamin','cagle','surveillance → community resistance'],
+  ['benjamin','wang','abolition as imagination'],
+  ['kwet','birhane','digital colonialism → algorithmic colonization'],
+  ['kwet','dawson','surveillance infrastructure → border tech'],
+  ['birhane','dawson','Western AI exports → border laboratory'],
+  ['dawson','crawford','border tech → drone accountability'],
+  ['wolfe','dawson','settler colonialism → border as structure'],
+  ['browne','cagle','surveillance history → SF surveillance fight'],
+  ['wang','guntarik','imprisoned imagination → rematriation'],
+  ['friedman','wang','carceral dialectics → abolitionist dreaming'],
+  ['mbembe','wang','necropolitics → death-worlds → freedom imaginary'],
+  ['guntarik','costanza','indigenous knowledge → design justice'],
+  ['roth','obermeyer','Shirley card bias → algorithmic health bias'],
+  ['foucault','metzl','biopower → psychiatric control'],
+  ['foucault','roberts','biopolitics → genetic governance'],
+];
+
+// ============================================================
+// 1. NETWORK GRAPH (Force-Directed)
+// ============================================================
+let networkNodes = [], showLabels = true, activeFilter = 'all', dragNode = null;
+
+function initNetwork() {
+  window._networkInit = true;
+  const canvas = document.getElementById('networkCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+
+  // Initialize positions in cluster groups
+  const clusterCenters = {
+    colonial: { x: W*0.15, y: H*0.22 },
+    surveillance: { x: W*0.50, y: H*0.12 },
+    digital: { x: W*0.85, y: H*0.22 },
+    medical: { x: W*0.15, y: H*0.75 },
+    abolition: { x: W*0.50, y: H*0.82 },
+    futures: { x: W*0.85, y: H*0.75 },
+  };
+
+  networkNodes = AUTHORS.map((a, i) => {
+    const c = clusterCenters[a.cluster];
+    return {
+      ...a,
+      x: c.x + (Math.random() - 0.5) * 180,
+      y: c.y + (Math.random() - 0.5) * 130,
+      vx: 0, vy: 0,
+      radius: 16 + a.works.length * 5,
+    };
+  });
+
+  let hoveredNode = null;
+  let mouseX = 0, mouseY = 0;
+
+  function simulate() {
+    // Repulsion
+    for (let i = 0; i < networkNodes.length; i++) {
+      for (let j = i + 1; j < networkNodes.length; j++) {
+        let dx = networkNodes[j].x - networkNodes[i].x;
+        let dy = networkNodes[j].y - networkNodes[i].y;
+        let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        let force = 2400 / (dist * dist);
+        networkNodes[i].vx -= (dx/dist) * force;
+        networkNodes[i].vy -= (dy/dist) * force;
+        networkNodes[j].vx += (dx/dist) * force;
+        networkNodes[j].vy += (dy/dist) * force;
+      }
+    }
+    // Attraction along edges
+    EDGES.forEach(([a, b]) => {
+      const na = networkNodes.find(n => n.id === a);
+      const nb = networkNodes.find(n => n.id === b);
+      if (!na || !nb) return;
+      let dx = nb.x - na.x;
+      let dy = nb.y - na.y;
+      let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+      let force = (dist - 160) * 0.002;
+      na.vx += (dx/dist) * force;
+      na.vy += (dy/dist) * force;
+      nb.vx -= (dx/dist) * force;
+      nb.vy -= (dy/dist) * force;
+    });
+    // Center gravity
+    networkNodes.forEach(n => {
+      n.vx += (W/2 - n.x) * 0.001;
+      n.vy += (H/2 - n.y) * 0.001;
+      n.vx *= 0.85;
+      n.vy *= 0.85;
+      if (n !== dragNode) {
+        n.x += n.vx;
+        n.y += n.vy;
+      }
+      n.x = Math.max(n.radius, Math.min(W - n.radius, n.x));
+      n.y = Math.max(n.radius, Math.min(H - n.radius, n.y));
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // Background grain
+    ctx.fillStyle = '#14120E';
+    ctx.fillRect(0, 0, W, H);
+
+    const filtered = activeFilter === 'all' ? networkNodes : networkNodes.filter(n => n.cluster === activeFilter);
+    const filteredIds = new Set(filtered.map(n => n.id));
+
+    // Draw edges
+    EDGES.forEach(([a, b, label]) => {
+      const na = networkNodes.find(n => n.id === a);
+      const nb = networkNodes.find(n => n.id === b);
+      if (!na || !nb) return;
+      const visible = activeFilter === 'all' || (filteredIds.has(a) && filteredIds.has(b));
+      const isHovered = hoveredNode && (hoveredNode.id === a || hoveredNode.id === b);
+
+      ctx.beginPath();
+      ctx.moveTo(na.x, na.y);
+      ctx.lineTo(nb.x, nb.y);
+      ctx.strokeStyle = isHovered ? 'rgba(200,168,75,0.6)' : visible ? 'rgba(200,168,75,0.15)' : 'rgba(200,168,75,0.04)';
+      ctx.lineWidth = isHovered ? 3 : 1.5;
+      ctx.stroke();
+
+      if (isHovered && label) {
+        const mx = (na.x + nb.x) / 2;
+        const my = (na.y + nb.y) / 2;
+        ctx.font = '14px "Trebuchet MS"';
+        ctx.fillStyle = 'rgba(200,168,75,0.65)';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, mx, my - 6);
+      }
+    });
+
+    // Draw nodes
+    networkNodes.forEach(n => {
+      const visible = activeFilter === 'all' || n.cluster === activeFilter;
+      const isHovered = hoveredNode === n;
+      const isConnected = hoveredNode && EDGES.some(([a,b]) => (a === hoveredNode.id && b === n.id) || (b === hoveredNode.id && a === n.id));
+      const alpha = visible ? (isHovered ? 1 : isConnected ? 0.9 : hoveredNode ? 0.3 : 0.8) : 0.1;
+
+      // Glow
+      if (isHovered) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius + 12, 0, Math.PI * 2);
+        ctx.fillStyle = COLORS[n.cluster] + '20';
+        ctx.fill();
+      }
+
+      // Node circle
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS[n.cluster];
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+      ctx.strokeStyle = isHovered ? '#fff' : COLORS[n.cluster];
+      ctx.lineWidth = isHovered ? 2 : 1;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // Label
+      if (showLabels && visible) {
+        ctx.font = (isHovered ? 'bold ' : '') + '16px "Bebas Neue"';
+        ctx.fillStyle = isHovered ? '#FEFAE0' : 'rgba(254,250,224,' + Math.max(alpha * 0.95, 0.6) + ')';
+        ctx.textAlign = 'center';
+        ctx.fillText(n.name.split(' ').pop(), n.x, n.y + n.radius + 22);
+      }
+    });
+
+    simulate();
+    requestAnimationFrame(draw);
+  }
+
+  // Mouse events
+  function getNodeAt(x, y) {
+    for (let i = networkNodes.length - 1; i >= 0; i--) {
+      const n = networkNodes[i];
+      const dx = x - n.x, dy = y - n.y;
+      if (dx*dx + dy*dy < (n.radius + 5) * (n.radius + 5)) return n;
+    }
+    return null;
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = (e.clientX - rect.left) * (W / rect.width);
+    mouseY = (e.clientY - rect.top) * (H / rect.height);
+
+    if (dragNode) {
+      dragNode.x = mouseX;
+      dragNode.y = mouseY;
+      return;
+    }
+
+    const node = getNodeAt(mouseX, mouseY);
+    hoveredNode = node;
+    canvas.style.cursor = node ? 'pointer' : 'grab';
+
+    const tt = document.getElementById('networkTooltip');
+    if (node) {
+      tt.innerHTML = '<div class="tt-author">' + node.name + '</div><div class="tt-work">' + node.works.join(', ') + '</div><div class="tt-cluster">' + node.cluster.toUpperCase().replace('_',' ') + ' · ' + node.year + '</div>';
+      tt.style.display = 'block';
+      tt.style.left = (e.clientX + 16) + 'px';
+      tt.style.top = (e.clientY - 20) + 'px';
+    } else {
+      tt.style.display = 'none';
+    }
+  });
+
+  canvas.addEventListener('mousedown', e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (W / rect.width);
+    const y = (e.clientY - rect.top) * (H / rect.height);
+    const node = getNodeAt(x, y);
+    if (node) dragNode = node;
+  });
+
+  canvas.addEventListener('mouseup', () => { dragNode = null; });
+  canvas.addEventListener('mouseleave', () => {
+    dragNode = null;
+    hoveredNode = null;
+    document.getElementById('networkTooltip').style.display = 'none';
+  });
+
+  canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (W / rect.width);
+    const y = (e.clientY - rect.top) * (H / rect.height);
+    const node = getNodeAt(x, y);
+    if (node && node.card) {
+      const card = document.getElementById(node.card);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('open');
+        card.style.boxShadow = '0 0 30px rgba(212,168,83,0.3)';
+        setTimeout(() => card.style.boxShadow = '', 2000);
+      }
+    }
+  });
+
+  draw();
+}
+
+function resetNetwork() {
+  const W = 860, H = 580;
+  const centers = {
+    colonial:{x:W*0.15,y:H*0.22}, surveillance:{x:W*0.50,y:H*0.12}, digital:{x:W*0.85,y:H*0.22},
+    medical:{x:W*0.15,y:H*0.75}, abolition:{x:W*0.50,y:H*0.82}, futures:{x:W*0.85,y:H*0.75}
+  };
+  networkNodes.forEach(n => {
+    const c = centers[n.cluster];
+    n.x = c.x + (Math.random()-0.5)*180;
+    n.y = c.y + (Math.random()-0.5)*130;
+    n.vx = 0; n.vy = 0;
+  });
+}
+
+function toggleLabels() { showLabels = !showLabels; }
+function filterCluster(val) { activeFilter = val; }
+
+// ============================================================
+// 2. CONCEPT FLOW
+// ============================================================
+function initFlow() {
+  window._flowInit = true;
+  const canvas = document.getElementById('flowCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+
+  const concepts = [
+    { name: 'Biopower', color: '#C3A87F', path: [
+      {x:80,y:60,label:'Foucault'},{x:220,y:90,label:'Mbembe'},{x:360,y:130,label:'Browne'},
+      {x:500,y:110,label:'Roberts'},{x:640,y:160,label:'Metzl'},{x:780,y:200,label:'Benjamin'}
+    ]},
+    { name: 'Settler/Colony', color: '#606C38', path: [
+      {x:80,y:160,label:'Wolfe'},{x:220,y:180,label:'Mbembe'},{x:360,y:220,label:'Kwet'},
+      {x:500,y:250,label:'Dawson'},{x:640,y:280,label:'Crawford'},{x:780,y:260,label:'Guntarik'}
+    ]},
+    { name: 'Surveillance', color: '#C3A87F', path: [
+      {x:80,y:270,label:'Foucault'},{x:220,y:290,label:'Browne'},{x:360,y:310,label:'Roth'},
+      {x:500,y:330,label:'Birhane'},{x:640,y:350,label:'Cagle'},{x:780,y:340,label:'Browne (Epi)'}
+    ]},
+    { name: 'Carceral Body', color: '#606C38', path: [
+      {x:80,y:370,label:'Washington'},{x:220,y:380,label:'Perreira'},{x:360,y:400,label:'Obermeyer'},
+      {x:500,y:420,label:'Metzl'},{x:640,y:440,label:'Benjamin'},{x:780,y:430,label:'Friedman'}
+    ]},
+    { name: 'Liberation', color: '#C3A87F', path: [
+      {x:80,y:460,label:'Fanon/Mbembe'},{x:220,y:470,label:'Costanza-Chock'},{x:360,y:480,label:'Coalition'},
+      {x:500,y:490,label:'Benjamin'},{x:640,y:480,label:'Wang'},{x:780,y:470,label:'Guntarik'}
+    ]},
+  ];
+
+  let hoveredConcept = null;
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#14120E';
+    ctx.fillRect(0,0,W,H);
+
+    // Week markers
+    const weeks = ['Jan 22','Jan 29','Module','Mar 26','Apr 2','Apr 9–16'];
+    const xPositions = [80, 220, 360, 500, 640, 780];
+    weeks.forEach((w, i) => {
+      ctx.font = '9px "JetBrains Mono"';
+      ctx.fillStyle = 'rgba(200,168,75,0.4)';
+      ctx.textAlign = 'center';
+      ctx.fillText(w, xPositions[i], 30);
+      ctx.beginPath();
+      ctx.moveTo(xPositions[i], 38);
+      ctx.lineTo(xPositions[i], H - 10);
+      ctx.strokeStyle = 'rgba(200,168,75,0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    concepts.forEach((concept, ci) => {
+      const isHovered = hoveredConcept === ci;
+      const alpha = hoveredConcept === null ? 0.7 : isHovered ? 1 : 0.12;
+
+      // Draw flow line
+      ctx.beginPath();
+      ctx.moveTo(concept.path[0].x, concept.path[0].y);
+      for (let i = 1; i < concept.path.length; i++) {
+        const prev = concept.path[i-1];
+        const curr = concept.path[i];
+        const cpx = (prev.x + curr.x) / 2;
+        ctx.bezierCurveTo(cpx, prev.y, cpx, curr.y, curr.x, curr.y);
+      }
+      ctx.strokeStyle = concept.color;
+      ctx.globalAlpha = alpha;
+      ctx.lineWidth = isHovered ? 4 : 2;
+      ctx.stroke();
+
+      // Draw nodes
+      concept.path.forEach(pt => {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, isHovered ? 6 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = concept.color;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+
+        if (isHovered) {
+          ctx.font = '10px "Instrument Sans"';
+          ctx.fillStyle = '#FEFAE0';
+          ctx.globalAlpha = 1;
+          ctx.textAlign = 'center';
+          ctx.fillText(pt.label, pt.x, pt.y - 12);
+        }
+      });
+      ctx.globalAlpha = 1;
+    });
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+
+    let closest = null, closestDist = 40;
+    concepts.forEach((c, ci) => {
+      c.path.forEach(pt => {
+        const d = Math.sqrt((mx-pt.x)**2 + (my-pt.y)**2);
+        if (d < closestDist) { closest = ci; closestDist = d; }
+      });
+    });
+    hoveredConcept = closest;
+
+    const tt = document.getElementById('flowTooltip');
+    if (closest !== null) {
+      tt.innerHTML = '<div class="tt-author">' + concepts[closest].name + '</div><div class="tt-concept">Trace: ' + concepts[closest].path.map(p=>p.label).join(' → ') + '</div>';
+      tt.style.display = 'block';
+      tt.style.left = (e.clientX + 16) + 'px';
+      tt.style.top = (e.clientY - 20) + 'px';
+    } else {
+      tt.style.display = 'none';
+    }
+    draw();
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    hoveredConcept = null;
+    document.getElementById('flowTooltip').style.display = 'none';
+    draw();
+  });
+
+  // Build legend
+  const legend = document.getElementById('flowLegend');
+  concepts.forEach((c, i) => {
+    const item = document.createElement('div');
+    item.className = 'flow-legend-item';
+    item.innerHTML = '<span class="flow-legend-dot" style="background:'+c.color+'"></span>' + c.name;
+    item.addEventListener('mouseenter', () => { hoveredConcept = i; draw(); });
+    item.addEventListener('mouseleave', () => { hoveredConcept = null; draw(); });
+    legend.appendChild(item);
+  });
+
+  draw();
+}
+
+// ============================================================
+// 3. TIMELINE
+// ============================================================
+function initTimeline() {
+  window._timelineInit = true;
+  const canvas = document.getElementById('timelineCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+
+  const sorted = [...AUTHORS].sort((a,b) => a.year - b.year);
+  const minYear = 1976, maxYear = 2024;
+  const padL = 60, padR = 40, padT = 60, padB = 60;
+  const plotW = W - padL - padR;
+
+  function yearToX(y) { return padL + ((y - minYear) / (maxYear - minYear)) * plotW; }
+
+  // Assign vertical positions to avoid overlap
+  const rows = {};
+  sorted.forEach((a, i) => {
+    const cluster = a.cluster;
+    if (!rows[cluster]) rows[cluster] = 0;
+    a._row = rows[cluster]++;
+  });
+  const clusterOrder = ['colonial','surveillance','digital','medical','abolition','futures'];
+  let currentY = padT;
+  const clusterYStart = {};
+  clusterOrder.forEach(cl => {
+    clusterYStart[cl] = currentY;
+    const count = sorted.filter(a => a.cluster === cl).length;
+    currentY += count * 28 + 30;
+  });
+  const totalH = currentY + padB;
+
+  let hoveredAuthor = null;
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#14120E';
+    ctx.fillRect(0,0,W,H);
+
+    // Year axis
+    for (let y = 1980; y <= 2025; y += 5) {
+      const x = yearToX(y);
+      ctx.beginPath();
+      ctx.moveTo(x, padT - 10);
+      ctx.lineTo(x, H - padB);
+      ctx.strokeStyle = 'rgba(200,168,75,0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.font = '14px "Trebuchet MS"';
+      ctx.fillStyle = 'rgba(200,168,75,0.5)';
+      ctx.textAlign = 'center';
+      ctx.fillText(y.toString(), x, padT - 16);
+    }
+
+    // Cluster labels
+    clusterOrder.forEach(cl => {
+      const yy = clusterYStart[cl] + 4;
+      ctx.font = '9px "JetBrains Mono"';
+      ctx.fillStyle = COLORS[cl];
+      ctx.textAlign = 'left';
+      ctx.globalAlpha = 0.6;
+      ctx.fillText(cl.toUpperCase(), 4, yy + 10);
+      ctx.globalAlpha = 1;
+    });
+
+    // Draw authors
+    sorted.forEach(a => {
+      const x = yearToX(a.year);
+      const y = clusterYStart[a.cluster] + a._row * 28 + 10;
+      const isHovered = hoveredAuthor === a;
+      const r = isHovered ? 7 : 5;
+
+      // Connection lines for hovered
+      if (isHovered) {
+        EDGES.forEach(([ea, eb]) => {
+          if (ea === a.id || eb === a.id) {
+            const other = sorted.find(n => n.id === (ea === a.id ? eb : ea));
+            if (other) {
+              const ox = yearToX(other.year);
+              const oy = clusterYStart[other.cluster] + other._row * 28 + 10;
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              const cpx = (x + ox) / 2;
+              ctx.bezierCurveTo(cpx, y, cpx, oy, ox, oy);
+              ctx.strokeStyle = 'rgba(212,168,83,0.35)';
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+            }
+          }
+        });
+      }
+
+      // Node
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS[a.cluster];
+      ctx.globalAlpha = isHovered ? 1 : hoveredAuthor ? 0.3 : 0.8;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Label
+      ctx.font = (isHovered ? 'bold ' : '') + '16px "Bebas Neue"';
+      ctx.fillStyle = isHovered ? '#f0e6d3' : 'rgba(232,224,212,0.5)';
+      ctx.textAlign = 'left';
+      ctx.fillText(a.name.split(' ').pop() + ' (' + a.year + ')', x + 10, y + 4);
+    });
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+
+    let closest = null, closestDist = 20;
+    sorted.forEach(a => {
+      const x = yearToX(a.year);
+      const y = clusterYStart[a.cluster] + a._row * 28 + 10;
+      const d = Math.sqrt((mx-x)**2 + (my-y)**2);
+      if (d < closestDist) { closest = a; closestDist = d; }
+    });
+    hoveredAuthor = closest;
+    canvas.style.cursor = closest ? 'pointer' : 'default';
+
+    const tt = document.getElementById('timelineTooltip');
+    if (closest) {
+      const connCount = EDGES.filter(([a,b]) => a === closest.id || b === closest.id).length;
+      tt.innerHTML = '<div class="tt-author">' + closest.name + ' (' + closest.year + ')</div><div class="tt-work">' + closest.works.join(', ') + '</div><div class="tt-cluster">' + closest.cluster.toUpperCase() + ' · ' + connCount + ' connections</div>';
+      tt.style.display = 'block';
+      tt.style.left = (e.clientX + 16) + 'px';
+      tt.style.top = (e.clientY - 20) + 'px';
+    } else {
+      tt.style.display = 'none';
+    }
+    draw();
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    hoveredAuthor = null;
+    document.getElementById('timelineTooltip').style.display = 'none';
+    draw();
+  });
+
+  canvas.addEventListener('click', e => {
+    if (hoveredAuthor && hoveredAuthor.card) {
+      const card = document.getElementById(hoveredAuthor.card);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('open');
+        card.style.boxShadow = '0 0 30px rgba(212,168,83,0.3)';
+        setTimeout(() => card.style.boxShadow = '', 2000);
+      }
+    }
+  });
+
+  draw();
+}
+
+// ============================================================
+// 4. THEMATIC CLUSTERS
+// ============================================================
+function initClusters() {
+  window._clusterInit = true;
+  const canvas = document.getElementById('clusterCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+
+  const clusterData = [
+    { id: 'colonial', name: 'COLONIAL\nFOUNDATIONS', cx: W*0.18, cy: H*0.28, r: 85, color: COLORS.colonial,
+      members: ['Mbembe','Wolfe'], keyConcept: 'Structure not event · Eliminatory logic · Camp as laboratory' },
+    { id: 'surveillance', name: 'SURVEILLANCE\n& BLACKNESS', cx: W*0.50, cy: H*0.18, r: 90, color: COLORS.surveillance,
+      members: ['Foucault','Browne','Roth'], keyConcept: 'Biopower · Racializing surveillance · Prototypical whiteness' },
+    { id: 'digital', name: 'DIGITAL\nCOLONIALISM', cx: W*0.82, cy: H*0.28, r: 85, color: COLORS.digital,
+      members: ['Kwet','Birhane','Dawson','Crawford'], keyConcept: 'Software/hardware/network control · Border as laboratory · Drone accountability' },
+    { id: 'medical', name: 'MEDICAL\nVIOLENCE', cx: W*0.18, cy: H*0.72, r: 95, color: COLORS.medical,
+      members: ['Washington','Obermeyer','Roberts','Metzl','Perreira'], keyConcept: 'Carceral health imaginary · Algorithmic laundering · Diagnostic racism' },
+    { id: 'abolition', name: 'ABOLITIONIST\nTECH', cx: W*0.50, cy: H*0.78, r: 95, color: COLORS.abolition,
+      members: ['Benjamin','Costanza-Chock','Cagle','Coalition','Friedman'], keyConcept: 'New Jim Code · Design justice · Destroy + Grow · Carceral tech resistance' },
+    { id: 'futures', name: 'SPECULATIVE\nFUTURES', cx: W*0.82, cy: H*0.72, r: 80, color: COLORS.futures,
+      members: ['Wang','Guntarik'], keyConcept: 'Imprisoned imagination · Rematriation · Communal fire · Digital terra nullius' },
+  ];
+
+  // Cross-cluster connections
+  const crossLinks = [
+    ['colonial','surveillance','Biopower framework shared'],
+    ['colonial','digital','Colonial structure → digital infrastructure'],
+    ['surveillance','medical','Racializing surveillance → medical control'],
+    ['surveillance','abolition','Dark sousveillance → resistance tools'],
+    ['digital','abolition','Algorithmic critique → community organizing'],
+    ['medical','abolition','Carceral health → abolitionist health'],
+    ['abolition','futures','Abolition imagination → speculative practice'],
+    ['colonial','futures','Colonial structure → rematriation as refusal'],
+    ['surveillance','digital','Surveillance capitalism → global extraction'],
+    ['medical','colonial','Medical exploitation rooted in colonial science'],
+  ];
+
+  let hoveredCluster = null;
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#14120E';
+    ctx.fillRect(0,0,W,H);
+
+    // Draw cross-links
+    crossLinks.forEach(([a,b,label]) => {
+      const ca = clusterData.find(c => c.id === a);
+      const cb = clusterData.find(c => c.id === b);
+      const isActive = hoveredCluster && (hoveredCluster.id === a || hoveredCluster.id === b);
+
+      ctx.beginPath();
+      ctx.moveTo(ca.cx, ca.cy);
+      const cpx = (ca.cx + cb.cx) / 2 + (Math.random()-0.5)*20;
+      const cpy = (ca.cy + cb.cy) / 2;
+      ctx.quadraticCurveTo(cpx, cpy, cb.cx, cb.cy);
+      ctx.strokeStyle = isActive ? 'rgba(200,168,75,0.5)' : 'rgba(200,168,75,0.08)';
+      ctx.lineWidth = isActive ? 2 : 1;
+      ctx.setLineDash(isActive ? [] : [4,4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (isActive) {
+        ctx.font = '9px "JetBrains Mono"';
+        ctx.fillStyle = 'rgba(200,168,75,0.6)';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, (ca.cx+cb.cx)/2, (ca.cy+cb.cy)/2 - 8);
+      }
+    });
+
+    // Draw cluster bubbles
+    clusterData.forEach(cl => {
+      const isHovered = hoveredCluster === cl;
+      const isConnected = hoveredCluster && crossLinks.some(([a,b]) => (a === hoveredCluster.id && b === cl.id) || (b === hoveredCluster.id && a === cl.id));
+      const alpha = hoveredCluster === null ? 1 : isHovered ? 1 : isConnected ? 0.7 : 0.2;
+
+      // Outer glow
+      if (isHovered) {
+        const grad = ctx.createRadialGradient(cl.cx, cl.cy, cl.r * 0.5, cl.cx, cl.cy, cl.r * 1.5);
+        grad.addColorStop(0, cl.color + '30');
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.fillRect(cl.cx - cl.r*1.5, cl.cy - cl.r*1.5, cl.r*3, cl.r*3);
+      }
+
+      // Circle
+      ctx.beginPath();
+      ctx.arc(cl.cx, cl.cy, cl.r, 0, Math.PI * 2);
+      ctx.fillStyle = cl.color + (isHovered ? '20' : '0a');
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+      ctx.strokeStyle = cl.color;
+      ctx.lineWidth = isHovered ? 2.5 : 1.5;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // Cluster label
+      const lines = cl.name.split('\n');
+      ctx.font = 'bold 11px "JetBrains Mono"';
+      ctx.fillStyle = cl.color;
+      ctx.globalAlpha = alpha;
+      ctx.textAlign = 'center';
+      lines.forEach((line, i) => {
+        ctx.fillText(line, cl.cx, cl.cy - 12 + i * 16);
+      });
+
+      // Member names
+      ctx.font = '10px "Instrument Sans"';
+      ctx.fillStyle = 'rgba(254,250,224,' + (alpha * 0.85) + ')';
+      cl.members.forEach((m, i) => {
+        ctx.fillText(m, cl.cx, cl.cy + 18 + i * 14);
+      });
+      ctx.globalAlpha = 1;
+    });
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+
+    let closest = null;
+    clusterData.forEach(cl => {
+      const d = Math.sqrt((mx-cl.cx)**2 + (my-cl.cy)**2);
+      if (d < cl.r + 10) closest = cl;
+    });
+    hoveredCluster = closest;
+    canvas.style.cursor = closest ? 'pointer' : 'default';
+
+    const tt = document.getElementById('clusterTooltip');
+    if (closest) {
+      const connCount = crossLinks.filter(([a,b]) => a === closest.id || b === closest.id).length;
+      tt.innerHTML = '<div class="tt-author">' + closest.name.replace('\n',' ') + '</div><div class="tt-concept">' + closest.keyConcept + '</div><div class="tt-cluster">' + closest.members.length + ' authors · ' + connCount + ' cross-cluster links</div>';
+      tt.style.display = 'block';
+      tt.style.left = (e.clientX + 16) + 'px';
+      tt.style.top = (e.clientY - 20) + 'px';
+    } else {
+      tt.style.display = 'none';
+    }
+    draw();
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    hoveredCluster = null;
+    document.getElementById('clusterTooltip').style.display = 'none';
+    draw();
+  });
+
+  draw();
+}
+
+// Initialize first tab on load
+window.addEventListener('load', () => { setTimeout(initNetwork, 300); });
+
+// Thread items interactivity
+document.querySelectorAll('.thread-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const isActive = this.classList.contains('active-thread');
+    document.querySelectorAll('.thread-item').forEach(t => t.classList.remove('active-thread'));
+    if (!isActive) this.classList.add('active-thread');
+  });
+});
+
+
+// Summary section interactivity
+function toggleSum(btn) {
+  const content = btn.previousElementSibling;
+  const isOpen = content.style.display !== 'none';
+  content.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '▼ EXPAND DOSSIER' : '▲ COLLAPSE';
+  btn.classList.toggle('expanded', !isOpen);
+}
+
+function expandAllSum() {
+  document.querySelectorAll('.sum-content').forEach(c => c.style.display = 'block');
+  document.querySelectorAll('.sum-toggle').forEach(b => { b.textContent = '▲ COLLAPSE'; b.classList.add('expanded'); });
+}
+
+function collapseAllSum() {
+  document.querySelectorAll('.sum-content').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('.sum-toggle').forEach(b => { b.textContent = '▼ EXPAND DOSSIER'; b.classList.remove('expanded'); });
+}
+
+function filterSum(type, btn) {
+  document.querySelectorAll('.sum-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.sum-card').forEach(card => {
+    if (type === 'all') { card.style.display = ''; return; }
+    card.style.display = card.classList.contains(type) ? '' : 'none';
+  });
+  document.querySelectorAll('.summary-divider').forEach(d => {
+    d.style.display = type === 'argument' ? 'none' : '';
+  });
+}
+
+
+// ═══ WEBGL FLOWING MESH SHADER (from Bibhushana site) ═══
+(function() {
+  const canvas = document.getElementById('bgShader');
+  if (!canvas) return;
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+
+  function resize() {
+    canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+    canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const vsSource = `
+    attribute vec2 a_position;
+    void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+  `;
+
+  const fsSource = `
+    precision mediump float;
+    uniform float u_time;
+    uniform vec2 u_resolution;
+
+    float hash(vec2 p) {
+      return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+    }
+
+    float noise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      float a = hash(i);
+      float b = hash(i + vec2(1.0, 0.0));
+      float c = hash(i + vec2(0.0, 1.0));
+      float d = hash(i + vec2(1.0, 1.0));
+      return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+    }
+
+    float fbm(vec2 p) {
+      float v = 0.0;
+      float a = 0.5;
+      for (int i = 0; i < 5; i++) {
+        v += a * noise(p);
+        p *= 2.0;
+        a *= 0.5;
+      }
+      return v;
+    }
+
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      float t = u_time * 0.15;
+
+      float n1 = fbm(uv * 3.0 + t * 0.3);
+      float n2 = fbm(uv * 2.0 - t * 0.2 + n1 * 0.5);
+      float n3 = fbm(uv * 4.0 + vec2(n2, n1) * 0.4);
+
+      // Bibhushana palette: black base with subtle red/gold wisps
+      vec3 black = vec3(0.078, 0.07, 0.055);
+      vec3 darkRed = vec3(0.10, 0.12, 0.06);
+      vec3 darkGold = vec3(0.12, 0.10, 0.065);
+
+      vec3 col = black;
+      col = mix(col, darkRed, n2 * 0.5);
+      col = mix(col, darkGold, n3 * 0.35);
+      col += vec3(n1 * 0.02);
+
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  function createShader(type, source) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, source);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { gl.deleteShader(s); return null; }
+    return s;
+  }
+
+  const vs = createShader(gl.VERTEX_SHADER, vsSource);
+  const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+  if (!vs || !fs) return;
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+
+  const posBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+
+  const posLoc = gl.getAttribLocation(program, 'a_position');
+  const timeLoc = gl.getUniformLocation(program, 'u_time');
+  const resLoc = gl.getUniformLocation(program, 'u_resolution');
+
+  function render(time) {
+    gl.useProgram(program);
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.uniform1f(timeLoc, time * 0.001);
+    gl.uniform2f(resLoc, canvas.width, canvas.height);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();
+
+</script>
+</body>
+</html>
