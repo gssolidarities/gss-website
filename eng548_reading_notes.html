@@ -78,33 +78,63 @@ body{
   text-align:center;
 }
 
-/* === SIDEBAR === */
+/* === SIDEBAR (GSS floating collapse-on-hover pattern) === */
 .sidebar{
-  position:fixed;left:0;top:47px;bottom:24px;width:260px;
-  background:rgba(20,18,14,0.97);border-right:1px solid var(--amber-dim);
-  overflow-y:auto;z-index:100;padding:20px 0;
-  transition:transform 0.3s;
+  position:fixed;left:0;top:50%;transform:translateY(-50%);
+  width:42px;max-height:calc(100vh - 110px);
+  background:rgba(20,18,14,0.92);
+  border:1px solid var(--amber-dim);border-left:none;
+  border-radius:0 8px 8px 0;
+  overflow:hidden;z-index:900;padding:10px 0;
+  box-shadow:2px 0 20px rgba(0,0,0,0.3);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:width 0.38s cubic-bezier(0.16,1,0.3,1), box-shadow 0.38s;
+}
+.sidebar:hover,.sidebar.open{
+  width:260px;overflow-y:auto;
+  box-shadow:4px 0 32px rgba(0,0,0,0.5);
 }
 .sidebar-title{
   font-family:var(--font-head);font-size:13px;font-weight:700;
   letter-spacing:4px;text-transform:uppercase;color:var(--amber);
-  padding:12px 20px;border-bottom:1px solid var(--amber-dim);
-  margin-bottom:12px;
+  padding:10px 20px;border-bottom:1px solid var(--amber-dim);
+  margin-bottom:10px;white-space:nowrap;
+  opacity:0;transition:opacity 0.2s 0.12s;
 }
+.sidebar:hover .sidebar-title,.sidebar.open .sidebar-title{opacity:1}
+/* Collapsed-state glyph — three dots — shows when sidebar is 42px */
+.sidebar::before{
+  content:'⋮';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  color:var(--amber);font-size:22px;letter-spacing:2px;
+  pointer-events:none;transition:opacity 0.25s;
+}
+.sidebar:hover::before,.sidebar.open::before{opacity:0}
+.nav-link,.nav-map-link{
+  overflow:hidden;
+  opacity:0;transition:opacity 0.2s 0.12s,color 0.2s,background 0.2s;
+}
+.sidebar:hover .nav-link,.sidebar:hover .nav-map-link,
+.sidebar.open .nav-link,.sidebar.open .nav-map-link{opacity:1}
 .nav-link{
-  display:block;padding:8px 20px;color:var(--text-dim);
-  text-decoration:none;font-size:13px;letter-spacing:0.5px;
-  border-left:2px solid transparent;transition:all 0.2s;
+  display:flex;align-items:flex-start;gap:6px;
+  padding:7px 16px 7px 18px;color:var(--text-dim);
+  text-decoration:none;font-size:12.5px;letter-spacing:0.3px;line-height:1.35;
+  border-left:2px solid transparent;
 }
 .nav-link:hover{color:var(--amber);border-left-color:var(--amber);background:var(--amber-glow)}
 .nav-link .nav-num{
-  display:inline-block;width:60px;color:var(--red);font-size:9px;letter-spacing:1.5px;
+  flex-shrink:0;width:56px;color:var(--red);font-size:9px;letter-spacing:1.2px;
+  padding-top:2px;
+}
+.nav-link .nav-text{
+  flex:1;white-space:normal;word-wrap:break-word;overflow-wrap:anywhere;
 }
 .nav-map-link{
-  display:block;padding:10px 20px;color:var(--amber);
+  display:block;padding:9px 20px;color:var(--amber);
   text-decoration:none;font-family:var(--font-head);font-size:12px;
   letter-spacing:2px;text-transform:uppercase;
-  border-bottom:1px solid var(--amber-dim);margin-bottom:8px;
+  border-bottom:1px solid var(--amber-dim);margin-bottom:6px;
 }
 .nav-map-link:hover{background:var(--amber-glow)}
 
@@ -226,7 +256,7 @@ body{
   border-bottom:1px dashed var(--amber-dim);
 }
 .cb-body p{
-  font-size:15.5px;line-height:1.8;color:var(--text);
+  font-size:15.5px;line-height:1.8;color:#FFFFFF;
 }
 
 .cb-tags{
@@ -245,7 +275,7 @@ body{
 
 /* === VISUALIZATION SECTION === */
 .viz-section{
-  margin:60px 0;padding:40px 0;
+  margin:40px 0;padding:24px 0;
   border-top:1px solid var(--amber-dim);
   border-bottom:1px solid var(--amber-dim);
   position:relative;
@@ -272,7 +302,7 @@ body{
 .viz-tab:hover{color:var(--text)}
 .viz-tab.active{color:var(--amber);border-bottom-color:var(--amber);background:var(--amber-glow)}
 
-.viz-panel{display:none;padding:20px 0}
+.viz-panel{display:none;padding:10px 0}
 .viz-panel.active{display:block}
 .viz-title{
   font-family:var(--font-head);font-size:13px;font-weight:700;
@@ -295,10 +325,16 @@ body{
 .viz-select option{background:var(--bg)}
 
 canvas{
-  display:block;width:100%;
+  display:block;width:100%;height:auto;max-width:100%;
   background:#1C1A14;border:1px solid var(--amber-dim);
   cursor:crosshair;
 }
+/* Each aspect-ratio matches the canvas' internal width/height attributes
+   so the entire drawing buffer is visible — nothing gets cropped. */
+#networkCanvas  {aspect-ratio:1200/700;max-height:600px}
+#flowCanvas     {aspect-ratio:860/520; max-height:540px}
+#timelineCanvas {aspect-ratio:860/480; max-height:500px}
+#clusterCanvas  {aspect-ratio:860/540; max-height:560px}
 
 .viz-tooltip{
   display:none;position:fixed;background:#1C1A14;
@@ -307,6 +343,10 @@ canvas{
   z-index:1000;pointer-events:none;
   box-shadow:8px 8px 0 rgba(0,0,0,0.5);
 }
+/* Network graph: suppress the big floating tooltip so it doesn't cover
+   the node labels. The hover halo + label bolding on the canvas itself
+   provide the interaction feedback. */
+#networkTooltip{display:none!important}
 .viz-tooltip .tt-author{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--amber);letter-spacing:1px}
 .viz-tooltip .tt-work{font-size:11px;color:var(--text-dim);margin-bottom:4px;font-style:italic}
 .viz-tooltip .tt-concept{font-size:11px;color:var(--text)}
@@ -334,7 +374,7 @@ canvas{
   font-family:var(--font-head);font-size:16px;font-weight:700;
   letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:6px;
 }
-.thread-trace{font-size:17px;line-height:1.75;font-style:italic;color:#FEFAE0!important}
+.thread-trace{font-size:17px;line-height:1.75;font-style:italic;color:#FFFFFF!important}
 
 /* === PDF EMBED === */
 .pdf-section{
@@ -376,8 +416,16 @@ canvas{
   align-items:center;justify-content:center;
 }
 @media(max-width:900px){
-  .sidebar{transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
+  .sidebar{
+    top:47px;left:0;transform:translateX(-100%);
+    width:260px;max-height:calc(100vh - 71px);
+    border-radius:0;overflow-y:auto;
+  }
+  .sidebar.open{transform:translateX(0);width:260px}
+  .sidebar::before{display:none}
+  .sidebar .sidebar-title,
+  .sidebar .nav-link,
+  .sidebar .nav-map-link{opacity:1}
   .main{margin-left:0}
   .container{padding:24px 16px 0}
   .hamburger{display:flex}
@@ -419,7 +467,7 @@ canvas{
 }
 .sum-subhead.argument{color:#606C38}
 .sum-subhead.resist{color:var(--green)}
-.sum-para{font-size:15px;line-height:1.85;margin-bottom:12px;color:#FEFAE0}
+.sum-para{font-size:15px;line-height:1.85;margin-bottom:12px;color:#FFFFFF}
 .sum-para .src-ref{color:#C3A87F;font-weight:500}
 
 .sum-toggle{
@@ -438,7 +486,7 @@ canvas{
   font-family:var(--font-head);font-size:22px;font-weight:700;
   letter-spacing:6px;text-transform:uppercase;color:var(--amber);margin-bottom:8px;
 }
-.pdf-desc{font-size:14px;color:#FEFAE0;font-style:italic}
+.pdf-desc{font-size:14px;color:#FFFFFF;font-style:italic}
 .pdf-frame-wrap{
   position:relative;
   transform:rotate(-0.4deg);
@@ -511,7 +559,7 @@ canvas{
 .pdf-section-title{color:var(--green)!important}
 
 /* Ensure body text is BLACK everywhere */
-.cb-body p, .sum-para, .thread-trace, .node-thread, .viz-subtitle, p{color:#FEFAE0!important}
+.cb-body p, .sum-para, .thread-trace, .node-thread, .viz-subtitle, p{color:#FFFFFF!important}
 .cb-work{color:#FEFAE0!important}
 .tag{color:#606C38!important}
 
@@ -545,13 +593,13 @@ canvas{
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-title">◆ DOSSIER INDEX</div>
   <a class="nav-map-link" href="#vizSection">⬡ INTEL MAPS</a>
-  <a class="nav-link" href="#week-jan22"><span class="nav-num">WEEK 02</span>COLONIAL LEGACIES & RACIAL S...</a>
-<a class="nav-link" href="#week-jan29"><span class="nav-num">WEEK 03</span>BIOPOWER, SURVEILLANCE & DIG...</a>
-<a class="nav-link" href="#week-health"><span class="nav-num">MODULE</span>HEALTH, MEDICINE & BIOPOWER</a>
-<a class="nav-link" href="#week-march26"><span class="nav-num">WEEK 10</span>MILITARIZATION, BORDERS & TE...</a>
-<a class="nav-link" href="#week-april2"><span class="nav-num">WEEK 11</span>ABOLITIONIST TECH MOVEMENTS ...</a>
-<a class="nav-link" href="#week-april9"><span class="nav-num">WEEK 12</span>ABOLITIONIST TECH MOVEMENTS ...</a>
-<a class="nav-link" href="#week-april16"><span class="nav-num">WEEK 13</span>SPECULATIVE FUTURES — AFROFU...</a>
+  <a class="nav-link" href="#week-jan22"><span class="nav-num">WEEK 02</span><span class="nav-text">Colonial Legacies &amp; Racial Science in Tech</span></a>
+  <a class="nav-link" href="#week-jan29"><span class="nav-num">WEEK 03</span><span class="nav-text">Biopower, Surveillance &amp; Digital Colonialism</span></a>
+  <a class="nav-link" href="#week-health"><span class="nav-num">MODULE</span><span class="nav-text">Health, Medicine &amp; Biopower</span></a>
+  <a class="nav-link" href="#week-march26"><span class="nav-num">WEEK 10</span><span class="nav-text">Militarization, Borders &amp; Technoscientific Violence</span></a>
+  <a class="nav-link" href="#week-april2"><span class="nav-num">WEEK 11</span><span class="nav-text">Abolitionist Tech Movements &amp; Digital Activism</span></a>
+  <a class="nav-link" href="#week-april9"><span class="nav-num">WEEK 12</span><span class="nav-text">Abolitionist Tech Movements II</span></a>
+  <a class="nav-link" href="#week-april16"><span class="nav-num">WEEK 13</span><span class="nav-text">Speculative Futures — Afrofuturism, Indigeneity &amp; Imagination</span></a>
   <a class="nav-map-link" href="#summaryDossier" style="margin-top:8px;border-top:1px solid var(--amber-dim);border-bottom:none">◉ ARGUMENTS DOSSIER</a>
   <a class="nav-map-link" href="#pdfArchive" style="border-bottom:none">◉ SOURCE PDF</a>
 </nav>
@@ -599,7 +647,7 @@ canvas{
           <option value="futures">Futures</option>
         </select>
       </div>
-      <canvas id="networkCanvas" width="1200" height="900"></canvas>
+      <canvas id="networkCanvas" width="1200" height="700"></canvas>
       <div id="networkTooltip" class="viz-tooltip"></div>
     </div>
 
@@ -1752,28 +1800,28 @@ function initNetwork() {
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
+  // Do not set canvas.style.width/height here — let the stylesheet control
+  // the displayed size so the graph is responsive and fits its container.
   ctx.scale(dpr, dpr);
 
   // Initialize positions in cluster groups
   const clusterCenters = {
-    colonial: { x: W*0.15, y: H*0.22 },
-    surveillance: { x: W*0.50, y: H*0.12 },
-    digital: { x: W*0.85, y: H*0.22 },
-    medical: { x: W*0.15, y: H*0.75 },
-    abolition: { x: W*0.50, y: H*0.82 },
-    futures: { x: W*0.85, y: H*0.75 },
+    colonial: { x: W*0.15, y: H*0.24 },
+    surveillance: { x: W*0.50, y: H*0.16 },
+    digital: { x: W*0.85, y: H*0.24 },
+    medical: { x: W*0.15, y: H*0.72 },
+    abolition: { x: W*0.50, y: H*0.78 },
+    futures: { x: W*0.85, y: H*0.72 },
   };
 
   networkNodes = AUTHORS.map((a, i) => {
     const c = clusterCenters[a.cluster];
     return {
       ...a,
-      x: c.x + (Math.random() - 0.5) * 180,
-      y: c.y + (Math.random() - 0.5) * 130,
+      x: c.x + (Math.random() - 0.5) * 160,
+      y: c.y + (Math.random() - 0.5) * 110,
       vx: 0, vy: 0,
-      radius: 16 + a.works.length * 5,
+      radius: 14 + a.works.length * 4,
     };
   });
 
@@ -1818,8 +1866,9 @@ function initNetwork() {
         n.x += n.vx;
         n.y += n.vy;
       }
-      n.x = Math.max(n.radius, Math.min(W - n.radius, n.x));
-      n.y = Math.max(n.radius, Math.min(H - n.radius, n.y));
+      n.x = Math.max(n.radius + 4, Math.min(W - n.radius - 4, n.x));
+      // reserve 34px at bottom for the label drawn beneath each node
+      n.y = Math.max(n.radius + 4, Math.min(H - n.radius - 34, n.y));
     });
   }
 
@@ -1967,15 +2016,17 @@ function initNetwork() {
 }
 
 function resetNetwork() {
-  const W = 860, H = 580;
+  const canvas = document.getElementById('networkCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.width / dpr, H = canvas.height / dpr;
   const centers = {
-    colonial:{x:W*0.15,y:H*0.22}, surveillance:{x:W*0.50,y:H*0.12}, digital:{x:W*0.85,y:H*0.22},
-    medical:{x:W*0.15,y:H*0.75}, abolition:{x:W*0.50,y:H*0.82}, futures:{x:W*0.85,y:H*0.75}
+    colonial:{x:W*0.15,y:H*0.24}, surveillance:{x:W*0.50,y:H*0.16}, digital:{x:W*0.85,y:H*0.24},
+    medical:{x:W*0.15,y:H*0.72}, abolition:{x:W*0.50,y:H*0.78}, futures:{x:W*0.85,y:H*0.72}
   };
   networkNodes.forEach(n => {
     const c = centers[n.cluster];
-    n.x = c.x + (Math.random()-0.5)*180;
-    n.y = c.y + (Math.random()-0.5)*130;
+    n.x = c.x + (Math.random()-0.5)*160;
+    n.y = c.y + (Math.random()-0.5)*110;
     n.vx = 0; n.vy = 0;
   });
 }
@@ -1993,7 +2044,7 @@ function initFlow() {
   const W = canvas.width, H = canvas.height;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr; canvas.height = H * dpr;
-  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  // canvas.style.width/height omitted — stylesheet handles display sizing
   ctx.scale(dpr, dpr);
 
   const concepts = [
@@ -2136,7 +2187,7 @@ function initTimeline() {
   const W = canvas.width, H = canvas.height;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr; canvas.height = H * dpr;
-  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  // canvas.style.width/height omitted — stylesheet handles display sizing
   ctx.scale(dpr, dpr);
 
   const sorted = [...AUTHORS].sort((a,b) => a.year - b.year);
@@ -2298,7 +2349,7 @@ function initClusters() {
   const W = canvas.width, H = canvas.height;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr; canvas.height = H * dpr;
-  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  // canvas.style.width/height omitted — stylesheet handles display sizing
   ctx.scale(dpr, dpr);
 
   const clusterData = [
