@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intake Terminal — AI, Necropolitics & Engineered Oppression</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c10;
+  --bg-card:#0f1219;
+  --bg-card2:#13181f;
+  --bg-deep:#06080b;
+  --border:#c8a84b;
+  --border-dim:#3a3010;
+  --amber:#c8a84b;
+  --amber-bright:#f0c93a;
+  --amber-glow:rgba(200,168,75,0.15);
+  --red:#c0392b;
+  --red-bright:#e74c3c;
+  --green:#27ae60;
+  --text:#d4cdb8;
+  --text-dim:#7a7260;
+  --text-bright:#f0e8d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Share Tech Mono',monospace;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  min-height:100vh;
+  cursor:crosshair;
+  font-size:16px;
+}
+
+/* ════ GRAIN + SCANLINE ════ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.55;
+}
+.scan-line{
+  position:fixed;top:0;left:0;width:100%;height:2px;
+  background:rgba(200,168,75,0.08);z-index:8998;pointer-events:none;
+  animation:scanDown 8s linear infinite;
+}
+@keyframes scanDown{0%{top:-2px;}100%{top:100vh;}}
+
+/* ════ TOP NAV (GSS) ════ */
+#gss-topnav{
+  position:fixed;top:0;left:0;right:0;z-index:7500;
+  display:flex;align-items:center;justify-content:center;gap:32px;
+  padding:0 24px;height:44px;
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(240,230,200,0.08);
+  font-family:'Special Elite',monospace;
+}
+#gss-topnav a{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(240,230,200,0.7);text-decoration:none;
+  padding:6px 14px;border-radius:14px;transition:all .22s;
+  white-space:nowrap;
+}
+#gss-topnav a:hover{background:var(--red);color:#fff;}
+
+/* ════ PROGRESS BAR ════ */
+.progress-bar{
+  position:fixed;top:44px;left:0;height:3px;width:100%;z-index:7600;
+  background:var(--bg);
+}
+.progress-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--red),var(--amber));
+  box-shadow:0 0 6px var(--amber);
+  transition:width .15s;
+}
+
+/* ════ HERO / TERMINAL HEADER ════ */
+.hero{
+  padding:120px 60px 60px;position:relative;
+}
+.hero-frame{
+  border:1px solid var(--border-dim);
+  background:rgba(15,18,25,0.55);
+  padding:36px 38px 30px;
+  position:relative;
+  max-width:1200px;margin:0 auto;
+  box-shadow:8px 8px 0 rgba(0,0,0,0.35),inset 0 0 60px rgba(0,0,0,0.4);
+}
+.hero-frame::before,.hero-frame::after{
+  content:'';position:absolute;width:18px;height:18px;
+  border-color:var(--amber);border-style:solid;opacity:0.7;
+}
+.hero-frame::before{top:8px;left:8px;border-width:2px 0 0 2px;}
+.hero-frame::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+
+.hero-classification{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Oswald',sans-serif;
+  font-size:12px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--red);border:1px solid var(--red);
+  padding:5px 13px;margin-bottom:30px;
+}
+.hero-classification::before{
+  content:'';width:8px;height:8px;background:var(--red);border-radius:50%;
+  animation:blink 1.4s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+
+.hero-title{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:clamp(54px,9vw,120px);
+  line-height:0.92;letter-spacing:-1px;text-transform:uppercase;
+  color:var(--amber-bright);
+  margin-bottom:18px;
+}
+.hero-title .row{display:block;}
+.hero-title .row.alt{color:var(--text-bright);}
+.hero-title .row.red{color:var(--red);}
+.cursor-blink::after{
+  content:'█';color:var(--amber);margin-left:6px;
+  animation:cb 1s steps(1) infinite;
+}
+@keyframes cb{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.hero-sub{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:clamp(16px,2vw,20px);
+  color:var(--text);
+  max-width:680px;line-height:1.6;margin-top:18px;
+}
+
+.hero-meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1px;margin-top:38px;
+  background:var(--border-dim);
+  border:1px solid var(--border-dim);
+}
+.hm-cell{
+  background:var(--bg-card);
+  padding:16px 18px;
+}
+.hm-key{
+  font-family:'Special Elite',monospace;font-size:9.5px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--text-dim);
+  margin-bottom:5px;
+}
+.hm-val{
+  font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;
+  letter-spacing:1px;color:var(--amber);
+}
+.hm-val .red{color:var(--red);}
+.hm-val .green{color:var(--green);}
+
+/* ════ INDEX RULE ════ */
+.index-rule{
+  display:flex;align-items:center;gap:14px;
+  padding:0 60px;margin:24px 0 14px;max-width:1200px;
+  margin-left:auto;margin-right:auto;
+}
+.index-rule .ir-tag{
+  font-family:'Special Elite',monospace;
+  font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--amber);
+}
+.index-rule .ir-line{
+  flex:1;height:1px;background:linear-gradient(90deg,var(--amber),transparent);
+}
+
+/* ════ FEATURED FILE (the live prototype) ════ */
+.featured-wrap{padding:0 60px 30px;}
+.featured{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.5fr;gap:0;
+  background:var(--bg-card);
+  border:1px solid var(--border);border-top:3px solid var(--amber);
+  box-shadow:12px 12px 0 rgba(0,0,0,0.5),inset 0 0 50px rgba(0,0,0,0.3);
+  position:relative;
+  transform:rotate(-0.4deg);
+  transition:transform .4s cubic-bezier(.2,1,.3,1);
+}
+.featured:hover{transform:rotate(0deg);}
+.featured::before,.featured::after{
+  content:'';position:absolute;width:18px;height:18px;
+  border-color:var(--amber);border-style:solid;opacity:0.8;z-index:4;
+}
+.featured::before{top:8px;left:8px;border-width:2px 0 0 2px;}
+.featured::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+
+.featured-stamp{
+  position:absolute;top:-16px;right:38px;
+  background:var(--red);color:#fff;
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:13px;letter-spacing:3px;text-transform:uppercase;
+  padding:5px 14px;
+  box-shadow:4px 4px 0 rgba(0,0,0,0.5);
+  z-index:5;
+}
+
+/* Left panel: case info */
+.feat-info{
+  padding:40px 38px 38px;
+  background:linear-gradient(180deg,rgba(192,57,43,0.04) 0%,transparent 100%);
+  border-right:1px solid var(--border-dim);
+  position:relative;
+}
+.feat-file{
+  display:inline-block;
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text-bright);background:var(--red);
+  padding:4px 12px;margin-bottom:22px;
+}
+.feat-title{
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:34px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--amber-bright);line-height:1.1;
+  margin-bottom:12px;
+}
+.feat-subtitle{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:16px;color:var(--text);
+  margin-bottom:22px;line-height:1.55;
+}
+.feat-meta{margin:18px 0;}
+.feat-meta-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'Share Tech Mono',monospace;font-size:13px;
+  padding:8px 0;border-bottom:1px dashed var(--border-dim);
+  color:var(--text);
+}
+.feat-meta-row span:first-child{
+  font-family:'Special Elite',monospace;font-size:10px;
+  color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;
+}
+.feat-meta-row span:last-child{color:var(--amber);font-weight:600;letter-spacing:0.5px;}
+.feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
+.feat-tag{
+  font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--red-bright);background:rgba(192,57,43,0.12);
+  border:1px solid rgba(192,57,43,0.4);
+  padding:3px 10px;
+}
+
+/* Right panel: abstract + CTA */
+.feat-brief{
+  padding:40px 38px 38px;
+  display:flex;flex-direction:column;
+}
+.feat-watermark{
+  position:absolute;top:50%;right:38px;
+  transform:translateY(-50%) rotate(-25deg);
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:120px;letter-spacing:8px;
+  color:rgba(192,57,43,0.05);
+  pointer-events:none;user-select:none;white-space:nowrap;
+  z-index:0;
+}
+.feat-brief-lbl{
+  font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--amber);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.feat-brief-lbl::before{
+  content:'';width:6px;height:6px;background:var(--amber);
+}
+.feat-brief-body{
+  font-family:'IM Fell English',serif;font-size:16px;line-height:1.75;
+  color:var(--text-bright);
+  margin-bottom:22px;position:relative;z-index:1;
+}
+.feat-brief-body em{color:var(--amber-bright);font-style:italic;}
+.feat-key-quote{
+  border-left:3px solid var(--red);padding:10px 16px;
+  background:rgba(192,57,43,0.08);
+  font-family:'Oswald',sans-serif;
+  font-size:14px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--red-bright);line-height:1.4;
+  margin:18px 0;position:relative;z-index:1;
+}
+.feat-cta{
+  margin-top:auto;display:inline-flex;align-items:center;justify-content:space-between;gap:20px;
+  background:var(--red);color:#fff;
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:14px;letter-spacing:3px;text-transform:uppercase;
+  padding:18px 24px;text-decoration:none;
+  box-shadow:4px 4px 0 rgba(0,0,0,0.5);
+  transition:all .28s ease;border:none;
+  position:relative;z-index:1;
+}
+.feat-cta:hover{background:var(--amber);color:var(--bg);transform:translate(-2px,-2px);box-shadow:6px 6px 0 rgba(0,0,0,0.5);}
+.feat-cta .arrow{font-size:18px;transition:transform .28s;}
+.feat-cta:hover .arrow{transform:translateX(6px);}
+
+/* ════ QUEUE / INCOMING ════ */
+.queue-wrap{padding:50px 60px 100px;}
+.queue{
+  max-width:1200px;margin:0 auto;
+}
+.queue-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:24px;border-bottom:1px solid var(--border-dim);padding-bottom:14px;
+  flex-wrap:wrap;gap:10px;
+}
+.queue-title{
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:22px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--amber);
+}
+.queue-count{
+  font-family:'Special Elite',monospace;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.queue-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;
+  margin-top:18px;
+}
+.queue-card{
+  background:var(--bg-card2);
+  border:1px dashed var(--border-dim);
+  padding:18px 18px;position:relative;
+  min-height:130px;display:flex;flex-direction:column;
+  opacity:0.65;transition:opacity .22s,border-color .22s,transform .22s;
+}
+.queue-card:hover{opacity:0.9;border-color:var(--border);transform:translateY(-2px);}
+.queue-card .qc-file{
+  font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;
+}
+.queue-card .qc-title{
+  font-family:'Oswald',sans-serif;font-weight:600;
+  font-size:18px;letter-spacing:1px;color:var(--text-bright);
+  text-transform:uppercase;line-height:1.15;flex:1;
+}
+.queue-card .qc-status{
+  margin-top:14px;
+  font-family:'Special Elite',monospace;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--red);
+  display:flex;align-items:center;gap:6px;
+}
+.queue-card .qc-status::before{
+  content:'';width:6px;height:6px;background:var(--red);border-radius:50%;
+  animation:blink 1.6s ease-in-out infinite;
+}
+
+.queue-note{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:14.5px;color:var(--text-dim);line-height:1.6;
+  margin-top:28px;max-width:760px;
+  border-left:2px solid var(--border-dim);padding-left:16px;
+}
+
+/* ════ FOOTER ════ */
+footer{
+  background:var(--bg-deep);
+  padding:54px 60px;
+  border-top:1px solid var(--border-dim);
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:24px;
+}
+.f-brand{
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:clamp(36px,7vw,68px);line-height:0.85;
+  color:var(--amber-bright);letter-spacing:1px;text-transform:uppercase;
+}
+.f-info{
+  font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1.5px;
+  color:var(--text);line-height:2;text-align:right;
+}
+.f-back{
+  font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--red);text-decoration:none;display:inline-block;margin-top:8px;
+  border-bottom:1px solid var(--red);padding-bottom:2px;
+  transition:gap .22s,color .22s;
+}
+.f-back:hover{color:var(--amber);border-color:var(--amber);}
+
+/* ════ REVEAL ════ */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:900px){
+  .hero{padding:90px 22px 40px;}
+  .hero-frame{padding:24px 22px 20px;}
+  .index-rule{padding:0 22px;}
+  .featured-wrap{padding:0 22px 30px;}
+  .featured{grid-template-columns:1fr;transform:none;}
+  .feat-info{border-right:none;border-bottom:1px solid var(--border-dim);}
+  .feat-watermark{display:none;}
+  .queue-wrap{padding:36px 22px 70px;}
+  footer{padding:36px 22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ TOP NAV ════ -->
+<nav id="gss-topnav">
+  <a href="/">Home</a>
+  <a href="/pedagogy.html">Interactive Pedagogy</a>
+  <a href="/contributions">Contributions</a>
+  <a href="/gss-about-v2.html">About GSS</a>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+<div class="scan-line"></div>
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="hero-frame">
+    <div class="hero-classification">CASE INTAKE · ONGOING</div>
+    <h1 class="hero-title">
+      <span class="row rv">Intake</span>
+      <span class="row red rv" style="transition-delay:.1s;">Terminal<span class="cursor-blink"></span></span>
+      <span class="row alt rv" style="transition-delay:.2s;font-size:.42em;letter-spacing:1px;margin-top:14px;">AI · Necropolitics · Engineered Oppression</span>
+    </h1>
+    <p class="hero-sub rv" style="transition-delay:.3s;">
+      A working dossier of student research prototypes from the graduate seminar. The first file is open. Others are in intake — building toward release by end of May 2026.
+    </p>
+    <div class="hero-meta rv" style="transition-delay:.4s;">
+      <div class="hm-cell">
+        <div class="hm-key">Course</div>
+        <div class="hm-val">ENG 548</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-key">Status</div>
+        <div class="hm-val"><span class="green">●</span> Ongoing</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-key">Active File</div>
+        <div class="hm-val">01</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-key">Pending Intake</div>
+        <div class="hm-val"><span class="red">●</span> 11</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ INDEX RULE ════ -->
+<div class="index-rule rv">
+  <span class="ir-tag">▸ Active Files · 01 of 12</span>
+  <span class="ir-line"></span>
+</div>
+
+<!-- ════ FEATURED FILE ════ -->
+<section class="featured-wrap">
+  <article class="featured rv">
+    <div class="featured-stamp">● Live</div>
+
+    <!-- Left: file dossier -->
+    <div class="feat-info">
+      <span class="feat-file">File CASE-01</span>
+      <h2 class="feat-title">ICE + AI Surveillance</h2>
+      <p class="feat-subtitle">From Slave Catchers to Flock Cameras — The Continuum of American State Violence.</p>
+
+      <div class="feat-meta">
+        <div class="feat-meta-row"><span>Author</span><span>Anastasia Garcia</span></div>
+        <div class="feat-meta-row"><span>Format</span><span>Interactive Sketchboard</span></div>
+        <div class="feat-meta-row"><span>Modules</span><span>10 Scrollable Sections</span></div>
+        <div class="feat-meta-row"><span>Released</span><span>Spring 2025 · Prototype</span></div>
+      </div>
+
+      <div class="feat-tags">
+        <span class="feat-tag">Surveillance</span>
+        <span class="feat-tag">Abolition</span>
+        <span class="feat-tag">Carceral Tech</span>
+        <span class="feat-tag">Flock Safety</span>
+        <span class="feat-tag">ICE</span>
+        <span class="feat-tag">Necropolitics</span>
+      </div>
+    </div>
+
+    <!-- Right: brief + CTA -->
+    <div class="feat-brief">
+      <div class="feat-watermark">CLASSIFIED</div>
+
+      <div class="feat-brief-lbl">Project Brief</div>
+      <div class="feat-brief-body">
+        A critical analysis of <em>ICE + AI surveillance</em> that traces the continuum from 1850s slave catchers to today's Flock cameras and automated deportation pipelines. The prototype reads as a classified field-report: scroll-driven hand-drawn timelines, FBI-style file badges, redacted-style "key insights," and follow-the-money diagrams connecting Flock Safety, Palantir, and private prison companies.
+      </div>
+
+      <div class="feat-key-quote">
+        ◈ AI Surveillance = High-Tech Slave Catching · Not a bug. Working as designed.
+      </div>
+
+      <a href="/untitled%20folder/ice_surveillance_sketchboard_styled%20(1).html" class="feat-cta">
+        <span>Open Case File · ICE + AI Surveillance</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </article>
+</section>
+
+<!-- ════ QUEUE / INCOMING ════ -->
+<section class="queue-wrap">
+  <div class="queue">
+    <div class="queue-head rv">
+      <span class="queue-title">▼ Intake Queue · Awaiting Release</span>
+      <span class="queue-count">11 Files · ETA · May 2026</span>
+    </div>
+
+    <div class="queue-grid">
+      <div class="queue-card rv"><div class="qc-file">File CASE-02</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.04s;"><div class="qc-file">File CASE-03</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.08s;"><div class="qc-file">File CASE-04</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.12s;"><div class="qc-file">File CASE-05</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.16s;"><div class="qc-file">File CASE-06</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.2s;"><div class="qc-file">File CASE-07</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.24s;"><div class="qc-file">File CASE-08</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.28s;"><div class="qc-file">File CASE-09</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.32s;"><div class="qc-file">File CASE-10</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.36s;"><div class="qc-file">File CASE-11</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+      <div class="queue-card rv" style="transition-delay:.4s;"><div class="qc-file">File CASE-12</div><div class="qc-title">Awaiting<br>Intake</div><div class="qc-status">Pending Review</div></div>
+    </div>
+
+    <p class="queue-note rv">
+      The remaining case files are works-in-progress by students of the seminar — counter-archival prototypes, data-violence interventions, and abolitionist research tools. Final projects from all students will be released to the public dossier by the end of May 2026.
+    </p>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer>
+  <div>
+    <div class="f-brand">DOSSIER<br>OPEN<br>REFUSE</div>
+    <a href="/contributions" class="f-back">← Back to Contributions</a>
+  </div>
+  <div class="f-info">
+    Global South Solidarities<br>
+    AI · Necropolitics · Engineered Oppression<br>
+    Graduate Seminar · WSU<br><br>
+    <span style="color:var(--red);">●</span> Case Intake · Open Archive
+  </div>
+</footer>
+
+<script>
+// Progress bar
+const pf=document.getElementById('progFill');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  if(h>0) pf.style.width=(window.scrollY/h*100)+'%';
+},{passive:true});
+
+// Reveal on scroll
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('vis');
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.06,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
