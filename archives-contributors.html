@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Card Catalog — Archives, Rhetoricity of Technologies, & Anti-Oppressive Interventions</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Special+Elite&family=Space+Mono:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0604;
+  --deep:#060302;
+  --paper:#f0e6c8;
+  --manila:#e5d4a4;
+  --manila-light:#efe2bc;
+  --manila-dark:#c4ad7a;
+  --red:#c0190f;
+  --red-deep:#8b0000;
+  --gold:#b8860b;
+  --stamp:#1a3a1a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  overflow-x:hidden;
+  cursor:none;
+  min-height:100vh;
+}
+
+/* ═════ CURSOR ═════ */
+#cdot{
+  width:10px;height:10px;background:var(--red);border:2px solid #fff;
+  box-shadow:0 0 0 1px var(--red);border-radius:50%;
+  position:fixed;z-index:99999;pointer-events:none;
+  transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s;
+}
+#cring{
+  width:32px;height:32px;background:transparent;
+  border:2px solid rgba(255,255,255,0.5);
+  box-shadow:0 0 0 1px rgba(192,25,15,0.3);border-radius:50%;
+  position:fixed;z-index:99998;pointer-events:none;
+  transform:translate(-50%,-50%);
+  transition:left 0.15s ease-out,top 0.15s ease-out,width 0.2s,height 0.2s;
+}
+#cdot.h{width:14px;height:14px;}
+#cring.h{width:44px;height:44px;}
+
+/* ═════ PAPER GRAIN OVERLAY ═════ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity:0.55;
+}
+
+/* ═════ TOP NAV ═════ */
+#gss-topnav{
+  position:fixed;top:0;left:0;right:0;z-index:7000;
+  display:flex;align-items:center;justify-content:center;gap:32px;
+  padding:0 24px;height:44px;
+  background:rgba(10,6,4,0.92);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(240,230,200,0.08);
+  font-family:'Space Mono',monospace;
+}
+#gss-topnav a{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(240,230,200,0.7);text-decoration:none;
+  padding:6px 14px;border-radius:14px;transition:all .22s;
+  cursor:none;white-space:nowrap;
+}
+#gss-topnav a:hover{background:var(--red);color:#fff;}
+
+/* ═════ HERO ═════ */
+.hero{
+  min-height:88vh;padding:120px 80px 80px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 30%,rgba(192,25,15,0.16) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 50% at 10% 80%,rgba(184,134,11,0.08) 0%,transparent 55%);
+}
+.hero-classification{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:6px;text-transform:uppercase;
+  color:var(--red);
+  display:inline-block;border:1px solid var(--red);
+  padding:5px 14px;margin-bottom:36px;
+  position:relative;z-index:1;align-self:flex-start;
+}
+.hero-classification::before{
+  content:'';position:absolute;left:6px;top:50%;width:6px;height:6px;
+  background:var(--red);border-radius:50%;transform:translateY(-50%);
+  animation:blink 1.6s ease-in-out infinite;
+}
+.hero-classification span{padding-left:14px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(72px,14vw,180px);
+  line-height:0.85;letter-spacing:-2px;
+  color:var(--paper);position:relative;z-index:1;
+}
+.hero-title .row{display:block;}
+.hero-title .row.red{color:var(--red);}
+.hero-title .row.ghost{
+  -webkit-text-stroke:1px rgba(240,230,200,0.2);
+  color:transparent;
+}
+
+.hero-meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;
+  margin-top:48px;max-width:920px;position:relative;z-index:1;
+}
+.hero-meta-cell{
+  border-left:2px solid var(--red);padding-left:16px;
+}
+.hero-meta-key{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(240,230,200,0.5);margin-bottom:6px;
+}
+.hero-meta-val{
+  font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;
+  color:var(--paper);line-height:1.1;
+}
+
+.hero-sub{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:clamp(17px,2.1vw,22px);
+  color:rgba(240,230,200,0.6);
+  max-width:680px;margin-top:48px;line-height:1.65;
+  position:relative;z-index:1;
+}
+
+.scroll-cue{
+  position:absolute;bottom:36px;left:80px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;
+  color:rgba(240,230,200,0.25);text-transform:uppercase;
+  animation:pulse 2.4s ease-in-out infinite;z-index:1;
+}
+@keyframes pulse{0%,100%{opacity:0.25;transform:translateY(0);}50%{opacity:0.55;transform:translateY(6px);}}
+
+/* ═════ DIVIDER ═════ */
+.section-divider{
+  display:flex;align-items:center;gap:18px;
+  padding:0 80px;margin:24px 0 60px;
+  position:relative;
+}
+.section-divider .sd-mark{
+  width:10px;height:10px;background:var(--red);
+  transform:rotate(45deg);flex-shrink:0;
+}
+.section-divider .sd-rule{
+  flex:1;height:1px;background:rgba(240,230,200,0.12);
+}
+.section-divider .sd-lbl{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;
+  text-transform:uppercase;color:rgba(240,230,200,0.5);
+}
+
+/* ═════ CATALOG GRID ═════ */
+.catalog{padding:0 80px 120px;}
+.catalog-intro{
+  max-width:780px;margin:0 0 64px;
+  font-family:'IM Fell English',serif;
+  font-size:17px;line-height:1.75;
+  color:rgba(240,230,200,0.7);
+}
+.catalog-intro em{color:var(--paper);font-style:italic;}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+  gap:38px 28px;
+}
+
+/* ═════ CATALOG CARD (filing-card aesthetic) ═════ */
+.card{
+  display:block;text-decoration:none;cursor:none;
+  background:var(--manila);
+  color:var(--ink);
+  padding:32px 26px 26px;
+  position:relative;
+  box-shadow:6px 6px 0 rgba(0,0,0,0.35),0 2px 8px rgba(0,0,0,0.25);
+  transition:transform .42s cubic-bezier(.18,1,.3,1),box-shadow .42s ease;
+  min-height:220px;
+  display:flex;flex-direction:column;
+}
+.card:nth-child(odd)  { transform:rotate(-1.2deg);background:var(--manila); }
+.card:nth-child(even) { transform:rotate( 0.9deg);background:var(--manila-light); }
+.card:nth-child(3n)   { transform:rotate(-0.4deg); }
+.card:nth-child(5n)   { transform:rotate( 1.6deg); }
+
+.card:hover{
+  transform:rotate(0deg) translateY(-8px) scale(1.02);
+  box-shadow:10px 16px 0 rgba(0,0,0,0.45),0 8px 24px rgba(192,25,15,0.18);
+  z-index:5;
+}
+
+/* Top filing tab */
+.card::before{
+  content:'';position:absolute;top:0;left:24px;
+  width:60px;height:14px;
+  background:var(--manila-dark);
+  clip-path:polygon(0 0,100% 0,90% 100%,10% 100%);
+  transform:translateY(-12px);
+}
+/* Three hole-punch dots on left side */
+.card::after{
+  content:'';position:absolute;left:8px;top:50%;
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(0,0,0,0.18);
+  box-shadow:0 -22px 0 rgba(0,0,0,0.18),0 22px 0 rgba(0,0,0,0.18);
+  transform:translateY(-50%);
+}
+
+.card-file{
+  font-family:'Special Elite',monospace;
+  font-size:10px;letter-spacing:3px;
+  color:var(--red);text-transform:uppercase;
+  margin-bottom:18px;display:flex;align-items:baseline;gap:8px;
+}
+.card-file::before{
+  content:'';width:5px;height:5px;background:var(--red);
+  display:inline-block;
+}
+.card-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:34px;line-height:0.95;letter-spacing:0.5px;
+  color:var(--ink);
+  margin-bottom:10px;
+  transition:color .25s;
+}
+.card-name .surname{display:block;color:var(--red-deep);}
+.card-project{
+  font-family:'IM Fell English',serif;
+  font-style:italic;font-size:14px;line-height:1.5;
+  color:rgba(10,6,4,0.65);
+  margin-bottom:14px;
+}
+.card-spacer{flex:1;}
+.card-foot{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-top:12px;
+}
+.card-cta{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--red);font-weight:bold;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:gap .25s ease,color .22s;
+  cursor:none;
+}
+.card-cta:hover{gap:14px;color:var(--red-deep);}
+.card:hover .card-cta{gap:12px;}
+.card-stamp{
+  font-family:'Special Elite',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(10,6,4,0.4);
+}
+
+/* ═════ Project Statement dropdown ═════ */
+.card-statement{
+  margin-top:12px;
+  border-top:1px dashed rgba(10,6,4,0.18);
+  border-bottom:1px dashed rgba(10,6,4,0.18);
+}
+.card-statement summary{
+  list-style:none;cursor:none;
+  padding:11px 0;
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--red);font-weight:bold;
+  display:flex;align-items:center;gap:10px;
+  transition:color .22s;
+  user-select:none;
+}
+.card-statement summary::-webkit-details-marker{display:none;}
+.card-statement summary .cs-toggle{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:14px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;
+  border:1.5px solid var(--red);color:var(--red);
+  background:transparent;
+  transition:transform .28s ease,background .22s,color .22s;
+  flex-shrink:0;
+}
+.card-statement[open] summary .cs-toggle{
+  transform:rotate(45deg);
+  background:var(--red);color:var(--manila);
+}
+.card-statement summary:hover{color:var(--red-deep);}
+.card-statement .cs-content{
+  padding:4px 2px 16px;
+  animation:csReveal .35s ease both;
+}
+.card-statement[open] .cs-content p{
+  font-family:'IM Fell English',serif;
+  font-size:13.5px;line-height:1.7;
+  color:rgba(10,6,4,0.78);
+  font-style:italic;
+}
+@keyframes csReveal{
+  from{opacity:0;transform:translateY(-4px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Unavailable variant: red diagonal "CLASSIFIED" stamp */
+.card.locked{cursor:not-allowed;}
+.card.locked .card-name,.card.locked .card-project{color:rgba(10,6,4,0.5);}
+.card.locked .card-cta{color:rgba(10,6,4,0.35);}
+.card.locked .restricted-stamp{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-18deg);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;letter-spacing:4px;
+  color:var(--red);
+  border:3px solid var(--red);
+  padding:6px 18px;
+  opacity:0.55;pointer-events:none;
+  background:rgba(245,235,200,0.5);
+  text-shadow:0 0 2px rgba(192,25,15,0.3);
+}
+.card.locked:hover{transform:rotate(0deg) translateY(-4px) scale(1.01);}
+
+/* ═════ FOOTER ═════ */
+footer{
+  background:var(--deep);padding:60px 80px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:28px;
+  border-top:1px solid rgba(240,230,200,0.06);
+}
+.f-brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(38px,8vw,72px);line-height:0.85;
+  color:#fff;
+}
+.f-info{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
+  color:rgba(255,255,255,0.65);text-align:right;line-height:2;
+}
+.f-back{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--red);text-decoration:none;display:inline-block;margin-top:10px;
+  border-bottom:1px solid var(--red);padding-bottom:2px;
+  transition:gap .22s;
+}
+
+/* ═════ REVEAL ═════ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+
+/* ═════ RESPONSIVE ═════ */
+@media(max-width:768px){
+  .hero,.catalog,.section-divider,footer{padding-left:24px;padding-right:24px;}
+  .scroll-cue{left:24px;}
+  .cards{grid-template-columns:1fr;gap:36px;}
+  .card{padding:28px 22px 22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV (GSS site-wide) -->
+<nav id="gss-topnav">
+  <a href="/">Home</a>
+  <a href="/pedagogy.html">Interactive Pedagogy</a>
+  <a href="/contributions">Contributions</a>
+  <a href="/gss-about-v2.html">About GSS</a>
+</nav>
+
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- ═════ HERO ═════ -->
+<section class="hero">
+  <div class="hero-classification rv"><span>Catalog · Fall 2024 · Index 01</span></div>
+  <h1 class="hero-title">
+    <span class="row rv">The</span>
+    <span class="row red rv" style="transition-delay:.12s;">Card Catalog</span>
+    <span class="row ghost rv" style="transition-delay:.24s;font-size:0.45em;letter-spacing:-1px;margin-top:14px;">Archives · Rhetoricity · Interventions</span>
+  </h1>
+
+  <div class="hero-meta rv" style="transition-delay:.38s;">
+    <div class="hero-meta-cell">
+      <div class="hero-meta-key">Course</div>
+      <div class="hero-meta-val">ENG 548 · Fall 2024</div>
+    </div>
+    <div class="hero-meta-cell">
+      <div class="hero-meta-key">Catalog</div>
+      <div class="hero-meta-val">13 Files</div>
+    </div>
+    <div class="hero-meta-cell">
+      <div class="hero-meta-key">Status</div>
+      <div class="hero-meta-val">Open Archive</div>
+    </div>
+    <div class="hero-meta-cell">
+      <div class="hero-meta-key">Praxis</div>
+      <div class="hero-meta-val">Counter-Archival</div>
+    </div>
+  </div>
+
+  <p class="hero-sub rv" style="transition-delay:.5s;">
+    Thirteen graduate scholars — investigating archives as contested sites of power, building counter-archives, and refusing the logics of erasure. Pull a card from the drawer.
+  </p>
+
+  <div class="scroll-cue">↓ enter the catalog ↓</div>
+</section>
+
+<!-- ═════ DIVIDER ═════ -->
+<div class="section-divider rv">
+  <span class="sd-mark"></span>
+  <span class="sd-lbl">Index — 13 Contributors</span>
+  <span class="sd-rule"></span>
+  <span class="sd-lbl">A — Z</span>
+</div>
+
+<!-- ═════ CATALOG ═════ -->
+<section class="catalog">
+  <p class="catalog-intro rv">
+    Each card below is a <em>file</em> — a doorway into one contributor's archival research. Click a card to open the project. Cards marked <em>RESTRICTED</em> hold projects not yet made public.
+  </p>
+
+  <div class="cards">
+
+    <!-- FILE 01 -->
+    <article class="card rv">
+      <div class="card-file">File ARC-01</div>
+      <h2 class="card-name">Cheyenne<span class="surname">Browne</span></h2>
+      <p class="card-project">Ghosts of Compliancy — Dispossession on the Palouse.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>This work interrogates the 200+ years of erasure and dispossession on the Palouse and the archive's complicity in perpetuating these narratives. Drawing from personal family archives, landscape studies, and traditional sources, it explores accountability, inheritance, and responsibility — and how the archive, by attempting to erase and control, has shaped future possibilities of land and relationships.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Chey.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 02 -->
+    <article class="card rv" style="transition-delay:.05s;">
+      <div class="card-file">File ARC-02</div>
+      <h2 class="card-name">Josie<span class="surname">Cohen-Rodríguez</span></h2>
+      <p class="card-project">Queer Multimodal Storying &amp; Archives of the So-Called "Northwest."</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>This project looks to the present as a link to the past in order to imagine new liberatory futures built around relationality, solidarity, and radical care. Using a framework of multidirectional memory, it traces legacies and patterns of power as mediated through juridical, historical and archival processes throughout the so-called Northwest.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Josie%20Cohen-Rodr%C3%ADguez.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 03 -->
+    <article class="card rv" style="transition-delay:.1s;">
+      <div class="card-file">File ARC-03</div>
+      <h2 class="card-name">Corita<span class="surname">Fernando</span></h2>
+      <p class="card-project">No Body Remains in Memory of "Development."</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>The "Absence archive" centers on memories, histories, and narratives that are forgotten and deliberately erased within archival practices. Through four case studies focusing on the human body — hands, parts, and bodily memory — this project deconstructs the violence behind utilizing gaps within archival practices of "development" and "civilization," and probes the rethinking of archival practice itself.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Corita%20Fernando.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 04 (locked) -->
+    <article class="card locked rv" style="transition-delay:.15s;">
+      <div class="card-file">File ARC-04</div>
+      <h2 class="card-name">Myra<span class="surname">Henderson</span></h2>
+      <p class="card-project">Project not yet released to the public archive.</p>
+      <span class="card-spacer"></span>
+      <div class="card-foot">
+        <span class="card-cta" style="cursor:not-allowed;">Restricted</span>
+        <span class="card-stamp">Pending</span>
+      </div>
+      <span class="restricted-stamp">Restricted</span>
+    </article>
+
+    <!-- FILE 05 -->
+    <article class="card rv" style="transition-delay:.2s;">
+      <div class="card-file">File ARC-05</div>
+      <h2 class="card-name">Brigette<span class="surname">Hinnant</span></h2>
+      <p class="card-project">Forgotten Faces of Colonial Resistance.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>In the early 20th century, thousands of Filipinos immigrated to the United States to find work after colonization, only to be exploited as non-white agricultural laborers. Drawing on decolonial theory, labor process theory, transnational migration theory, and kuwentuhan, this project analyzes how and why Filipinos immigrated, their union-making methods, and the importance of sharing their stories to honestly history the U.S. and the labor it extracted.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Brigette%20Hinnant.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 06 -->
+    <article class="card rv" style="transition-delay:.25s;">
+      <div class="card-file">File ARC-06</div>
+      <h2 class="card-name">Daman<span class="surname">Khalid</span></h2>
+      <p class="card-project">Pakistan: The Land of Resistance — indigenous literary voices of non-violent resistance.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>This zine revisits the indigenous literary voices of non-violent resistance in the wake of religious extremism and state-backed oppression impinging on Pakistan since its creation. It explores postcolonial limitations and decolonial possibilities in third-world literature and culture — examining Global North–South literary relations through movements of resistance, solidarity, and Sufi traditions of refusal.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Daman%20Khalid.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 07 -->
+    <article class="card rv" style="transition-delay:.3s;">
+      <div class="card-file">File ARC-07</div>
+      <h2 class="card-name">Grace<span class="surname">No</span></h2>
+      <p class="card-project">Revisiting a History of Shared Resistance — Afro-Asian activism &amp; transcultural solidarity.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>The myth of intrinsic conflict between marginalized communities has been promoted by a white supremacist culture, even as Asian and Black communities share experiences of being victimized by the same racist system. This mini-archive curates films and recipes that center transcultural and transnational solidarity — elevating past and ongoing efforts of resistance that speak back to imperial powers.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/gGrace%20No.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 08 -->
+    <article class="card rv" style="transition-delay:.35s;">
+      <div class="card-file">File ARC-08</div>
+      <h2 class="card-name">Prakash<span class="surname">Paudel</span></h2>
+      <p class="card-project">Global South Bodies in Medical Experiments.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>Medical apartheid is not uncommon in the history of health and medicine. People from marginalized communities — especially from the Global South — have become the site of medical and health experimentations. This article examines medical experiments on docile bodies, focusing on Global South medical apartheid and its inseparable connection to the historical colonizing process of people and heritage.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Prakash%20Paudel.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 09 -->
+    <article class="card rv" style="transition-delay:.4s;">
+      <div class="card-file">File ARC-09</div>
+      <h2 class="card-name">Alli<span class="surname">Riechman-Bennett</span></h2>
+      <p class="card-project">Food Archive Representing Osage Nation — Ozark archival sovereignty.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>Foodways are paths, behaviors, and results of human interaction with food — and when colonial powers influence the supply chain, they actively create food genocide. This zine examines Osage Nation foodways as displayed in current Ozark archives, weaving together food sovereignty, archival remediation, and the McCaleb research drafts to argue for re-indigenizing — not merely decolonizing — the archive.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Allison%20Riechman.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 10 -->
+    <article class="card rv" style="transition-delay:.45s;">
+      <div class="card-file">File ARC-10</div>
+      <h2 class="card-name">Ma-Ya<span class="surname">&nbsp;</span></h2>
+      <p class="card-project">Disrupting Violence — Solidarity in the Time of Despair.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>Drawing from anti-imperial transnational feminist approaches, this project emphasizes the necessity for Global South solidarity to disrupt settler colonial knowledge production that disregards non-western epistemology and bodies. It investigates the contours of global inequalities to build epistemic justice against memory injustices — being attentive to stories of violence conducted in Gaza, and refusing the silence of academia.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Ma-Ya.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 11 -->
+    <article class="card rv" style="transition-delay:.5s;">
+      <div class="card-file">File ARC-11</div>
+      <h2 class="card-name">Genoveva<span class="surname">Vega Gastelum</span></h2>
+      <p class="card-project">Reviviendo Mi Lengua Mixteca (Ñuu Savi) — language, culture &amp; belonging.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>In Mexico, various indigenous languages are spoken alongside Spanish — including Mixteco, spoken throughout Oaxaca. The Endangered Language Alliance reports fewer than 2,000 Mixtec speakers in the United States. This project is a journey of language reclamation: preserving Mixteco's stories, songs, and ways of thinking, and resisting the colonial erasure of indigenous languages.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/Genoveva%20Vega.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+    <!-- FILE 12 (locked) -->
+    <article class="card locked rv" style="transition-delay:.55s;">
+      <div class="card-file">File ARC-12</div>
+      <h2 class="card-name">Valanci<span class="surname">Villa</span></h2>
+      <p class="card-project">Project not yet released to the public archive.</p>
+      <span class="card-spacer"></span>
+      <div class="card-foot">
+        <span class="card-cta" style="cursor:not-allowed;">Restricted</span>
+        <span class="card-stamp">Pending</span>
+      </div>
+      <span class="restricted-stamp">Restricted</span>
+    </article>
+
+    <!-- FILE 13 -->
+    <article class="card rv" style="transition-delay:.6s;">
+      <div class="card-file">File ARC-13</div>
+      <h2 class="card-name">Sezin<span class="surname">Zorlu</span></h2>
+      <p class="card-project">Memory Work of Narratives on Coerced Sterilization.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>This zine focuses on the narratives of people who have been sterilized — especially Indigenous, Native American, and Mexican women in the U.S. — through two documentaries (<em>No Más Bebés</em>, 2015 and <em>Amá</em>, 2022) and archival images from The Freedom Archives and The American Indian Digital History Archive. It moves coerced sterilization out of forgotten archival space and into public memory work.</p>
+        </div>
+      </details>
+      <div class="card-foot">
+        <a class="card-cta" href="/untitled%20folder/sezin.html">Open File <span>→</span></a>
+        <span class="card-stamp">Available</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═════ FOOTER ═════ -->
+<footer>
+  <div>
+    <div class="f-brand">ARCHIVE<br>RESIST<br>LIBERATE</div>
+    <a href="/contributions" class="f-back">← Back to Contributions</a>
+  </div>
+  <div class="f-info">
+    Global South Solidarities<br>
+    Digital-Multimodal Humanities<br>
+    &amp; Memory Justice<br><br>
+    <span style="color:var(--red);">●</span> Catalog ARC-01 — Fall 2024
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const dot=document.getElementById('cdot'),ring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  dot.style.left=mx+'px';dot.style.top=my+'px';
+});
+function loopRing(){
+  rx+=(mx-rx)*0.15;ry+=(my-ry)*0.15;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loopRing);
+}
+loopRing();
+document.querySelectorAll('a,button,summary,.card,.card-cta').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.classList.add('h');ring.classList.add('h');});
+  el.addEventListener('mouseleave',()=>{dot.classList.remove('h');ring.classList.remove('h');});
+});
+
+// REVEAL ON SCROLL
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('vis');
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
