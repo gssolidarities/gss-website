@@ -142,6 +142,90 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
 .rvl{opacity:0;transform:translateX(-32px);transition:opacity 0.7s ease,transform 0.7s ease;}
 .rvl.vis{opacity:1;transform:translateX(0);}
 
+/* ══ CN-BOX · Pedagogy-style course-card design (smaller) ══ */
+.cn-box{
+  background:#f5f0e6;
+  border:1px solid rgba(10,6,4,0.08);
+  position:relative;overflow:hidden;
+  max-width:820px;margin-top:48px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.cn-box-header{
+  background:var(--ink);
+  color:#fff;
+  padding:2.2rem 2.6rem 2rem;
+  position:relative;overflow:hidden;
+}
+.cn-box-header::after{
+  content:attr(data-bg-num);
+  position:absolute;right:-14px;top:-22px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:140px;line-height:1;
+  color:rgba(255,255,255,0.04);
+  pointer-events:none;user-select:none;
+}
+.cn-box-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--red);margin-bottom:16px;
+}
+.cn-box-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(28px,3.8vw,40px);
+  line-height:0.95;letter-spacing:-0.5px;
+  color:var(--paper);margin-bottom:14px;
+}
+.cn-box-title .accent{color:var(--red);}
+.cn-box-desc{
+  font-family:'IM Fell English',serif;
+  font-style:italic;
+  font-size:14.5px;line-height:1.6;
+  color:rgba(255,255,255,0.55);
+  max-width:540px;
+}
+.cn-box-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 2.6rem;
+  background:#f5f0e6;
+  text-decoration:none;
+  position:relative;overflow:hidden;
+  border-top:2px solid var(--red);
+  cursor:none;
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+.cn-box-link::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(192,25,15,0.08) 50%,transparent 100%);
+  transform:translateX(-100%);
+  transition:transform .5s ease;
+}
+.cn-box-link:hover::before{transform:translateX(0);}
+.cn-box-link:hover{padding-left:3rem;}
+.cn-box-link-left{
+  display:flex;flex-direction:column;gap:2px;
+  position:relative;z-index:1;
+}
+.cn-box-link-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;
+  color:rgba(10,6,4,0.55);
+}
+.cn-box-link-text{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:1px;
+  color:var(--ink);
+}
+.cn-box-link-arrow{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;
+  color:var(--red);
+  position:relative;z-index:1;
+  transition:transform .3s ease;
+}
+.cn-box-link:hover .cn-box-link-arrow{transform:translateX(10px);}
+
 /* ══ UNIFIED LINK-BOX (pinned card style, reused per section) ══ */
 .link-box{
   margin-top:56px;padding:60px 56px 52px;
@@ -278,16 +362,20 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
   <h2 class="program-title rv" style="color:var(--ink);">ARCHIVES, RHETORICITY<br>OF TECHNOLOGIES, &amp;<br>ANTI-OPPRESSIVE<br>INTERVENTIONS</h2>
   <div class="program-subtitle rv" style="color:var(--ink);opacity:0.4;">Graduate Seminar · Counter-Archival Praxis</div>
 
-  <div class="link-box lb-paper rv">
-    <span class="lb-tape-l"></span>
-    <span class="lb-tape-r"></span>
-    <span class="lb-pin"></span>
-    <div class="lb-stamp"><span>Student Work</span></div>
-    <div class="lb-heading">STUDENT<br><span class="accent">CONTRIBUTIONS</span></div>
-    <div class="lb-meta">[ 13 Graduate Contributors ]</div>
-    <p class="lb-body">Archival research projects, counter-archival interventions, and decolonial-feminist worldmaking by 13 graduate students from the Archives, Rhetoricity of Technologies, &amp; Anti-Oppressive Interventions seminar. Visit the dedicated page to explore each contributor's project.</p>
-    <a href="#" class="lb-cta">Visit This Page&nbsp;&nbsp;→</a>
-  </div>
+  <article class="cn-box rv">
+    <div class="cn-box-header" data-bg-num="01">
+      <div class="cn-box-eyebrow">Student Work</div>
+      <h3 class="cn-box-title">Student <span class="accent">Contributions</span></h3>
+      <p class="cn-box-desc">Archival research projects, counter-archival interventions, and decolonial-feminist worldmaking by 13 graduate students from this seminar.</p>
+    </div>
+    <a href="#" class="cn-box-link">
+      <div class="cn-box-link-left">
+        <span class="cn-box-link-eyebrow">13 Graduate Contributors</span>
+        <span class="cn-box-link-text">Visit This Page</span>
+      </div>
+      <span class="cn-box-link-arrow">→</span>
+    </a>
+  </article>
 </section>
 
 <div class="torn" style="background:var(--ink);transform:rotate(180deg);"></div>
@@ -299,16 +387,20 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
   <h2 class="program-title rv" style="color:var(--paper);">AI, NECROPOLITICS,<br>&amp; ENGINEERED<br>OPPRESSION</h2>
   <div class="program-subtitle rv">Contributors forthcoming</div>
 
-  <div class="link-box lb-paper rv">
-    <span class="lb-tape-l"></span>
-    <span class="lb-tape-r"></span>
-    <span class="lb-pin"></span>
-    <div class="lb-stamp"><span>Student Work</span></div>
-    <div class="lb-heading">STUDENT<br><span class="accent">CONTRIBUTIONS</span></div>
-    <div class="lb-meta">[ Prototype ]</div>
-    <p class="lb-body">View the basic prototype of one of the student research projects from AI, Necropolitics, &amp; Engineered Oppression course. This prototype demonstrates critical analysis of technological systems, data, violence, and abolitionist framing in action. The final projects of all students will be available by the end of May 2026.</p>
-    <a href="/untitled%20folder/ice_surveillance_sketchboard_styled%20(1).html" class="lb-cta">Visit This Page&nbsp;&nbsp;→</a>
-  </div>
+  <article class="cn-box rv">
+    <div class="cn-box-header" data-bg-num="02">
+      <div class="cn-box-eyebrow">Student Work</div>
+      <h3 class="cn-box-title">Student <span class="accent">Contributions</span></h3>
+      <p class="cn-box-desc">A basic prototype of one student research project — critical analysis of technological systems, data violence, and abolitionist framing. Final projects of all students will be available by the end of May 2026.</p>
+    </div>
+    <a href="/untitled%20folder/ice_surveillance_sketchboard_styled%20(1).html" class="cn-box-link">
+      <div class="cn-box-link-left">
+        <span class="cn-box-link-eyebrow">Prototype Available</span>
+        <span class="cn-box-link-text">Visit This Page</span>
+      </div>
+      <span class="cn-box-link-arrow">→</span>
+    </a>
+  </article>
 </section>
 
 <div class="torn" style="background:var(--muted);transform:scaleX(-1);"></div>
@@ -325,16 +417,20 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
     <p style="color:var(--ink);font-family:'Trebuchet MS',sans-serif;">The fellowship operates on a simple but radical premise: that the scholars most qualified to document and theorize Global South struggles are often the ones least supported by academic institutions. Fellows receive modest compensation for their contributions—an acknowledgment that intellectual labor, especially when it emerges from minoritized and diasporic communities, deserves material recognition. Over the course of the year, fellows develop multimodal, public-facing projects that will be housed on the open-access Global South Solidarities anarchive website. These projects take many forms: digital narratives, curated archival materials, pedagogical resources, multimedia essays, and creative works that refuse the boundaries between scholarship and art, between theory and practice.</p>
   </div>
 
-  <div class="link-box lb-muted rv">
-    <span class="lb-tape-l"></span>
-    <span class="lb-tape-r"></span>
-    <span class="lb-pin"></span>
-    <div class="lb-stamp"><span>Fellowship</span></div>
-    <div class="lb-heading">THE<br>SOUTH ASIAN<br><span class="accent">COHORT</span></div>
-    <div class="lb-meta">[ 2025–2026 · Inaugural Year ]</div>
-    <p class="lb-body">A year-long program for South Asian scholars committed to decolonial, feminist, queer, and anticolonial knowledge production. Fellows develop multimodal, public-facing projects — digital narratives, curated archival materials, pedagogical resources, multimedia essays, and creative works — that will live on the open-access Global South Solidarities anarchive.</p>
-    <a href="#" class="lb-cta">Visit This Page&nbsp;&nbsp;→</a>
-  </div>
+  <article class="cn-box rv">
+    <div class="cn-box-header" data-bg-num="03">
+      <div class="cn-box-eyebrow">Fellowship</div>
+      <h3 class="cn-box-title">South Asian <span class="accent">Cohort</span></h3>
+      <p class="cn-box-desc">A year-long program for South Asian scholars committed to decolonial, feminist, queer, and anticolonial knowledge production. Fellows develop multimodal, public-facing projects on the GSS anarchive.</p>
+    </div>
+    <a href="#" class="cn-box-link">
+      <div class="cn-box-link-left">
+        <span class="cn-box-link-eyebrow">2025–2026 · Inaugural Year</span>
+        <span class="cn-box-link-text">Visit This Page</span>
+      </div>
+      <span class="cn-box-link-arrow">→</span>
+    </a>
+  </article>
 </section>
 
 <div class="torn" style="background:var(--ink);transform:rotate(180deg) scaleX(-1);"></div>
