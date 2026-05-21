@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FILE: RICHIK BANERJEE — Reflecting on the Art of Solidarity | GSS ANARCHIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&family=Caveat:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0b0f;
+  --card: #0f1219;
+  --amber: #c8a84b;
+  --amber-dim: rgba(200,168,75,0.15);
+  --amber-glow: rgba(200,168,75,0.08);
+  --red: #c0392b;
+  --blue: #2196f3;
+  --green: #27ae60;
+  --text: #e8e4dc;
+  --text-dim: #7a7262;
+  --scanline: rgba(200,168,75,0.02);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+::selection { background:var(--amber); color:var(--bg); }
+
+html { scroll-behavior:smooth; cursor:crosshair; }
+
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Share Tech Mono', monospace;
+  font-size:17px;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+/* ===== BACKGROUND SCRIBBLE CANVAS ===== */
+#bgScribble {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.06;
+}
+
+/* ===== FILM GRAIN ===== */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:10000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+
+/* ===== SCANLINES ===== */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  background:repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scanline) 2px, var(--scanline) 4px);
+  animation:scanMove 8s linear infinite;
+}
+@keyframes scanMove {
+  0% { transform:translateY(0); }
+  100% { transform:translateY(4px); }
+}
+
+/* ===== PROGRESS BAR ===== */
+#progress {
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  background:linear-gradient(90deg, var(--red), var(--amber));
+  z-index:10001;
+  width:0%;
+  transition:width 0.1s;
+}
+
+/* ===== LOADER ===== */
+#loader {
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  z-index:20000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition:opacity 1.2s ease, visibility 1.2s ease;
+}
+#loader.hidden { opacity:0; visibility:hidden; }
+.loader-text {
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:clamp(0.8rem,2vw,1.2rem);
+  letter-spacing:0.5em;
+  color:var(--amber);
+  text-transform:uppercase;
+  animation:flicker 1.5s ease-in-out infinite;
+}
+@keyframes flicker {
+  0%,100% { opacity:0.4; }
+  50% { opacity:1; }
+}
+.loader-bar {
+  width:200px;
+  height:2px;
+  background:rgba(200,168,75,0.1);
+  margin-top:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.loader-bar::after {
+  content:'';
+  position:absolute;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:var(--amber);
+  animation:loadSlide 1.5s ease-in-out infinite;
+}
+@keyframes loadSlide {
+  0% { left:-100%; }
+  100% { left:100%; }
+}
+
+/* ===== NAVIGATION ===== */
+#nav {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:5000;
+  padding:0.8rem 2rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(10,11,15,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(200,168,75,0.1);
+  transition:transform 0.4s;
+}
+#nav.hide { transform:translateY(-100%); }
+.nav-id {
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:0.75rem;
+  letter-spacing:0.4em;
+  color:var(--amber);
+  text-transform:uppercase;
+}
+.nav-id .red { color:var(--red); }
+.nav-file {
+  font-family:'Share Tech Mono', monospace;
+  font-size:0.65rem;
+  color:#9e9688;
+  letter-spacing:0.2em;
+}
+
+/* ===== HAND-DRAWN SCRIBBLE LINES ===== */
+.scribble-wrap {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:1;
+}
+.scribble-wrap svg {
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+.scribble-line {
+  fill:none;
+  stroke:#2d8a4e;
+  stroke-width:1.5;
+  stroke-linecap:round;
+  opacity:0.18;
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  transition:stroke-dashoffset 2s ease;
+}
+.content-box.vis .scribble-line,
+.reveal.vis .scribble-line {
+  stroke-dashoffset:0;
+}
+/* Some lines thinner / more transparent */
+.scribble-line.thin { stroke-width:1; opacity:0.1; }
+.scribble-line.bold { stroke-width:2.2; opacity:0.22; }
+.scribble-line.ink { stroke:#1a6b3a; stroke-width:1.8; opacity:0.12; }
+
+/* ===== MARGIN SCRIBBLE CANVASES ===== */
+.margin-scribble {
+  position:fixed;
+  top:0;
+  bottom:0;
+  width:clamp(80px, 12vw, 180px);
+  pointer-events:none;
+  z-index:1;
+  opacity:0.14;
+}
+.margin-scribble.left { left:0; }
+.margin-scribble.right { right:0; }
+@media(max-width:900px) {
+  .margin-scribble { display:none; }
+}
+
+/* ===== SCROLL SECTIONS ===== */
+.scroll-section {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,4rem);
+  position:relative;
+}
+
+/* ===== CONTENT BOX (DOSSIER CARD) ===== */
+.content-box {
+  background:var(--card);
+  border:1px solid var(--amber);
+  border-top-width:3px;
+  padding:clamp(2rem,4vw,3.5rem);
+  max-width:850px;
+  width:100%;
+  position:relative;
+  box-shadow:12px 12px 0 rgba(0,0,0,0.5);
+  transform:rotate(-0.5deg);
+  transition:transform 0.4s ease;
+}
+.content-box:hover { transform:rotate(0deg); }
+.content-box.tilt-right { transform:rotate(0.5deg); }
+.content-box.tilt-right:hover { transform:rotate(0deg); }
+
+/* Corner brackets */
+.content-box::before {
+  content:'';
+  position:absolute;
+  top:8px;
+  left:8px;
+  width:20px;
+  height:20px;
+  border-top:2px solid var(--amber);
+  border-left:2px solid var(--amber);
+  z-index:2;
+}
+.content-box::after {
+  content:'';
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  width:20px;
+  height:20px;
+  border-bottom:2px solid var(--amber);
+  border-right:2px solid var(--amber);
+  z-index:2;
+}
+/* Ensure text sits above scribbles */
+.content-box > *:not(.scribble-wrap):not(.watermark) {
+  position:relative;
+  z-index:2;
+}
+.content-box::after {
+  content:'';
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  width:20px;
+  height:20px;
+  border-bottom:2px solid var(--amber);
+  border-right:2px solid var(--amber);
+}
+
+/* ===== FILE BADGE ===== */
+.file-badge {
+  position:absolute;
+  top:-1px;
+  right:1.5rem;
+  background:var(--red);
+  color:white;
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:0.65rem;
+  letter-spacing:0.3em;
+  padding:0.3rem 0.8rem;
+  text-transform:uppercase;
+}
+
+/* ===== CLASSIFIED WATERMARK ===== */
+.watermark {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-25deg);
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:clamp(4rem,12vw,10rem);
+  color:rgba(200,168,75,0.03);
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  pointer-events:none;
+  white-space:nowrap;
+  user-select:none;
+}
+
+/* ===== HEADINGS ===== */
+.section-title {
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:clamp(1.5rem,4vw,2.5rem);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--amber);
+  margin-bottom:0.5rem;
+  line-height:1.2;
+}
+.section-subtitle {
+  font-family:'Oswald', sans-serif;
+  font-weight:400;
+  font-size:0.7rem;
+  letter-spacing:0.5em;
+  color:#9e9688;
+  text-transform:uppercase;
+  margin-bottom:2rem;
+}
+.assemblage-num {
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:0.7rem;
+  letter-spacing:0.4em;
+  color:var(--red);
+  text-transform:uppercase;
+  margin-bottom:0.3rem;
+}
+
+/* ===== TEXT ===== */
+.body-text {
+  font-size:clamp(1rem,1.3vw,1.1rem);
+  color:#ebe7df;
+  margin-bottom:1.2rem;
+  line-height:1.95;
+}
+.body-text em { color:var(--amber); font-style:italic; }
+
+.highlight {
+  background:linear-gradient(transparent 60%, rgba(200,168,75,0.25) 60%);
+  padding:0 2px;
+}
+
+/* ===== TIMELINE ITEM ===== */
+.timeline-item {
+  border-left:3px solid var(--red);
+  padding:0.8rem 0 0.8rem 1.5rem;
+  margin:1.5rem 0;
+  position:relative;
+}
+.timeline-item::before {
+  content:'▶';
+  position:absolute;
+  left:-0.5rem;
+  top:0.8rem;
+  color:var(--red);
+  font-size:0.6rem;
+}
+.timeline-label {
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:0.75rem;
+  letter-spacing:0.3em;
+  color:var(--red);
+  text-transform:uppercase;
+  margin-bottom:0.5rem;
+}
+
+/* ===== KEY POINT ===== */
+.key-point {
+  border:1px dashed var(--red);
+  padding:1.5rem;
+  margin:1.5rem 0;
+  transform:rotate(-0.3deg);
+  position:relative;
+}
+.key-point.green { border-color:var(--green); }
+.key-point-title {
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:0.8rem;
+  letter-spacing:0.3em;
+  color:var(--red);
+  text-transform:uppercase;
+  margin-bottom:0.8rem;
+}
+.key-point.green .key-point-title { color:var(--green); }
+
+/* ===== ARROW DIVIDER ===== */
+.arrow-div {
+  text-align:center;
+  color:var(--red);
+  letter-spacing:1em;
+  font-size:0.8rem;
+  padding:1.5rem 0;
+  opacity:0.5;
+}
+
+/* ===== TAG ===== */
+.tag {
+  display:inline-block;
+  border:1px solid var(--red);
+  color:var(--red);
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:0.6rem;
+  letter-spacing:0.2em;
+  padding:0.2rem 0.6rem;
+  text-transform:uppercase;
+  border-radius:20px;
+  margin:0.2rem;
+}
+.tag.amber { border-color:var(--amber); color:var(--amber); }
+.tag.green { border-color:var(--green); color:var(--green); }
+.tag.blue { border-color:var(--blue); color:var(--blue); }
+
+/* ===== SKETCH NOTE ===== */
+.sketch-note {
+  border-left:2px solid var(--text-dim);
+  padding-left:1.5rem;
+  font-style:italic;
+  color:#9e9688;
+  margin:1.5rem 0;
+  font-size:0.9rem;
+}
+
+/* ===== BANGLA ===== */
+.bangla {
+  font-family:'Noto Sans Bengali', sans-serif;
+  color:var(--amber);
+}
+
+/* ===== POEM BLOCK ===== */
+.poem-block {
+  font-family:'Caveat', cursive;
+  font-size:clamp(1.2rem,2.2vw,1.6rem);
+  line-height:1.7;
+  color:#ebe7df;
+  padding:1.5rem 0;
+  border-bottom:1px solid rgba(200,168,75,0.08);
+  margin:1rem 0;
+}
+
+/* ===== COLOR ACCENT CARD ===== */
+.accent-card {
+  padding:clamp(1.5rem,3vw,2.5rem);
+  margin:2rem 0;
+  position:relative;
+  transform:rotate(-1deg);
+  transition:transform 0.3s;
+}
+.accent-card:hover { transform:rotate(0deg); }
+.accent-card.magenta { background:#9b2d6b; color:white; }
+.accent-card.purple { background:#5b4a9e; color:white; }
+.accent-card.blue { background:#5b8dd9; color:white; }
+.accent-card.olive { background:#7a8a3c; color:white; }
+.accent-card.coral { background:#ff7f7f; color:#0a0b0f; }
+.accent-card.pink { background:#ffb3b3; color:#0a0b0f; }
+.accent-card.deep { background:#1a1a2e; color:white; }
+.accent-card-text {
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:clamp(1rem,2.5vw,1.6rem);
+  line-height:1.4;
+  text-transform:none;
+  letter-spacing:0;
+}
+
+/* ===== BIG STATEMENT ===== */
+.big-stmt {
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:clamp(1.5rem,5vw,3.5rem);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  line-height:1.15;
+  color:#ebe7df;
+  text-align:center;
+  padding:clamp(3rem,8vw,6rem) 2rem;
+}
+.big-stmt .a { color:var(--amber); }
+.big-stmt .r { color:var(--red); }
+.big-stmt .g { color:var(--green); }
+.big-stmt .dim { opacity:0.2; }
+
+/* ===== MAP TABLE ===== */
+.map-table {
+  width:100%;
+  border-collapse:collapse;
+  margin:1.5rem 0;
+  font-size:0.85rem;
+}
+.map-table th {
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:0.7rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--amber);
+  text-align:left;
+  padding:0.8rem;
+  border-bottom:2px solid var(--amber);
+}
+.map-table td {
+  padding:0.6rem 0.8rem;
+  border-bottom:1px solid rgba(200,168,75,0.08);
+  vertical-align:top;
+}
+.map-table tr:hover td { background:rgba(200,168,75,0.03); }
+.map-table .num { color:var(--red); font-family:'Oswald',sans-serif; font-weight:700; }
+.map-table .name-col { color:var(--amber); font-style:italic; }
+.map-table .pages-col { color:#9e9688; font-size:0.8rem; }
+
+/* ===== EXPANDABLE ===== */
+.expand-header {
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1rem 0;
+  border-bottom:1px solid rgba(200,168,75,0.08);
+  transition:all 0.3s;
+}
+.expand-header:hover { padding-left:0.5rem; border-color:var(--amber); }
+.expand-header h3 {
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:clamp(0.9rem,1.6vw,1.15rem);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--amber);
+}
+.expand-arrow {
+  color:var(--red);
+  font-size:1.2rem;
+  transition:transform 0.3s;
+}
+.expand-header.open .expand-arrow { transform:rotate(45deg); }
+.expand-body {
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.6s ease;
+}
+.expand-body.open { max-height:8000px; }
+.expand-inner { padding:1.5rem 0; }
+
+/* ===== MICRO POEM GRID ===== */
+.micro-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:0;
+}
+.micro-cell {
+  padding:clamp(1.5rem,3vw,3rem);
+  min-height:160px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-family:'Caveat', cursive;
+  font-size:clamp(1rem,1.6vw,1.3rem);
+  border:1px solid rgba(200,168,75,0.05);
+  cursor:pointer;
+  transition:all 0.4s;
+  color:#9e9688;
+  position:relative;
+}
+.micro-cell:hover { color:var(--amber); background:rgba(200,168,75,0.05); }
+
+/* ===== DISCLAIMER ===== */
+#disclaimer {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:5000;
+  padding:0.4rem 2rem;
+  background:rgba(10,11,15,0.92);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(192,57,43,0.2);
+  font-size:0.6rem;
+  color:#9e9688;
+  letter-spacing:0.2em;
+  text-align:center;
+  font-family:'Oswald', sans-serif;
+  text-transform:uppercase;
+}
+#disclaimer .r { color:var(--red); }
+
+/* ===== TOC PANEL ===== */
+#toc {
+  position:fixed;
+  right:-340px;
+  top:0;
+  bottom:0;
+  width:340px;
+  background:#0d0e14;
+  z-index:6000;
+  padding:4rem 2rem 2rem;
+  transition:right 0.4s ease;
+  overflow-y:auto;
+  border-left:1px solid rgba(200,168,75,0.1);
+}
+#toc.open { right:0; }
+.toc-title {
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:0.75rem;
+  letter-spacing:0.5em;
+  color:var(--red);
+  margin-bottom:2rem;
+  text-transform:uppercase;
+}
+.toc-link {
+  display:block;
+  padding:0.5rem 0;
+  font-size:0.75rem;
+  color:rgba(200,168,75,0.4);
+  text-decoration:none;
+  transition:all 0.3s;
+  border-bottom:1px solid rgba(200,168,75,0.04);
+  font-family:'Share Tech Mono', monospace;
+}
+.toc-link:hover { color:var(--amber); padding-left:0.5rem; }
+.toc-link .num { color:var(--red); margin-right:0.5rem; }
+
+#toc-btn {
+  position:fixed;
+  right:1.5rem;
+  bottom:3rem;
+  width:44px;
+  height:44px;
+  background:var(--card);
+  border:1px solid var(--amber);
+  color:var(--amber);
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  cursor:pointer;
+  z-index:6001;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.3s;
+}
+#toc-btn:hover { background:var(--amber); color:var(--bg); }
+
+/* ===== REVEAL ===== */
+.reveal {
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.vis { opacity:1; transform:translateY(0); }
+
+/* ===== NOTES TABLE ===== */
+.notes-table {
+  width:100%;
+  border-collapse:collapse;
+  margin:1.5rem 0;
+  font-size:0.8rem;
+}
+.notes-table th {
+  font-family:'Oswald', sans-serif;
+  font-weight:600;
+  font-size:0.65rem;
+  letter-spacing:0.3em;
+  color:#9e9688;
+  text-align:left;
+  padding:0.5rem;
+  border-bottom:1px solid rgba(200,168,75,0.1);
+  text-transform:uppercase;
+}
+.notes-table td {
+  padding:0.4rem 0.5rem;
+  border-bottom:1px solid rgba(200,168,75,0.04);
+  color:#9e9688;
+  font-style:italic;
+}
+
+@media(max-width:768px) {
+  .scroll-section { padding:3rem 1rem; }
+  .content-box { padding:1.5rem; transform:rotate(0deg)!important; box-shadow:8px 8px 0 rgba(0,0,0,0.4); }
+  .accent-card { transform:rotate(0deg)!important; }
+  .micro-grid { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND SCRIBBLE CANVAS -->
+<canvas id="bgScribble"></canvas>
+<canvas class="margin-scribble left" id="marginL"></canvas>
+<canvas class="margin-scribble right" id="marginR"></canvas>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">LOGGING OUT...</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- PROGRESS -->
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-id">GSS <span class="red">ANARCHIVE</span></div>
+  <div class="nav-file">FILE: RB-2026-SOLIDARITY // LIVE 20.04.2026</div>
+</nav>
+
+<!-- DISCLAIMER -->
+<div id="disclaimer"><span class="r">CLASSIFIED</span> — GLOBAL SOUTH SOLIDARITIES — STUDENT CONTRIBUTION — WASHINGTON STATE UNIVERSITY</div>
+
+<!-- TOC -->
+<div id="toc">
+  <div class="toc-title">MAP OF LOOSE MOTIONS</div>
+  <a href="#cover" class="toc-link"><span class="num">00</span> COVER</a>
+  <a href="#map" class="toc-link"><span class="num">01</span> ASSEMBLAGE MAP</a>
+  <a href="#one" class="toc-link"><span class="num">02</span> ONE — THE OOMPH OF YOUR SALIVA</a>
+  <a href="#two" class="toc-link"><span class="num">03</span> TWO — THE SIGNATURE OF THE STATE</a>
+  <a href="#three" class="toc-link"><span class="num">04</span> THREE — HAGUFYING KOBITA</a>
+  <a href="#four" class="toc-link"><span class="num">05</span> FOUR — THE THEATRE OF DEATH-WISH</a>
+  <a href="#five" class="toc-link"><span class="num">06</span> FIVE — BECOMING-SCHIZO</a>
+  <a href="#six" class="toc-link"><span class="num">07</span> SIX — THE GLITCH IN THE ARRANGEMENT</a>
+  <a href="#seven" class="toc-link"><span class="num">08</span> SEVEN — A WOUND IS AN EVENT OF SURPRISE</a>
+</div>
+<button id="toc-btn" onclick="document.getElementById('toc').classList.toggle('open')">TOC</button>
+
+<!-- ============================================================ -->
+<!-- COVER -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="cover">
+  <div class="content-box reveal" style="text-align:center;transform:rotate(0deg);">
+    <div class="file-badge">FILE 00</div>
+    <div class="watermark">CLASSIFIED</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 700" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,180 C120,150 260,260 400,210 S580,130 720,190 S840,250 870,220"/>
+        <path class="scribble-line" d="M800,0 C770,100 810,220 760,340 S790,460 750,580 S780,670 760,700"/>
+        <path class="scribble-line thin" d="M-20,500 C80,470 200,560 350,510 S530,430 670,490 S810,550 870,520"/>
+      </svg>
+    </div>
+    <div class="assemblage-num" style="margin-bottom:2rem;">Global South Solidarities — Student Contribution</div>
+    <div class="section-title" style="font-size:clamp(2rem,7vw,5rem);margin-bottom:0.5rem;">REFLECTING</div>
+    <div class="section-title" style="font-size:clamp(1rem,3vw,2rem);opacity:0.5;font-weight:400;font-style:italic;margin-bottom:0.3rem;">on the art of</div>
+    <div class="section-title" style="font-size:clamp(2rem,7vw,5rem);margin-bottom:2rem;">SOLIDARITY</div>
+    <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1rem,2.5vw,1.5rem);letter-spacing:0.4em;color:var(--red);margin-bottom:0.5rem;">RICHIK BANERJEE</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:#9e9688;letter-spacing:0.3em;">20 / 04 / 2026</div>
+    <div class="arrow-div" style="margin-top:3rem;">▼ ▼ ▼</div>
+    <div style="font-size:0.65rem;color:#9e9688;letter-spacing:0.2em;margin-top:0.5rem;">SCROLL TO DECLASSIFY</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- MAP OF LOOSE MOTIONS -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="map">
+  <div class="content-box tilt-right reveal">
+    <div class="file-badge">FILE 01</div>
+    <div class="watermark">INDEX</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 900" preserveAspectRatio="none">
+        <path class="scribble-line" d="M-20,200 C110,170 240,280 380,230 S560,150 700,210 S830,270 870,240"/>
+        <path class="scribble-line ink" d="M830,0 C800,130 840,280 790,420 S820,560 780,700 S810,830 790,900"/>
+        <path class="scribble-line thin" d="M60,0 C80,110 40,230 90,350 S50,480 100,610 S60,740 80,870"/>
+        <path class="scribble-line bold" d="M-20,650 C100,620 250,720 400,670 S580,590 720,650 S850,710 870,680"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">ASSEMBLAGE INDEX</div>
+    <div class="section-title">MAP OF LOOSE MOTIONS</div>
+    <div class="section-subtitle">Chapter Structure — Subject RB-2026</div>
+
+    <table class="map-table">
+      <thead>
+        <tr><th>Assemblage</th><th>Name</th><th>Pages</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">One</td><td class="name-col">the oomph of your saliva</td><td class="pages-col">2–4</td></tr>
+        <tr><td class="num">Two</td><td class="name-col">the signature of the state</td><td class="pages-col">5–7</td></tr>
+        <tr><td class="num">Three</td><td class="name-col">hagufying kobita</td><td class="pages-col">8–14, 30–35, 39–40</td></tr>
+        <tr><td class="num">Four</td><td class="name-col">the theatre of death-wish</td><td class="pages-col">15–18, 22–24</td></tr>
+        <tr><td class="num">Five</td><td class="name-col">becoming-schizo / the intravenous survivor</td><td class="pages-col">20–21, 25–29, 36–38, 41–42</td></tr>
+        <tr><td class="num">Six</td><td class="name-col">the glitch in the arrangement</td><td class="pages-col">43, 47–50, 52–53, 55–66, 68, 70, 72, 74–84</td></tr>
+        <tr><td class="num">Seven</td><td class="name-col">a wound is an event of surprise</td><td class="pages-col">44, 67, 69, 71, 73, 85</td></tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:2rem;">
+      <div class="timeline-label">UNASSIGNED NOTES</div>
+      <table class="notes-table">
+        <thead><tr><th>Note</th><th>Page(s)</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>"0"</td><td>19</td><td>unassigned</td></tr>
+          <tr><td>"2"</td><td>45–46</td><td>blank / image — unassigned</td></tr>
+          <tr><td>blank</td><td>51</td><td>unassigned</td></tr>
+          <tr><td>"1"</td><td>54</td><td>unassigned</td></tr>
+          <tr><td>wound</td><td>85</td><td>added page — assemblage seven</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sketch-note">This project is a way to addressing disparate ideas that come in as a playful gesture and become a field of thought-dots.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE ONE: THE OOMPH OF YOUR SALIVA (pp 2-4) -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="one">
+  <div class="content-box reveal">
+    <div class="file-badge">FILE 02</div>
+    <div class="watermark">OOMPH</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 1200" preserveAspectRatio="none">
+        <path class="scribble-line" d="M-20,180 C120,160 180,320 260,280 S420,150 520,210 S680,340 870,280"/>
+        <path class="scribble-line thin" d="M-10,450 C80,430 200,520 350,470 S550,380 680,440 S800,510 870,460"/>
+        <path class="scribble-line bold" d="M-20,750 C60,720 150,830 280,780 S450,680 580,740 S720,830 870,770"/>
+        <path class="scribble-line ink" d="M820,0 C790,120 830,280 780,400 S810,550 770,700 S800,850 780,1000"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage One — Pages 2–4</div>
+    <div class="section-title">THE OOMPH OF YOUR SALIVA</div>
+    <div class="section-subtitle">Solidarity & Creative Involution</div>
+
+    <div class="accent-card coral" style="transform:rotate(-2deg);">
+      <div class="accent-card-text">The oomph of your saliva coupled with the curves of your fleshy gum is the perfect chaos one desires to be collided with, a sweaty collision, erogenous convulsions driving one's tongue to the edge of sanity…I see your <span class="bangla">লোম</span> making nature calls…chutneyed sprouts of my longing lingering across the spread of your such calls!</div>
+    </div>
+
+    <div class="accent-card magenta" style="transform:rotate(1.5deg);">
+      <div class="accent-card-text" style="font-size:clamp(0.9rem,1.6vw,1.15rem);">her metallic clitoris suspends the <span class="bangla">চুল</span> of my cortex… she is a cosmic UV of suspension, a penal tube with a discreet autonomy, an ovulatory <span class="bangla">কুড়ো</span> that runs deep into the <span class="bangla">মেব্রো</span> of critical fantasy…</div>
+    </div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <div class="body-text">Solidarity knows nothing of 'damage control'. In this project, I would like to read the concept of solidarity from lens of a <em>creative involution</em>, a non-heteronormative desire that doesn't cater to the Oedipalizied regimes of narcissism or despair. Relations are borne out of relations and cannot be pre-empted by any grand socio-political macinery.</div>
+
+    <div class="key-point">
+      <div class="key-point-title">CORE THESIS</div>
+      <div class="body-text" style="margin:0;">Solidarity, here, is an act of <span class="highlight">creative abberation</span>, a pungent rupture in the ethics of social justice. Art that doesn't only disturb but spreads like an unwarranted desirous infection, where <em>excess</em> creates a playground of imagining untimely relations.</div>
+    </div>
+
+    <div class="body-text" style="margin-top:1.5rem;">Protests are slowly converting into spaces of 'safe mobility'. What is 'the <span class="bangla">জনগণ</span>'?</div>
+    <div class="body-text">I have been participating in some 'planned' protest marches and quite frankly, I don't understand it fully. While visibility is important on paper, I simply cannot consider 'planned' marches to be of any shock-use. Rather, the marches are blueprints of responsibilized affairs where people find solace in advertised walks and self-promotional humanism. Narcissism follows soon after and residents feel happy about doing their 'bit'.</div>
+    <div class="body-text">Protests can neither be systematized nor can rage be held accountable for irresponsible affairs. In its spectacular systematicity, protests are losing their inherent chaotic drives which are run by surpluses of emotions and risks. The surplus provokes a re-action of mobilization that incessantly provokes desires of shock-value whose usability doesn't necessarily align with the system of 'planned' operations.</div>
+    <div class="body-text">The shock is used both intuitively by the actors as well as the non-actors, that is, people who are both within and without the legality of the state. Shock-use cannot be fully apprehended by either the actors or the state, as it is the outcome of drives that run on the outpouring of two moments apparently: residue of time (residual past) and surplus-present (present which is more than the 'just' present).</div>
+    <div class="body-text">Rage knows no democracy or dissent. It is simply an affair of excess and the current staging of marches is taking away the rage of people while making them spaces of 'safe mobility'. The safety is, of course, maintained by the surveillance of the perpetrators, that is the government, against whom the marches are planned.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE TWO: THE SIGNATURE OF THE STATE (pp 5-7) -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="two">
+  <div class="content-box tilt-right reveal">
+    <div class="file-badge">FILE 03</div>
+    <div class="watermark">FREEDOM</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 1400" preserveAspectRatio="none">
+        <path class="scribble-line" d="M-10,120 C100,90 220,200 340,160 S500,80 620,140 S780,220 870,180"/>
+        <path class="scribble-line bold" d="M30,0 C50,150 20,300 60,450 S30,620 70,780 S40,950 60,1100"/>
+        <path class="scribble-line thin" d="M-20,680 C80,650 250,750 400,700 S580,620 700,680 S820,750 870,710"/>
+        <path class="scribble-line ink" d="M-20,1050 C120,1020 280,1120 420,1070 S600,980 750,1040 S860,1100 870,1060"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage Two — Pages 5–7</div>
+    <div class="section-title">THE SIGNATURE OF THE STATE</div>
+    <div class="section-subtitle">Freedom, Control & the Personal</div>
+
+    <div class="body-text">Hello folks. Here's some good news. Even freedom is a document, signed by the state. Signatures are omnipresent. <em>Total freedom is total anarchy</em>, something that can never be a possibility in life.</div>
+
+    <div class="key-point green">
+      <div class="key-point-title">MARGINS OF FREEDOM</div>
+      <div class="body-text" style="margin:0;">Life is a documentation of, what i call, <span class="highlight">'margins of freedom'</span>. Freedom has borderlines and margins beyond which nobody really knows what 'absolute freedom' feels like. Freedom is the seeable point, a catchable state of affairs, a sense-value that can be 'captured' by the logic of sense.</div>
+    </div>
+
+    <div class="body-text">Freedom is the capture of such margins, a knowable end in logic. It is a document of the state, a record of balance sheet. There's no such thing as 'absolute freedom' because absolute freedom is absolute anarchy, something which does not meet the required standards of a considerable free subject. Freedom is the standardization of a sensible subject (in control) and therein comes the idea of 'responsibilization'.</div>
+    <div class="body-text">Freedom is what the 'control society' wants you to believe in. Every act of 'given' freedom is a signature of the state, by the state and for the state. Freedom is an act of control considered by the state in exchange for acting responsibly within the limits of freedom.</div>
+    <div class="body-text">It's a moral prescription that is forced upon us in order to make ourselves feel guilty when (and if) somebody thinks of crossing over the 'margins of freedom'. So, it is freedom only that takes away the 'if' element from life and becomes a routinisation of control.</div>
+
+    <div class="timeline-item">
+      <div class="timeline-label">DECLARATION</div>
+      <div class="body-text" style="margin:0;">Freedom is a <em>debt</em> considered by the state and therefore, a direct demand of one's wilful submission to the sovereign power. Freedom is the <em>actuality</em> of control. Freedom is both a direct and an indirect surveillance of the state.</div>
+    </div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <div class="accent-card magenta" style="transform:rotate(-1.5deg);">
+      <div class="accent-card-text">I believe that my greatest strength will eventually lead to my irreparable downfall. I'm not a rational object of law.</div>
+    </div>
+
+    <div class="body-text">No, I don't believe that rationality applies when it comes to the idea of love. It's a surge of complex emotions that makes us choose insanity over sanity, absurdity over rationality, schizophrenia over logic. And the basic part is that I don't understand any of the above brackets of human desire.</div>
+    <div class="body-text">I don't wish to be an object of rationality anymore. I wish to be a creature, an effective multiple, a schizoid who takes divergent paths of actions, suffers centrifugally, moans and shrieks and farts and darts and bleeds puss, mucus and slimy yucky growths.</div>
+    <div class="body-text">I do crazy stuff because I've taken the route towards illogical cantonment. Learning makes us raw. Degrees polish the raw meat and makes it gaudy. Let's 'go a little schizo'! I'm an impulsive stream of chaos who readily accepts potty-travel over biriyani contests. I'm everything but a rational human.</div>
+
+    <div class="key-point">
+      <div class="key-point-title">THE PARADOX</div>
+      <div class="body-text" style="margin:0;">Isn't this rationality too, rationing my 'illogical cantonment'? This is the paradox! Solidarity can be about creating lines of relations that aren't clearly visible to our sense of social regimentation. But, that does't mean that the unclear foggy foamy lines of tension are missiing from the state of affairs!</div>
+    </div>
+
+    <div class="body-text">It's all about taking a leap of faith and embracing risks that are supposed to be go <em>wayward</em> as per the regimetation goes. There are pluralistic vectors of imagining solidarity and the ecology surrounding it's peopled design.</div>
+
+    <div style="text-align:center;margin:2rem 0;">
+      <div class="big-stmt" style="font-size:clamp(1.5rem,5vw,3.5rem);padding:1rem;">WHAT <span class="a">ARE</span> THESE <span class="r">PEOPLE</span><span class="dim">?</span></div>
+    </div>
+
+    <div class="body-text">But, who are these people? Antropocentric? Humanist? Moralist? Legalist? Rationalist? This? That? Rather, I aim at the problem of <em>what</em> are these people? What makes them people-like or not? What makes them enjoy the process of solidarity or not? What makes them accountable for their decisions or not?</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE THREE: HAGUFYING KOBITA (pp 8-14, 30-35, 39-40) -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="three" style="min-height:auto;padding-top:6rem;padding-bottom:6rem;">
+  <div class="content-box reveal" style="max-width:900px;">
+    <div class="file-badge">FILE 04</div>
+    <div class="watermark">HAGU</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 900 2400" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M870,100 C820,250 860,420 800,580 S830,760 790,920 S820,1100 800,1280 S830,1450 790,1620 S810,1800 780,1980"/>
+        <path class="scribble-line" d="M-20,350 C130,310 280,410 430,360 S620,280 760,340 S880,400 920,370"/>
+        <path class="scribble-line thin" d="M-20,900 C100,870 260,960 420,910 S600,830 740,890 S870,950 920,920"/>
+        <path class="scribble-line ink" d="M-20,1500 C80,1470 200,1570 380,1510 S560,1430 700,1490 S850,1560 920,1520"/>
+        <path class="scribble-line" d="M50,0 C70,180 30,360 80,540 S40,720 90,900 S50,1100 80,1300"/>
+        <path class="scribble-line thin" d="M-20,2000 C150,1970 320,2060 490,2010 S670,1930 800,1990 S900,2050 920,2020"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage Three — Pages 8–14, 30–35, 39–40</div>
+    <div class="section-title">HAGUFYING KOBITA</div>
+    <div class="section-subtitle">Hagu-Kobis, Broken Philosophy, Fecal Intimacy & Subaltern Poetics</div>
+
+    <!-- HAGU-KOBIS -->
+    <div class="body-text">They are the <em>excess</em> of samaj, disavowed extras, connivers and whose composition is very much grounded in the materiality of their existence. They are disgustive, vomitive and contagious in nature, echoing calls for pungency all around the streets of civility.</div>
+    <div class="body-text">I call them <span class="highlight">hagu-kobis</span> of the world, abjected yet metabollic in design, foul yet determines the health of a system. One can also look at hagu-kobis as the coolants of a system that runs on an 24*7 engine of factory-signifieds and certitides.</div>
+    <div class="body-text">Hagu-kobis, as a concept, can be looked at as an affect that looks at <em>joyful miscreancy</em>, a fun-filled ride where mischief takes the place of telos. The discarded invisibilized repugnant Others who are often considered to be disposable waste or a burden to the sacrality of state apparatus.</div>
+    <div class="body-text">I'm interested in the rhetoric of <em>disposability</em> as an embodies sign-structure that re-cyclically 'comes back' because the very structure that eliminates them needs the layout of profanity to be 'set apart' for future elimination from its blueprint. In this sense, structurally speaking, both sides are entwined in an ecology of semiotic entanglement, so much so that there is a kind of inter-active habitation that sets up a site of spatial contestation.</div>
+
+    <div class="sketch-note">This space, or <em>spatial involution</em>, is what Gary Genosko talks of when studying Guattari in his book, <em>Critical Semiotics</em> (2016).</div>
+
+    <div class="timeline-item">
+      <div class="timeline-label">GENOSKO / GUATTARI</div>
+      <div class="body-text" style="margin:0;">A-signifying semiotics are defined relationally by Guattari against signifying semiologies, beyond which — outside the strata defined by content and expression planes and form-matter-substance relations — are a-semiotic encodings (genetic and other codes involving signaletic communication among viruses, cells, bacteria that are stripped of any projected writing "onto" them (17).</div>
+    </div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- HAGU CONCEPTS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin:2rem 0;">
+      <div class="key-point green" style="transform:rotate(0.5deg);">
+        <div class="key-point-title" style="color:var(--green);">HAGU SHAKTI</div>
+        <div class="body-text" style="margin:0;font-size:0.85rem;">You can hear the smell, eat the smell, almost smell the smell, touch the smell, feel! That's what hagu does to you! It philosophizes itself into minor political notes.</div>
+      </div>
+      <div class="key-point green" style="transform:rotate(-0.5deg);">
+        <div class="key-point-title" style="color:var(--green);">HAGU IS FREEDOM</div>
+        <div class="body-text" style="margin:0;font-size:0.85rem;">Hagu is genderless, casteless, non-racist, a neutral motion in life! Hagu is freedom — colored scented freedom from the crutches of sovereign power.</div>
+      </div>
+    </div>
+
+    <!-- BROKEN PHILOSOPHY -->
+    <div class="timeline-item" style="margin-top:2rem;">
+      <div class="timeline-label">BROKEN PHILOSOPHY — THE COMMODE</div>
+      <div class="body-text" style="margin:0;">The birth of a commode is, what I call, 'broken philosophy'. We know that any active philosophical flow must carry some reactive disturbances for it to be (in)complete, thereby making philosophy 'move into' our life cycle. Consider the bathroom as the subjective motherland of bodily motion and the subjectivation of commode as an ethical birth of the bathroom-mother subject.</div>
+    </div>
+    <div class="body-text">The object here doesn't simply remain an utilitarian item of dailyness. Rather, as soon as the object is being created in the mind of the creator, (s)he is aware of the medical usefulness of the commode as well as humanizing the object so as to familiarize the commode with the users as a daily socio-ethical practicioner.</div>
+    <div class="body-text">The materiality of commode is 'trans(in)fused' (borrowing Ranjan Ghosh's idea) with human behavioral laws for it to be showcased as both a necessitated grotesque and the coprophilic jouissance that the subjectivated commode provides us with everyday. This is a daily intercourse that humans have everyday with commodes as the subjectivated grotesque. Commodes are our constant sexual partner. Hence, I disown the binary of the human and the non-human.</div>
+
+    <div class="accent-card olive" style="transform:rotate(-1deg);max-width:500px;">
+      <div class="accent-card-text">Philosophy is the everdayness of objects.</div>
+    </div>
+
+    <div class="sketch-note">Ranjan Ghosh, in his boi, <em>Trans(in)fusion</em>: Trans(in)fusion is a method of 'doing' and 'living' and our non-method too — a map with which we begin to think through issues, disciplines, discourses and expire at a point where the initial map remains with a smudge, a torn, frayed end, a splotch.</div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- PANOPTIC GAZE & HAGU POETRY (pp 30-35) -->
+    <div class="body-text">Panoptic gaze is okay but the infallible desire to be obedient towards the gaze is what makes the Gaze an all-pervasive discourse of the Bangali cultural hotspots. If there's no death, there's no life. If there's no expiration, there'll be no re-generation. If there's no filth, there cannot be civility. If there's no hagu, there's no system. If there's no pecchap, there cannot be any revolution born out of the dingy pathways of filthy desires.</div>
+    <div class="body-text">Poetry ceases to survive without the filthy economy of desiring-hagu. Hagu is not only material but also the im-materiality of metabolic capital that is both spiritual and fearful.</div>
+
+    <div class="key-point green">
+      <div class="key-point-title" style="color:var(--green);">METABOLIC CAPITAL</div>
+      <div class="body-text" style="margin:0;">Hagu is the only symptomatic evidence of life and remains the only symptom that reminds us of the fact that life existed in full flow. Quite interestingly, hagu can be linked to the desire for living to the fullest and also to the farthest possible destination in life's journey. Pungency is the only trace that there's life, whether living or dead. A corpse becomes alive in its travel to the process of decay and pungent dissemination. Pungency is the key to life. So is hagu!</div>
+    </div>
+
+    <div class="body-text">Poets are dispensable haggards, belonging to the lowest rung of the literary ladder. It is in their haggish dispensation that a poet reappropriates the <em>fallenness</em> of her literary practice. I call them 'hagu-kobi'. Hagu, because of their potty-smeared rule of existence in the hallowed domain of critical experts; hagu because kobis can be easily 'flushed out' from the princely states of ivy scholarship yet they remain in the undergarments of our earth, seeped into the soil and spread all over the land in a state of 'tensile inexactitude' as the abjected Other.</div>
+    <div class="body-text">'Pottyfication', and not pontification, is the new verticality of 'word-vomit' (Prof. Arka Chattopadhyay uses this term in a blurb in one of my books), a compostable expression of <em>desiring-hagu</em>, the very becoming of affect and the 'disgustification' of aesthetics as a way of metabolic regeneration.</div>
+    <div class="body-text">People often ask me, "Why do you give away free copies to everyone"? I smile and think softly, "Well, infection is free. You can get infected for free".</div>
+
+    <div class="accent-card deep" style="text-align:center;transform:rotate(0.5deg);">
+      <div class="accent-card-text">Enough of their gaze! Let us all embrace the catatonic pungency of 'hagu poetry', poetry-in-loose-motion.</div>
+    </div>
+
+    <!-- FECAL INTIMACY (pp 39-40) -->
+    <div class="body-text" style="margin-top:2rem;">Fecality is this state of perpendicular suspension of affect where the materiality of content matter distributes loathsome <span class="bangla">খেলামাখা</span> across universities and sense-order disciplines. Any form of fecal radical currency cannot be gauged as before or after. Fecality is the suddenness of cerebral motion, an <em>eeeew-yuuucky</em> celerity that feels like a desirable infection.</div>
+    <div class="body-text"><em>Hagufying kobita</em> is micropolitical in this sense, meaning that the very idea of poetic fecality (not SIMPLY poetic faculty), is virtually addressed in a commode-like eeeew-yuuuucky setting. The same old shit gives way to new shit!</div>
+    <div class="body-text">Hagu-kobi is a perverse chiasmatic understanding of subjectivity whose fecality offers a humus-like ecology of thought; a natural order returning back to the bowel-design of poetic-cellular repair.</div>
+
+    <div style="margin-top:1.5rem;">
+      <span class="tag">HAGU-KOBI</span>
+      <span class="tag amber">METABOLIC AFFECT</span>
+      <span class="tag green">FECAL INTIMACY</span>
+      <span class="tag">POTTYFICATION</span>
+      <span class="tag amber">DISGUSTIFICATION</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE FOUR: THE THEATRE OF DEATH-WISH (pp 15-18, 22-24) -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="four" style="min-height:auto;padding-top:6rem;padding-bottom:6rem;">
+  <div class="content-box tilt-right reveal" style="max-width:900px;">
+    <div class="file-badge">FILE 05</div>
+    <div class="watermark">LOVE</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 900 2200" preserveAspectRatio="none">
+        <path class="scribble-line ink" d="M40,0 C60,200 20,400 70,600 S30,820 80,1020 S40,1240 70,1440 S30,1650 60,1850"/>
+        <path class="scribble-line" d="M-20,280 C140,240 300,350 460,300 S640,220 780,280 S890,340 920,310"/>
+        <path class="scribble-line bold" d="M860,50 C830,220 870,400 820,580 S850,780 810,960 S840,1150 800,1340 S830,1530 790,1720"/>
+        <path class="scribble-line thin" d="M-20,1100 C120,1070 280,1170 440,1120 S620,1040 760,1100 S880,1160 920,1130"/>
+        <path class="scribble-line" d="M-20,1700 C90,1670 220,1760 380,1710 S560,1630 700,1690 S840,1750 920,1720"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage Four — Pages 15–18, 22–24</div>
+    <div class="section-title">THE THEATRE OF DEATH-WISH</div>
+    <div class="section-subtitle">Love, Nihilism & Schizometric Circuits</div>
+
+    <!-- LONGING POEMS -->
+    <div class="poem-block" style="font-size:clamp(1.2rem,2.2vw,1.6rem);">Longing for the tissue of one's agony, the scales of one's past,<br>the <span class="bangla">ছা</span> of one's desire, the blood of one's chahat,<br>the fabric of one's restlessness, the secrecy of one's beats,<br>the heat of one's tension, the drama of one's eroticism,<br>the cannibalism of one's appetite, the puss of one's thought,<br>the <span class="bangla">থিদে</span> of one's thirst, the saltiness of one's aloneness,<br>the brushing of one's dawn, the teeth of one's dusk,<br>the animism of one's trauma, the diagram of one's resistance,<br>the veins of one's silence, the cracks in one's skin,<br>the cuts of one's time, the curse of one's breath,<br>the pulse of one's vomit, the pact of one's stimulation,<br>the fear of one's failing in love...</div>
+
+    <div class="accent-card magenta" style="transform:rotate(1deg);">
+      <div class="accent-card-text" style="font-style:italic;">The semen of one's touch, the spit of one's alterity, the odour of one's excess, the cough of one's nudity, the strangulation of one's cornea, the rope of one's waiting, the abscess of one's detour, the ulcer of one's sensitivity, the <span class="bangla">ফোড়া</span> of one's summer, the <span class="bangla">পূজ</span> of one's stammering, the <span class="bangla">ময়লা</span> of one's desire, the <span class="bangla">মলাট</span> of one's <span class="bangla">বাসনা</span>, the falality of one's death wish, the muckiness of one's trauma-blanket, the commode of one's fever, the gel of one's absence, the botch of one's tongue, the runniness of one's smell, the pickle of one's garbage, the rubbish of one's affair, the cavity of one's letting go...</div>
+    </div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- LOVE SECTION -->
+    <div class="body-text">Now, I remember, in one of the interviews available on YouTube, James Baldwin talks of 'love' and how love as a sole idea hasn't been used as a political weapon or as an affective strategy for the upliftment of humanity or solidarity, in general.</div>
+    <div class="body-text">Love, as a concept, always refers to something else that defines what love is, more so about constructs and signifieds. Love isn't a destination of any sort. It's a journey that might take us to some place, an accidental elsewhere, which is never the case when we think of 'love' as a social category.</div>
+    <div class="body-text">I say, 'love' needs to be felt as a <span class="highlight">crematorial groundwork</span>, a theatre of death-wish, an excremental avalanche, the divine fall from grace. The rhetoric says that one must 'fall' in love but in terms of loving, everything else is considered but the 'fall'.</div>
+
+    <div class="accent-card purple" style="transform:rotate(-1.5deg);">
+      <div class="accent-card-text">Love is the footholding of expansive uncertainty, an essence of non-place, where desires catapult into jargons of authenticity. A 'restive dialectic' meets an ethics of restlessness where spots of time move into crevices of non-place, making a case for sublime accident.</div>
+    </div>
+
+    <div class="body-text">Love-making isn't just bodily but an affective prefigural construction where heterogenous components from various social fields and endo-graphic intensities converge in a psychosomatic carnival, with no formal end/ends. Love is like an orgy-driven power, able to manipulate the moods of hegemony into an ectopic pregnancy, an anomalous cavity, a semiological orchestrator of 'schizometric' circuits that doesn't rely on any willing suspension of disbelief.</div>
+
+    <div class="accent-card blue" style="transform:rotate(0.8deg);">
+      <div class="accent-card-text">Nihilism is more about engaging the profundity of the Other with the self, an integrated wiring of self-enquiry, affirming a psychosomatic reflexivity of 'ethical distanciation'. One's nihilism is one's route to the ideology of jouissance.</div>
+    </div>
+
+    <div class="body-text">Love has been totally instrumentalized and being made to function as a social, economic, racial, classed, casteist gendered Symbolic exchange (<em>informally formalized</em> transaction) which in turns responsibilizes the Oedipalized ecology of homotopic relations under the guise of liberal democracy.</div>
+
+    <div class="accent-card coral" style="transform:rotate(-0.5deg);">
+      <div class="accent-card-text">your earlobes raise the thermometer of my lungs...</div>
+    </div>
+
+    <div class="accent-card pink" style="transform:rotate(1deg);">
+      <div class="accent-card-text" style="font-size:clamp(0.9rem,1.6vw,1.15rem);">In between the folds of sweaty nerves and the tentacular lips of ovaries, between the bruises of hardcore nights and the blank puffy days, lies the navel of desire, the stretch marks of stenchy bites, curd-like gums and the vulva of muddy passions...</div>
+    </div>
+
+    <div class="accent-card deep" style="text-align:center;transform:rotate(-0.5deg);">
+      <div class="accent-card-text" style="font-size:clamp(1.1rem,2.5vw,1.8rem);">Let the white-coated tongue of ours taste the acidic burps of love-making.</div>
+    </div>
+
+    <div class="accent-card pink" style="transform:rotate(0.8deg);">
+      <div class="accent-card-text" style="font-size:clamp(0.85rem,1.5vw,1rem);">Let the wild porcupine-like bloodstream of love free us all from the prescription of love. It is a wilful abstraction, <span class="bangla">অ-ধার্মিক বেনিয়ম চ্যাটচ্যাটে</span> space whose technology lies suspended in a state of vertiginous blank sheet, always too far but always so easy!</div>
+    </div>
+
+    <div class="accent-card blue" style="text-align:center;transform:rotate(-0.3deg);">
+      <div class="accent-card-text">Being sexy is being vulnerable to the point of touching the skin of one's existential threshold. The touch becomes the fabric of the other's desire.</div>
+    </div>
+
+    <!-- DUST PARTICLE POEM -->
+    <div class="poem-block" style="margin-top:2rem;">love is like a dust particle<br>it is the particularity of a particle in the motion of dust<br>love isn't dustable<br>it ain't durable either<br>it is what it is<br>maybe the perpetual cojoining of ampersand<br>particle's particularity</div>
+    <div class="poem-block">loving you is like searching for the entry-exit point of a dust particle in life</div>
+
+    <div style="margin-top:1.5rem;">
+      <span class="tag">CREMATORIAL JOUISSANCE</span>
+      <span class="tag amber">SCHIZOMETRIC</span>
+      <span class="tag green">ECTOPIC TRANSCENDENCE</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE FIVE: BECOMING-SCHIZO (pp 20-21, 25-29, 36-38, 41-42) -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="five" style="min-height:auto;padding-top:6rem;padding-bottom:6rem;">
+  <div class="content-box reveal" style="max-width:900px;">
+    <div class="file-badge">FILE 06</div>
+    <div class="watermark">SCHIZO</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 900 2000" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,200 C130,170 290,270 450,220 S630,140 770,200 S890,260 920,230"/>
+        <path class="scribble-line" d="M880,0 C850,180 890,370 840,550 S870,740 830,930 S860,1120 820,1310 S850,1500 810,1690"/>
+        <path class="scribble-line thin" d="M-20,800 C100,770 250,860 410,810 S590,730 730,790 S860,850 920,820"/>
+        <path class="scribble-line ink" d="M60,0 C80,160 40,330 90,500 S50,680 100,860 S60,1050 90,1240 S50,1430 80,1620"/>
+        <path class="scribble-line" d="M-20,1400 C120,1370 280,1460 440,1410 S620,1330 760,1390 S880,1450 920,1420"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage Five — Pages 20–21, 25–29, 36–38, 41–42</div>
+    <div class="section-title">BECOMING-SCHIZO /<br>THE INTRAVENOUS SURVIVOR</div>
+    <div class="section-subtitle">Reflecting on the Art of Solidarity, Schizometric Thinking, Acts of Writing & Listening</div>
+
+    <!-- REFLECTING (pp 21-22) -->
+    <div class="body-text">What is solidarity? What do we mean by the term justice? How is Law getting the better of social justice? Where does the concept of solidarity fit in amidst the turmoil of social justice and Law?</div>
+    <div class="body-text">Solidarity, for me, is an act of creation, developing concepts from various domains of thought, be it social or antisocial (abjected side of the story) and I feel a deep sense of justice towards the creation of poetry not as a literary sidekick but as a solidary art form that doesn't depend on any school of thought but is a convergence of polyvocal desires and encrusted eroticism.</div>
+    <div class="body-text">'Encrustation of eroticism' is to define a pseudo-structural layer of ill-defined desires amongst the many other layers of thinking-equilibrium. My intention is to create a dialogue between the text and the reader (myself included) so as to design a fabric of solidarity, starting with the author and not at a distance.</div>
+    <div class="body-text">Reflections, I do believe, are supposed to go beyond mere representationalism and encounter a radical contingency 'from within'. The contingent is never outside the structure of alterity. The uncanny is housed within the structures of hospitality and ethics. The 'virtual' is the un-realized non-localizable potential of the real which Deleuze and Guattari discussed as opposed to the 'actual'.</div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- SCHIZOMETRIC THINKING (pp 26-27) -->
+    <div class="timeline-item">
+      <div class="timeline-label">'SCHIZOMETRIC THINKING'</div>
+      <div class="body-text" style="margin:0;">To define the concept is to address the limits of its definition. Every single piece of information (or 'signal') is an entangled <em>fold</em> of relations and processes, thriving on risky intercourse with eroticized equilibrium of <em>edges</em>. To be a <em>schizo</em> is to be a matter of disgustable stimuli, a feline-like habitation of porous bypasses, an unretractable irritant with an overt affinity for infectious lumps!</div>
+    </div>
+
+    <div class="key-point">
+      <div class="key-point-title">QUEERING THE LOCAL</div>
+      <div class="body-text" style="margin:0;">Firstly, queering the boundedness of what we define as 'local' will be one of the key elements in relation to the globality of 'global' and in such a process, my subproject will try and relate to the affective categories of resistance in the understanding of poetry as a tool to connect with 'tangential others'. Secondly, due to the large-scale shift towards the advancement of artificial intelligence and right-wing populism across the globe, the nature of cerebral capital is undergoing a massive change in the treatment (and preservation) of value and intellect. This truism of technology, or, what we can call, <span class="highlight">'technification of intellect'</span>, has created havoc in the field of humanities and social sciences.</div>
+    </div>
+
+    <div class="accent-card deep" style="transform:rotate(-0.8deg);max-width:600px;">
+      <div class="accent-card-text">Intellectuals don't inspire me. Cerebrals do. Intellectualism is idolatry-making. Cerebralism is game-making.</div>
+    </div>
+
+    <div class="body-text">The bureaucratization of knowledge produces (and promotes) intellectuals as prototypical sacrosanct religious figures of power. These intellectuals are produced by such formal bureaucracy, promoted by the logistical framework of power relation, and are left to be disillusioned in idolatry. Intellectuals are social constructs of cultural knowledge and this culture-power has got nothing to do with intellect (as matter). The grey matter is always under the contract of 'Bhawans' and offices of intellect-control.</div>
+
+    <div class="sketch-note">janitor's jhadu, rainbow, cotton candy, Brutus, pollutant, microbes…all are in solidarity with each other…eschatological leap into incorporeal becoming of time (Benjamin dials Gilles)…subjectivity is borne out of such impurities of transversal desires…</div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- ACTS OF WRITING (pp 36-37) -->
+    <div class="timeline-item">
+      <div class="timeline-label">CONTEMPLATING ABOUT ACTS OF WRITING</div>
+      <div class="body-text" style="margin:0;">We speak through writing but at the same time, writing speaks <em>back</em> to us. A continual negation of affirming both the presence of the reader and the writer. An entry into a critical <span class="highlight">double bind</span> that produces a negotiation between author and reader.</div>
+    </div>
+    <div class="body-text">In this case, both the reader and the writer can never reach their desired destinations as they live through continuous habitational displacement. Maybe, ethics lie in that displaced gap, an interminable opening.</div>
+
+    <div class="accent-card coral" style="transform:rotate(1deg);max-width:500px;">
+      <div class="accent-card-text">To write is to suffer from multiple deaths!</div>
+    </div>
+
+    <div class="body-text">Writing is not pleasurably pleasurable! It is the activation of infinitesimal slippery loops of negation and confusion. It is an act of expiration. The flaw becomes the lunatic 'flow' of inhuman drives and animalistic desires.</div>
+    <div class="body-text">Almost all my books carry errors. I am erroneous because mistakes make me a better lunatic. How can a lunatic better on his previous lunacy?</div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- SOLIDARITY AS LISTENING (pp 41-42) -->
+    <div class="timeline-item">
+      <div class="timeline-label">SOLIDARITY AS LISTENING</div>
+      <div class="body-text" style="margin:0;">Listening needs practice. It is an affective engagement that goes beyond the mere comprehensibility of whatever we've listened to. An everlasting residual practice that demands no perfectionism or any kind of probabilistic reasoning.</div>
+    </div>
+    <div class="body-text">Listening is an art, an abstract composition of verses, which both affects the listener and the speaker in an intensive spirit of critical intimacy. The practice of listening is never meant to signal the incoming of a missionist response. It is to 'delay' the sight of any automated probability. To listen is to listen more!</div>
+
+    <div class="key-point green">
+      <div class="key-point-title" style="color:var(--green);">SOLIDARITY DEFINED</div>
+      <div class="body-text" style="margin:0;">Schizometric thinking is everything and anything that crosses the limits of our syllabic thinking; anxieties, conflicts, tension, mood swings, curves of passion, will, all of the thought-dots coming together to form a union of some sort, a gestural democracy. <span class="highlight">Solidarity, is essentially, the practice of such a gestational space where lines of relations are borne out of the untimely potential of events. Solidarity, is the creation of the art of solidarity!</span></div>
+    </div>
+
+    <!-- CONFESSIONAL (p 42) -->
+    <div class="expand-header" onclick="toggle(this)" style="margin-top:2rem;">
+      <h3>THE CONFESSIONAL FRAGMENT</h3>
+      <span class="expand-arrow">+</span>
+    </div>
+    <div class="expand-body">
+      <div class="expand-inner">
+        <div class="body-text">I don't know what i want. At times, i want money and at other times, i choose anarchy. Sometimes, my rationality makes me want to feel secure and be safe but in the very next moment, i feel inclined to care less for safety. At times, i want to be a risky slimy creature and at other times, i feel that i think that i will be happy living my life as a potbellied bhadralok.</div>
+        <div class="body-text">Sometimes, i wish to be a poet who doesn't care for any kind of authentic settlement but, at other times, i feel my innards getting sliced open when i know that there's no seeable future in the materiality of revolt. Does nomadism carry any future? Am i a nomad or just a petit bourgeois who fantasizes about a distant revolution (to come) simply by daydreaming about stories from the pages of history?</div>
+        <div class="body-text">I don't know. I don't know. I don't know.</div>
+        <div class="body-text">Please understand that this ain't any existential rant about deep theory and stuff. It's the feeling, the felt transitions, the affective part or the encounter with transitions when reading that makes a text, jump out from the constraints of grammatical index and becomes 'in-itself', a medium of intravenous survival.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;">
+      <span class="tag amber">SCHIZOMETRIC</span>
+      <span class="tag green">GESTURAL DEMOCRACY</span>
+      <span class="tag">DOUBLE BIND</span>
+      <span class="tag blue">INTRAVENOUS SURVIVOR</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE SIX: THE GLITCH IN THE ARRANGEMENT -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="six" style="min-height:auto;padding-top:6rem;padding-bottom:6rem;">
+  <div class="content-box tilt-right reveal" style="max-width:900px;">
+    <div class="file-badge">FILE 07</div>
+    <div class="watermark">GLITCH</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 900 1200" preserveAspectRatio="none">
+        <path class="scribble-line" d="M-20,150 C110,120 240,230 380,180 S560,100 700,160 S840,220 920,190"/>
+        <path class="scribble-line bold" d="M850,0 C820,140 860,300 810,450 S840,610 800,770 S830,930 790,1080"/>
+        <path class="scribble-line ink" d="M-20,600 C80,570 210,660 360,610 S540,530 680,590 S820,650 920,620"/>
+        <path class="scribble-line thin" d="M70,0 C90,130 50,270 100,410 S60,560 110,710 S70,860 100,1010"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage Six — Pages 43, 47–50, 52–53, 55–66, 68, 70, 72, 74–84</div>
+    <div class="section-title">THE GLITCH IN THE ARRANGEMENT</div>
+    <div class="section-subtitle">Poetry as Loose Motion, Kobita, Micro-Poems & Fragments</div>
+
+    <!-- POETRY REFLECTIONS -->
+    <div class="expand-header" onclick="toggle(this)">
+      <h3>POETRY AS LOOSE MOTION</h3>
+      <span class="expand-arrow">+</span>
+    </div>
+    <div class="expand-body">
+      <div class="expand-inner">
+        <div class="body-text">Poetry is the approximation of desires and subsequent failures of its approximated states.</div>
+        <div class="body-text">…poems are inexact surpluses of stupidity, generating tectonic shifts in the cerebral space, catatonic gaps and scratches that drive the pleasure principle in search of an arrivant.</div>
+        <div class="body-text">Poems are Dionysian excess, the deformed surplus that drive madness and is, in turn, driven by stupidity: erring the responsibility of logic.</div>
+        <div class="body-text">The use-value of a poem depends on the irrationality of its inutility. <span class="bangla">যে কবিতা পড়া যায় বোঝা যায় সম্পূর্ণ হয় থেকে যায়, সেইটি কবিতা নহে, এক্কা</span> compromised familiar setup, <span class="bangla">যার</span> value pre-deterministic.</div>
+        <div class="body-text">If poetry is valued as transparent, what is transparent language then? I say, poetry is a 'fallen' language of investment, an investment of desires. To 'fall' from the grace-mark of value is what my poetry desires to be, a <em>fallen investment</em>.</div>
+        <div class="body-text">Poetry holds an autonomy of a 'fall', the 'fall' of common sense. Poetry breaks into droplets of desire.</div>
+        <div class="body-text" style="font-size:1.1rem;color:var(--amber);">Poetry can't be, rather, shouldn't be recited all the time. Poetry, for me, is a loose motion that critiques the 'relation of relation'. Poetry can be sensed via touch, smell and taste too.</div>
+        <div class="body-text"><span class="bangla" style="font-size:1.1rem;">কত অল্প জানি আমি! কাজেই আমি অল্প-অল্প করেই চলি।</span></div>
+      </div>
+    </div>
+
+    <div class="expand-header" onclick="toggle(this)">
+      <h3>WOMBING AN ECOLOGY OF SILLINESS</h3>
+      <span class="expand-arrow">+</span>
+    </div>
+    <div class="expand-body">
+      <div class="expand-inner">
+        <div class="body-text">…if we don't have the silliness to swim through the crevices in our repetitions then how come differences be expected in the everydayness of poetry? To become silly is to become courageous, to not make amends with the ossification of Sense.</div>
+        <div class="body-text">Everything makes sense if there's sensitivity in place. Everything makes sense once imagination loses its grip on the magnified shops of ossified sensibilities.</div>
+        <div class="body-text" style="color:var(--amber);">The personal is political and the political is transversal.</div>
+        <div class="body-text">There cannot be any <span class="bangla">মাপঝোক</span> in passion. It's raw, fleshy, pucky to the 'sensible' ears. Poetry is mucky pucky fleshy whatevering of passion, ethological drives that catapult into latitudes of nomadism. Poetry is the <span class="bangla">অবাস্তবতা</span> of passion.</div>
+      </div>
+    </div>
+
+    <div class="expand-header" onclick="toggle(this)">
+      <h3>KOBITA & MICROPOLITICS</h3>
+      <span class="expand-arrow">+</span>
+    </div>
+    <div class="expand-body">
+      <div class="expand-inner">
+        <div class="body-text">A glitch in an arrangement of moralist diction is where the becoming of poetry (as well as becoming 'in poetry') lies. Kobita is not an arrangement of convenient diction by a language expert. Kobita must stop making quick-sense in order to inhabit a strange tension in her schizo-becoming!</div>
+        <div class="body-text"><span class="bangla">কবিতা কোনো আবেগের গাইড বই না যার শুরু ও শেষ নৈতিকতার বাঁধনে আটকে থাকবে।</span></div>
+        <div class="body-text">Kobita springs up from the middle and stays so but in an illusion of an 'end'. Poetry, as thought-in-thought, liquidates the regimes of representation in language. At least, it tries so.</div>
+      </div>
+    </div>
+
+    <div class="accent-card deep" style="text-align:center;transform:rotate(-0.5deg);margin:2rem 0;">
+      <div class="accent-card-text" style="font-size:clamp(1.2rem,3vw,2rem);">Queering the homogeneity of seriousness is primarily what my poetic loose motion is all about!</div>
+    </div>
+
+    <div class="arrow-div">▼ ▼ ▼</div>
+
+    <!-- MICRO POEMS -->
+    <div class="timeline-label" style="margin-bottom:1rem;">FRAGMENTS & MICRO-POEMS</div>
+  </div>
+</section>
+
+<!-- MICRO GRID -->
+<div class="micro-grid">
+  <div class="micro-cell">Mistakes make me</div>
+  <div class="micro-cell">a wound is an event of surprise</div>
+  <div class="micro-cell">a piece of peace is a poem</div>
+  <div class="micro-cell">How can silence be worded?</div>
+  <div class="micro-cell">something has been left 'open'</div>
+  <div class="micro-cell">spaces are investments of the future</div>
+  <div class="micro-cell">How can we measure the vastness of a full stop?</div>
+  <div class="micro-cell">Poetry is the uncapped potential of an idea that is yet to be</div>
+  <div class="micro-cell">Where's my homeo-pathy for normalcy?</div>
+  <div class="micro-cell">nothing happens, nobody comes, nobody goes — more than twice</div>
+  <div class="micro-cell">Why is the color of my freedom, green today? Yesterday, it was magenta.</div>
+  <div class="micro-cell">Will i ever be able to live up to the expectations of her tears?</div>
+</div>
+
+<!-- MORE POEMS SECTION -->
+<section class="scroll-section" style="min-height:auto;padding-top:4rem;padding-bottom:4rem;">
+  <div style="max-width:800px;width:100%;margin:0 auto;">
+    <div class="poem-block reveal">Archiving memory is like walking on a tight rope<br>On one side, there's falling into oblivion<br>On the other, there's falling into concrete steps of familiarity<br>Both are archival possibilities.</div>
+    <div class="poem-block reveal">Promise of a vulture<br>nobody cares to go off track<br>these tracks of familiarity<br>lead us to an echo chamber of dead zones<br>Even vultures try and avoid dead meat from these zones of echo<br>The vultures are flying off track now</div>
+    <div class="poem-block reveal">Imagining euthanasia<br>God my! God my! God my!<br>Bestiality is like the flames of northern lights!<br>creatures belong to the belly of virtual<br>crocodiles light up the waters of absence<br>Waiting for euthanasia</div>
+    <div class="poem-block reveal">Many-a-times i have thought of writing something<br>but then<br>the thought itself writes in an automatic absence<br>Who is writing whom?<br>Thought or absence?</div>
+    <div class="poem-block reveal">What's poetry if not whatsapping the left overs from yet to-be to the uncapped lines of yets?<br>Yet it's called poetry!<br>&nbsp;&nbsp;yet and yeti<br>&nbsp;&nbsp;spongy jugalbandi</div>
+    <div class="poem-block reveal" style="color:var(--amber);"><span class="bangla">ভাষা তামাশা হতাশা বাতাসা কুয়াশা</span></div>
+    <div class="poem-block reveal">Gupchup gupchup gupchup <span class="bangla">গুপচুপ গুপচুপ</span> gupchup <span class="bangla">গুপচুপ গুপচুপ গুপচুপ</span> gupchup gupchup<br><br>By the way, who's there?</div>
+    <div class="poem-block reveal">Let's write one joke<br>abcdefghijklmnopqrstuvwxyz<br>even death can't mukti us from the sequence of letters</div>
+    <div class="poem-block reveal">Baudrillard score<br>fowl cutlet of a fowl cutlet of a fowles cutlet</div>
+    <div class="poem-block reveal" style="color:var(--amber);"><span class="bangla">Subtended signs — ময়দা মাখানো রুটি এবং জলহস্তীর পাকস্থলী — দুটি দুই গ্রহের চিহ্ন — তবে মিল তো আছেই বটে কোথাও একটা! জানা আছে কারুর?</span></div>
+    <div class="poem-block reveal" style="color:var(--amber);"><span class="bangla">দাড়ি ধরে মারো টান রাজা হবে খান খান</span><br><br><span style="font-size:0.85rem;color:#9e9688;">I do hope that the readers will be curious enough to translate the Bangla language as per their tongues!</span></div>
+    <div class="poem-block reveal">I'll cease to write as soon as nonsense becomes categorical.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ASSEMBLAGE SEVEN: A WOUND IS AN EVENT OF SURPRISE -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="seven">
+  <div class="content-box reveal" style="text-align:center;transform:rotate(0deg);">
+    <div class="file-badge">FILE 08</div>
+    <div class="watermark">WOUND</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 800" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,120 C100,90 230,190 370,140 S540,60 680,120 S810,180 870,150"/>
+        <path class="scribble-line" d="M820,0 C790,110 830,240 780,370 S810,500 770,630 S800,730 780,800"/>
+        <path class="scribble-line ink" d="M-20,480 C80,450 200,540 350,490 S530,410 670,470 S800,530 870,500"/>
+        <path class="scribble-line thin" d="M50,0 C70,90 30,190 80,290 S40,400 90,510 S50,620 80,730"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Assemblage Seven — Pages 44, 67, 69, 71, 73, 85</div>
+    <div class="section-title">A WOUND IS AN EVENT<br>OF SURPRISE</div>
+    <div class="section-subtitle">The Self, The Other & Becoming-Animal</div>
+
+    <div class="body-text" style="text-align:left;">The other of the self is also a creation of a reference where the self only is a referential posture of socio-cultural simulations. There's no self but only the other who in fact, wards off the posturing of a self. Society prides itself on the 'self-self' fashioning of subjects who are nothing but simulations of abstracted referents.</div>
+    <div class="body-text" style="text-align:left;">Who needs this 'self' in a human? The self doesn't even carry its own self-time. The other is the unreciprocated variant in a system of relations who waits in secrecy, waiting in 'real time', that which is unknowable to the state yet ever present in social fields. Reality is the distancing of the self and so, is always outside the self-fashioned 'self' of a Self.</div>
+    <div class="body-text" style="text-align:left;">A tick is the abominated other, the feared jaanwar, which i desire to-be. i wish to enter into the non-ness of a non-human and remain as a coiled other, who is very much capable of overturning the fabricated posture of its own subjective practice of truth.</div>
+    <div class="body-text" style="text-align:left;"><span class="bangla">মানুষ হয়ে বোকা বুলেছি।</span></div>
+
+    <div class="poem-block" style="margin-top:2rem;font-size:clamp(1rem,1.8vw,1.3rem);">What are thoughts if not an accident of the sensible?<br>A car slipping over <span class="bangla">রোডমাখা মাখানো</span> creamy sandesh<br>Theropod kafkas milking grey-eyed <span class="bangla">ভ্যাস</span><br>and a gymnast working night shift in KGB<br>Answers are no longer in proximity to the ears of institutions.</div>
+  </div>
+</section>
+
+<!-- ===== BIG STATEMENTS ===== -->
+<div class="big-stmt reveal">ONE CAN NEVER <span class="a">TOUCH</span> THE SOIL OF <span class="r">TRAUMA</span><br><span class="dim">UNLESS ONE LISTENS TO THE DEEP CALL OF</span> A <span class="a">WOUND</span>.</div>
+
+<div class="big-stmt reveal" style="font-size:clamp(1.2rem,4vw,2.5rem);">DEDICATED TO<br><span class="a">SOIL</span>…<span class="r">EARTHWORMS</span>…<span class="g">LIFE</span></div>
+
+<!-- FINAL -->
+<section class="scroll-section" style="min-height:50vh;">
+  <div style="text-align:center;">
+    <div class="poem-block reveal" style="font-size:clamp(1.3rem,3vw,2rem);color:#9e9688;border:none;">i will begin to write a poem<br>soon after these silences</div>
+    <div class="reveal" style="font-size:0.65rem;color:#9e9688;letter-spacing:0.5em;margin-top:2rem;">(incomplete)</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:3rem 2rem;text-align:center;border-top:1px solid rgba(200,168,75,0.05);">
+  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.5em;color:rgba(200,168,75,0.2);text-transform:uppercase;">Global South Solidarities — Student Contribution</div>
+  <div style="font-family:'Caveat',cursive;font-size:1rem;color:rgba(200,168,75,0.15);margin-top:0.5rem;font-style:italic;">dedicated to the phytoplankton of social justice</div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:rgba(200,168,75,0.08);letter-spacing:0.3em;margin-top:1rem;">FILE CLOSED // 20.04.2026</div>
+</footer>
+
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hidden'),2000)});
+
+// Progress
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('progress').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100+'%';
+});
+
+// Nav hide
+let ls=0;
+window.addEventListener('scroll',()=>{
+  const n=document.getElementById('nav'),s=window.scrollY;
+  if(s>ls&&s>100)n.classList.add('hide');else n.classList.remove('hide');
+  ls=s;
+});
+
+// Reveal
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Expand
+function toggle(h){h.classList.toggle('open');h.nextElementSibling.classList.toggle('open')}
+
+// TOC close
+document.querySelectorAll('.toc-link').forEach(l=>{l.addEventListener('click',()=>{document.getElementById('toc').classList.remove('open')})});
+
+// ===== CHAOTIC MARGIN SCRIBBLES =====
+// Mimics the raw green pen scrawls from Richik's original PDF
+(function(){
+  // Hide old bg canvas
+  const bgc=document.getElementById('bgScribble');
+  if(bgc)bgc.style.display='none';
+
+  function setupMargin(canvasId, side){
+    const c=document.getElementById(canvasId);
+    if(!c)return;
+    const ctx=c.getContext('2d');
+
+    function resize(){
+      const rect=c.getBoundingClientRect();
+      c.width=rect.width*2; // retina
+      c.height=window.innerHeight*2;
+      c.style.width=rect.width+'px';
+      c.style.height=window.innerHeight+'px';
+      draw();
+    }
+
+    function rnd(min,max){return min+Math.random()*(max-min)}
+    function rndInt(min,max){return Math.floor(rnd(min,max))}
+
+    // Generate a chaotic scribble cluster (like someone scrawling loops)
+    function drawScribbleCluster(cx,cy,radius,loops){
+      ctx.beginPath();
+      let x=cx+rnd(-radius*0.3,radius*0.3);
+      let y=cy+rnd(-radius*0.3,radius*0.3);
+      ctx.moveTo(x,y);
+      for(let i=0;i<loops;i++){
+        const cp1x=x+rnd(-radius,radius);
+        const cp1y=y+rnd(-radius,radius);
+        const cp2x=x+rnd(-radius,radius);
+        const cp2y=y+rnd(-radius,radius);
+        const ex=cx+rnd(-radius*0.8,radius*0.8);
+        const ey=cy+rnd(-radius*0.8,radius*0.8);
+        ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,ex,ey);
+        x=ex;y=ey;
+      }
+      ctx.stroke();
+    }
+
+    // Draw a long wandering line (like pen dragged across paper)
+    function drawWanderLine(startX,startY,length,drift){
+      ctx.beginPath();
+      let x=startX,y=startY;
+      ctx.moveTo(x,y);
+      const steps=rndInt(8,20);
+      for(let i=0;i<steps;i++){
+        const cp1x=x+rnd(-drift,drift);
+        const cp1y=y+length/steps*rnd(0.3,1.5);
+        const cp2x=x+rnd(-drift,drift);
+        const cp2y=y+length/steps*rnd(0.8,2);
+        y+=length/steps*rnd(0.7,1.3);
+        x+=rnd(-drift*0.5,drift*0.5);
+        ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,x,y);
+      }
+      ctx.stroke();
+    }
+
+    // Draw crossing horizontal scratches
+    function drawScratch(y,w){
+      ctx.beginPath();
+      const startX=rnd(0,w*0.2);
+      ctx.moveTo(startX,y);
+      const segs=rndInt(3,6);
+      let x=startX;
+      for(let i=0;i<segs;i++){
+        x+=rnd(w*0.1,w*0.3);
+        const cy1=y+rnd(-15,15);
+        ctx.quadraticCurveTo(x-rnd(5,20),cy1,x,y+rnd(-8,8));
+      }
+      ctx.stroke();
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      const w=c.width;
+      const h=c.height;
+
+      const colors=['#2d8a4e','#1a6b3a','#238b45','#2e7d4a','#1e7a3e'];
+
+      // Draw 4-7 big chaotic scribble clusters scattered vertically
+      const clusterCount=rndInt(4,7);
+      for(let i=0;i<clusterCount;i++){
+        ctx.strokeStyle=colors[rndInt(0,colors.length)];
+        ctx.lineWidth=rnd(1.2,3);
+        ctx.globalAlpha=rnd(0.3,0.7);
+        const cx=rnd(w*0.15,w*0.85);
+        const cy=rnd(h*0.05,h*0.95);
+        const radius=rnd(30,90);
+        const loops=rndInt(8,25);
+        drawScribbleCluster(cx,cy,radius,loops);
+      }
+
+      // Draw 3-5 long wandering vertical lines
+      const lineCount=rndInt(3,5);
+      for(let i=0;i<lineCount;i++){
+        ctx.strokeStyle=colors[rndInt(0,colors.length)];
+        ctx.lineWidth=rnd(0.8,2.5);
+        ctx.globalAlpha=rnd(0.2,0.55);
+        const sx=rnd(w*0.1,w*0.9);
+        const sy=rnd(-h*0.1,h*0.3);
+        const len=rnd(h*0.3,h*0.8);
+        const drift=rnd(20,60);
+        drawWanderLine(sx,sy,len,drift);
+      }
+
+      // Draw 5-10 small horizontal scratches
+      const scratchCount=rndInt(5,10);
+      for(let i=0;i<scratchCount;i++){
+        ctx.strokeStyle=colors[rndInt(0,colors.length)];
+        ctx.lineWidth=rnd(0.6,2);
+        ctx.globalAlpha=rnd(0.15,0.45);
+        drawScratch(rnd(h*0.05,h*0.95),w);
+      }
+
+      // Draw 2-3 tight spiral knots (like the concentrated scribble balls in the PDF)
+      const knotCount=rndInt(2,3);
+      for(let i=0;i<knotCount;i++){
+        ctx.strokeStyle=colors[rndInt(0,colors.length)];
+        ctx.lineWidth=rnd(1,2.5);
+        ctx.globalAlpha=rnd(0.25,0.55);
+        const kx=rnd(w*0.2,w*0.8);
+        const ky=rnd(h*0.1,h*0.9);
+        ctx.beginPath();
+        for(let a=0;a<Math.PI*rnd(6,14);a+=0.15){
+          const r=a*rnd(1.5,3.5)+rnd(-5,5);
+          const px=kx+Math.cos(a)*r+rnd(-3,3);
+          const py=ky+Math.sin(a)*r+rnd(-3,3);
+          if(a===0)ctx.moveTo(px,py);
+          else ctx.lineTo(px,py);
+        }
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha=1;
+    }
+
+    resize();
+    window.addEventListener('resize',resize);
+
+    // Redraw periodically with slight variation for organic feel
+    setInterval(()=>{draw()},12000);
+  }
+
+  setupMargin('marginL','left');
+  setupMargin('marginR','right');
+})();
+</script>
+</body>
+</html>

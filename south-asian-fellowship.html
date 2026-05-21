@@ -334,6 +334,55 @@ body::after{
 .card.forthcoming .card-name{color:rgba(36,25,50,0.55);}
 .card.forthcoming .card-stamp{color:var(--saffron-deep);}
 
+/* ═════ Project Statement dropdown (for live fellows) ═════ */
+.card-statement{
+  margin-top:4px;margin-bottom:10px;
+  border-top:1px dashed rgba(36,25,50,0.22);
+  border-bottom:1px dashed rgba(36,25,50,0.22);
+}
+.card-statement summary{
+  list-style:none;cursor:none;
+  padding:11px 0;
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--madder);font-weight:bold;
+  display:flex;align-items:center;gap:10px;
+  transition:color .22s;user-select:none;
+}
+.card-statement summary::-webkit-details-marker{display:none;}
+.card-statement summary .cs-toggle{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:14px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;
+  border:1.5px solid var(--madder);color:var(--madder);
+  background:transparent;
+  transition:transform .28s ease,background .22s,color .22s;
+  flex-shrink:0;
+}
+.card-statement[open] summary .cs-toggle{
+  transform:rotate(45deg);
+  background:var(--madder);color:var(--cream);
+}
+.card-statement summary:hover{color:var(--saffron-deep);}
+.card-statement .cs-content{
+  padding:4px 2px 16px;
+  animation:csReveal .35s ease both;
+}
+.card-statement[open] .cs-content p{
+  font-family:'IM Fell English',serif;
+  font-size:13.5px;line-height:1.7;
+  color:rgba(36,25,50,0.78);
+  font-style:italic;
+}
+.card-statement[open] .cs-content p em{
+  color:var(--madder-deep);font-style:italic;
+}
+@keyframes csReveal{
+  from{opacity:0;transform:translateY(-4px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
 /* ═════ CLOSING NOTE ═════ */
 .closing{
   padding:80px 80px 40px;max-width:880px;margin:0 auto;
@@ -468,21 +517,27 @@ footer{
 
   <div class="cards">
 
-    <!-- THREAD I -->
-    <article class="card forthcoming rv">
+    <!-- THREAD I · RICHIK BANERJEE -->
+    <article class="card rv">
       <span class="card-roman">I</span>
       <div class="card-eyebrow">Fellow · Thread 01</div>
-      <h2 class="card-name">Fellow<span class="last">Forthcoming</span></h2>
-      <p class="card-discipline">Decolonial storytelling — South Asian diasporic memory work.</p>
+      <h2 class="card-name">Richik<span class="last">Banerjee</span></h2>
+      <p class="card-discipline">Reflecting on the Art of Solidarity — Schizometric thinking, acts of writing &amp; listening.</p>
+      <details class="card-statement">
+        <summary><span class="cs-toggle">+</span>Project Statement</summary>
+        <div class="cs-content">
+          <p>Solidarity knows nothing of "damage control." This project reads solidarity through the lens of a <em>creative involution</em> — a non-heteronormative desire that does not cater to Oedipalized regimes of narcissism or despair. Through schizometric thinking, acts of writing and listening, the work designs a fabric of solidarity starting with the author and not at a distance — a creative aberration, a pungent rupture in the ethics of social justice.</p>
+        </div>
+      </details>
       <div class="card-tags">
-        <span class="card-tag">South Asia</span>
-        <span class="card-tag">Diaspora</span>
-        <span class="card-tag">Decolonial</span>
+        <span class="card-tag">Solidarity</span>
+        <span class="card-tag">Schizometric</span>
+        <span class="card-tag">India</span>
       </div>
       <span class="card-spacer"></span>
       <div class="card-foot">
-        <a class="card-cta" href="#">Read Project <span>→</span></a>
-        <span class="card-stamp">Coming 2025–26</span>
+        <a class="card-cta" href="/untitled%20folder/Richik%20Banerjee.html">Read Project <span>→</span></a>
+        <span class="card-stamp">Live</span>
       </div>
     </article>
 
@@ -597,7 +652,7 @@ function loopRing(){
   requestAnimationFrame(loopRing);
 }
 loopRing();
-document.querySelectorAll('a,button,.card,.card-cta').forEach(el=>{
+document.querySelectorAll('a,button,summary,.card,.card-cta').forEach(el=>{
   el.addEventListener('mouseenter',()=>{dot.classList.add('h');ring.classList.add('h');});
   el.addEventListener('mouseleave',()=>{dot.classList.remove('h');ring.classList.remove('h');});
 });
