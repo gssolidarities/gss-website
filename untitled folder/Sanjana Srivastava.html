@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Journey of Bleeding into Language — Sanjana Srivastava | GSS</title>
+<meta name="description" content="A long-form embodied essay on menstruation, endometriosis, silence, and folk healing — by Sanjana Srivastava, for Global South Solidarities." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,200..900,30..100,0..1;1,9..144,200..900,30..100,0..1&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   GSS · STUDENT CONTRIBUTION — SANJANA SRIVASTAVA
+   "My Journey of Bleeding into Language"
+   ============================================================ */
+
+:root{
+  /* — palette: parchment, oxblood, coral wash, turmeric — */
+  --paper:        #f1e2d0;   /* parchment / page */
+  --paper-warm:   #ecd6bf;   /* deeper parchment */
+  --coral:        #7d1818;   /* deep blood wash (was pinkish coral) */
+  --coral-deep:   #5e1414;   /* deeper blood (poem stage) */
+  --ink:          #1f120c;   /* body text */
+  --ink-soft:     #3a2419;   /* body softer */
+  --oxblood:      #6b1818;   /* deep blood */
+  --blood:        #8d1a1a;   /* saturated red — poem text */
+  --rust:         #a8431f;
+  --turmeric:     #b8902a;   /* goddess accent */
+  --turmeric-d:   #8a6a1c;
+  --whisper:      #b9907d;   /* faded text */
+  --line:         #b9907d55;
+  --shadow:       0 1px 0 #00000010;
+
+  /* — type — */
+  --display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+  --body:    "EB Garamond", Georgia, "Times New Roman", serif;
+  --mono:    "DM Mono", ui-monospace, monospace;
+
+  --measure: 38rem;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth; scroll-padding-top: 70px;}
+section[id]{ scroll-margin-top: 70px; }
+html, body{
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 21px;
+  line-height: 1.7;
+  font-weight: 420;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body{
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, #7d181814 0%, transparent 60%),
+    radial-gradient(1000px 500px at -10% 110%, #e0c1a022 0%, transparent 60%);
+}
+
+::selection{ background: var(--blood); color: var(--paper); }
+
+/* — paper grain — */
+body::before{
+  content:"";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.2  0 0 0 0 0.1  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* === SCROLL PROGRESS — a thread of blood === */
+.scroll-thread{
+  position: fixed; top: 0; left: 0;
+  height: 2px; width: 0%;
+  background: linear-gradient(90deg, transparent, var(--blood) 40%, var(--oxblood));
+  z-index: 9999;
+  transition: width 80ms linear;
+}
+
+/* === CURSOR — a small drop === */
+.drop{
+  position: fixed; top:0; left:0;
+  width: 14px; height: 14px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--blood);
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  z-index: 9998;
+  mix-blend-mode: multiply;
+  opacity: .55;
+  transition: width .2s, height .2s, opacity .25s;
+}
+.drop.is-hover{ width: 28px; height: 28px; opacity: .75; }
+@media (hover: none){ .drop{ display:none } }
+
+/* === STICKY NAV — appears after hero === */
+.nav{
+  position: fixed; top: 18px; right: 18px;
+  z-index: 100;
+  display: flex; gap: 8px;
+  background: #f1e2d0e6;
+  border: 1px solid var(--line);
+  padding: 9px 13px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 12px; letter-spacing: .09em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0; transform: translateY(-10px); pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.nav.show{ opacity:1; transform: translateY(0); pointer-events: auto; }
+.nav a{
+  color: var(--ink-soft); text-decoration: none;
+  padding: 4px 10px; border-radius: 999px;
+  transition: background .2s, color .2s;
+}
+.nav a:hover{ background: var(--blood); color: var(--paper); }
+
+/* === HERO === */
+.hero{
+  position: relative;
+  min-height: 100vh;
+  background: var(--coral);
+  color: var(--paper);
+  display: grid; place-items: center;
+  padding: 4rem 1.5rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* hero scallop border, an echo of the PDF page edge */
+.hero::before, .hero::after{
+  content:"";
+  position: absolute; left: 0; right: 0; height: 14px;
+  background-image:
+    radial-gradient(circle at 7px 14px, var(--paper) 7px, transparent 8px);
+  background-size: 14px 14px;
+  background-repeat: repeat-x;
+  z-index: 2;
+}
+.hero::before{ top: 0; transform: rotate(180deg);}
+.hero::after{ bottom: 0; }
+
+.hero-inner{
+  position: relative; z-index: 3;
+  text-align: center;
+  max-width: 60rem;
+}
+
+.epi-label{
+  font-family: var(--mono);
+  font-size: 12.5px; letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-bottom: 2.4rem;
+  opacity: .85;
+}
+.epi-label span{ display:inline-block; padding: 0 .6rem;}
+.epi-label .dot{ font-size: 18px; vertical-align: -2px; }
+
+.hero h1{
+  font-family: var(--display);
+  font-weight: 350;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  font-size: clamp(2.4rem, 7.6vw, 6.4rem);
+  line-height: 0.97;
+  letter-spacing: -0.022em;
+  color: var(--paper);
+  margin-bottom: 1.6rem;
+}
+.hero h1 .ampersand{ font-style: italic; color: var(--turmeric); }
+.hero h1 .word{ display: inline-block; opacity: 0; transform: translateY(20px) scale(.96); animation: bleed-in .9s cubic-bezier(.2,.7,.2,1) forwards;}
+@keyframes bleed-in{ to { opacity: 1; transform: translateY(0) scale(1);} }
+
+.hero-quote{
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+  font-weight: 350;
+  line-height: 1.55;
+  max-width: 38rem;
+  margin: 1.2rem auto 2.2rem;
+  color: var(--paper);
+  opacity: 0;
+  animation: bleed-in 1.4s ease 1.1s forwards;
+}
+.hero-quote::before, .hero-quote::after{
+  content: "";
+  display: block;
+  width: 1px; height: 26px;
+  background: var(--paper);
+  margin: 1rem auto;
+  opacity: .5;
+}
+.hero-quote cite{ font-style: normal; font-family: var(--mono); font-size: .78em; letter-spacing: .15em; text-transform: uppercase; opacity: .75; display:block; margin-top: 1rem;}
+
+.byline{
+  margin-top: 3.6rem;
+  display: flex; flex-direction: column; gap: .35rem;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--paper);
+  opacity: 0;
+  animation: bleed-in 1.6s ease 1.6s forwards;
+}
+.byline .author{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.85rem;
+  letter-spacing: .04em;
+  text-transform: none;
+  margin-bottom: .25rem;
+}
+.byline .div{ width: 36px; height: 1px; background: var(--paper); opacity: .5; margin: .5rem 0; }
+.byline .meta{ display: flex; gap: 1rem; align-items: center; font-size: 12px; opacity: .8; }
+.byline .meta span+span::before{ content:"·"; margin-right: 1rem; opacity:.5;}
+
+.hero-scroll{
+  position: absolute; bottom: 1.8rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--paper);
+  opacity: .65;
+  z-index: 4;
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+}
+.hero-scroll::after{
+  content: ""; display: block; width: 1px; height: 28px;
+  background: var(--paper);
+  animation: pulse 2.2s ease-in-out infinite;
+  transform-origin: top;
+}
+@keyframes pulse{ 0%,100%{ transform: scaleY(.4); opacity:.4 } 50%{ transform: scaleY(1); opacity: 1 } }
+
+/* === SECTIONS === */
+section{ position: relative; z-index: 2; }
+
+.chapter{
+  padding: 7rem 1.5rem;
+  position: relative;
+}
+.chapter-inner{ max-width: var(--measure); margin: 0 auto; }
+.chapter-wide{ max-width: 64rem; margin: 0 auto; }
+
+.chapter-mark{
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 1.4rem;
+  opacity: .85;
+  display: flex; align-items: center; gap: .7rem;
+}
+.chapter-mark::before, .chapter-mark::after{
+  content:""; flex: 1; height: 1px; background: var(--line);
+  max-width: 80px;
+}
+.chapter-mark::after{ display:none; }
+
+.chapter h2{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 320;
+  font-variation-settings: "opsz" 80, "SOFT" 60;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--oxblood);
+  margin-bottom: 2.6rem;
+  max-width: 30ch;
+}
+.chapter h2 em{ font-style: normal; color: var(--blood); }
+
+.chapter h3{
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--oxblood);
+  margin: 2.5rem 0 1rem;
+}
+
+.prose p{
+  margin-bottom: 1.5rem;
+  hyphens: auto;
+  text-align: left;
+}
+
+.prose p::first-letter{
+  /* default no drop cap; only on first paragraph of section via class */
+}
+
+.first-of-section::first-letter{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 4.6rem;
+  line-height: .85;
+  float: left;
+  margin: .35rem .55rem 0 0;
+  color: var(--blood);
+}
+
+.prose em{ font-style: italic; color: var(--ink-soft); }
+.prose strong{ font-weight: 600; color: var(--oxblood);}
+.pull{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 320;
+  font-size: clamp(1.55rem, 2.6vw, 2.15rem);
+  line-height: 1.25;
+  color: var(--oxblood);
+  margin: 2.6rem 0;
+  padding: 1rem 0 1rem 1.4rem;
+  border-left: 2px solid var(--blood);
+  max-width: 32rem;
+}
+
+/* — silence toggle: certain words can be muted/revealed — */
+.unspoken{
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--whisper);
+  transition: color .25s;
+}
+.unspoken::after{
+  content: "";
+  position: absolute; left: 0; right: 0; top: 48%;
+  height: 8px;
+  background: var(--ink);
+  opacity: .85;
+  transition: transform .35s ease;
+  transform-origin: left;
+  pointer-events: none;
+}
+.unspoken.is-spoken::after{ transform: scaleX(0); }
+.unspoken.is-spoken{ color: var(--blood); }
+
+/* === EPIGRAPH PANEL (transitions between sections) === */
+.transition{
+  padding: 6rem 1.5rem;
+  text-align: center;
+}
+.transition blockquote{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 320;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  line-height: 1.3;
+  max-width: 40rem;
+  margin: 0 auto;
+  color: var(--oxblood);
+}
+.transition blockquote em{ color: var(--blood); }
+
+/* === POEM STAGE — coral background, deep red text — direct echo of the PDF === */
+.poem-stage{
+  background: var(--coral);
+  color: var(--paper);
+  padding: 8rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.poem-stage::before, .poem-stage::after{
+  content:"";
+  position: absolute; left: 0; right: 0; height: 14px;
+  background-image: radial-gradient(circle at 7px 14px, var(--paper) 7px, transparent 8px);
+  background-size: 14px 14px;
+  background-repeat: repeat-x;
+  z-index: 2;
+}
+.poem-stage::before{ top: 0; transform: rotate(180deg);}
+.poem-stage::after{ bottom: 0; }
+
+.poem-title{
+  font-family: var(--display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  text-align: center;
+  color: var(--paper);
+  margin-bottom: 4rem;
+  letter-spacing: .01em;
+  text-transform: lowercase;
+}
+
+.poem{
+  max-width: 30rem;
+  margin: 0 auto;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 600;
+  color: var(--paper);
+  font-size: clamp(1.05rem, 1.5vw, 1.18rem);
+  line-height: 1.95;
+}
+.poem .stanza{
+  margin: 0 0 2.2rem;
+}
+.poem .stanza p{ margin: 0; }
+.poem .stanza.pause{ height: 1.4rem; }
+.poem .glyph{
+  text-align: center;
+  font-size: 1.3rem;
+  letter-spacing: .25em;
+  margin: 2.2rem 0;
+  opacity: .75;
+}
+
+.poem-stanza-reveal{
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.poem-stanza-reveal.in{ opacity: 1; transform: translateY(0);}
+
+/* === MEDICAL CARD — clinical interlude === */
+.med-card{
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  padding: 1.8rem 1.6rem;
+  margin: 2.5rem 0;
+  font-family: var(--mono);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  position: relative;
+}
+.med-card::before{
+  content: "Rx · clinical note";
+  position: absolute; top: -10px; left: 14px;
+  background: var(--paper);
+  padding: 0 .6rem;
+  font-size: 11px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--blood);
+}
+.med-card .drug{
+  display: block;
+  font-weight: 500;
+  color: var(--blood);
+  margin-bottom: .35rem;
+  letter-spacing: .04em;
+}
+.med-card + .med-card{ margin-top: 1rem; }
+
+/* === GODDESS CARDS === */
+.goddess-section{
+  background: var(--paper-warm);
+  padding: 7rem 1.5rem;
+  position: relative;
+}
+.goddess-section::before{
+  content:"";
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--turmeric);
+  opacity: .4;
+}
+.goddess-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.25rem;
+  max-width: 64rem;
+  margin: 3rem auto 0;
+}
+.goddess{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 1.8rem 1.6rem 2rem;
+  position: relative;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  cursor: pointer;
+  min-height: 280px;
+  display: flex; flex-direction: column;
+}
+.goddess:hover{
+  transform: translateY(-4px);
+  border-color: var(--turmeric);
+  box-shadow: 0 18px 40px -20px #6b1818bb;
+}
+.goddess .num{
+  font-family: var(--mono);
+  font-size: 11.5px; letter-spacing: .3em;
+  color: var(--turmeric-d);
+  text-transform: uppercase;
+  margin-bottom: .8rem;
+}
+.goddess .name{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 2.3rem;
+  line-height: 1;
+  color: var(--blood);
+  margin-bottom: .25rem;
+}
+.goddess .domain{
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--turmeric-d);
+  margin-bottom: 1rem;
+}
+.goddess .desc{
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.goddess .sigil{
+  position: absolute; bottom: 1rem; right: 1rem;
+  font-family: var(--display);
+  font-size: 1.4rem;
+  color: var(--turmeric);
+  opacity: .6;
+}
+
+/* === MIDWIFE GALLERY === */
+.midwife-section{
+  background: var(--paper);
+  padding: 7rem 0 5rem;
+}
+.midwife-intro{
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+.gallery{
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1.6fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+}
+.gallery figure{
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  border-radius: 1px;
+  filter: contrast(1.02) saturate(.96);
+}
+.gallery figure img{
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .9s cubic-bezier(.2,.7,.2,1), filter .6s;
+}
+.gallery figure:hover img{ transform: scale(1.04); filter: contrast(1.05) saturate(1.05);}
+.gallery figure figcaption{
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to top, #1f120cee, transparent);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 12.5px; letter-spacing: .12em;
+  padding: 2rem 1rem 1rem;
+  text-transform: uppercase;
+  transform: translateY(110%);
+  transition: transform .5s ease;
+}
+.gallery figure:hover figcaption{ transform: translateY(0);}
+.gallery .fig-1{ grid-column: 1; grid-row: 1; aspect-ratio: 3/5; }
+.gallery .fig-2{ grid-column: 2; grid-row: 1; aspect-ratio: 7/10; }
+.gallery .fig-3{ grid-column: 3; grid-row: 1; aspect-ratio: 1/2; }
+.gallery .fig-4{ grid-column: 1 / span 2; grid-row: 2; aspect-ratio: 5/3; }
+.gallery .fig-5{ grid-column: 3; grid-row: 2; aspect-ratio: 4/3; }
+.gallery-consent{
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .25em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  margin-top: 1.6rem;
+  opacity: .8;
+}
+
+/* === CODA === */
+.coda{
+  background: var(--coral);
+  color: var(--paper);
+  padding: 9rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.coda::before, .coda::after{
+  content:"";
+  position: absolute; left: 0; right: 0; height: 14px;
+  background-image: radial-gradient(circle at 7px 14px, var(--paper) 7px, transparent 8px);
+  background-size: 14px 14px;
+  background-repeat: repeat-x;
+  z-index: 2;
+}
+.coda::before{ top: 0; transform: rotate(180deg);}
+.coda::after{ bottom: 0; }
+.coda .lines{
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.3vw, 1.85rem);
+  color: var(--paper);
+  line-height: 2;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+.coda .lines p{ margin: 1.2rem 0;}
+
+/* === PDF EMBED === */
+.pdf-section{
+  padding: 7rem 1.5rem;
+  background: var(--paper-warm);
+}
+.pdf-frame{
+  max-width: 60rem; margin: 2rem auto 0;
+  border: 1px solid var(--line);
+  background: var(--ink);
+  position: relative;
+  aspect-ratio: 8.5/11;
+  box-shadow: 0 30px 80px -40px #1f120c;
+}
+.pdf-frame iframe, .pdf-frame embed, .pdf-frame object{
+  width: 100%; height: 100%;
+  border: 0;
+  display: block;
+}
+.pdf-fallback{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 13px;
+  text-align: center;
+  padding: 2rem;
+}
+.pdf-actions{
+  display: flex; gap: .8rem; justify-content: center;
+  margin-top: 1.5rem;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.pdf-actions a{
+  color: var(--oxblood); text-decoration: none;
+  padding: .7rem 1.2rem;
+  border: 1px solid var(--line);
+  transition: background .25s, color .25s, border-color .25s;
+}
+.pdf-actions a:hover{ background: var(--blood); color: var(--paper); border-color: var(--blood);}
+
+/* === REFERENCES === */
+.refs{
+  padding: 7rem 1.5rem 4rem;
+  background: var(--paper);
+}
+.refs-inner{ max-width: var(--measure); margin: 0 auto;}
+.refs h2{ margin-bottom: 2rem; }
+.ref-list{
+  list-style: none;
+  counter-reset: ref;
+  font-family: var(--body);
+  font-size: 17.5px;
+  line-height: 1.6;
+}
+.ref-list li{
+  counter-increment: ref;
+  padding: 1.2rem 0 1.2rem 3.4rem;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  color: var(--ink-soft);
+}
+.ref-list li::before{
+  content: counter(ref, decimal-leading-zero);
+  position: absolute; left: 0; top: 1.2rem;
+  font-family: var(--mono);
+  font-size: 12px; letter-spacing: .15em;
+  color: var(--blood);
+}
+.ref-list li em{ font-style: italic; color: var(--oxblood); }
+.ref-list a{
+  color: var(--blood);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.ref-list a:hover{ color: var(--oxblood); }
+
+/* === FOOTER === */
+footer{
+  padding: 3rem 1.5rem 4rem;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+footer a{ color: var(--turmeric); text-decoration: none; }
+footer a:hover{ color: var(--paper); }
+footer .em{ font-family: var(--display); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 16px; color: var(--paper); display:block; margin-bottom: .6rem;}
+footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4rem auto; opacity: .5;}
+
+/* === REVEAL === */
+.reveal{ opacity: 0; transform: translateY(18px); transition: opacity 1s ease, transform 1s ease;}
+.reveal.in{ opacity: 1; transform: translateY(0);}
+
+/* === MENSTRUAL CYCLE — circular indicator (left side) === */
+.cycle{
+  position: fixed;
+  left: 22px; bottom: 22px;
+  width: 54px; height: 54px;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0; transition: opacity .4s;
+}
+.cycle.show{ opacity: .9; }
+.cycle svg{ width: 100%; height: 100%; transform: rotate(-90deg);}
+.cycle circle{ fill: none; stroke: var(--line); stroke-width: 1.5;}
+.cycle .arc{ stroke: var(--blood); stroke-width: 1.5; stroke-linecap: round;}
+.cycle .num{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-family: var(--mono);
+  font-size: 11px; color: var(--oxblood);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 720px){
+  body{ font-size: 19.5px; line-height: 1.65;}
+  .chapter{ padding: 4.5rem 1.25rem;}
+  .gallery{
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+  }
+  .gallery .fig-1, .gallery .fig-2, .gallery .fig-3,
+  .gallery .fig-4, .gallery .fig-5 { grid-column: auto; grid-row: auto; aspect-ratio: 4/5;}
+  .gallery .fig-4{ grid-column: 1 / span 2; aspect-ratio: 5/3;}
+  .nav{
+    top: 12px; right: 12px; left: 12px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    font-size: 10.5px; padding: 7px 9px;
+    border-radius: 999px;
+  }
+  .nav::-webkit-scrollbar{ display: none;}
+  .nav a{ padding: 4px 9px; flex-shrink: 0;}
+  .pull{ font-size: 1.45rem; }
+  .cycle{ width: 42px; height: 42px;}
+  .first-of-section::first-letter{ font-size: 3.6rem; }
+  .byline .meta{ flex-direction: column; gap: .35rem; align-items: center; text-align: center;}
+  .byline .meta span+span::before{ content: ""; margin: 0;}
+  .hero{ padding: 4rem 1.25rem 6rem;}
+  .hero h1{ line-height: 1.0;}
+  .hero-scroll{ display: none;}
+  .goddess-grid{ gap: 1rem;}
+  .goddess{ min-height: auto;}
+  .pdf-frame{ aspect-ratio: 8.5/14;}
+  .chapter h2{ font-size: 2.1rem; }
+  .epi-label{ letter-spacing: .25em; font-size: 11.5px;}
+  .ref-list{ font-size: 16.5px;}
+  .ref-list li{ padding-left: 2.6rem;}
+}
+
+@media (max-width: 480px){
+  .nav{ font-size: 10px;}
+  .nav a{ padding: 3px 7px;}
+}
+
+/* — print styles — */
+@media print{
+  body{ background: white; color: black;}
+  .nav, .scroll-thread, .drop, .cycle, .hero-scroll, .pdf-section, .pdf-actions{ display: none;}
+}
+</style>
+</head>
+<body>
+
+<!-- Floating chrome -->
+<div class="scroll-thread" id="thread"></div>
+<div class="drop" id="drop" aria-hidden="true"></div>
+<div class="cycle" id="cycle" aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44"></circle>
+    <circle class="arc" cx="50" cy="50" r="44"
+      stroke-dasharray="276.46" stroke-dashoffset="276.46" id="arc"></circle>
+  </svg>
+  <div class="num" id="cycleNum">0%</div>
+</div>
+
+<nav class="nav" id="nav" aria-label="Section navigation">
+  <a href="#inheritance">Inheritance</a>
+  <a href="#poems">Poems</a>
+  <a href="#diagnosis">Diagnosis</a>
+  <a href="#midwife">Midwife</a>
+  <a href="#goddesses">Goddesses</a>
+  <a href="#pdf">PDF</a>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="hero-inner">
+
+    <div class="epi-label">
+      <span>Global South Solidarities</span><span class="dot">✦</span><span>Student Contribution</span>
+    </div>
+
+    <h1>
+      <span class="word" style="animation-delay:0s">My</span>
+      <span class="word" style="animation-delay:.08s">Journey</span>
+      <span class="word" style="animation-delay:.16s">of</span>
+      <span class="word" style="animation-delay:.24s">Bleeding</span>
+      <br/>
+      <span class="word" style="animation-delay:.32s">into</span>
+      <span class="word" style="animation-delay:.40s">Language</span>
+    </h1>
+
+    <div class="hero-quote">
+      Woman, remember. You have the memory living deep in your mind, in your blood, in your lifegiving darkness. Reach down to it and bring it forth.
+      <cite>— Walker, 1990</cite>
+    </div>
+
+    <div class="byline">
+      <div class="author">Sanjana Srivastava</div>
+      <div class="div"></div>
+      <div class="meta">
+        <span>20 &nbsp;/&nbsp; 04 &nbsp;/&nbsp; 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">descend</div>
+</header>
+
+<!-- ==================== § I · THE INHERITANCE ==================== -->
+<section class="chapter" id="inheritance">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ I &nbsp; The Inheritance</div>
+
+    <h2 class="reveal">A silence taught before language.</h2>
+
+    <div class="prose">
+      <p class="reveal first-of-section">I grew up in a middle-class, conventional Indian household. And, stereotypical Indian households have certain things that are never meant to be spoken aloud. I was around thirteen when I got my first period. I remember being quietly taken into a room, away from everyone else, as if something had happened that needed to be hidden. The silence around it made it feel less like a natural change and more like a secret. It was almost like something shameful. I did not understand what was happening to my body. I was terrified of the blood, convinced that something was wrong with me, that I had some strange disease that could not be named in public. Instead of reassurance, I was told this would happen every month. I was told that I would have to learn to live with the pain, the discomfort, and the inconvenience. And more than anything, I would have to learn to carry it quietly. Pain was not something to be expressed. I was expected to remain functional, and to go about my days as if nothing had changed.</p>
+
+      <p class="reveal">There was an unspoken rule that the pain was mine to endure, but not to share. And with that came a new set of boundaries. I was told to keep my distance from boys, to be hyper-aware of my body in ways I had never been before. The fear of stains followed me everywhere — on clothes, on chairs, in beds, in public spaces. The idea that someone might see, especially a male member of the family, felt like the ultimate humiliation. Even the visibility of a pad (used or unused) became loaded with shame, something to be hidden as carefully as the experience itself. I remember the few times my father accidentally noticed the stains, and how, in an instant, I could no longer meet his eyes. A quiet, overwhelming shame would settle in me, as if something deeply private had been exposed. And I did not know how to exist in that shared space anymore.</p>
+
+      <p class="reveal">There were also rituals of impurity. During those days, I was not allowed to enter the temple or any <em>“sacred”</em> space. My body, I was told, was impure. Only after a final bath, like, washing my hair, cleansing myself thoroughly, could I return to spaces considered <em>“sacred”</em>. I was told not to touch pickles, holy books, or even images of gods and goddesses. I was warned that my presence alone could spoil, defile, or contaminate what was otherwise considered pure.</p>
+
+      <p class="reveal">Growing up with these beliefs, I often found myself wondering what I had done wrong. Something so natural was wrapped in embarrassment, silence, and shame. It felt like I was being asked to carry not just physical pain, but also a quiet burden of stigma. And, I had never chosen this, but I was expected to accept without question.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== § II · THE WATCHING ==================== -->
+<section class="chapter" id="watching">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ II &nbsp; The Watching</div>
+
+    <h2 class="reveal">A body learning to <em>monitor</em> itself.</h2>
+
+    <div class="prose">
+      <p class="reveal first-of-section">Since then, I have lived with blood in its many forms, like, different shades, textures, intensities. Sometimes, they are bright red, sometimes barely there, sometimes overwhelming. Sometimes, they are thick like jelly, and sometimes, thin like water. At times, they are brown, and at times, almost black. I have come to think of myself as a monthly bleeder, marking time not just by calendars, but by the rhythms of my body.</p>
+
+      <p class="reveal">Over the years, I have quietly mastered the art of managing pain; more accurately, minimizing it, softening it, hiding it. Because the pain I felt was never quite seen as <em>“real”</em> pain, never urgent enough to be acknowledged, never significant enough to interrupt life. So, I learned to carry it as something ordinary, something expected. It became part of the fabric of my days, something I was meant to endure without question.</p>
+
+      <p class="pull reveal">And somewhere along the way, I began to realize that bleeding itself is not always the hardest part. What weighs heavier is the constant effort to conceal it, to mask the uneasiness, to move through the world as though nothing inside me is aching. The struggle is not just in the body, but in the silence that is asked to maintain.</p>
+
+      <p class="reveal">Along with all of this, there was a constant watching of my body, of its paces, of every small change. How many days would it last? Which days would be heavy, which ones lighter? What colour was the blood today — red, pink, brown, almost black? Was it smooth, clotted, thick, or stringy? These questions became a quiet routine, a kind of ongoing assessment I carried within myself. And, all of this watching and monitoring happened in silence, hush-hush, almost secretive. If something felt off, if the bleeding did not follow its expected pattern, that too had to be hushed. A flow that was too heavy, too light, too strange — none of it was meant to be spoken of openly. Everything had to be contained, managed quietly, as if even the irregularities of my body were things to be concealed.</p>
+
+      <p class="reveal">Over time, this gaze turned inward. I began to monitor myself just as closely, keeping track of every detail, as if understanding my body meant keeping it under control. It was not just external expectations, but an internalized vigilance. It was a self-surveillance that I had learned to practice without even realizing it. Eventually, I came to believe that my body had to follow a kind of discipline. I believed that there had to be a linearity to my bleeding. I had to be a <em>“linear”</em> bleeder. The cycle was expected to be precise in timing, flow, colour, and texture. Everything had to be in order; everything had to be predictable. And when it was not, it was immediately marked as a problem. Irregularity meant concern and action. It meant visits to the gynaecologist, ultrasounds, and prescriptions. My body was something to be measured, regulated, and corrected whenever it strayed from what was considered <em>“normal”</em>.</p>
+
+      <p class="reveal">And then life went on, like it does for so many monthly bleeders. I became continually aware of my cycle, as I counted the days, noticed the colour, the texture, the shifts. It was always there in the background like a quiet accounting of my body. The pain and cramps became something to manage as if nothing were happening, something to carry without pause or acknowledgment. And over the years, I felt the intensity grow slowly and steadily, until what once seemed bearable began to demand more of me than I had ever been taught to admit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== § III · SCRIBBLES ==================== -->
+<section class="chapter" id="scribbles">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ III &nbsp; Scribbles in the Middle of Pain</div>
+    <h2 class="reveal">A body documenting itself.</h2>
+    <div class="prose">
+      <p class="reveal first-of-section">Some scribbles were born in the middle of this pain. Some words were written between cramps, between breaths, when my body would not let me rest and language felt like it was slipping away. I wrote not because I was clear, but because I needed to hold onto something as the waves moved through me. In those moments, I began to theorise pain, to give it shape, to rhetoricise it, to turn it into something that could be seen, heard, and taken seriously. I worked on pain, through pain, with pain, so it would not remain invisible, so it would not be fired as something small or ordinary. I produced fragments that were not polished thoughts; they were traces of a body insisting on being acknowledged. They were marks of thinking through discomfort, of trying to understand what was happening beneath my skin while it was happening. My body turned to writing, sometimes, as it was a body documenting itself, a body refusing silence, a body making sense of its own becoming.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== POEM I ==================== -->
+<section class="poem-stage" id="poems">
+  <h3 class="poem-title">i am not quiet when i bleed</h3>
+
+  <div class="poem">
+    <div class="stanza poem-stanza-reveal">
+      <p>my body splits open</p>
+      <p>not gently</p>
+      <p>but like something forced</p>
+      <p>again and again into rupture</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>blood does not flow</p>
+      <p>it seeps, it drips, it gathers</p>
+      <p>thick, dark, stubborn</p>
+      <p>like something rotting inside me</p>
+      <p>refusing to leave cleanly</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>inside,</p>
+      <p>my abdomen twists into knots</p>
+      <p>tight, brutal, unrelenting</p>
+      <p>as if my muscles are being wrung out</p>
+      <p>by hands I cannot see</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>this is not poetic</p>
+      <p>this is a body in distress</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>my back feels like it is cracking under weight</p>
+      <p>a slow, grinding ache</p>
+      <p>dragging down my spine</p>
+      <p>as if something heavy is hooked into me</p>
+      <p>and pulling</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>there is nausea</p>
+      <p>sour, rising, invasive</p>
+      <p>climbing up my throat</p>
+      <p>making even breath feel contaminated</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>and the wetness</p>
+      <p>endless, sticky, suffocating</p>
+      <p>blood sitting against my vagina</p>
+      <p>too long</p>
+      <p>too warm</p>
+      <p>too much</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>my body feels raw</p>
+      <p>sore in places that burn</p>
+      <p>chafed, swollen, overexposed</p>
+      <p>like I am wearing my insides</p>
+      <p>on the outside</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>nothing about this is clean</p>
+      <p>it clots,</p>
+      <p>it clumps,</p>
+      <p>it stains,</p>
+      <p>it smells faintly metallic</p>
+      <p>like something breaking down</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>and still,</p>
+      <p>I am expected to sit still</p>
+      <p>to smile</p>
+      <p>to act untouched</p>
+      <p>as if this ugliness</p>
+      <p>does not exist</p>
+      <p>as if my body is not</p>
+      <p>struggling</p>
+      <p>leaking</p>
+      <p>hurting</p>
+      <p>as if I am not</p>
+      <p>quietly enduring</p>
+      <p>something that feels</p>
+      <p>this violent</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>I was taught to hide this</p>
+      <p>to make it small</p>
+      <p>to make it invisible</p>
+      <p>but there is nothing delicate here</p>
+      <p>this is not a soft red bloom</p>
+      <p>this is rupture</p>
+      <p>this is excess</p>
+      <p>this is a body pushed to its edge</p>
+      <p>and I am inside it</p>
+      <p>every month</p>
+      <p>asked to call it normal</p>
+      <p>asked to call it nothing</p>
+      <p>while it tears through me</p>
+      <p>like it always has</p>
+      <p>and no one ever names it</p>
+      <p>for what it is</p>
+    </div>
+
+    <div class="glyph">/ / /</div>
+  </div>
+</section>
+
+<!-- ==================== POEM II ==================== -->
+<section class="poem-stage" id="poem-2">
+  <h3 class="poem-title">i write where it hurts</h3>
+
+  <div class="poem">
+    <div class="stanza poem-stanza-reveal">
+      <p>blood gathers first</p>
+      <p>dark, slow, stubborn</p>
+      <p>then spills</p>
+      <p>thicker on some days, thinner on others</p>
+      <p>iron, damp, almost decay</p>
+      <p>like rusted memory</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>it twists</p>
+      <p>coils</p>
+      <p>tightens around my insides</p>
+      <p>until even breathing feels negotiated</p>
+      <p>my abdomen becomes a site of argument</p>
+      <p>my back a long, dragging sentence</p>
+      <p>that refuses to end</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>inside,</p>
+      <p>my uterus folds into violence</p>
+      <p>cramps gripping like teeth</p>
+      <p>biting down</p>
+      <p>again</p>
+      <p>again</p>
+      <p>again</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>my vagina feels worn</p>
+      <p>tender in ways that have no polite language</p>
+      <p>I shift, adjust, endure</p>
+      <p>as if I can rearrange discomfort</p>
+      <p>into something manageable</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>but I began to write</p>
+      <p>not because I had clarity</p>
+      <p>but because the pain needed somewhere to go</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>I write in the middle of cramps</p>
+      <p>in the pauses between waves</p>
+      <p>in the moments when my body feels too loud</p>
+      <p>for silence</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>writing does not stop the pain</p>
+      <p>but it holds it</p>
+      <p>gives it edges</p>
+      <p>gives it form</p>
+      <p>gives it a place outside my body</p>
+      <p>even if only for a moment</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>so I write</p>
+      <p>through the blood</p>
+      <p>through the ache</p>
+      <p>through the heaviness</p>
+    </div>
+
+    <div class="stanza poem-stanza-reveal">
+      <p>I write because</p>
+      <p>if I name it</p>
+      <p>if I trace it</p>
+      <p>if I let it exist in words</p>
+      <p>then maybe</p>
+      <p>I am not only bleeding</p>
+      <p>I am also</p>
+      <p>slowly</p>
+      <p>learning how to heal</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== § IV · THE MISNAMING ==================== -->
+<section class="chapter" id="diagnosis">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ IV &nbsp; The Misnaming</div>
+
+    <h2 class="reveal">My body translated into <em>nerves</em>.</h2>
+
+    <div class="prose">
+      <p class="reveal first-of-section">When the pain grew harder to dismiss and when it began to interrupt rather than quietly accompany my days, I sought medical help. I was told it was irritable bowel syndrome, caused by stress and anxiety. It felt that my body was translated into nerves; my pain was rewritten as emotion. I was given medication meant to calm what was assumed to be internal unrest and sent back into my life with a diagnosis that offered reassurance, but no real relief.</p>
+
+      <p class="reveal">For the next five to six years, I lived within that explanation. I adjusted myself around the pain, planned my days in anticipation of it, learned to endure not as a sign of strength but as a necessity. Steadily, I began to mistrust my own body, as I questioned the legitimacy of what I was feeling. I came to understand how easily suffering becomes invisible when it does not leave behind clear evidence. My suffering was invisible because it resisted appearing on scans, reports, or tests. My pain returned with every menstrual cycle, consistent and insistent. However, medically, it did not exist. It carried no authority because it had not yet been named in a language that medicine recognizes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- transition -->
+<section class="transition">
+  <blockquote class="reveal">
+    Years later, that language finally shifted. <em>Endometriosis.</em> A word that did not mark the beginning of my pain, but its recognition.
+  </blockquote>
+</section>
+
+<!-- ==================== § V · THE NAMING ==================== -->
+<section class="chapter" id="naming">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ V &nbsp; The Naming</div>
+    <h2 class="reveal">The past <em>rearranged</em> itself.</h2>
+
+    <div class="prose">
+      <p class="reveal first-of-section">The condition had always been there; only its acknowledgment had arrived late. With that naming, something changed. My pain no longer had to justify itself or be translated into something more acceptable. It was allowed to exist as pain. For the first time, I felt a strange kind of comfort, not because the pain had lessened, but because it had finally been believed. In that flash, the past rearranged itself. The years of pain, of misnaming, of being unheard, began to make sense. Everything that came before that diagnosis had existed outside the boundaries of medical legitimacy. What failed me was not medicine alone, but the absence of listening.</p>
+
+      <p class="pull reveal">This story extends beyond the personal; it is rhetorical. It reveals how women's pain is often sorted, translated, delayed, and displaced into narratives of stress, weakness, or imagination. My body became a site where evidence was demanded before belief could be granted. This project emerges from that rupture and from the space between what the body knows and what medicine is willing to name.</p>
+
+      <p class="reveal">As Gloria Steinem (1978) once imagined, if men were the ones who menstruated, it would likely be celebrated, ritualized, funded, and spoken of with pride rather than silence. However, as menstruation is associated with women, it is rendered ordinary and pushed into silence. It becomes something to be managed quietly, spoken of in hushed tones, if at all. Within this culture of silence, a range of gynaecological conditions, like, endometriosis, PCOD, adenomyosis, postpartum haemorrhage, infertility, menorrhagia, polymenorrhagia, dysmenorrhea, and amenorrhea continue to be misunderstood, minimized, or dismissed. Rather than being recognized as forms of legitimate physical suffering, they are often reframed as emotional excess, stress, or hormonal instability. This pattern is not merely a residue of the past; it remains embedded within contemporary global health systems. The consequence is a persistent failure to listen to women's bodies, to take their pain seriously, and to provide care that fully acknowledges the complexity and materiality of their experiences.</p>
+
+      <p class="reveal">The relative neglect of conditions such as endometriosis becomes difficult to ignore. This points to how menstrual and reproductive health remain structurally under-researched and under-recognized. Endometriosis is a chronic gynaecological condition affecting approximately one in ten individuals of reproductive age (World Health Organization [WHO], 2023; Zondervan et al., 2020). It is commonly associated with severe pelvic pain, fatigue, infertility, and cyclical physical impairment. Despite its prevalence and well-documented impact on quality of life, endometriosis remains significantly underdiagnosed and poorly understood within clinical practice. Studies indicate that individuals with endometriosis often wait between seven and ten years to receive a formal diagnosis (De Corte et al., 2025; Hudelist et al., 2012). During this prolonged diagnostic period, like me, many patients frequently encounter dismissal, psychologization, and normalization of their symptoms. Pain is often reframed as stress, anxiety, or functional disturbance rather than investigated as a marker of chronic illness.</p>
+
+      <p class="reveal">Consequently, individuals with endometriosis navigate years of medical uncertainty while enduring disruptions to work, relationships, and everyday participation in social life. These persistent delays raise critical questions about how endometriosis is recognized, interpreted, and institutionally managed. While biomedical research typically frames endometriosis as a pathological condition caused by ectopic endometrial tissue growth, such approaches alone cannot fully account for the broader social consequences of delayed diagnosis, disbelief, and misrecognition. Increasingly, scholars have begun to examine how cultural norms, gendered expectations, and communicative practices shape the interpretation of menstrual and pelvic pain. Historical analyses of women's health care demonstrate that women's bodily experiences have often been dismissed as exaggerated, emotional, or hormonally driven, rather than treated as credible sources of knowledge (Cleghorn, 2021). Situated within this broader history of gendered medical skepticism, endometriosis emerges not only as a biological condition but also as one whose recognition is mediated by cultural and institutional frameworks.</p>
+
+      <p class="reveal">In that light, I read endometriosis as not only a medical condition, but as a story of what is allowed to remain unknown. Its long invisibility across biomedical, political, and social spaces suggests that ignorance here is not simply a gap, but something that has been quietly produced and maintained. In this way, endometriosis sits alongside other contested conditions where knowledge feels unfinished; and where science, for various reasons, has not fully arrived. When I look at it through this lens, I see how consistently women's experiences of illness have been left out of what counts as credible knowledge. Feminist and social science scholars have already begun to trace these absences, showing how women's accounts have been excluded from dominant narratives. However, there is still so much that remains unexamined, particularly in terms of how this not-knowing continues to be shaped in present-day healthcare systems and policies, particularly in low- and middle-income contexts (Hudson, 2021). What lingers, then, is a sense of urgency because endometriosis is not rare, nor is it insignificant. It is a chronic, life-altering condition that affects millions of people across the world. And still, it waits for attention, for recognition, for a deeper kind of listening. It becomes important to engage with it to not only study the disease, but to confront the conditions that allow certain kinds of suffering to remain unseen for so long.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== § VI · THE PHARMACOPOEIA ==================== -->
+<section class="chapter" id="pharmacopoeia">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ VI &nbsp; The Pharmacopoeia</div>
+    <h2 class="reveal">Medicine that <em>negotiates</em>, not cures.</h2>
+
+    <div class="prose">
+      <p class="reveal first-of-section">I was formally diagnosed with endometriosis in 2025, although I had been living with its symptoms for years before it was finally named. The diagnosis did not arrive as a beginning, but as a recognition of what my body had long been enduring. As part of my treatment, I was prescribed Fresco Mom Softgel Capsule and Elagolix.</p>
+
+      <div class="med-card reveal">
+        <span class="drug">Fresco Mom Softgel Capsule</span>
+        commonly used to treat and prevent iron deficiency anaemia and to supplement iron, folic acid, and zinc in conditions such as nutritional deficiency or recovery (PharmEasy, n.d.).
+      </div>
+
+      <div class="med-card reveal">
+        <span class="drug">Elagolix &nbsp;·&nbsp; oral GnRH antagonist</span>
+        prescribed to manage moderate to severe pain associated with endometriosis by suppressing estrogen production, thereby reducing hormonal stimulation of endometriotic lesions (Mayo Clinic, n.d.; Taylor et al., 2017). In clinical terms, it works by interrupting hormonal signaling pathways, dropping estrogen levels in the body.
+      </div>
+
+      <p class="reveal">But what this meant, in lived terms, was something else entirely. It meant my cycle, which was once persistent, painful, predictable in its violence, was abruptly paused. The bleeding stopped for months. At first, this absence felt like respite, like a quiet I had longed for. But that quiet was unfamiliar, almost disorienting. My body, which I had come to understand through cycles of pain and release, now felt held in suspension. The medications did not simply treat my body; they reorganized it. They muted certain processes while amplifying others. The pain did not disappear so much as shift — becoming less visible, less cyclical, but not entirely gone. Instead, new sensations and vibrations emerged. A strange dryness settled into my vagina; one I had never known before. It was as if a part of me had been quietly emptied of its own softness. There was sense of internal thinning, as if something essential had been reduced. My body no longer felt like it was moving through its own rhythm, but through something externally regulated, chemically instructed.</p>
+
+      <p class="reveal">While GnRH antagonists like Elagolix are often positioned as a significant advancement in endometriosis treatment, their role remains limited to symptom management rather than cure. These medications reduce pain and can inhibit lesion activity by lowering estrogen levels, but they do not eliminate the underlying disease (Taylor et al., 2017; Surrey et al., 2018). In clinical practice, they are frequently introduced as second-line therapies, particularly when other hormonal treatments have failed, which already situates them within a framework of partial efficacy (Surrey et al., 2018). Moreover, the suppression of estrogen creates a hypoestrogenic state that can lead to side effects such as bone density loss, hot flashes, and mood disturbances, thus limiting long-term use (Surrey et al., 2018; Bedaiwy et al., 2017). To manage these effects, <em>“add-back”</em> therapies (low doses of estrogen or progesterone) are often prescribed alongside GnRH antagonists. While necessary, these additions further complicate the experience of treatment, sometimes even reducing its overall effectiveness (Bedaiwy et al., 2017). Even with these developments, not all patients respond to hormonal suppression. Some bodies resist it, remain in pain despite intervention, leaving individuals with limited or no effective medical options (Donnez & Dolmans, 2021). In this context, the idea of a <em>“lack of treatment”</em> is not about absence, but about insufficiency and about the limits of what these medications can do.</p>
+
+      <p class="pull reveal">These medicines do not <em>“fix”</em> the body. They negotiate with it. They quiet certain violences while introducing new forms of discomfort. They ask the body to become something else, i.e., less cyclical, less visibly in pain, but also less familiar.</p>
+
+      <p class="reveal">And in that process, I find myself learning my body again, not as it was, but as it is being reshaped slowly and uncertainly, under the influence of treatment. The treatment that is supposed to ease things introduce new discomforts, new dependencies, and new calculations. It becomes a constant balancing act between pain and side effects, between what is gained and what is compromised. It makes realize what it means to live with a condition that is acknowledged, yet not fully understood; treated, yet not resolved. And, perhaps, this is where the weight of it lies. It is not just in the pain itself, but in the ongoing negotiation it demands. To live with endometriosis, as I am coming to comprehend it, is to live in a space where certainty is always deferred. Endometriosis is where one is constantly making sense of a body that is both known and unknown, both treated and still waiting.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== § VII · THE MIDWIFE ==================== -->
+<section class="midwife-section" id="midwife">
+  <div class="midwife-intro">
+    <div class="chapter-mark reveal">§ VII &nbsp; The Midwife</div>
+    <h2 class="reveal">An archive of bodies, rituals, stories.</h2>
+    <div class="prose">
+      <p class="reveal first-of-section">Eventually, as I went on writing, talking and reading about endometriosis, I found myself deeply intrigued by how the world of tribal and vernacular medicine attends to what formal biomedical systems so often overlook. It listens to, names, and works with forms of pain that are otherwise dismissed or left unsolved. It was this curiosity that led me into a long, unhurried conversation with a woman who had spent her life as a devotee of the tribal goddess Manasa and as a practising midwife. Sitting beside her felt like sitting beside an archive of bodies, rituals, stories, and forms of knowledge that had travelled quietly from one woman's hands to another's.</p>
+
+      <p class="reveal">As she spoke, I became aware of how much I had never been taught to see. In her world, pain was never reduced to something vague or <em>“just hormonal.”</em> Every ache, every cycle, every shift in a woman's body carried meaning. It had a name, a lineage, a logic that made sense within a lived system of care. Through her stories, I began to understand that folk and tribal traditions are not scattered beliefs, but structured and coherent healing systems. They may not <em>“cure”</em> in the biomedical sense, but they do something equally vital. They recognize, validate, and hold women's embodied experiences in ways modern medicine often fails to.</p>
+    </div>
+  </div>
+
+  <!-- gallery -->
+  <div class="gallery reveal">
+    <figure class="fig-1">
+      <img src="sanjana-assets/midwife-1.jpg" alt="The midwife engaged in the worship of Goddess Manasa" loading="lazy">
+      <figcaption>Fig. 1 · in worship of Goddess Manasa</figcaption>
+    </figure>
+    <figure class="fig-2">
+      <img src="sanjana-assets/midwife-2.jpg" alt="The midwife preparing a neem-based remedy" loading="lazy">
+      <figcaption>Fig. 2 · preparing a neem-based remedy<br/>to alleviate sensations of internal heat &amp; burning</figcaption>
+    </figure>
+    <figure class="fig-3">
+      <img src="sanjana-assets/midwife-3.jpg" alt="The midwife in conversation with the author" loading="lazy">
+      <figcaption>Fig. 3 · in conversation with me</figcaption>
+    </figure>
+    <figure class="fig-4">
+      <img src="sanjana-assets/midwife-4.jpg" alt="The midwife in a moment of ritual possession" loading="lazy">
+      <figcaption>Figs. 4 &amp; 5 · in moments of ritual possession</figcaption>
+    </figure>
+    <figure class="fig-5">
+      <img src="sanjana-assets/midwife-5.jpg" alt="The midwife in a moment of ritual possession" loading="lazy">
+      <figcaption>Figs. 4 &amp; 5 · in moments of ritual possession</figcaption>
+    </figure>
+  </div>
+  <p class="gallery-consent">★ &nbsp; All images are taken with consent &nbsp; ★</p>
+</section>
+
+<!-- ==================== § VIII · GODDESSES ==================== -->
+<section class="goddess-section" id="goddesses">
+  <div class="chapter-wide">
+    <div class="chapter-mark reveal" style="justify-content:center; max-width: 30rem; margin-left:auto; margin-right:auto;">§ VIII &nbsp; A Living System of Care</div>
+    <h2 class="reveal" style="text-align:center; margin-left:auto; margin-right:auto;">Tribal goddesses as <em>active presences</em>.</h2>
+
+    <div class="prose chapter-inner reveal">
+      <p>She described how gynaecological suffering is addressed through practices embedded in everyday life. There are rituals for heat and swelling, invocations to Manasa for womb-related ailments and the use of herbs and massage by midwives who read the body with an intimacy that felt almost like reading a text. Listening to her, it seemed these traditions offer more than treatment; they offer recognition. They grant women's pain credibility. They make suffering legible. They allow the body to speak in ways that are heard and responded to. In her telling, tribal healing was not superstition, but a language. It is a way of knowing and caring that has been quietly holding women, even as other systems have failed to listen.</p>
+
+      <p>The old woman invoked tribal goddesses Manasa, Shitala, Olabibi, and Basuli, not as distant myths, but as active presences within a living system of care. These figures became part of an everyday vocabulary through which women's pain could be understood and held. She spoke of cooling water rituals, of abstaining from fire and freshly cooked food, and of ancestral chants. These practices were not symbolic alone, but deeply responsive to women's bodily suffering.</p>
+    </div>
+
+    <div class="goddess-grid">
+      <article class="goddess reveal">
+        <div class="num">№ 01</div>
+        <div class="name">Manasa</div>
+        <div class="domain">womb · poison · balance</div>
+        <p class="desc">Women experiencing deep, persistent pelvic pain — pain that closely resembles contemporary descriptions of endometriosis — often turned to Manasa's rituals for relief. The midwife described this pain as a form of <em>“womb poison”</em>, a culturally grounded way of naming internal congestion, clotting, and the heavy burning that many women endure without clinical recognition. Manasa is invoked as a goddess who removes poison and restores internal balance.</p>
+        <span class="sigil">✦</span>
+      </article>
+
+      <article class="goddess reveal">
+        <div class="num">№ 02</div>
+        <div class="name">Shitala</div>
+        <div class="domain">cooling · purification · relief</div>
+        <p class="desc">A goddess associated with cooling, purification, and relief from heat-related afflictions. Rituals surrounding her, such as those observed during Shitala Satam, where devotees avoid cooking, consume pre-prepared cold food, bathe in water bodies, and offer prayers for protection. They operate within a logic where <em>“heat”</em> is not merely environmental or spiritual, but also bodily — a way of naming and making sense of somatic distress, i.e., pelvic heat, menstrual burning, and inflammation.</p>
+        <span class="sigil">✦</span>
+      </article>
+
+      <article class="goddess reveal">
+        <div class="num">№ 03</div>
+        <div class="name">Olabibi</div>
+        <div class="domain">flow · spotting · safeguarding</div>
+        <p class="desc">A deity associated with safeguarding women from bleeding-related disorders, i.e., excessive menstrual flow, irregular spotting, and other forms of unexplained bleeding.</p>
+        <span class="sigil">✦</span>
+      </article>
+
+      <article class="goddess reveal">
+        <div class="num">№ 04</div>
+        <div class="name">Basuli</div>
+        <div class="domain">irregularity · delay · meaning</div>
+        <p class="desc">Basuli Thakurani is often invoked when women experience menstrual irregularities, delayed cycles, or moments when the body feels unpredictable. Rituals dedicated to Basuli offer a way to make meaning out of symptoms that might otherwise feel chaotic or isolating.</p>
+        <span class="sigil">✦</span>
+      </article>
+    </div>
+
+    <div class="prose chapter-inner reveal" style="margin-top: 3.5rem;">
+      <p>This community understanding aligns with Ayurvedic interpretations of endometriosis. According to <em>The Ayurveda Encyclopedia: Natural Secrets to Healing, Prevention &amp; Longevity</em> (Kupferberg, 1998), endometriosis is classified as <em>‘Kapha disorder’</em> characterized by <em>“extra uterine membrane growth”</em> (Kupferberg, 1998). Ayurvedic treatments, such as ashoka, guggul, myrrh, turmeric, and dandelion, aim to reduce Kapha and restore systemic balance (Kupferberg, 1998). The midwife's account and Ayurvedic theory provide alternative frameworks that name, interpret, and respond to endometriosis in ways that validate women's embodied pain.</p>
+
+      <p>While searching for materials to better understand healing practices, I came across <em>Tongchangya Community of Mizoram: Status of Women</em> (Tongchangya, 2025). Reading it felt uncannily similar to the conversation I had with the midwife. It echoed her words, her logic, her way of understanding the body. The text documents how, within the Tongchangya community, women have long served as traditional physicians and midwives, often regarded as more effective and <em>“fruitful”</em> healers than men. Their practices draw on herbs, barks, animal products, bile, horn, tooth powders, and mantra-based medicines. These systems are not random or fragmented, but structured, named, and internally coherent. In these spaces, healing is not limited to eradication of symptoms. It is about being seen, named, and held. These traditions create a poetic and communal space for relief, as it speaks to pain in ways that formal medicine remains unable or unwilling to do.</p>
+
+      <p class="pull">Conversations with the midwife makes me see how these traditions operate with their own diagnostic logic. The midwife's narratives reveal how vernacular healing systems have long created space for gynaecological suffering; often long before such conditions become visible through medical imaging or clinical validation. They offer, not simply treatment, but language. A vocabulary through which pain can be expressed, understood, and collectively acknowledged. In contrast to the silences that often surround such experiences in biomedical contexts, these traditions make room for the body to speak, and, crucially, to be heard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== § IX · LIVING WITH QUESTIONS ==================== -->
+<section class="chapter" id="questions">
+  <div class="chapter-inner">
+    <div class="chapter-mark reveal">§ IX &nbsp; Living with Questions</div>
+    <h2 class="reveal">Not closure, but <em>continued attempt</em>.</h2>
+
+    <div class="prose">
+      <p class="reveal first-of-section">What remains, at the end of all this, is not a neat resolution but a way of living with questions. My journey with endometriosis has not been linear, neither in diagnosis, nor in treatment, nor in understanding. It has unfolded in fragments. It has unfolded in pain that arrived before language, in years of misrecognition, in eventual naming, and in the ongoing effort to make sense of what still exceeds explanation.</p>
+
+      <p class="reveal">I find myself moving between worlds; between biomedical terms and embodied sensations, between prescriptions and rituals, between what can be measured and what can only be felt. Each framework offers something, but none feels complete on its own. Medicine gives me a name, a set of interventions, a vocabulary of management. Folk and vernacular systems offer recognition, a language of care, a way of situating pain within something larger than the individual body. And somewhere between them, I continue to piece together my own understanding.</p>
+
+      <p class="reveal">Living with endometriosis has become an everyday act of interpretation. I read my body's rhythms, disruptions, and silences closely. I negotiate pain not just physically, but intellectually and emotionally. There are days when the body feels known, and others when it feels unfamiliar again. Possibly, what this journey has taught me most is that understanding does not always arrive as certainty. Sometimes it emerges through fragments, through conversations, through rituals, through medical encounters, and most importantly, through writing. It is ongoing, unfinished, and deeply personal. And in that incompleteness, I am learning not just to endure, but to listen differently to my body, to other women's stories, and to the many ways in which pain can be known, named, and shared.</p>
+
+      <p class="reveal">It feels necessary to speak about menstruation, and to try to speak even when the words feel incomplete. It is not to be spoken as something private and to be quietly endured, but as something that resists staying hidden. For too long, these embodied experiences have been pushed into stillness, folded into secrecy, or made to appear commonplace enough to disregard. But, still, the body keeps insisting. It holds stories that do not disappear simply because they are not spoken. To speak of menstruation, the pain, the confusion, the disruptions, the negotiations, is not always to arrive at clarity. Sometimes, it is only to make the mess visible; to give language to something that keeps slipping away from it; to interrupt, even momentarily, the quiet that has been imposed for generations.</p>
+
+      <p class="reveal">This project, for me, is less a conclusion and more a continued attempt, it is a reaching out. This project is a way of saying that what I internalized in my childhood — the secrecy, the embarrassment, the sense of impurity — still lingers, but does not have to remain unchallenged. It is also, perhaps, a hesitant call to girls and women, especially in the Indian subcontinent, to not be entirely hushed by it. It is an uncertain call to not be hushed because speaking resolves it, but because silence never did.</p>
+
+      <p class="reveal">Even now, it does not feel complete. The pain does not end neatly. The understanding does not settle. Some days the body feels known; other days, it returns as something unfamiliar again. But, may be, that is where this stays. It stays, not as a finished argument, not as closure, but as something ongoing. It is a set of fragments, and a body still trying to make sense of itself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CODA ==================== -->
+<section class="coda">
+  <div class="lines">
+    <p class="poem-stanza-reveal">let vaginas be seen, and in being seen, be freed</p>
+    <p class="poem-stanza-reveal">let vaginal blood flow without disguise or apology</p>
+    <p class="poem-stanza-reveal">let the vaginas speak and flow in solidarity</p>
+  </div>
+</section>
+
+<!-- ==================== PDF ==================== -->
+<section class="pdf-section" id="pdf">
+  <div class="chapter-wide" style="text-align:center;">
+    <div class="chapter-mark reveal" style="justify-content:center; max-width: 30rem; margin-left:auto; margin-right:auto;">¶ &nbsp; The Original Document</div>
+    <h2 class="reveal" style="text-align:center; margin-left:auto; margin-right:auto;">Read the project as <em>composed</em>.</h2>
+  </div>
+  <div class="pdf-frame">
+    <object data="sanjana-assets/sanjana-srivastava-bleeding-into-language.pdf#view=FitH&toolbar=1" type="application/pdf">
+      <embed src="sanjana-assets/sanjana-srivastava-bleeding-into-language.pdf#view=FitH" type="application/pdf">
+      <div class="pdf-fallback">
+        Your browser cannot display the PDF inline.<br/>
+        Please use the buttons below to open or download.
+      </div>
+    </object>
+  </div>
+  <div class="pdf-actions">
+    <a href="sanjana-assets/sanjana-srivastava-bleeding-into-language.pdf" target="_blank" rel="noopener">Open in new tab ↗</a>
+    <a href="sanjana-assets/sanjana-srivastava-bleeding-into-language.pdf" download>Download PDF ↓</a>
+  </div>
+</section>
+
+<!-- ==================== REFERENCES ==================== -->
+<section class="refs">
+  <div class="refs-inner">
+    <div class="chapter-mark reveal">¶ &nbsp; References</div>
+    <h2 class="reveal">Works cited.</h2>
+    <ol class="ref-list">
+      <li class="reveal">Bedaiwy, M. A., Allaire, C., &amp; Yong, P. J. (2017). Medical management of endometriosis in patients with chronic pelvic pain. <em>Seminars in Reproductive Medicine, 35</em>(1), 38–53. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5794019/" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">Bullo, S. (2020). “I feel like I'm being stabbed by a thousand tiny men”: The challenges of communicating endometriosis pain. <em>Health, 24</em>(5), 476–492. <a href="https://doi.org/10.1177/1363459318817943" target="_blank" rel="noopener">doi</a></li>
+      <li class="reveal">Cleghorn, E. (2021). <em>Unwell women: A journey through medicine and myth in a man-made world.</em> W&amp;N.</li>
+      <li class="reveal">Donnez, J., &amp; Dolmans, M. M. (2021). GnRH antagonists with or without add-back therapy: A new alternative in the management of endometriosis? <em>Gynecology and Pelvic Medicine.</em> <a href="https://gpm.amegroups.org/article/view/6728/html" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">Hudelist, G., Fritzer, N., Thomas, A., Niehues, C., Oppelt, P., Haas, D., Tammaa, A., &amp; Salzer, H. (2012). Diagnostic delay for endometriosis in Austria and Germany: Causes and possible consequences. <em>Human Reproduction, 27</em>(12), 3412–3416. <a href="https://doi.org/10.1093/humrep/des316" target="_blank" rel="noopener">doi</a></li>
+      <li class="reveal">Hudson, N. (2021). The missed disease? Endometriosis as an example of “undone science.” <em>Reproductive Biomedicine &amp; Society Online, 14,</em> 20–27. <a href="https://doi.org/10.1016/j.rbms.2021.07.003" target="_blank" rel="noopener">doi</a></li>
+      <li class="reveal">Kupferberg, N. (1998). <em>The Ayurveda encyclopedia: Natural secrets to healing, prevention, &amp; longevity.</em> ASL Publications.</li>
+      <li class="reveal">Mayo Clinic. (n.d.). <em>Elagolix (oral route) description and brand names.</em> <a href="https://www.mayoclinic.org/drugs-supplements/elagolix-oral-route/description/drg-20443966" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">PharmEasy. (n.d.). <em>Fresco tablet: Uses, side effects, price &amp; dosage.</em> <a href="https://pharmeasy.in/online-medicine-order/fresco-tab-11210" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">Steinem, G. (1978). If men could menstruate: A political fantasy. <em>Ms. Magazine,</em> 110.</li>
+      <li class="reveal">Surrey, E., Taylor, H. S., Giudice, L., Lessey, B. A., Abrao, M. S., Archer, D. F., et al. (2018). Long-term outcomes of elagolix in women with endometriosis. <em>New England Journal of Medicine.</em> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12239828/" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">Taylor, H. S., Giudice, L. C., Lessey, B. A., Abrao, M. S., Kotarski, J., Archer, D. F., et al. (2017). Treatment of endometriosis-associated pain with elagolix. <em>New England Journal of Medicine, 377</em>(1), 28–40. <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1700089" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">Tongchangya, P. R. (2025). <em>Tongchangya community of Mizoram: Status of women.</em> Annapurna Bera, Research Publication.</li>
+      <li class="reveal">Walker, B. G. (1990). <em>Women's rituals: A sourcebook.</em> HarperOne.</li>
+      <li class="reveal">World Health Organization. (2023). <em>Endometriosis.</em> <a href="https://www.who.int/news-room/fact-sheets/detail/endometriosis" target="_blank" rel="noopener">link</a></li>
+      <li class="reveal">Zondervan, K. T., Becker, C. M., &amp; Missmer, S. A. (2020). Endometriosis. <em>New England Journal of Medicine, 382</em>(13), 1244–1256. <a href="https://doi.org/10.1056/NEJMra1810764" target="_blank" rel="noopener">doi</a></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span class="em">Sanjana Srivastava</span>
+  My Journey of Bleeding into Language
+  <div class="div"></div>
+  Global South Solidarities &nbsp;·&nbsp; 20 / 04 / 2026
+  <div class="div"></div>
+  <a href="../index.html">return to GSS</a>
+</footer>
+
+<script>
+/* ============================================================
+   Interactions
+   ============================================================ */
+
+// 1. scroll thread + cycle ring
+(function(){
+  const thread = document.getElementById('thread');
+  const arc    = document.getElementById('arc');
+  const num    = document.getElementById('cycleNum');
+  const cycle  = document.getElementById('cycle');
+  const nav    = document.getElementById('nav');
+  const TOTAL  = 276.46;
+  const heroH  = window.innerHeight;
+
+  function tick(){
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const y = window.scrollY;
+    const p = Math.min(1, Math.max(0, y / h));
+    thread.style.width = (p*100).toFixed(1)+'%';
+    arc.setAttribute('stroke-dashoffset', (TOTAL * (1 - p)).toFixed(2));
+    num.textContent = Math.round(p*100) + '%';
+
+    if (y > heroH * 0.6){ nav.classList.add('show'); cycle.classList.add('show'); }
+    else { nav.classList.remove('show'); cycle.classList.remove('show'); }
+  }
+  window.addEventListener('scroll', tick, { passive: true });
+  window.addEventListener('resize', tick);
+  tick();
+})();
+
+// 2. cursor drop
+(function(){
+  const drop = document.getElementById('drop');
+  if (!drop) return;
+  let tx=0, ty=0, x=0, y=0;
+  window.addEventListener('mousemove', (e)=>{ tx = e.clientX; ty = e.clientY; });
+  function loop(){
+    x += (tx - x) * 0.18;
+    y += (ty - y) * 0.18;
+    drop.style.transform = `translate(${x}px, ${y}px) rotate(-45deg)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+  // hover state
+  document.querySelectorAll('a, .goddess, figure, button').forEach(el=>{
+    el.addEventListener('mouseenter', ()=> drop.classList.add('is-hover'));
+    el.addEventListener('mouseleave', ()=> drop.classList.remove('is-hover'));
+  });
+})();
+
+// 3. reveal on scroll
+(function(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
+
+// 4. poem stanza staggered reveal — within each poem stage
+(function(){
+  document.querySelectorAll('.poem-stage').forEach(stage=>{
+    const stanzas = stage.querySelectorAll('.poem-stanza-reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach((e, i)=>{
+        if (e.isIntersecting){
+          const idx = Array.from(stanzas).indexOf(e.target);
+          setTimeout(()=> e.target.classList.add('in'), idx * 80);
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    stanzas.forEach(s => io.observe(s));
+  });
+  // coda lines
+  const coda = document.querySelectorAll('.coda .poem-stanza-reveal');
+  const ioc = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){
+        const idx = Array.from(coda).indexOf(e.target);
+        setTimeout(()=> e.target.classList.add('in'), idx * 220);
+        ioc.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  coda.forEach(s => ioc.observe(s));
+})();
+
+// 5. graceful smooth scroll for nav
+document.querySelectorAll('.nav a').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    const href = a.getAttribute('href');
+    if (href.startsWith('#')){
+      e.preventDefault();
+      const t = document.querySelector(href);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
