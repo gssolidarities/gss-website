@@ -142,6 +142,90 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
 .rvl{opacity:0;transform:translateX(-32px);transition:opacity 0.7s ease,transform 0.7s ease;}
 .rvl.vis{opacity:1;transform:translateX(0);}
 
+/* ══ UNIFIED LINK-BOX (pinned card style, reused per section) ══ */
+.link-box{
+  margin-top:56px;padding:60px 56px 52px;
+  position:relative;max-width:900px;
+  border-bottom:4px solid var(--red);
+  box-shadow:0 4px 24px rgba(0,0,0,0.2);
+}
+.link-box .lb-tape-l,.link-box .lb-tape-r{
+  position:absolute;top:-12px;width:80px;height:24px;
+  background:rgba(218,200,160,0.5);z-index:2
+}
+.link-box .lb-tape-l{left:60px;transform:rotate(-3deg)}
+.link-box .lb-tape-r{right:60px;transform:rotate(3deg)}
+.link-box .lb-pin{
+  position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:16px;height:16px;background:var(--red);border-radius:50%;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);z-index:3
+}
+.link-box .lb-stamp{
+  font-family:'Space Mono',monospace;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--red);border:2px solid var(--red);
+  display:inline-block;padding:6px 16px;margin-bottom:26px;
+  transform:rotate(-1deg);position:relative;overflow:hidden;
+  cursor:none;transition:color 0.4s
+}
+.link-box .lb-stamp::before{
+  content:'';position:absolute;inset:0;background:var(--red);
+  transform:translateX(-101%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:0
+}
+.link-box .lb-stamp:hover::before{transform:translateX(0)}
+.link-box .lb-stamp:hover{color:#fff}
+.link-box .lb-stamp span{position:relative;z-index:1}
+.link-box .lb-heading{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(42px,7vw,72px);line-height:0.9;
+  margin-bottom:24px
+}
+.link-box .lb-heading .accent{color:var(--red)}
+.link-box .lb-meta{
+  font-family:'Space Mono',monospace;font-size:13px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--red);margin-bottom:16px;font-weight:bold
+}
+.link-box .lb-body{
+  font-family:'Trebuchet MS',sans-serif;font-size:19px;line-height:1.75;
+  max-width:720px;margin-bottom:36px
+}
+.link-box .lb-cta{
+  display:inline-flex;align-items:center;gap:14px;
+  background:var(--ink);color:#f5f0e6;
+  font-family:'Space Mono',monospace;font-size:13px;letter-spacing:4px;text-transform:uppercase;
+  text-decoration:none;padding:18px 36px;
+  cursor:none;transition:background 0.28s
+}
+.link-box .lb-cta:hover{background:var(--red)}
+/* Torn bottom edge */
+.link-box::after{
+  content:'';position:absolute;bottom:-16px;left:0;right:0;height:16px;
+  background:inherit;
+  clip-path:polygon(0 0,2% 60%,4% 20%,6% 70%,8% 30%,10% 80%,13% 15%,16% 65%,19% 35%,22% 75%,25% 20%,28% 60%,32% 30%,35% 80%,38% 10%,42% 55%,45% 25%,48% 70%,52% 40%,55% 85%,58% 20%,62% 65%,65% 30%,68% 75%,72% 15%,75% 60%,78% 35%,82% 80%,85% 10%,88% 55%,92% 25%,95% 70%,98% 40%,100% 0)
+}
+/* Variants */
+.lb-paper{background:#f5f0e6;color:var(--ink)}
+.lb-paper .lb-heading{color:var(--ink)}
+.lb-paper .lb-body{color:rgba(10,6,4,0.8)}
+.lb-deep{background:#0f0907;color:var(--paper);border-bottom-color:var(--gold)}
+.lb-deep .lb-stamp{color:var(--gold);border-color:var(--gold)}
+.lb-deep .lb-stamp::before{background:var(--gold)}
+.lb-deep .lb-stamp:hover{color:var(--ink)}
+.lb-deep .lb-heading{color:var(--paper)}
+.lb-deep .lb-heading .accent{color:var(--gold)}
+.lb-deep .lb-meta{color:var(--gold)}
+.lb-deep .lb-body{color:rgba(240,230,200,0.85)}
+.lb-deep .lb-cta{background:var(--red);color:#fff}
+.lb-deep .lb-cta:hover{background:var(--gold);color:var(--ink)}
+.lb-muted{background:#efe2c3;color:var(--ink);border-bottom-color:var(--stamp)}
+.lb-muted .lb-stamp{color:var(--stamp);border-color:var(--stamp)}
+.lb-muted .lb-stamp::before{background:var(--stamp)}
+.lb-muted .lb-heading{color:var(--ink)}
+.lb-muted .lb-heading .accent{color:var(--stamp)}
+.lb-muted .lb-meta{color:var(--stamp)}
+.lb-muted .lb-body{color:rgba(10,6,4,0.8)}
+.lb-muted .lb-cta{background:var(--stamp)}
+.lb-muted .lb-cta:hover{background:var(--red)}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   #hero,.program,footer{padding-left:24px;padding-right:24px;}
@@ -149,6 +233,9 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
   .fellowship-body{grid-template-columns:1fr;}
   .hero-title{letter-spacing:-1px;}
   .scroll-cue{left:24px;}
+  .link-box{padding:48px 28px 38px}
+  .link-box .lb-tape-l{left:24px}
+  .link-box .lb-tape-r{right:24px}
 }
 </style>
 </head>
@@ -189,25 +276,18 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
   <div class="program-num rv" aria-hidden="true">01</div>
   <div class="program-tag rv" style="color:var(--red);border-color:var(--red);">Fall 2024 · ENG 548</div>
   <h2 class="program-title rv" style="color:var(--ink);">ARCHIVES, RHETORICITY<br>OF TECHNOLOGIES, &amp;<br>ANTI-OPPRESSIVE<br>INTERVENTIONS</h2>
-  <div class="program-subtitle rv" style="color:var(--ink);opacity:0.4;">13 Graduate Student Contributors</div>
+  <div class="program-subtitle rv" style="color:var(--ink);opacity:0.4;">Graduate Seminar · Counter-Archival Praxis</div>
 
-  <div class="contrib-grid">
-    <a href="/untitled%20folder/Chey.html" class="contrib-card rv"><div class="contrib-num">01</div><div class="contrib-name">Cheyanne Brown</div></a>
-    <a href="/untitled%20folder/Josie%20Cohen-Rodr%C3%ADguez.html" class="contrib-card rv" style="transition-delay:0.04s;"><div class="contrib-num">02</div><div class="contrib-name">Josie Cohen-Rodriguez</div></a>
-    <a href="/untitled%20folder/Corita%20Fernando.html" class="contrib-card rv" style="transition-delay:0.08s;"><div class="contrib-num">03</div><div class="contrib-name">Corita Fernando</div></a>
-    <a href="#" class="contrib-card rv" style="transition-delay:0.12s;"><div class="contrib-num">04</div><div class="contrib-name">Myra Henderson<span class="contrib-star">*</span></div><div class="contrib-status">Project unavailable</div></a>
-    <a href="/untitled%20folder/Brigette%20Hinnant.html" class="contrib-card rv" style="transition-delay:0.16s;"><div class="contrib-num">05</div><div class="contrib-name">Brigette Hinnant</div></a>
-    <a href="/untitled%20folder/Daman%20Khalid.html" class="contrib-card rv" style="transition-delay:0.2s;"><div class="contrib-num">06</div><div class="contrib-name">Daman Khalid</div></a>
-    <a href="/untitled%20folder/gGrace%20No.html" class="contrib-card rv" style="transition-delay:0.24s;"><div class="contrib-num">07</div><div class="contrib-name">Grace No</div></a>
-    <a href="/untitled%20folder/Prakash%20Paudel.html" class="contrib-card rv" style="transition-delay:0.28s;"><div class="contrib-num">08</div><div class="contrib-name">Prakash Paudel</div></a>
-    <a href="/untitled%20folder/Allison%20Riechman.html" class="contrib-card rv" style="transition-delay:0.32s;"><div class="contrib-num">09</div><div class="contrib-name">Allison Riechman-Bennett</div></a>
-    <a href="/untitled%20folder/Ma-Ya.html" class="contrib-card rv" style="transition-delay:0.36s;"><div class="contrib-num">10</div><div class="contrib-name">Ma-Ya</div></a>
-    <a href="/untitled%20folder/Genoveva%20Vega.html" class="contrib-card rv" style="transition-delay:0.4s;"><div class="contrib-num">11</div><div class="contrib-name">Genoveva Vega Gastelum</div></a>
-    <a href="#" class="contrib-card rv" style="transition-delay:0.44s;"><div class="contrib-num">12</div><div class="contrib-name">Valanci Villa<span class="contrib-star">*</span></div><div class="contrib-status">Project unavailable</div></a>
-    <a href="/untitled%20folder/sezin.html" class="contrib-card rv" style="transition-delay:0.48s;"><div class="contrib-num">13</div><div class="contrib-name">Sezin Zorlu</div></a>
+  <div class="link-box lb-paper rv">
+    <span class="lb-tape-l"></span>
+    <span class="lb-tape-r"></span>
+    <span class="lb-pin"></span>
+    <div class="lb-stamp"><span>Student Work</span></div>
+    <div class="lb-heading">STUDENT<br><span class="accent">CONTRIBUTIONS</span></div>
+    <div class="lb-meta">[ 13 Graduate Contributors ]</div>
+    <p class="lb-body">Archival research projects, counter-archival interventions, and decolonial-feminist worldmaking by 13 graduate students from the Archives, Rhetoricity of Technologies, &amp; Anti-Oppressive Interventions seminar. Visit the dedicated page to explore each contributor's project.</p>
+    <a href="#" class="lb-cta">Visit This Page&nbsp;&nbsp;→</a>
   </div>
-
-  <div class="star-note rv"><span class="sn-star">*</span> Indicates that the project of the individual is not available at the moment.</div>
 </section>
 
 <div class="torn" style="background:var(--ink);transform:rotate(180deg);"></div>
@@ -219,27 +299,15 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
   <h2 class="program-title rv" style="color:var(--paper);">AI, NECROPOLITICS,<br>&amp; ENGINEERED<br>OPPRESSION</h2>
   <div class="program-subtitle rv">Contributors forthcoming</div>
 
-  <div class="rv" style="margin-top:56px;position:relative;">
-    <!-- Tape corners -->
-    <div style="position:absolute;top:-12px;left:60px;width:80px;height:24px;background:rgba(218,200,160,0.5);transform:rotate(-3deg);z-index:2;"></div>
-    <div style="position:absolute;top:-12px;right:60px;width:80px;height:24px;background:rgba(218,200,160,0.5);transform:rotate(3deg);z-index:2;"></div>
-    <!-- Pin -->
-    <div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:16px;height:16px;background:var(--red);border-radius:50%;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>
-    <!-- Card -->
-    <div style="background:#f5f0e6;padding:60px 56px 48px;border-bottom:4px solid var(--red);position:relative;box-shadow:0 4px 24px rgba(0,0,0,0.2);">
-      <!-- Torn bottom edge -->
-      <div style="position:absolute;bottom:-16px;left:0;right:0;height:16px;background:#f5f0e6;clip-path:polygon(0 0,2% 60%,4% 20%,6% 70%,8% 30%,10% 80%,13% 15%,16% 65%,19% 35%,22% 75%,25% 20%,28% 60%,32% 30%,35% 80%,38% 10%,42% 55%,45% 25%,48% 70%,52% 40%,55% 85%,58% 20%,62% 65%,65% 30%,68% 75%,72% 15%,75% 60%,78% 35%,82% 80%,85% 10%,88% 55%,92% 25%,95% 70%,98% 40%,100% 0);"></div>
-      
-      <div class="card-stamp"><span>Student Work</span></div>
-      
-      <div class="card-heading"><span class="fill-word" data-text="STUDENT">STUDENT</span><br><span class="fill-word accent-word" data-text="CONTRIBUTIONS">CONTRIBUTIONS</span></div>
-
-      <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:16px;font-weight:bold;">[ Prototype ]</div>
-      
-      <div style="font-family:'Trebuchet MS',sans-serif;font-size:19px;line-height:1.75;color:rgba(10,6,4,0.8);max-width:700px;margin-bottom:36px;">View the basic prototype of one of the student research projects from AI, Necropolitics, &amp; Engineered Oppression course. This prototype demonstrates critical analysis of technological systems, data, violence, and abolitionist framing in action. The final projects of all students will be available by the end of May 2026.</div>
-      
-      <a href="/untitled%20folder/ice_surveillance_sketchboard_styled%20(1).html" style="display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:#f5f0e6;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;padding:18px 36px;transition:all 0.28s;cursor:none;" onmouseover="this.style.background='#c0190f'" onmouseout="this.style.background='#0a0604'">Visit Student Work&nbsp;&nbsp;→</a>
-    </div>
+  <div class="link-box lb-paper rv">
+    <span class="lb-tape-l"></span>
+    <span class="lb-tape-r"></span>
+    <span class="lb-pin"></span>
+    <div class="lb-stamp"><span>Student Work</span></div>
+    <div class="lb-heading">STUDENT<br><span class="accent">CONTRIBUTIONS</span></div>
+    <div class="lb-meta">[ Prototype ]</div>
+    <p class="lb-body">View the basic prototype of one of the student research projects from AI, Necropolitics, &amp; Engineered Oppression course. This prototype demonstrates critical analysis of technological systems, data, violence, and abolitionist framing in action. The final projects of all students will be available by the end of May 2026.</p>
+    <a href="/untitled%20folder/ice_surveillance_sketchboard_styled%20(1).html" class="lb-cta">Visit This Page&nbsp;&nbsp;→</a>
   </div>
 </section>
 
@@ -257,9 +325,15 @@ footer{background:var(--ink);padding:72px 80px;display:flex;justify-content:spac
     <p style="color:var(--ink);font-family:'Trebuchet MS',sans-serif;">The fellowship operates on a simple but radical premise: that the scholars most qualified to document and theorize Global South struggles are often the ones least supported by academic institutions. Fellows receive modest compensation for their contributions—an acknowledgment that intellectual labor, especially when it emerges from minoritized and diasporic communities, deserves material recognition. Over the course of the year, fellows develop multimodal, public-facing projects that will be housed on the open-access Global South Solidarities anarchive website. These projects take many forms: digital narratives, curated archival materials, pedagogical resources, multimedia essays, and creative works that refuse the boundaries between scholarship and art, between theory and practice.</p>
   </div>
 
-  <div class="coming-soon rv" style="border-color:rgba(13,8,0,0.12);margin-top:56px;">
-    <div class="coming-soon-title" style="color:var(--ink);">FELLOWS FORTHCOMING</div>
-    <div class="coming-soon-sub" style="color:var(--ink);">Individual fellow pages will be added as projects develop</div>
+  <div class="link-box lb-muted rv">
+    <span class="lb-tape-l"></span>
+    <span class="lb-tape-r"></span>
+    <span class="lb-pin"></span>
+    <div class="lb-stamp"><span>Fellowship</span></div>
+    <div class="lb-heading">THE<br>SOUTH ASIAN<br><span class="accent">COHORT</span></div>
+    <div class="lb-meta">[ 2025–2026 · Inaugural Year ]</div>
+    <p class="lb-body">A year-long program for South Asian scholars committed to decolonial, feminist, queer, and anticolonial knowledge production. Fellows develop multimodal, public-facing projects — digital narratives, curated archival materials, pedagogical resources, multimedia essays, and creative works — that will live on the open-access Global South Solidarities anarchive.</p>
+    <a href="#" class="lb-cta">Visit This Page&nbsp;&nbsp;→</a>
   </div>
 </section>
 
