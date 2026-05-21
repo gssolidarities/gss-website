@@ -792,11 +792,769 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
 /* — print styles — */
 @media print{
   body{ background: white; color: black;}
-  .nav, .scroll-thread, .drop, .cycle, .hero-scroll, .pdf-section, .pdf-actions{ display: none;}
+  .nav, .scroll-thread, .drop, .cycle, .hero-scroll, .pdf-section, .pdf-actions, .ambient, .vignette{ display: none;}
 }
+
+/* ════════════════════════════════════════════════════════════
+   ✦ FANCY · HAND-WORKED ANIMATIONS · LAYER ON TOP
+   ════════════════════════════════════════════════════════════ */
+
+/* — ambient slow-drift particles inside dark blood sections — */
+.hero, .poem-stage, .coda{ overflow:hidden; position:relative; }
+.ambient{ position:absolute; inset:0; pointer-events:none; z-index:1; }
+.ambient .seed{
+  position:absolute; left:var(--x,50%); top:-12%;
+  width:var(--s,7px); height:var(--s,7px);
+  background:radial-gradient(circle at 35% 30%, rgba(241,226,208,0.65), rgba(141,26,26,0.0) 70%);
+  border-radius:50%;
+  animation: drift var(--d,16s) linear infinite;
+  animation-delay: var(--delay,0s);
+  filter: blur(0.5px);
+  opacity:0;
+}
+@keyframes drift{
+  0%   { transform:translate(0,-20vh)   scale(.6); opacity:0; }
+  10%  { opacity:.55; }
+  85%  { opacity:.45; }
+  100% { transform:translate(var(--dx,8px),120vh) scale(1); opacity:0; }
+}
+
+/* — vignette aura on blood-red sections — */
+.hero::after, .poem-stage::after, .coda::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:120px;
+  background:linear-gradient(0deg, rgba(0,0,0,0.18), transparent);
+  pointer-events:none; z-index:2;
+}
+
+/* — animated growing rules on chapter-mark — */
+.chapter-mark::before{
+  width:0; transition: width 1.4s cubic-bezier(.18,1,.3,1) .15s, max-width 1.4s cubic-bezier(.18,1,.3,1) .15s;
+}
+.chapter-mark.in::before{ width:80px; }
+.chapter-mark::after{ display:block !important; flex:0; width:0; transition: width 1.4s cubic-bezier(.18,1,.3,1) .35s; height:1px; background:var(--line);}
+.chapter-mark.in::after{ width:34px; }
+
+/* — drop-cap on first paragraph of each chapter prose block — */
+.chapter .prose > p:first-of-type::first-letter{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  float: left;
+  font-size: 4.6em;
+  line-height: .9;
+  padding: .05em .12em 0 0;
+  margin: .12em .15em -.05em 0;
+  color: var(--blood);
+  text-shadow: 1px 1px 0 rgba(141,26,26,0.10);
+  transition: color .4s ease, transform .4s ease;
+}
+.chapter .prose > p:first-of-type:hover::first-letter{
+  color: var(--oxblood); transform: scale(1.02);
+}
+
+/* — animated underline-bleed for emphasised words inside prose — */
+.prose em, .prose strong{ position:relative; }
+.prose em::after, .prose strong::after{
+  content:""; position:absolute; left:0; right:100%; bottom:-1px; height:1px;
+  background: var(--blood);
+  transition: right 1.1s cubic-bezier(.4,0,.2,1);
+}
+.prose em.in-view::after, .prose strong.in-view::after{ right:0; }
+
+/* — word-by-word reveal for chapter h2 (set up by JS) — */
+.chapter h2 .w{
+  display:inline-block; opacity:0;
+  transform: translateY(14px) scale(.96);
+  transition: opacity .65s cubic-bezier(.2,.7,.2,1), transform .65s cubic-bezier(.2,.7,.2,1);
+}
+.chapter h2 .w.in{ opacity:1; transform:none; }
+
+/* — chapter title hover — gentle italic warp — */
+.chapter h2{
+  transition: letter-spacing .6s ease;
+}
+.chapter h2:hover{ letter-spacing: -.005em; }
+
+/* — goddess sigils: slow breathing aura + sparkle ring — */
+.goddess .sigil{ position:relative; z-index:1; transition: transform .5s ease, color .5s ease; }
+.goddess .sigil::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:36px; height:36px; transform: translate(-50%,-50%) scale(.4);
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(184,144,42,0.55) 0%, rgba(184,144,42,0) 70%);
+  z-index:-1; opacity:0;
+  animation: breathe 4.2s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{ transform: translate(-50%,-50%) scale(.55); opacity:.0; }
+  50%    { transform: translate(-50%,-50%) scale(1.05); opacity:.7; }
+}
+.goddess:hover .sigil{ transform: rotate(45deg) scale(1.18); color: var(--blood); }
+
+/* — goddess card tilt + lift — */
+.goddess{
+  transition: transform .55s cubic-bezier(.18,1,.3,1), box-shadow .45s ease, border-color .35s ease;
+}
+.goddess:hover{
+  transform: translateY(-6px) rotate(-.4deg);
+  box-shadow: 8px 12px 0 rgba(141,26,26,0.10), 0 6px 22px rgba(0,0,0,0.08);
+}
+
+/* — gallery figure: subtle rotation + tape on hover — */
+.gallery figure{
+  transition: transform .5s cubic-bezier(.18,1,.3,1), box-shadow .5s ease;
+}
+.gallery figure:nth-child(odd){ transform: rotate(-0.6deg); }
+.gallery figure:nth-child(even){ transform: rotate(0.5deg); }
+.gallery figure:nth-child(3n){ transform: rotate(-0.2deg); }
+.gallery figure:hover{
+  transform: rotate(0deg) translateY(-6px) scale(1.025);
+  box-shadow: 10px 14px 0 rgba(0,0,0,0.18), 0 8px 28px rgba(141,26,26,0.12);
+  z-index: 4;
+}
+.gallery figure::before{
+  content:""; position:absolute; left:50%; top:-8px; transform: translateX(-50%) rotate(-2deg);
+  width: 64px; height: 12px;
+  background: rgba(241,226,208,0.55);
+  opacity:0; transition: opacity .45s ease;
+  z-index: 3;
+}
+.gallery figure:hover::before{ opacity:.85; }
+
+/* — scroll-thread: glowing drop tip — */
+.scroll-thread{
+  background: linear-gradient(90deg, transparent, var(--blood) 40%, var(--oxblood));
+  position: fixed; top:0; left:0; height:2px; width:0%; z-index:9999;
+  box-shadow: 0 0 12px rgba(141,26,26,0.55);
+  transition: width 80ms linear;
+}
+.scroll-thread::after{
+  content:""; position:absolute; top:50%; right:-3px;
+  width:7px; height:7px; border-radius:50%;
+  background: var(--blood);
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px var(--blood), 0 0 22px rgba(141,26,26,0.55);
+  animation: pulse-tip 1.8s ease-in-out infinite;
+}
+@keyframes pulse-tip{
+  0%,100%{ transform: translateY(-50%) scale(1); opacity:.85; }
+  50%    { transform: translateY(-50%) scale(1.35); opacity:1; }
+}
+
+/* — page enter: slow ink wipe revealed at first load — */
+.page-curtain{
+  position: fixed; inset: 0;
+  background: var(--paper);
+  z-index: 10000;
+  pointer-events:none;
+  animation: curtain-out 1.6s cubic-bezier(.6,0,.2,1) forwards;
+  animation-delay: .35s;
+}
+@keyframes curtain-out{
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-101%); }
+}
+
+/* — section transition wash: a thin red rule that "draws" across when section enters — */
+.section-wash{
+  position: relative;
+}
+.section-wash::before{
+  content:""; position:absolute; top:0; left:0;
+  width:0; height:1px;
+  background: var(--blood);
+  transition: width 1.4s cubic-bezier(.18,1,.3,1);
+}
+.section-wash.in::before{ width:100%; }
+
+/* — refs list — bleed-in line by line — */
+.ref-list li{
+  opacity:0; transform: translateY(8px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+.ref-list li.in{ opacity:1; transform:none; }
+
+/* — hero h1 .word — give a richer letter wobble + slight blood drip shadow — */
+.hero h1 .word{
+  text-shadow: 0 1px 0 rgba(141,26,26,0.35), 0 12px 24px rgba(141,26,26,0.12);
+}
+
+/* — hero ampersand — slowly turn — */
+.hero h1 .ampersand{
+  display:inline-block;
+  animation: ampSpin 14s ease-in-out infinite;
+  transform-origin: 50% 60%;
+}
+@keyframes ampSpin{
+  0%,100%{ transform: rotate(-3deg); }
+  50%    { transform: rotate(3deg); }
+}
+
+/* — poem-stage: each stanza a slow breath when in view — */
+.poem .stanza.in{ animation: stanza-breathe 7s ease-in-out infinite; }
+@keyframes stanza-breathe{
+  0%,100%{ filter: brightness(1); }
+  50%    { filter: brightness(1.08); }
+}
+
+/* — cycle indicator — blood-coloured strokes adapt to blood-red sections — */
+.cycle .arc{ filter: drop-shadow(0 0 4px rgba(141,26,26,0.55)); }
+
+/* — chapter sections fade a touch on scroll past — */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation: none !important; transition: none !important; }
+  .page-curtain{ display:none !important; }
+  .rivulets{ display:none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   ✦ BLOOD RIVULETS · continuous drips down the empty margins
+   ════════════════════════════════════════════════════════════ */
+.rivulets{
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 150;       /* below spine (200) so spine sits in front of drips */
+  overflow: hidden;
+}
+.rivulets .side{
+  position: absolute; top: 0; bottom: 0;
+  width: 110px;
+  overflow: hidden;
+}
+.rivulets .side.left { left: 0; }
+.rivulets .side.right{ right: 0; }
+
+/* A single drip = a long thin streak that loops down forever.
+   Multiple rivers per side at different x offsets and speeds give a
+   continuous, organic "bleeding" feel. */
+.rivulet{
+  position: absolute;
+  width: 2px;
+  height: 70vh;
+  top: -70vh;
+  background: linear-gradient(180deg,
+    rgba(141,26,26,0.0)  0%,
+    rgba(141,26,26,0.05) 5%,
+    rgba(141,26,26,0.20) 18%,
+    rgba(141,26,26,0.45) 40%,
+    rgba(107,24,24,0.75) 75%,
+    rgba(107,24,24,0.95) 96%,
+    transparent          100%);
+  filter: blur(0.4px);
+  border-radius: 2px;
+  animation: drip-fall var(--dur, 14s) cubic-bezier(.55,.05,.65,.55) infinite;
+  animation-delay: var(--delay, 0s);
+  opacity: .85;
+  mix-blend-mode: multiply;  /* blends well over cream paper AND dark sections */
+}
+/* The viscous drop at the trailing edge */
+.rivulet::after{
+  content: '';
+  position: absolute;
+  left: 50%; bottom: -4px;
+  transform: translateX(-50%);
+  width: 7px; height: 11px;
+  background:
+    radial-gradient(ellipse at 50% 30%, #c0190f 0%, #8d1a1a 45%, #6b1818 75%, transparent 90%);
+  border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
+  filter: blur(0.4px);
+  box-shadow:
+    0 0 4px rgba(141,26,26,0.6),
+    0 2px 6px rgba(107,24,24,0.45);
+}
+/* A faint trailing "wet smear" just behind the streak head */
+.rivulet::before{
+  content: '';
+  position: absolute;
+  left: -2px; right: -2px;
+  bottom: 0; height: 18vh;
+  background: linear-gradient(180deg,
+    rgba(141,26,26,0) 0%,
+    rgba(141,26,26,.12) 60%,
+    rgba(107,24,24,.20) 100%);
+  filter: blur(2.5px);
+}
+
+@keyframes drip-fall{
+  /* Slow build at the top, slight acceleration, then a final droplet hover */
+  0%   { transform: translateY(0);     opacity: 0;    }
+  6%   { opacity: .35;  }
+  18%  { opacity: .85;  }
+  82%  { transform: translateY(110vh); opacity: .9;   }
+  100% { transform: translateY(140vh); opacity: 0;    }
+}
+
+/* Stagger — three rivers per side at different x, duration, delay */
+.rivulets .side.left  .r1{ left: 20px; --dur: 13s; --delay: 0s;   }
+.rivulets .side.left  .r2{ left: 52px; --dur: 19s; --delay: 5s;   }
+.rivulets .side.left  .r3{ left: 84px; --dur: 10s; --delay: 8s;   }
+.rivulets .side.right .r1{ right: 20px; --dur: 16s; --delay: 2s;  }
+.rivulets .side.right .r2{ right: 52px; --dur: 11s; --delay: 7s;  }
+.rivulets .side.right .r3{ right: 84px; --dur: 21s; --delay: 0s;  }
+
+/* Variants — thinner / thicker streaks per side for visual variety */
+.rivulets .side .r1{ width: 2px;   }
+.rivulets .side .r2{ width: 1.4px; opacity: .75; }
+.rivulets .side .r3{ width: 2.4px; opacity: .9;  }
+
+/* Pool / stain near the bottom margin — accumulates the impression
+   that the drips have been falling for a while */
+.rivulets .side::after{
+  content:'';
+  position: absolute; left: 6px; right: 6px; bottom: -10px;
+  height: 70px;
+  background:
+    radial-gradient(ellipse 80px 18px at 25% 70%, rgba(107,24,24,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 110px 14px at 60% 90%, rgba(141,26,26,0.5)  0%, transparent 75%),
+    radial-gradient(ellipse  90px 12px at 85% 60%, rgba(107,24,24,0.45) 0%, transparent 70%);
+  filter: blur(1.2px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: .9;
+}
+
+/* On scrolling, sharpen + speed up — JS sets --scroll-boost */
+.rivulets.scrolling .rivulet{
+  animation-duration: calc(var(--dur, 14s) / 1.5);
+}
+
+/* Narrow viewports — hide so content stays readable + spine is gone anyway */
+@media (max-width: 900px){
+  .rivulets{ display: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   ✦ HIGH-LEVEL DH LAYER · scholarly apparatus + visualization
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Sticky right-rail Section Navigator ── */
+.spine{
+  position: fixed; right: 22px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  display:flex; flex-direction:column; gap:6px;
+  background: rgba(241,226,208,0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  padding: 14px 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  max-width: 220px;
+  pointer-events: auto;
+  opacity:0; transform: translateY(-50%) translateX(8px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.spine.in{ opacity:1; transform: translateY(-50%) translateX(0); }
+.spine-title{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--oxblood);
+  padding-bottom:6px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+.spine a{
+  display:flex; align-items:center; gap:9px;
+  color: var(--ink-soft); text-decoration:none;
+  letter-spacing: .18em; text-transform: uppercase;
+  padding: 5px 0;
+  transition: color .22s ease, padding-left .22s ease;
+}
+.spine a:hover{ color: var(--blood); padding-left: 4px; }
+.spine a .dot{
+  width:6px; height:6px; border-radius:50%;
+  background: transparent;
+  border:1px solid var(--whisper);
+  flex-shrink:0;
+  transition: background .22s, border-color .22s, transform .22s;
+}
+.spine a.active{ color: var(--blood); font-weight: 700; }
+.spine a.active .dot{ background: var(--blood); border-color: var(--blood); transform: scale(1.25); }
+.spine a.read .dot{ background: var(--turmeric); border-color: var(--turmeric); }
+.spine a .num{
+  font-size: 8.5px; color: var(--whisper); letter-spacing: .1em;
+  min-width: 18px;
+}
+@media (max-width: 1140px){ .spine{ display:none; } }
+
+/* ── Chapter meta chip (reading time + paragraph count) ── */
+.chapter-meta{
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--whisper);
+  margin: -.4rem 0 1.8rem;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.35);
+  width: max-content;
+}
+.chapter-meta .cm-dot{
+  width:5px; height:5px; border-radius:50%;
+  background: var(--blood); opacity:.7;
+}
+
+/* ── Inline glossary tooltip ── */
+.gloss{
+  position: relative;
+  border-bottom: 1px dashed var(--oxblood);
+  cursor: help;
+  transition: color .22s, border-color .22s;
+}
+.gloss:hover{ color: var(--blood); border-color: var(--blood); }
+.gloss::after{
+  content: attr(data-def);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%; transform: translateX(-50%) translateY(4px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 14px;
+  font-family: var(--body);
+  font-style: normal;
+  font-size: 13.5px;
+  font-weight: 420;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: none;
+  width: max-content;
+  max-width: 320px;
+  text-align: left;
+  white-space: normal;
+  border-left: 3px solid var(--blood);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s, transform .22s;
+  z-index: 50;
+}
+.gloss::before{
+  content:""; position: absolute;
+  bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+  opacity: 0; transition: opacity .22s;
+  z-index: 51;
+}
+.gloss:hover::after, .gloss:focus::after{ opacity:1; transform: translateX(-50%) translateY(0); pointer-events:auto;}
+.gloss:hover::before, .gloss:focus::before{ opacity:1; }
+
+/* ── Pull-quote callout (big dramatic sentence in middle of prose) ── */
+.pullquote{
+  margin: 3rem 0;
+  padding: 2rem 0 1.6rem;
+  position: relative;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  line-height: 1.25;
+  color: var(--oxblood);
+  text-align: left;
+  max-width: 38rem;
+  border-top: 1px solid var(--blood);
+  border-bottom: 1px solid var(--blood);
+}
+.pullquote::before{
+  content: "“";
+  position: absolute;
+  left: -32px; top: 8px;
+  font-family: var(--display);
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--blood);
+  opacity: .35;
+}
+.pullquote::after{
+  content: "”";
+  position: absolute;
+  right: -8px; bottom: -28px;
+  font-family: var(--display);
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--blood);
+  opacity: .35;
+}
+.pullquote em{ font-style: italic; color: var(--blood);}
+.pullquote .pq-attrib{
+  display: block;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--whisper);
+}
+
+/* ── GODDESS CONSTELLATION (interactive SVG) ── */
+.constellation{
+  position: relative;
+  margin: 4rem auto 5rem;
+  max-width: 880px;
+  padding: 2.4rem 1rem 2rem;
+  background: rgba(255,255,255,0.4);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.constellation-label{
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  text-align: center;
+  margin-bottom: .5rem;
+  opacity:.85;
+}
+.constellation-title{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  text-align: center;
+  color: var(--ink);
+  margin-bottom: 2.2rem;
+  letter-spacing: -.01em;
+}
+.constellation-svg{
+  display: block; width: 100%; height: 480px;
+  max-height: 60vh;
+}
+.constellation-svg .grid-line{
+  stroke: var(--line);
+  stroke-width: 0.4;
+  stroke-dasharray: 2 4;
+  opacity: 0;
+  animation: cnst-line-in 1.4s cubic-bezier(.18,1,.3,1) forwards;
+  animation-delay: .8s;
+}
+@keyframes cnst-line-in{ to{ opacity:.7; } }
+.constellation-svg .thread{
+  fill: none;
+  stroke: var(--blood);
+  stroke-width: 1.2;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  opacity: .55;
+  animation: cnst-thread-draw 2.2s cubic-bezier(.18,1,.3,1) forwards;
+}
+@keyframes cnst-thread-draw{ to{ stroke-dashoffset: 0; } }
+.constellation-svg .thread.t1{ animation-delay: 1.0s; stroke-dasharray: 500; stroke-dashoffset: 500;}
+.constellation-svg .thread.t2{ animation-delay: 1.2s; stroke-dasharray: 520; stroke-dashoffset: 520; stroke: var(--turmeric);}
+.constellation-svg .thread.t3{ animation-delay: 1.4s; stroke-dasharray: 480; stroke-dashoffset: 480;}
+.constellation-svg .thread.t4{ animation-delay: 1.6s; stroke-dasharray: 530; stroke-dashoffset: 530; stroke: var(--turmeric);}
+.constellation-svg .thread.t5{ animation-delay: 1.8s; stroke-dasharray: 460; stroke-dashoffset: 460;}
+.constellation-svg .thread.t6{ animation-delay: 2.0s; stroke-dasharray: 500; stroke-dashoffset: 500; stroke: var(--turmeric);}
+.constellation-svg .core circle{
+  fill: var(--paper-warm);
+  stroke: var(--blood);
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: cnst-pop 0.7s cubic-bezier(.18,1.4,.3,1) forwards;
+  animation-delay: .3s;
+  transform-origin: center;
+}
+.constellation-svg .core .core-text{
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  fill: var(--oxblood);
+  text-anchor: middle;
+  opacity: 0;
+  animation: fadein 1s ease forwards;
+  animation-delay: 1.2s;
+}
+@keyframes cnst-pop{ from{ transform: scale(.4); opacity:0; } to{ transform: scale(1); opacity:1; }}
+@keyframes fadein{ to{ opacity:1; } }
+
+.constellation-svg .node{
+  cursor: pointer;
+  transition: transform .35s cubic-bezier(.18,1,.3,1);
+  transform-origin: center;
+}
+.constellation-svg .node circle{
+  fill: var(--paper);
+  stroke: var(--blood);
+  stroke-width: 1.6;
+  opacity: 0;
+  animation: cnst-pop .8s cubic-bezier(.18,1.4,.3,1) forwards;
+  filter: drop-shadow(2px 2px 0 rgba(141,26,26,0.18));
+}
+.constellation-svg .node.n1 circle{ animation-delay: .5s; }
+.constellation-svg .node.n2 circle{ animation-delay: .65s; }
+.constellation-svg .node.n3 circle{ animation-delay: .8s; }
+.constellation-svg .node.n4 circle{ animation-delay: .95s; }
+.constellation-svg .node .glyph{
+  font-family: var(--display);
+  font-size: 24px;
+  fill: var(--blood);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  opacity: 0;
+  animation: fadein .8s ease forwards;
+}
+.constellation-svg .node.n1 .glyph{ animation-delay: .9s; }
+.constellation-svg .node.n2 .glyph{ animation-delay: 1.05s; }
+.constellation-svg .node.n3 .glyph{ animation-delay: 1.2s; }
+.constellation-svg .node.n4 .glyph{ animation-delay: 1.35s; }
+.constellation-svg .node .name{
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  fill: var(--ink);
+  text-anchor: middle;
+  opacity: 0;
+  animation: fadein .8s ease forwards;
+}
+.constellation-svg .node.n1 .name{ animation-delay: 1.0s; }
+.constellation-svg .node.n2 .name{ animation-delay: 1.15s; }
+.constellation-svg .node.n3 .name{ animation-delay: 1.3s; }
+.constellation-svg .node.n4 .name{ animation-delay: 1.45s; }
+.constellation-svg .node .domain{
+  font-family: var(--mono);
+  font-size: 9.5px;
+  fill: var(--whisper);
+  text-anchor: middle;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadein .8s ease forwards;
+}
+.constellation-svg .node.n1 .domain{ animation-delay: 1.1s; }
+.constellation-svg .node.n2 .domain{ animation-delay: 1.25s; }
+.constellation-svg .node.n3 .domain{ animation-delay: 1.4s; }
+.constellation-svg .node.n4 .domain{ animation-delay: 1.55s; }
+.constellation-svg .node:hover circle{
+  fill: var(--blood);
+  stroke: var(--oxblood);
+  filter: drop-shadow(2px 2px 0 rgba(141,26,26,0.5));
+}
+.constellation-svg .node:hover .glyph{ fill: var(--paper); }
+.constellation-svg .node:hover{ transform: scale(1.06);}
+.constellation-svg .node:hover .name{ fill: var(--blood); }
+
+.constellation-svg .pulse{
+  animation: cnst-pulse 3.6s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes cnst-pulse{
+  0%,100%{ opacity: .25; transform: scale(1);}
+  50%   { opacity: .8;  transform: scale(1.4);}
+}
+.constellation-svg .key-label{
+  font-family: var(--mono);
+  font-size: 9px;
+  fill: var(--ink-soft);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadein 1.2s ease forwards;
+  animation-delay: 2.4s;
+}
+
+.constellation-legend{
+  display: flex; justify-content: center; gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.constellation-legend .lg{ display:flex; align-items:center; gap:8px;}
+.constellation-legend .lg .swatch{
+  width:14px; height:2px; background: var(--blood); flex-shrink:0;
+}
+.constellation-legend .lg .swatch.gold{ background: var(--turmeric); }
+
+/* Constellation info panel — appears under graph when node clicked */
+.constellation-panel{
+  margin-top: 1.6rem;
+  padding: 1.4rem 1.6rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blood);
+  min-height: 60px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.constellation-panel.in{ opacity:1; transform: translateY(0);}
+.constellation-panel .pn-name{
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--blood);
+  margin-bottom: .25rem;
+}
+.constellation-panel .pn-domain{
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: .7rem;
+}
+.constellation-panel .pn-desc{
+  font-family: var(--body);
+  font-size: 15px; line-height: 1.65;
+  color: var(--ink);
+}
+.constellation-panel .pn-jump{
+  display: inline-block;
+  margin-top: .9rem;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--blood);
+  text-decoration: none;
+  border-bottom: 1px solid var(--blood);
+  padding-bottom: 2px;
+  transition: gap .22s, color .22s;
+}
+.constellation-panel .pn-jump:hover{ color: var(--oxblood); border-color: var(--oxblood); }
 </style>
 </head>
 <body>
+<!-- ✦ slow page-enter curtain — bleeds away on load -->
+<div class="page-curtain" aria-hidden="true"></div>
+
+<!-- ✦ Sticky right-rail Section Navigator (spine) -->
+<aside class="spine" id="spine" aria-label="Section navigator">
+  <div class="spine-title">Spine</div>
+  <a href="#inheritance"   data-n="i">   <span class="dot"></span><span class="num">I</span>   Inheritance</a>
+  <a href="#watching"      data-n="ii">  <span class="dot"></span><span class="num">II</span>  Watching</a>
+  <a href="#scribbles"     data-n="iii"> <span class="dot"></span><span class="num">III</span> Scribbles</a>
+  <a href="#poems"         data-n="iv">  <span class="dot"></span><span class="num">IV</span>  Poem I</a>
+  <a href="#poem-2"        data-n="v">   <span class="dot"></span><span class="num">V</span>   Poem II</a>
+  <a href="#diagnosis"     data-n="vi">  <span class="dot"></span><span class="num">VI</span>  Diagnosis</a>
+  <a href="#naming"        data-n="vii"> <span class="dot"></span><span class="num">VII</span> Naming</a>
+  <a href="#pharmacopoeia" data-n="viii"><span class="dot"></span><span class="num">VIII</span>Pharmacopoeia</a>
+  <a href="#midwife"       data-n="ix">  <span class="dot"></span><span class="num">IX</span>  Midwife</a>
+  <a href="#goddesses"     data-n="x">   <span class="dot"></span><span class="num">X</span>   Goddesses</a>
+  <a href="#questions"     data-n="xi">  <span class="dot"></span><span class="num">XI</span>  Questions</a>
+  <a href="#pdf"           data-n="xii"> <span class="dot"></span><span class="num">XII</span> Document</a>
+</aside>
+
+<!-- ✦ Blood rivulets — continuous drips down the empty side margins -->
+<div class="rivulets" id="rivulets" aria-hidden="true">
+  <div class="side left">
+    <div class="rivulet r1"></div>
+    <div class="rivulet r2"></div>
+    <div class="rivulet r3"></div>
+  </div>
+  <div class="side right">
+    <div class="rivulet r1"></div>
+    <div class="rivulet r2"></div>
+    <div class="rivulet r3"></div>
+  </div>
+</div>
 
 <!-- Floating chrome -->
 <div class="scroll-thread" id="thread"></div>
@@ -821,6 +1579,14 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
 
 <!-- ==================== HERO ==================== -->
 <header class="hero">
+  <div class="ambient" aria-hidden="true">
+    <span class="seed" style="--x:8%;  --s:6px;  --d:21s; --delay:0s;   --dx:14px;"></span>
+    <span class="seed" style="--x:22%; --s:9px;  --d:27s; --delay:5s;   --dx:-8px;"></span>
+    <span class="seed" style="--x:40%; --s:5px;  --d:18s; --delay:11s;  --dx:6px;"></span>
+    <span class="seed" style="--x:58%; --s:8px;  --d:24s; --delay:2s;   --dx:-12px;"></span>
+    <span class="seed" style="--x:72%; --s:6px;  --d:29s; --delay:8s;   --dx:10px;"></span>
+    <span class="seed" style="--x:88%; --s:10px; --d:23s; --delay:14s;  --dx:-6px;"></span>
+  </div>
   <div class="hero-inner">
 
     <div class="epi-label">
@@ -909,6 +1675,12 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
 
 <!-- ==================== POEM I ==================== -->
 <section class="poem-stage" id="poems">
+  <div class="ambient" aria-hidden="true">
+    <span class="seed" style="--x:14%; --s:7px;  --d:24s; --delay:0s;  --dx:8px;"></span>
+    <span class="seed" style="--x:34%; --s:5px;  --d:31s; --delay:6s;  --dx:-10px;"></span>
+    <span class="seed" style="--x:52%; --s:9px;  --d:22s; --delay:13s; --dx:14px;"></span>
+    <span class="seed" style="--x:78%; --s:6px;  --d:28s; --delay:3s;  --dx:-6px;"></span>
+  </div>
   <h3 class="poem-title">i am not quiet when i bleed</h3>
 
   <div class="poem">
@@ -1023,6 +1795,12 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
 
 <!-- ==================== POEM II ==================== -->
 <section class="poem-stage" id="poem-2">
+  <div class="ambient" aria-hidden="true">
+    <span class="seed" style="--x:10%; --s:8px;  --d:26s; --delay:1s;  --dx:-12px;"></span>
+    <span class="seed" style="--x:30%; --s:5px;  --d:21s; --delay:9s;  --dx:6px;"></span>
+    <span class="seed" style="--x:62%; --s:7px;  --d:30s; --delay:4s;  --dx:-8px;"></span>
+    <span class="seed" style="--x:84%; --s:6px;  --d:23s; --delay:12s; --dx:10px;"></span>
+  </div>
   <h3 class="poem-title">i write where it hurts</h3>
 
   <div class="poem">
@@ -1230,8 +2008,83 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
       <p>The old woman invoked tribal goddesses Manasa, Shitala, Olabibi, and Basuli, not as distant myths, but as active presences within a living system of care. These figures became part of an everyday vocabulary through which women's pain could be understood and held. She spoke of cooling water rituals, of abstaining from fire and freshly cooked food, and of ancestral chants. These practices were not symbolic alone, but deeply responsive to women's bodily suffering.</p>
     </div>
 
+    <!-- ✦ INTERACTIVE GODDESS CONSTELLATION (DH visualization) -->
+    <div class="constellation reveal" id="constellation">
+      <div class="constellation-label">▣ Visualization · A Map of the Pantheon</div>
+      <div class="constellation-title">Four goddesses, woven into <em>a single fabric of care</em>.</div>
+
+      <svg class="constellation-svg" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Interactive constellation of four tribal goddesses connected by shared themes">
+
+        <!-- Grid lines (dashed cross + circle) -->
+        <line class="grid-line" x1="400" y1="40"  x2="400" y2="400"/>
+        <line class="grid-line" x1="80"  y1="220" x2="720" y2="220"/>
+        <circle class="grid-line" cx="400" cy="220" r="170" fill="none"/>
+
+        <!-- Connecting threads: red = blood/flow/womb; gold = heat/cooling/ritual -->
+        <path class="thread t1"        d="M 200 130 Q 300 120 400 130 T 600 130"/>  <!-- top: Manasa - Shitala -->
+        <path class="thread t2"        d="M 600 130 Q 660 200 600 310"/>             <!-- right: Shitala - Olabibi -->
+        <path class="thread t3"        d="M 600 310 Q 500 340 400 330 T 200 310"/>  <!-- bottom: Olabibi - Basuli -->
+        <path class="thread t4"        d="M 200 310 Q 140 200 200 130"/>             <!-- left: Basuli - Manasa -->
+        <path class="thread t5"        d="M 200 130 Q 400 220 600 310"/>             <!-- diagonal: Manasa - Olabibi -->
+        <path class="thread t6"        d="M 600 130 Q 400 220 200 310"/>             <!-- diagonal: Shitala - Basuli -->
+
+        <!-- Concept keywords along the threads -->
+        <text class="key-label" x="400" y="118" text-anchor="middle">womb · poison</text>
+        <text class="key-label" x="650" y="222" text-anchor="middle" transform="rotate(90 650 222)">cooling · heat</text>
+        <text class="key-label" x="400" y="350" text-anchor="middle">flow · spotting</text>
+        <text class="key-label" x="150" y="222" text-anchor="middle" transform="rotate(-90 150 222)">balance · meaning</text>
+
+        <!-- Central core -->
+        <g class="core">
+          <circle cx="400" cy="220" r="44"/>
+          <circle class="pulse" cx="400" cy="220" r="44" fill="none" stroke="#8d1a1a" stroke-width="1"/>
+          <text class="core-text" x="400" y="216">A Living</text>
+          <text class="core-text" x="400" y="232">System of</text>
+          <text class="core-text" x="400" y="248">Care</text>
+        </g>
+
+        <!-- Four goddess nodes -->
+        <g class="node n1" data-goddess="manasa" tabindex="0">
+          <circle cx="200" cy="130" r="48"/>
+          <text class="glyph" x="200" y="124">✦</text>
+          <text class="name"  x="200" y="200">Manasa</text>
+          <text class="domain" x="200" y="218">womb · poison · balance</text>
+        </g>
+        <g class="node n2" data-goddess="shitala" tabindex="0">
+          <circle cx="600" cy="130" r="48"/>
+          <text class="glyph" x="600" y="124">✦</text>
+          <text class="name"  x="600" y="200">Shitala</text>
+          <text class="domain" x="600" y="218">cooling · purification</text>
+        </g>
+        <g class="node n3" data-goddess="olabibi" tabindex="0">
+          <circle cx="600" cy="310" r="48"/>
+          <text class="glyph" x="600" y="304">✦</text>
+          <text class="name"  x="600" y="380">Olabibi</text>
+          <text class="domain" x="600" y="398">flow · spotting · safeguard</text>
+        </g>
+        <g class="node n4" data-goddess="basuli" tabindex="0">
+          <circle cx="200" cy="310" r="48"/>
+          <text class="glyph" x="200" y="304">✦</text>
+          <text class="name"  x="200" y="380">Basuli</text>
+          <text class="domain" x="200" y="398">irregularity · meaning</text>
+        </g>
+      </svg>
+
+      <div class="constellation-legend">
+        <div class="lg"><span class="swatch"></span> Blood threads · womb, flow, balance</div>
+        <div class="lg"><span class="swatch gold"></span> Ritual threads · cooling, heat, care</div>
+      </div>
+
+      <!-- Detail panel populated by JS when a node is clicked -->
+      <div class="constellation-panel" id="constellation-panel">
+        <div class="pn-name" id="pn-name">Hover or click any goddess</div>
+        <div class="pn-domain" id="pn-domain">— to enter her domain —</div>
+        <div class="pn-desc" id="pn-desc">Four tribal goddesses — Manasa, Shitala, Olabibi, Basuli — form a single, interconnected vocabulary for women's pain. They are not isolated myths but a relational system, each one stewarding a register of bodily and ritual experience.</div>
+      </div>
+    </div>
+
     <div class="goddess-grid">
-      <article class="goddess reveal">
+      <article class="goddess reveal" id="g-manasa">
         <div class="num">№ 01</div>
         <div class="name">Manasa</div>
         <div class="domain">womb · poison · balance</div>
@@ -1239,7 +2092,7 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
         <span class="sigil">✦</span>
       </article>
 
-      <article class="goddess reveal">
+      <article class="goddess reveal" id="g-shitala">
         <div class="num">№ 02</div>
         <div class="name">Shitala</div>
         <div class="domain">cooling · purification · relief</div>
@@ -1247,7 +2100,7 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
         <span class="sigil">✦</span>
       </article>
 
-      <article class="goddess reveal">
+      <article class="goddess reveal" id="g-olabibi">
         <div class="num">№ 03</div>
         <div class="name">Olabibi</div>
         <div class="domain">flow · spotting · safeguarding</div>
@@ -1255,7 +2108,7 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
         <span class="sigil">✦</span>
       </article>
 
-      <article class="goddess reveal">
+      <article class="goddess reveal" id="g-basuli">
         <div class="num">№ 04</div>
         <div class="name">Basuli</div>
         <div class="domain">irregularity · delay · meaning</div>
@@ -1298,6 +2151,12 @@ footer .div{ width: 30px; height: 1px; background: var(--turmeric); margin: 1.4r
 
 <!-- ==================== CODA ==================== -->
 <section class="coda">
+  <div class="ambient" aria-hidden="true">
+    <span class="seed" style="--x:12%; --s:8px;  --d:25s; --delay:0s;  --dx:10px;"></span>
+    <span class="seed" style="--x:38%; --s:6px;  --d:32s; --delay:7s;  --dx:-12px;"></span>
+    <span class="seed" style="--x:64%; --s:10px; --d:22s; --delay:3s;  --dx:8px;"></span>
+    <span class="seed" style="--x:86%; --s:5px;  --d:28s; --delay:14s; --dx:-6px;"></span>
+  </div>
   <div class="lines">
     <p class="poem-stanza-reveal">let vaginas be seen, and in being seen, be freed</p>
     <p class="poem-stanza-reveal">let vaginal blood flow without disguise or apology</p>
@@ -1465,6 +2324,297 @@ document.querySelectorAll('.nav a').forEach(a=>{
     }
   });
 });
+
+/* ════════════════════════════════════════════════════════════
+   ✦ Fancy hand-worked animations · scroll-triggered + JS-wired
+   ════════════════════════════════════════════════════════════ */
+(function fancy(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  /* 1 · Wrap each word of chapter h2 in <span class="w"> for staggered reveal */
+  document.querySelectorAll('.chapter h2').forEach(h2 => {
+    /* Preserve existing inner HTML (so <em> nodes survive) — wrap text-node words only */
+    const wrap = (node) => {
+      if (node.nodeType === 3){
+        const frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach(token => {
+          if (/^\s+$/.test(token)) frag.appendChild(document.createTextNode(token));
+          else if (token.length){
+            const s = document.createElement('span');
+            s.className = 'w'; s.textContent = token;
+            frag.appendChild(s);
+          }
+        });
+        node.parentNode.replaceChild(frag, node);
+      } else if (node.nodeType === 1 && node.childNodes.length){
+        Array.from(node.childNodes).forEach(wrap);
+        if (!node.classList.contains('w') && (node.tagName === 'EM' || node.tagName === 'STRONG')){
+          /* Wrap whole inline element as one word */
+          const s = document.createElement('span');
+          s.className = 'w';
+          node.parentNode.insertBefore(s, node);
+          s.appendChild(node);
+        }
+      }
+    };
+    Array.from(h2.childNodes).forEach(wrap);
+    /* Give each .w a staggered transition-delay */
+    h2.querySelectorAll('.w').forEach((w, i) => {
+      w.style.transitionDelay = (i * 70) + 'ms';
+    });
+  });
+
+  /* 2 · IntersectionObserver — fires on a few different sets */
+  const inObserver = (selector, cls = 'in', root = {threshold: .15, rootMargin: '0px 0px -40px 0px'}) => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting){
+          e.target.classList.add(cls);
+          /* For h2 word reveal — propagate */
+          if (e.target.matches && e.target.matches('.chapter h2')){
+            e.target.querySelectorAll('.w').forEach(w => w.classList.add('in'));
+          }
+          /* For poem stanza — propagate to all p children */
+          if (e.target.matches && e.target.matches('.poem .stanza')){
+            /* already in via poem-stanza-reveal CSS — also add .in for breathing */
+          }
+          obs.unobserve(e.target);
+        }
+      });
+    }, root);
+    document.querySelectorAll(selector).forEach(el => obs.observe(el));
+    return obs;
+  };
+
+  inObserver('.chapter h2');
+  inObserver('.chapter-mark');
+  inObserver('.prose em, .prose strong', 'in-view');
+  inObserver('.ref-list li');
+  inObserver('.poem .stanza');
+
+  /* 3 · Soft cursor blood-drop trail (cheap, infrequent) */
+  let lastDropAt = 0;
+  document.addEventListener('mousemove', (e) => {
+    const now = performance.now();
+    if (now - lastDropAt < 110) return;       /* throttle */
+    lastDropAt = now;
+    if (Math.random() > 0.55) return;          /* skip ~half */
+    const d = document.createElement('span');
+    d.style.cssText = `
+      position:fixed; left:${e.clientX}px; top:${e.clientY + 6}px;
+      width:5px; height:5px; border-radius:50%;
+      background:radial-gradient(circle at 35% 30%, rgba(141,26,26,0.85), rgba(141,26,26,0) 70%);
+      pointer-events:none; z-index:9998; opacity:.85;
+      transition: transform 1.1s ease, opacity 1.1s ease;
+    `;
+    document.body.appendChild(d);
+    requestAnimationFrame(() => {
+      d.style.transform = `translate(${(Math.random()-.5)*10}px, 26px) scale(.6)`;
+      d.style.opacity = '0';
+    });
+    setTimeout(() => d.remove(), 1200);
+  }, {passive:true});
+
+  /* 4 · Chapter h2 hover: re-trigger word-by-word reveal briefly */
+  document.querySelectorAll('.chapter h2').forEach(h2 => {
+    h2.addEventListener('mouseenter', () => {
+      h2.querySelectorAll('.w').forEach((w, i) => {
+        w.classList.remove('in');
+        setTimeout(() => w.classList.add('in'), 30 + i*55);
+      });
+    });
+  });
+})();
+
+/* ════════════════════════════════════════════════════════════
+   ✦ DH layer · scholarly apparatus + interactive viz
+   ════════════════════════════════════════════════════════════ */
+(function dh(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── 1 · Spine (right-rail) scroll-spy + reveal ── */
+  const spine = document.getElementById('spine');
+  if (spine){
+    setTimeout(() => spine.classList.add('in'), 800);
+    const spineLinks = Array.from(spine.querySelectorAll('a'));
+    const targets = spineLinks.map(a => {
+      const id = a.getAttribute('href').slice(1);
+      return { link:a, el:document.getElementById(id) };
+    }).filter(t => t.el);
+
+    const onScroll = () => {
+      const y = window.scrollY + window.innerHeight * 0.35;
+      let active = null;
+      for (const t of targets){
+        const top = t.el.getBoundingClientRect().top + window.scrollY;
+        if (top <= y) active = t;
+      }
+      targets.forEach(t => {
+        t.link.classList.remove('active');
+        if (t === active) t.link.classList.add('active');
+        else if (active && targets.indexOf(t) < targets.indexOf(active)) t.link.classList.add('read');
+      });
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+
+  /* ── 2 · Chapter meta chip — auto-compute reading time + paragraph count ── */
+  document.querySelectorAll('.chapter').forEach((ch, idx) => {
+    const proseEl = ch.querySelector('.prose');
+    if (!proseEl) return;
+    const text = proseEl.textContent || '';
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.max(1, Math.round(words / 220));
+    const paras = proseEl.querySelectorAll('p').length;
+    const roman = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'][idx] || (idx+1);
+
+    const meta = document.createElement('div');
+    meta.className = 'chapter-meta';
+    meta.innerHTML = `
+      <span>Chapter ${roman}</span>
+      <span class="cm-dot"></span>
+      <span>${minutes} min read</span>
+      <span class="cm-dot"></span>
+      <span>${paras} ¶</span>
+      <span class="cm-dot"></span>
+      <span>${words.toLocaleString()} words</span>
+    `;
+    /* Insert just after the .chapter-mark divider */
+    const mark = ch.querySelector('.chapter-mark');
+    if (mark && mark.parentNode){
+      mark.parentNode.insertBefore(meta, mark.nextSibling);
+    } else {
+      proseEl.parentNode.insertBefore(meta, proseEl);
+    }
+  });
+
+  /* ── 3 · Inline glossary — wrap select terms with hover-tooltips ── */
+  const GLOSS = {
+    "endometriosis": "Endometriosis (med.): a chronic gynaecological condition in which tissue similar to the endometrial lining grows outside the uterus, often producing severe pelvic pain, fatigue, and infertility. Average diagnostic delay in women is 7–12 years (Bullo, 2020).",
+    "biopolitical":  "Biopolitics (Foucault, 1976): the management of bodies and populations by modern power — through medicine, demography, and biological norms — to discipline life rather than only suppress it.",
+    "biopolitics":  "Biopolitics (Foucault, 1976): the management of bodies and populations by modern power — through medicine, demography, and biological norms — to discipline life rather than only suppress it.",
+    "necropolitics": "Necropolitics (Mbembe, 2003): the political power to dictate how some may live and how some must die — extending Foucault's biopolitics into the question of who is exposed to death, neglect, or unlivable conditions.",
+    "rhetorical":   "Rhetoric (here, feminist health humanities): how language, symbol, and silence shape what counts as a credible account of bodily pain — and whose voices are heard.",
+    "Manasa":       "Manasa: Bengali tribal goddess of snakes, fertility, and the womb. Invoked against “womb-poison,” persistent pelvic pain, and reproductive distress.",
+    "Shitala":      "Shitala: Bengali goddess of cooling and purification — invoked against fever, heat-related afflictions, and bodily inflammation.",
+    "Olabibi":      "Olabibi: Bengali Muslim folk goddess associated with cholera and bleeding-related disorders. Cross-religious; worshipped by both Hindus and Muslims.",
+    "Basuli":       "Basuli Thakurani: tribal goddess invoked for menstrual irregularity, delayed cycles, and meaning-making around unpredictable bodily symptoms.",
+    "kuwentuhan":   "Kuwentuhan (Filipino, methodology): a relational research practice of community storytelling — knowledge produced through dialogue rather than extraction.",
+    "drapetomania": "Drapetomania (Cartwright, 1851): a 19th-c. pseudoscientific diagnosis that pathologized enslaved Black people's desire to flee captivity as mental illness — a foundational example of medicine weaponized for racial control."
+  };
+  const terms = Object.keys(GLOSS).sort((a,b) => b.length - a.length);
+  const proseTargets = document.querySelectorAll('.prose p, .goddess-section .prose p, .midwife-section .prose p');
+  const wrapTerms = (textNode) => {
+    const text = textNode.nodeValue;
+    let lower = text.toLowerCase();
+    let earliest = null;
+    for (const t of terms){
+      const i = lower.indexOf(t.toLowerCase());
+      if (i !== -1 && (earliest === null || i < earliest.i)){
+        earliest = {i, t};
+      }
+    }
+    if (!earliest) return false;
+    const before = text.slice(0, earliest.i);
+    const match  = text.slice(earliest.i, earliest.i + earliest.t.length);
+    const after  = text.slice(earliest.i + earliest.t.length);
+    const span = document.createElement('span');
+    span.className = 'gloss';
+    span.setAttribute('tabindex', '0');
+    span.setAttribute('data-def', GLOSS[earliest.t]);
+    span.textContent = match;
+    const parent = textNode.parentNode;
+    if (before) parent.insertBefore(document.createTextNode(before), textNode);
+    parent.insertBefore(span, textNode);
+    const afterNode = document.createTextNode(after);
+    parent.insertBefore(afterNode, textNode);
+    parent.removeChild(textNode);
+    /* Recurse on the "after" portion to catch second occurrences in same node */
+    wrapTerms(afterNode);
+    return true;
+  };
+  proseTargets.forEach(p => {
+    /* Skip if inside something already wrapped */
+    const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => {
+        const par = n.parentElement;
+        if (!par) return NodeFilter.FILTER_REJECT;
+        if (par.closest('.gloss, em, strong, .pullquote, a')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    let n; while ((n = walker.nextNode())) nodes.push(n);
+    nodes.forEach(wrapTerms);
+  });
+
+  /* ── 4 · Goddess Constellation · interactivity ── */
+  const goddessData = {
+    manasa:  { name:"Manasa",  domain:"womb · poison · balance",     anchor:"#g-manasa",
+               desc:"Bengali tribal goddess of the womb and snakes. The midwife invokes her to address persistent pelvic pain — a culturally grounded way of naming the internal congestion and clotting that resembles contemporary endometriosis." },
+    shitala: { name:"Shitala", domain:"cooling · purification · relief", anchor:"#g-shitala",
+               desc:"Goddess of cooling and purification. Her rituals — abstaining from fire and freshly cooked food, bathing in water bodies — operate within a logic where bodily heat (pelvic burning, inflammation) is read as a somatic distress to be cooled, not merely an environmental fact." },
+    olabibi: { name:"Olabibi", domain:"flow · spotting · safeguarding", anchor:"#g-olabibi",
+               desc:"Cross-religious folk deity (worshipped by Hindus and Muslims) who safeguards women from bleeding-related disorders — excessive menstrual flow, irregular spotting, and unexplained bleeding." },
+    basuli:  { name:"Basuli",  domain:"irregularity · delay · meaning", anchor:"#g-basuli",
+               desc:"Basuli Thakurani is invoked when the body feels unpredictable — for delayed cycles, menstrual irregularity, and the symptoms that otherwise feel chaotic. Her rituals offer a way to make meaning of bodily uncertainty." }
+  };
+  const cPanel = document.getElementById('constellation-panel');
+  const cName = document.getElementById('pn-name');
+  const cDomain = document.getElementById('pn-domain');
+  const cDesc = document.getElementById('pn-desc');
+  document.querySelectorAll('.constellation-svg .node').forEach(node => {
+    const populate = () => {
+      const key = node.getAttribute('data-goddess');
+      const g = goddessData[key];
+      if (!g) return;
+      cName.textContent = g.name;
+      cDomain.textContent = g.domain.toUpperCase();
+      cDesc.innerHTML = g.desc + ` <a class="pn-jump" href="${g.anchor}">Open her card &nbsp;→</a>`;
+      cPanel.classList.add('in');
+    };
+    node.addEventListener('mouseenter', populate);
+    node.addEventListener('focus', populate);
+    node.addEventListener('click', () => {
+      populate();
+      const key = node.getAttribute('data-goddess');
+      const t = document.querySelector(goddessData[key].anchor);
+      if (t) setTimeout(() => t.scrollIntoView({behavior:'smooth', block:'center'}), 250);
+    });
+    node.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); node.click(); }
+    });
+  });
+
+  /* ── 4.5 · Blood rivulets — speed up while the reader is actively scrolling ── */
+  const rv = document.getElementById('rivulets');
+  if (rv){
+    let scrollTimer = null;
+    window.addEventListener('scroll', () => {
+      rv.classList.add('scrolling');
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => rv.classList.remove('scrolling'), 320);
+    }, {passive:true});
+  }
+
+  /* ── 5 · Auto pull-quotes — convert specially-marked blockquotes ── */
+  /* Mark via data-pq="optional attrib" on any <blockquote> or <p> */
+  document.querySelectorAll('[data-pq]').forEach(el => {
+    const pq = document.createElement('div');
+    pq.className = 'pullquote reveal';
+    pq.innerHTML = el.innerHTML;
+    const attrib = el.getAttribute('data-pq');
+    if (attrib && attrib.trim()){
+      const a = document.createElement('span');
+      a.className = 'pq-attrib';
+      a.textContent = attrib;
+      pq.appendChild(a);
+    }
+    el.parentNode.replaceChild(pq, el);
+  });
+})();
 </script>
 
 </body>
