@@ -723,7 +723,7 @@ body::after {
 </nav>
 
 <!-- DISCLAIMER -->
-<div id="disclaimer"><span class="r">CLASSIFIED</span> — GLOBAL SOUTH SOLIDARITIES — STUDENT CONTRIBUTION — WASHINGTON STATE UNIVERSITY</div>
+<div id="disclaimer"><span class="r">CLASSIFIED</span> — GLOBAL SOUTH SOLIDARITIES</div>
 
 <!-- TOC -->
 <div id="toc">
@@ -1474,6 +1474,124 @@ body::after {
 
 <div class="big-stmt reveal" style="font-size:clamp(1.2rem,4vw,2.5rem);">DEDICATED TO<br><span class="a">SOIL</span>…<span class="r">EARTHWORMS</span>…<span class="g">LIFE</span></div>
 
+<!-- ============================================================ -->
+<!-- ORIGINAL DOCUMENT — full PDF embedded                         -->
+<!-- ============================================================ -->
+<style>
+.richik-pdf-section{
+  padding: 5rem 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(200,168,75,0.04), transparent 30%, rgba(192,57,43,0.04));
+}
+.richik-pdf-frame{
+  position: relative;
+  max-width: 56rem;
+  margin: 2rem auto 0;
+  background: #0c0d12;
+  border: 1px solid var(--amber);
+  border-top: 3px solid var(--amber);
+  box-shadow: 12px 12px 0 rgba(0,0,0,0.55), 0 0 40px rgba(0,0,0,0.5), inset 0 0 60px rgba(0,0,0,0.4);
+  aspect-ratio: 8.5/11;
+  overflow: hidden;
+}
+.richik-pdf-frame::before,
+.richik-pdf-frame::after{
+  content:''; position: absolute; width: 18px; height: 18px;
+  border-color: var(--amber); border-style: solid; opacity: 0.8; z-index: 4;
+}
+.richik-pdf-frame::before{ top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.richik-pdf-frame::after { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+.richik-pdf-frame iframe,
+.richik-pdf-frame object,
+.richik-pdf-frame embed{
+  width: 100%; height: 100%;
+  border: 0; display: block;
+  background: #0c0d12;
+}
+.richik-pdf-fallback{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: #0c0d12; color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; text-align: center; padding: 2rem;
+  line-height: 1.7;
+}
+.richik-pdf-actions{
+  display: flex; flex-wrap: wrap; gap: .8rem;
+  justify-content: center;
+  margin-top: 2rem;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 12px; letter-spacing: .25em; text-transform: uppercase;
+}
+.richik-pdf-actions a{
+  color: var(--amber);
+  text-decoration: none;
+  padding: .85rem 1.4rem;
+  border: 1px solid var(--amber);
+  background: rgba(200,168,75,0.04);
+  transition: background .28s, color .28s, transform .28s, box-shadow .28s;
+  cursor: crosshair;
+}
+.richik-pdf-actions a:hover{
+  background: var(--amber);
+  color: var(--bg);
+  transform: translate(-2px,-2px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+}
+.richik-pdf-actions a.alt{ color: var(--red); border-color: var(--red); background: rgba(192,57,43,0.06); }
+.richik-pdf-actions a.alt:hover{ background: var(--red); color: var(--bg); }
+.richik-pdf-meta{
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+  margin-top: 1.4rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; letter-spacing: .15em;
+  color: var(--text-dim);
+}
+.richik-pdf-meta .dot{ color: var(--red); }
+</style>
+
+<section class="scroll-section richik-pdf-section" id="document" style="min-height:auto;">
+  <div class="content-box reveal" style="max-width:920px;">
+    <div class="file-badge">FILE 99</div>
+    <div class="watermark">ORIGINAL</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 700" preserveAspectRatio="none">
+        <path class="scribble-line" d="M-20,150 C120,130 240,250 380,200 S560,140 700,200 S830,260 870,220"/>
+        <path class="scribble-line thin" d="M-10,510 C90,490 220,580 380,540 S560,460 700,510 S820,560 870,540"/>
+        <path class="scribble-line bold" d="M820,0 C800,140 830,280 790,420 S820,560 780,690"/>
+      </svg>
+    </div>
+
+    <div class="assemblage-num">Archive · Full Dossier</div>
+    <div class="section-title" style="font-size:clamp(1.8rem,5vw,3.4rem);">The Original Document</div>
+    <div class="section-subtitle">Reflecting on the Art of Solidarity — the project as composed, in full.</div>
+
+    <div class="richik-pdf-meta">
+      <span>Richik Banerjee</span>
+      <span class="dot">●</span>
+      <span>GSS · Spring 2026</span>
+      <span class="dot">●</span>
+      <span>Full PDF · ~85 pp.</span>
+    </div>
+
+    <div class="richik-pdf-frame">
+      <object data="richik-assets/richik-banerjee-art-of-solidarity.pdf#view=FitH&toolbar=1" type="application/pdf">
+        <embed src="richik-assets/richik-banerjee-art-of-solidarity.pdf#view=FitH" type="application/pdf">
+        <div class="richik-pdf-fallback">
+          Your browser cannot display the PDF inline.<br>
+          Use the buttons below to open or download.
+        </div>
+      </object>
+    </div>
+
+    <div class="richik-pdf-actions">
+      <a href="richik-assets/richik-banerjee-art-of-solidarity.pdf" target="_blank" rel="noopener">Open in new tab ↗</a>
+      <a class="alt" href="richik-assets/richik-banerjee-art-of-solidarity.pdf" download>Download PDF ↓</a>
+    </div>
+  </div>
+</section>
+
 <!-- FINAL -->
 <section class="scroll-section" style="min-height:50vh;">
   <div style="text-align:center;">
@@ -1484,7 +1602,7 @@ body::after {
 
 <!-- FOOTER -->
 <footer style="padding:3rem 2rem;text-align:center;border-top:1px solid rgba(200,168,75,0.05);">
-  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.5em;color:rgba(200,168,75,0.2);text-transform:uppercase;">Global South Solidarities — Student Contribution</div>
+  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.5em;color:rgba(200,168,75,0.2);text-transform:uppercase;">Global South Solidarities</div>
   <div style="font-family:'Caveat',cursive;font-size:1rem;color:rgba(200,168,75,0.15);margin-top:0.5rem;font-style:italic;">dedicated to the phytoplankton of social justice</div>
   <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:rgba(200,168,75,0.08);letter-spacing:0.3em;margin-top:1rem;">FILE CLOSED // 20.04.2026</div>
 </footer>
