@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FILE: BUDDHA LO — Reclaiming Land, Memory, and Voice | GSS ANARCHIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0b0f;
+  --card: #0f1219;
+  --amber: #c8a84b;
+  --amber-dim: rgba(200,168,75,0.15);
+  --amber-glow: rgba(200,168,75,0.08);
+  --red: #c0392b;
+  --green: #27ae60;
+  --text: #e8e4dc;
+  --text-dim: #7a7262;
+  --scanline: rgba(200,168,75,0.02);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+::selection { background:var(--amber); color:var(--bg); }
+html { scroll-behavior:smooth; cursor:crosshair; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Share Tech Mono', monospace;
+  font-size:17px; line-height:1.8; overflow-x:hidden;
+}
+
+/* film grain */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:10000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+/* scanlines */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background:repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scanline) 2px, var(--scanline) 4px);
+  animation:scanMove 8s linear infinite;
+}
+@keyframes scanMove { 0%{transform:translateY(0);} 100%{transform:translateY(4px);} }
+
+/* progress */
+#progress {
+  position:fixed; top:0; left:0; height:3px;
+  background:linear-gradient(90deg, var(--red), var(--amber));
+  z-index:10001; width:0%; transition:width 0.1s;
+}
+
+/* loader */
+#loader {
+  position:fixed; inset:0; background:var(--bg);
+  z-index:20000; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transition:opacity 1.2s ease, visibility 1.2s ease;
+}
+#loader.hidden { opacity:0; visibility:hidden; }
+.loader-text {
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:clamp(0.8rem,2vw,1.2rem); letter-spacing:0.5em;
+  color:var(--amber); text-transform:uppercase;
+  animation:flicker 1.5s ease-in-out infinite;
+}
+@keyframes flicker { 0%,100%{opacity:.4;} 50%{opacity:1;} }
+.loader-bar {
+  width:200px; height:2px; background:rgba(200,168,75,0.1);
+  margin-top:1.5rem; position:relative; overflow:hidden;
+}
+.loader-bar::after {
+  content:''; position:absolute; left:-100%; width:100%; height:100%;
+  background:var(--amber); animation:loadSlide 1.5s ease-in-out infinite;
+}
+@keyframes loadSlide { 0%{left:-100%;} 100%{left:100%;} }
+
+/* nav (dossier strip) */
+#nav {
+  position:fixed; top:0; left:0; right:0; z-index:5000;
+  padding:0.8rem 2rem; display:flex; justify-content:space-between; align-items:center;
+  background:rgba(10,11,15,0.92); backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(200,168,75,0.1);
+  transition:transform 0.4s;
+}
+.nav-id { font-family:'Oswald', sans-serif; font-weight:600; font-size:0.75rem; letter-spacing:0.4em; color:var(--amber); text-transform:uppercase;}
+.nav-id .red { color:var(--red); }
+.nav-file { font-family:'Share Tech Mono', monospace; font-size:0.65rem; color:#9e9688; letter-spacing:0.2em;}
+
+/* GSS top nav (consistent with rest of site) */
+#gss-topnav{
+  position:fixed; top:44px; left:0; right:0; z-index:4900;
+  display:flex; align-items:center; justify-content:center; gap:32px;
+  padding:0 24px; height:34px;
+  background:rgba(10,11,15,0.88);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(200,168,75,0.05);
+  font-family:'Share Tech Mono', monospace;
+}
+#gss-topnav a{
+  font-size:10.5px; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(232,228,220,0.5); text-decoration:none;
+  padding:5px 12px; border-radius:14px; transition:all .22s;
+}
+#gss-topnav a:hover{ background:var(--red); color:#fff; }
+
+/* scribble bg */
+.scribble-wrap { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:1;}
+.scribble-wrap svg { position:absolute; width:100%; height:100%; }
+.scribble-line {
+  fill:none; stroke:#2d8a4e; stroke-width:1.5; stroke-linecap:round;
+  opacity:0.18; stroke-dasharray:1000; stroke-dashoffset:1000;
+  transition:stroke-dashoffset 2s ease;
+}
+.content-box.vis .scribble-line, .reveal.vis .scribble-line { stroke-dashoffset:0; }
+.scribble-line.thin { stroke-width:1; opacity:0.1; }
+.scribble-line.bold { stroke-width:2.2; opacity:0.22; }
+.scribble-line.ink { stroke:#1a6b3a; stroke-width:1.8; opacity:0.12; }
+
+/* sections */
+.scroll-section {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,4rem);
+  position:relative;
+}
+
+/* content box */
+.content-box {
+  background:var(--card);
+  border:1px solid var(--amber); border-top-width:3px;
+  padding:clamp(2rem,4vw,3.5rem);
+  max-width:900px; width:100%;
+  position:relative;
+  box-shadow:12px 12px 0 rgba(0,0,0,0.5);
+  transform:rotate(-0.5deg);
+  transition:transform 0.4s ease;
+}
+.content-box:hover { transform:rotate(0deg); }
+.content-box.tilt-right { transform:rotate(0.5deg); }
+.content-box.tilt-right:hover { transform:rotate(0deg); }
+.content-box::before, .content-box::after {
+  content:''; position:absolute; width:20px; height:20px;
+}
+.content-box::before { top:8px; left:8px; border-top:2px solid var(--amber); border-left:2px solid var(--amber); z-index:2;}
+.content-box::after  { bottom:8px; right:8px; border-bottom:2px solid var(--amber); border-right:2px solid var(--amber); z-index:2;}
+.content-box > *:not(.scribble-wrap):not(.watermark) { position:relative; z-index:2; }
+
+/* file badge */
+.file-badge {
+  position:absolute; top:-1px; right:1.5rem;
+  background:var(--red); color:#fff;
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:0.65rem; letter-spacing:0.3em;
+  padding:0.3rem 0.8rem; text-transform:uppercase;
+}
+
+/* watermark */
+.watermark {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%) rotate(-25deg);
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:clamp(4rem,12vw,10rem);
+  color:rgba(200,168,75,0.03);
+  letter-spacing:0.2em; text-transform:uppercase;
+  pointer-events:none; white-space:nowrap; user-select:none;
+}
+
+/* headings */
+.section-title {
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:clamp(1.5rem,4vw,2.5rem);
+  text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--amber); margin-bottom:0.5rem; line-height:1.2;
+}
+.section-subtitle {
+  font-family:'Oswald', sans-serif; font-weight:400;
+  font-size:0.7rem; letter-spacing:0.5em;
+  color:#9e9688; text-transform:uppercase;
+  margin-bottom:2rem;
+}
+.assemblage-num {
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:0.7rem; letter-spacing:0.4em;
+  color:var(--red); text-transform:uppercase;
+  margin-bottom:0.3rem;
+}
+
+/* body text */
+.body-text {
+  font-size:clamp(1rem,1.2vw,1.05rem);
+  color:#ebe7df;
+  margin-bottom:1.2rem; line-height:1.95;
+}
+.body-text em { color:var(--amber); font-style:italic; }
+.body-text strong { color:var(--amber); font-weight:600; }
+.highlight {
+  background:linear-gradient(transparent 60%, rgba(200,168,75,0.25) 60%);
+  padding:0 2px;
+}
+
+/* tags */
+.tag {
+  display:inline-block; border:1px solid var(--red);
+  color:var(--red);
+  font-family:'Oswald', sans-serif; font-weight:600;
+  font-size:0.6rem; letter-spacing:0.2em;
+  padding:0.2rem 0.6rem; text-transform:uppercase;
+  border-radius:20px; margin:0.2rem;
+}
+.tag.amber { border-color:var(--amber); color:var(--amber);}
+.tag.green { border-color:var(--green); color:var(--green);}
+
+/* author block */
+.author-grid{
+  display:grid; grid-template-columns:auto 1fr; gap:32px; align-items:start;
+  margin-top:1.4rem;
+}
+.author-seal{
+  width:120px; height:120px;
+  border:1.5px solid var(--amber);
+  display:grid; place-items:center;
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:2.4rem; letter-spacing:.12em;
+  color:var(--amber);
+  background: radial-gradient(circle at center, rgba(200,168,75,0.08), transparent 70%);
+  box-shadow: inset 0 0 24px rgba(200,168,75,0.05), 4px 4px 0 rgba(0,0,0,0.4);
+  position:relative;
+  flex-shrink:0;
+}
+.author-seal::before, .author-seal::after{
+  content:''; position:absolute; width:8px; height:8px; border:1.5px solid var(--amber);
+}
+.author-seal::before{ top:6px; left:6px; border-right:none; border-bottom:none;}
+.author-seal::after { bottom:6px; right:6px; border-left:none; border-top:none;}
+@media(max-width:600px){
+  .author-grid{ grid-template-columns:1fr; gap:18px;}
+  .author-seal{ margin:0 auto;}
+}
+
+/* video case file */
+.video-case{
+  margin:2rem 0;
+  border:1px solid var(--amber);
+  background:#06070b;
+  padding:14px;
+  position:relative;
+  box-shadow:8px 8px 0 rgba(0,0,0,0.5);
+}
+.video-case::before, .video-case::after{
+  content:''; position:absolute; width:14px; height:14px;
+}
+.video-case::before { top:4px; left:4px; border-top:2px solid var(--amber); border-left:2px solid var(--amber);}
+.video-case::after  { bottom:4px; right:4px; border-bottom:2px solid var(--amber); border-right:2px solid var(--amber);}
+.video-case-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+  font-family:'Oswald', sans-serif;
+  font-size:0.65rem; letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--amber);
+}
+.video-case-head .vc-stamp{
+  background:var(--red); color:#fff;
+  padding:3px 10px; font-weight:700;
+}
+.video-case-head .vc-id{ color:#9e9688; }
+.video-case video{
+  display:block; width:100%;
+  background:#000;
+  border:1px solid rgba(200,168,75,0.18);
+}
+.video-case-caption{
+  margin-top:10px;
+  font-family:'Share Tech Mono', monospace;
+  font-size:.78rem; letter-spacing:.06em;
+  color:var(--amber);
+  border-top:1px dashed rgba(200,168,75,0.18);
+  padding-top:8px;
+  display:flex; justify-content:space-between; align-items:center; gap:14px;
+  flex-wrap:wrap;
+}
+.video-case-caption .vc-file{ color:#ebe7df; word-break:break-all; }
+.video-case-caption .vc-meta{ color:#9e9688; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase;}
+
+/* arrow div */
+.arrow-div {
+  text-align:center; color:var(--red); letter-spacing:1em;
+  font-size:0.8rem; padding:1.5rem 0; opacity:0.5;
+}
+
+/* big statement */
+.big-stmt {
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:clamp(1.5rem,5vw,3.5rem);
+  text-transform:uppercase; letter-spacing:0.05em; line-height:1.15;
+  color:#ebe7df; text-align:center;
+  padding:clamp(3rem,8vw,6rem) 2rem;
+}
+.big-stmt .a { color:var(--amber); }
+.big-stmt .r { color:var(--red); }
+.big-stmt .g { color:var(--green); }
+
+/* disclaimer */
+#disclaimer {
+  position:fixed; bottom:0; left:0; right:0; z-index:5000;
+  padding:0.4rem 2rem;
+  background:rgba(10,11,15,0.92);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(192,57,43,0.2);
+  font-size:0.6rem; color:#9e9688; letter-spacing:0.2em;
+  text-align:center;
+  font-family:'Oswald', sans-serif; text-transform:uppercase;
+}
+#disclaimer .r { color:var(--red); }
+
+/* toc */
+#toc {
+  position:fixed; right:-340px; top:0; bottom:0; width:340px;
+  background:#0d0e14; z-index:6000;
+  padding:4rem 2rem 2rem;
+  transition:right 0.4s ease;
+  overflow-y:auto;
+  border-left:1px solid rgba(200,168,75,0.1);
+}
+#toc.open { right:0; }
+.toc-title {
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:0.75rem; letter-spacing:0.5em;
+  color:var(--red); margin-bottom:2rem; text-transform:uppercase;
+}
+.toc-link {
+  display:block; padding:0.5rem 0; font-size:0.75rem;
+  color:rgba(200,168,75,0.4); text-decoration:none;
+  transition:all 0.3s;
+  border-bottom:1px solid rgba(200,168,75,0.04);
+  font-family:'Share Tech Mono', monospace;
+}
+.toc-link:hover { color:var(--amber); padding-left:0.5rem; }
+.toc-link .num { color:var(--red); margin-right:0.5rem; }
+
+#toc-btn {
+  position:fixed; right:1.5rem; bottom:3rem;
+  width:44px; height:44px;
+  background:var(--card); border:1px solid var(--amber);
+  color:var(--amber);
+  font-family:'Oswald', sans-serif; font-weight:700;
+  font-size:0.6rem; letter-spacing:0.1em;
+  cursor:pointer; z-index:6001;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s;
+}
+#toc-btn:hover { background:var(--amber); color:var(--bg); }
+
+/* reveal */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal.vis { opacity:1; transform:translateY(0); }
+
+/* small screens */
+@media(max-width:768px) {
+  .scroll-section { padding:3rem 1rem; }
+  .content-box { padding:1.5rem; transform:rotate(0deg)!important; box-shadow:8px 8px 0 rgba(0,0,0,0.4); }
+  #gss-topnav{ height:32px; padding:0 8px; gap:14px;}
+  #gss-topnav a{ font-size:9.5px; padding:4px 8px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">LOGGING IN…</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- PROGRESS -->
+<div id="progress"></div>
+
+<!-- NAV STRIP -->
+<nav id="nav">
+  <div class="nav-id">GSS <span class="red">ANARCHIVE</span></div>
+  <div class="nav-file">FILE: BL-2026-TAMANG // LIVE 21.05.2026</div>
+</nav>
+
+<!-- GSS top nav (site-wide) -->
+<nav id="gss-topnav">
+  <a href="/">Home</a>
+  <a href="/pedagogy.html">Interactive Pedagogy</a>
+  <a href="/contributions">Contributions</a>
+  <a href="/gss-about-v2.html">About GSS</a>
+</nav>
+
+<!-- DISCLAIMER -->
+<div id="disclaimer"><span class="r">CLASSIFIED</span> — GLOBAL SOUTH SOLIDARITIES</div>
+
+<!-- TOC -->
+<div id="toc">
+  <div class="toc-title">FIELD INDEX</div>
+  <a href="#cover"          class="toc-link"><span class="num">00</span> COVER</a>
+  <a href="#author"         class="toc-link"><span class="num">01</span> AUTHOR — BUDDHA LO</a>
+  <a href="#abstract"       class="toc-link"><span class="num">02</span> ABSTRACT</a>
+  <a href="#sindhupalchok"  class="toc-link"><span class="num">03</span> SINDHUPALCHOK — SIMEBHUME PUJA</a>
+  <a href="#timal"          class="toc-link"><span class="num">04</span> TIMAL — KING RINJIN DORJE</a>
+  <a href="#dupcheshwar"    class="toc-link"><span class="num">05</span> GOLFU NAMSAPURAN, DUPCHESHWAR</a>
+  <a href="#bolgau"         class="toc-link"><span class="num">06</span> BOLGAU — ENDURANCE &amp; ENCOUNTER</a>
+  <a href="#shemjong"       class="toc-link"><span class="num">07</span> SHEMJONG — IDENTITY, ERASURE</a>
+  <a href="#conclusion"     class="toc-link"><span class="num">08</span> RECLAIMING LAND, MEMORY, VOICE</a>
+</div>
+<button id="toc-btn" onclick="document.getElementById('toc').classList.toggle('open')">TOC</button>
+
+<!-- ============================================================ -->
+<!-- COVER -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="cover">
+  <div class="content-box reveal" style="text-align:center; transform:rotate(0deg);">
+    <div class="file-badge">FILE 00</div>
+    <div class="watermark">CLASSIFIED</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 700" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,180 C120,150 260,260 400,210 S580,130 720,190 S840,250 870,220"/>
+        <path class="scribble-line"      d="M800,0 C770,100 810,220 760,340 S790,460 750,580 S780,670 760,700"/>
+        <path class="scribble-line thin" d="M-20,500 C80,470 200,560 350,510 S530,430 670,490 S810,550 870,520"/>
+      </svg>
+    </div>
+    <div class="assemblage-num" style="margin-bottom:2rem;">Global South Solidarities</div>
+    <div class="section-title" style="font-size:clamp(2rem,7vw,5rem);margin-bottom:0.5rem;">RECLAIMING</div>
+    <div class="section-title" style="font-size:clamp(1rem,3vw,2rem);opacity:0.5;font-weight:400;font-style:italic;margin-bottom:0.3rem;">land, memory, and</div>
+    <div class="section-title" style="font-size:clamp(2rem,7vw,5rem);margin-bottom:2rem;">VOICE</div>
+    <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1rem,2.5vw,1.5rem);letter-spacing:0.4em;color:var(--red);margin-bottom:0.5rem;">BUDDHA LO</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:#9e9688;letter-spacing:0.3em;">A DIGITAL STORYTELLING PROJECT · FOUR TAMANG CLANS · NEPAL</div>
+    <div class="arrow-div" style="margin-top:3rem;">▼ ▼ ▼</div>
+    <div style="font-size:0.65rem;color:#9e9688;letter-spacing:0.2em;margin-top:0.5rem;">SCROLL TO ENTER THE FIELD</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- AUTHOR -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="author" style="min-height:auto;padding-top:5rem;padding-bottom:4rem;">
+  <div class="content-box tilt-right reveal">
+    <div class="file-badge">FILE 01</div>
+    <div class="watermark">AUTHOR</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 700" preserveAspectRatio="none">
+        <path class="scribble-line"      d="M-20,160 C110,140 240,250 380,210 S560,150 700,200 S830,260 870,230"/>
+        <path class="scribble-line thin" d="M-10,520 C90,500 220,580 380,540 S560,470 700,510 S820,560 870,540"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Researcher · Field Intake</div>
+    <div class="section-title">BUDDHA LO</div>
+    <div class="section-subtitle">Tamang Community · Decolonial Storytelling · Nepal</div>
+
+    <div class="author-grid">
+      <div class="author-seal">BL</div>
+      <div>
+        <p class="body-text">As a member of the <em>Tamang community</em>, the researcher adopts a decolonial storytelling methodology, centering the voices and oral narratives of community elders as primary sources of knowledge and resistance.</p>
+        <p class="body-text">The project documents how state-led <em>“unification”</em> processes functioned as forms of internal colonialism, shaping Tamang histories and identities. Framed through postcolonial theory, Indigenous studies, and cultural trauma.</p>
+        <div style="margin-top:1rem;">
+          <span class="tag">Tamang</span>
+          <span class="tag amber">Nepal</span>
+          <span class="tag green">Indigenous</span>
+          <span class="tag amber">Oral History</span>
+          <span class="tag">Decolonial</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO — Consent Relationality.mp4 (methodological framing) -->
+    <div class="video-case" style="margin-top:2.5rem;">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ METHODOLOGY</span>
+        <span class="vc-id">FILE 01 · CLIP 01</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/Consent%20Relationality.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">Consent Relationality.mp4</span>
+        <span class="vc-meta">Methodological Framing · Researcher Reflection</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ABSTRACT -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="abstract" style="min-height:auto;padding-top:4rem;padding-bottom:5rem;">
+  <div class="content-box reveal">
+    <div class="file-badge">FILE 02</div>
+    <div class="watermark">ABSTRACT</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 800" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,180 C120,160 260,290 400,230 S580,150 720,210 S830,270 870,240"/>
+        <path class="scribble-line"      d="M820,0 C800,140 830,280 790,420 S820,560 780,700"/>
+        <path class="scribble-line thin" d="M-20,640 C80,610 200,700 350,650 S530,580 670,640 S810,690 870,660"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Project Abstract</div>
+    <div class="section-title">ABSTRACT</div>
+    <div class="section-subtitle">Four Tamang Clans · Decolonial Methodology</div>
+
+    <p class="body-text">This digital storytelling project explores the multifaceted histories and lived experiences of <em>four Tamang clans</em> in Nepal, foregrounding their historical erasure and systemic exploitation. Filmed across the ancestral lands of <em>Sindhupalchowk, Kavre, Dhading, and Nuwakot</em>, the project situates its narrative within sacred burial sites of former Tamang kings — spaces that hold deep cultural and spiritual significance. As a member of the Tamang community, the researcher adopts a decolonial storytelling methodology, centering the voices and oral narratives of community elders as primary sources of knowledge and resistance.</p>
+
+    <p class="body-text">Framed through postcolonial theory, Indigenous studies, and cultural trauma, the project documents how state-led <em>“unification”</em> processes functioned as forms of internal colonialism, shaping Tamang histories and identities. It highlights intergenerational trauma and systemic marginalization, particularly through references to legal instruments such as the <em>Muluki Ain</em>, which institutionalized social hierarchies and exploitation. Personal narratives — including the account of a ward president — illustrate the enduring impacts of these structures across generations.</p>
+
+    <p class="body-text">By recording Indigenous epistemologies and lived experiences, this project challenges dominant historical narratives and <em>reclaims erased histories</em>. It underscores storytelling as a critical tool for cultural preservation, resistance, and self-representation. Ultimately, the work contributes to broader discussions on Global South Indigenous literature, contemporary Indigenous identity, and the role of film (videos) as a medium of social critique, affirming the transformative power of storytelling in reclaiming space and voice.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FIELD NARRATIVE I — SINDHUPALCHOK -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="sindhupalchok" style="min-height:auto;padding-top:4rem;padding-bottom:5rem;">
+  <div class="content-box tilt-right reveal">
+    <div class="file-badge">FILE 03</div>
+    <div class="watermark">SINDHUPALCHOK</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 900" preserveAspectRatio="none">
+        <path class="scribble-line"      d="M-20,200 C110,170 240,280 380,230 S560,150 700,210 S830,270 870,240"/>
+        <path class="scribble-line ink"  d="M830,0 C800,130 840,280 790,420 S820,560 780,700 S810,830 790,900"/>
+        <path class="scribble-line thin" d="M60,0 C80,110 40,230 90,350 S50,480 100,610 S60,740 80,870"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Field Narrative · Sindhupalchok</div>
+    <div class="section-title">ENCOUNTERING SIMEBHUME PUJA</div>
+    <div class="section-subtitle">Researcher · Buddha Lo</div>
+
+    <p class="body-text">My journey began in <em>Sindhupalchok</em>, a place I was visiting for the first time. The experience was both uncertain and exciting — I had little knowledge of the terrain, the routes, or even what exactly I would be able to document. What guided me forward was a deep curiosity about <em>Simebhume Puja</em>, a water–land worship ritual practiced by our Tamang ancestors since time immemorial.</p>
+
+    <p class="body-text">Despite its cultural significance, this ritual is gradually fading from the awareness of younger Tamang generations, particularly those growing up in urban environments. This realization added urgency and purpose to my journey.</p>
+
+    <p class="body-text">To reach the site, I connected with a cab driver (<em>Phurba samdhi</em>) in Kathmandu who belonged to the local community. His support became invaluable — not only did he help me navigate the unfamiliar route, but he also facilitated my access to the ritual space. Together, we hiked toward a hilltop after reaching <em>Lisankhupakhar</em>, a sacred landscape belonging to the Moktan clan of the Tamang community.</p>
+
+    <p class="body-text">Locally, this place is known by its original Tamang name, <em>Andarbung</em>. However, I observed that this Indigenous name has been replaced in official usage by the Nepali (Khas-Arya) name <em>Attarpur</em>, as displayed on a nearby health post signboard. This subtle shift in naming reflects a broader pattern of cultural erasure that Indigenous communities continue to navigate.</p>
+
+    <p class="body-text">One of the most striking aspects of life in this region is its deep connection to the land. Agriculture — especially <em>potato farming</em> — serves as a primary source of livelihood. The potatoes grown here are highly valued and in strong demand in Kathmandu for their exceptional quality. In the evening, around 5 p.m., I attempted to purchase some potatoes. However, my request was gently declined. The locals explained that the following day was <em>Simebhume Puja</em>, a sacred occasion during which digging the soil is strictly prohibited. Harvesting or selling potatoes on this day would violate the ritual's principles. This moment revealed something profound: <em>a living ethic of environmental respect embedded within cultural practice</em>. The land is not merely a resource — it is sacred, relational, and deserving of reverence.</p>
+
+    <!-- VIDEO — SIMEBHUME RITUAL.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 03 · CLIP 01</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/SIMEBHUME%20RITUAL.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">SIMEBHUME RITUAL.mp4</span>
+        <span class="vc-meta">Simebhume Puja · Sindhupalchok</span>
+      </div>
+    </div>
+
+    <!-- VIDEO — simebhume myth.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 03 · CLIP 02</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/simebhume%20myth.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">simebhume myth.mp4</span>
+        <span class="vc-meta">Origin · Myth · Sindhupalchok</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FIELD NARRATIVE II — TIMAL -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="timal" style="min-height:auto;padding-top:4rem;padding-bottom:5rem;">
+  <div class="content-box reveal">
+    <div class="file-badge">FILE 04</div>
+    <div class="watermark">TIMAL</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 900" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,160 C120,140 240,260 380,210 S560,140 700,200 S830,260 870,230"/>
+        <path class="scribble-line"      d="M820,0 C800,140 830,280 790,420 S820,560 780,700"/>
+        <path class="scribble-line thin" d="M-10,560 C90,540 220,620 380,580 S560,510 700,550 S820,600 870,580"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Field Narrative · Timal (Kavre)</div>
+    <div class="section-title">REMEMBERING KING RINJIN DORJE</div>
+    <div class="section-subtitle">Researcher · Buddha Lo</div>
+
+    <p class="body-text">My next journey took me to <em>Timal in Kavre</em>, a historically and culturally significant region for the Tamang community. I was accompanied by my brother-in-law (<em>Karna bhena</em>), who belongs to this locality. Having grown up there, he became not only my guide but also a vital narrative voice — bridging my perspective as a researcher with the lived knowledge of the land.</p>
+
+    <p class="body-text">Timal is not a single destination but a vast hill region composed of multiple scattered settlements. Reaching these sites required careful planning. While local buses operate up to a certain point, the remaining journey must be completed on foot. To navigate the distance efficiently, we chose to travel by scooter, which proved to be the most practical option despite the challenging conditions.</p>
+
+    <p class="body-text">The terrain was difficult — steep, slippery, and coated in red mud, especially after recent weather. The remoteness of the area was palpable, reinforcing how geographically and infrastructurally distant these Indigenous spaces remain. The majority of the inhabitants in this region belong to the <em>Dong clan</em> of the Tamang community, whose presence continues to shape the cultural landscape of Timal.</p>
+
+    <p class="body-text">One of the key sites we visited was <em>Kottimal</em>, where a statue of the last Tamang <em>ghley</em> (local king), <em>King Rinjin Dorje</em>, stands alongside his queen. The monument serves not only as a historical marker but also as a site of cultural memory, preserving the legacy of Tamang leadership in the region.</p>
+
+    <p class="body-text">Through my brother-in-law's connections, I was introduced to a local Tamang elder. What followed was not just an interview, but an immersive storytelling experience. The elder narrated the history of the place, recounting the life and legacy of King Rinjin Dorje. More significantly, he performed these stories through <em>Tamang Selo</em>, accompanied by the rhythmic beats of the <em>damfu</em>.</p>
+
+    <p class="body-text">This form of storytelling — where history, music, and memory converge — offered a powerful reminder that <em>Indigenous knowledge is not only spoken but also sung, performed, and felt</em>. It exists beyond written archives, carried forward through embodied cultural practices.</p>
+
+    <!-- VIDEO — temal clip 1 Storytelling.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 04 · CLIP 01</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/temal%20clip%201%20Storytelling.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">temal clip 1 Storytelling.mp4</span>
+        <span class="vc-meta">Storytelling · Timal · Kavre</span>
+      </div>
+    </div>
+
+    <!-- VIDEO — Damphu significance .mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 04 · CLIP 02</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/Damphu%20significance%20.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">Damphu significance .mp4</span>
+        <span class="vc-meta">Damfu · Instrument of Tamang Selo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FIELD NARRATIVE III — GOLFU NAMSAPURAN, DUPCHESHWAR -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="dupcheshwar" style="min-height:auto;padding-top:4rem;padding-bottom:5rem;">
+  <div class="content-box tilt-right reveal">
+    <div class="file-badge">FILE 05</div>
+    <div class="watermark">DUPCHESHWAR</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 900" preserveAspectRatio="none">
+        <path class="scribble-line"      d="M-20,200 C110,170 240,280 380,230 S560,150 700,210 S830,270 870,240"/>
+        <path class="scribble-line ink"  d="M-10,520 C90,500 220,580 380,540 S560,470 700,510 S820,560 870,540"/>
+        <path class="scribble-line thin" d="M820,0 C800,140 830,280 790,420 S820,560 780,700 S810,830 790,900"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Field Narrative · Golfu Namsapuran, Dupcheshwar (Nuwakot)</div>
+    <div class="section-title">IN SEARCH OF THE GHALAN GHLEY</div>
+    <div class="section-subtitle">Researcher · Buddha Lo</div>
+
+    <p class="body-text">Reaching <em>Golfu Namsapuran</em> in Dupcheshwar-4, Nuwakot, was one of the most challenging journeys in my fieldwork. My first attempt ended in uncertainty. I had traveled as far as <em>Samundratar</em>, but as dusk approached, I was forced to turn back. Even local residents in the Dupcheshwar area were unfamiliar with this site, known as the ancestral land of the last <em>Ghalan ghley</em> (king). With no clear directions and no assurance of lodging, continuing further felt unsafe.</p>
+
+    <p class="body-text">Determined to return, I began searching for local connections. After a few days, I was able to contact a ward president (<em>Gyan Bahadur Glan</em>) from the area who was temporarily based in Kathmandu. His family lived in Gokarna for the children's education, and he regularly traveled to Kathmandu on weekends. Through this connection, my second journey became not only possible but more grounded in local support.</p>
+
+    <p class="body-text">This time, I traveled with clarity and purpose. We set out early in the morning and continued until late evening. As we approached Samundratar — the point where I had previously turned back — I felt a sense of return, as if resuming an unfinished path. Beyond Samundratar, a narrow bridge marked the threshold into a more remote and less accessible terrain.</p>
+
+    <p class="body-text">The road ahead was difficult. The trail climbed steep hillsides, often disrupted by landslides and unstable paths. The physical landscape itself seemed to resist easy access, reflecting how these culturally significant sites remain geographically and symbolically distant from mainstream visibility. Despite these challenges, we eventually reached the ward president's home, where we rested for the night.</p>
+
+    <p class="body-text">The following morning, we continued onward to the ancestral land of the <em>Ghalan clan</em> of the Tamang community. Standing there, I was reminded that such places are not merely geographic locations but <em>living archives</em> — spaces where history, identity, and memory are deeply rooted in the land.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FIELD NARRATIVE IV — BOLGAU -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="bolgau" style="min-height:auto;padding-top:4rem;padding-bottom:5rem;">
+  <div class="content-box reveal" style="max-width:980px;">
+    <div class="file-badge">FILE 06</div>
+    <div class="watermark">BOLGAU</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 1200" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,180 C120,160 240,300 380,250 S560,170 700,230 S830,290 870,260"/>
+        <path class="scribble-line"      d="M820,0 C800,140 830,280 790,420 S820,560 780,700 S810,830 790,990"/>
+        <path class="scribble-line thin" d="M-10,640 C90,620 220,700 380,660 S560,590 700,630 S820,680 870,660"/>
+        <path class="scribble-line ink"  d="M60,0 C80,160 40,330 90,500 S50,680 100,860 S60,1040 80,1170"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Field Narrative · Bolgau, Dupcheshwar</div>
+    <div class="section-title">ENDURANCE AND ENCOUNTER IN A REMOTE LANDSCAPE</div>
+    <div class="section-subtitle">Researcher · Buddha Lo</div>
+
+    <p class="body-text">Interestingly, <em>Bolgau</em> was not part of my original travel plan. However, during my earlier field visit to Golfu Namsapuran, several local residents strongly encouraged me to include it in my journey. They spoke of its cultural significance and its potential for research, even while acknowledging that it remains one of the most remote and least explored areas in the region. Taking their advice seriously, I decided to make the journey.</p>
+
+    <p class="body-text">Reaching Bolgau was physically demanding. The route required a continuous uphill walk of nearly four hours through steep and rugged terrain. The monsoon season made the trail even more difficult — wet, slippery paths and frequent leech bites added to the exhaustion. After days of continuous travel and walking, my body began to give in. At one point during the climb, I briefly fainted, overwhelmed by fatigue and physical strain. Yet, this difficult journey also revealed something deeply meaningful.</p>
+
+    <p class="body-text">Upon reaching Bolgau, I encountered a community that seemed to exist in a different temporal rhythm — less touched by rapid cultural change. The elders, in particular, wore locally made garments that closely resembled traditional Tamang attire from earlier generations. Their clothing was not simply aesthetic; it was a <em>living expression of continuity, identity, and cultural resilience</em>.</p>
+
+    <p class="body-text">Despite its inaccessibility, or perhaps because of it, Bolgau holds immense potential for research. It stands as a reminder that some of the most significant <em>Indigenous knowledge systems and cultural practices persist in places that are hardest to reach</em> — geographically distant, yet culturally profound.</p>
+
+    <!-- VIDEO — BOLGAU CLIP 1Storytelling.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 06 · CLIP 01</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/BOLGAU%20CLIP%201Storytelling.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">BOLGAU CLIP 1Storytelling.mp4</span>
+        <span class="vc-meta">Storytelling · Bolgau · Dupcheshwar</span>
+      </div>
+    </div>
+
+    <!-- VIDEO — final bolgau storytelling.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 06 · CLIP 02</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/final%20bolgau%20storytelling.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">final bolgau storytelling.mp4</span>
+        <span class="vc-meta">Storytelling · Bolgau · Dupcheshwar</span>
+      </div>
+    </div>
+
+    <!-- VIDEO — bolgau song of resistance.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 06 · CLIP 03</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/bolgau%20song%20of%20resistance.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">bolgau song of resistance.mp4</span>
+        <span class="vc-meta">Song of Resistance · Bolgau</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FIELD NARRATIVE V — SHEMJONG -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="shemjong" style="min-height:auto;padding-top:4rem;padding-bottom:5rem;">
+  <div class="content-box tilt-right reveal">
+    <div class="file-badge">FILE 07</div>
+    <div class="watermark">SHEMJONG</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 900" preserveAspectRatio="none">
+        <path class="scribble-line"      d="M-20,180 C110,160 240,280 380,230 S560,160 700,210 S830,270 870,240"/>
+        <path class="scribble-line bold" d="M820,0 C800,140 830,280 790,420 S820,560 780,700 S810,830 790,900"/>
+        <path class="scribble-line thin" d="M-10,600 C90,580 220,660 380,620 S560,550 700,590 S820,640 870,620"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Field Narrative · Shemjong, Dhading</div>
+    <div class="section-title">IDENTITY, ERASURE, AND RECLAMATION</div>
+    <div class="section-subtitle">Researcher · Buddha Lo</div>
+
+    <p class="body-text">I chose to conclude my fieldwork in <em>Shemjong, Dhading</em> — a place remembered as the settlement of the last <em>Waiba ghley</em> (king Tagur). Compared to the other Tamang villages I had visited, Shemjong appeared relatively more prosperous. This contrast immediately raised questions for me: what historical or social factors had shaped this difference?</p>
+
+    <p class="body-text">The answer unfolded through a conversation with the local ward president (<em>Suresh Gurung</em> in citizenship but he is actually <em>Suresh Tamang</em>), who shared a deeply revealing story about the community's past. He explained that his father's generation — and eventually the entire village — had made a collective decision to <em>change their surname from Tamang to Gurung</em>. This was not a matter of cultural preference, but a strategic response to systemic discrimination.</p>
+
+    <p class="body-text">To understand this decision, it is necessary to recall the historical context of the <em>Muluki Ain</em>, the legal code promulgated under <em>Jung Bahadur Rana</em>. Within this framework, Tamang communities were categorized as <em>Masinya Matwali</em> — a classification that carried severe social and institutional restrictions. They were denied access to formal education and excluded from paid employment opportunities, including recruitment into the Indian Army, which was a major source of livelihood and social mobility.</p>
+
+    <p class="body-text">Faced with these structural barriers, the community in Shemjong adopted a different surname to navigate and survive within an oppressive system. This shift, while pragmatic, came at the cost of <em>concealing their Indigenous identity</em>.</p>
+
+    <p class="body-text"><em>What is remarkable, however, is what is happening now.</em></p>
+
+    <p class="body-text">The current generation has begun a collective process of <em>reclaiming their original identity</em>. Families who once adopted alternative surnames are now consciously returning to Tamang, asserting their heritage with renewed pride. This act of reclamation is not merely symbolic — it is a powerful form of <em>resistance against historical erasure</em> and a step toward restoring cultural dignity.</p>
+
+    <p class="body-text">Ending my fieldwork in Shemjong felt significant. It brought together many of the themes I had encountered throughout my journey — <em>land, memory, identity, and resilience</em> — while also pointing toward a future where Indigenous communities actively reclaim and redefine their place in history.</p>
+
+    <!-- VIDEO — Shemjong Storytelling.mp4 -->
+    <div class="video-case">
+      <div class="video-case-head">
+        <span class="vc-stamp">▶ FIELD RECORDING</span>
+        <span class="vc-id">FILE 07 · CLIP 01</span>
+      </div>
+      <video controls preload="metadata" playsinline>
+        <source src="buddha-assets/Shemjong%20Storytelling.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-case-caption">
+        <span class="vc-file">Shemjong Storytelling.mp4</span>
+        <span class="vc-meta">Storytelling · Shemjong · Dhading</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- BIG STATEMENT  -->
+<!-- ============================================================ -->
+<section class="scroll-section" style="min-height:auto;padding-top:3rem;padding-bottom:3rem;">
+  <div class="big-stmt reveal" style="font-size:clamp(1.2rem,4vw,2.5rem);">
+    <span class="r">LAND</span> · <span class="a">MEMORY</span> · <span class="g">VOICE</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CONCLUSION -->
+<!-- ============================================================ -->
+<section class="scroll-section" id="conclusion" style="min-height:auto;padding-top:4rem;padding-bottom:6rem;">
+  <div class="content-box reveal" style="max-width:920px;">
+    <div class="file-badge">FILE 08</div>
+    <div class="watermark">CONCLUSION</div>
+    <div class="scribble-wrap">
+      <svg viewBox="0 0 850 1000" preserveAspectRatio="none">
+        <path class="scribble-line bold" d="M-20,180 C120,160 240,290 380,230 S560,150 700,220 S830,280 870,250"/>
+        <path class="scribble-line"      d="M820,0 C800,140 830,280 790,420 S820,560 780,700 S810,830 790,990"/>
+        <path class="scribble-line thin" d="M-10,640 C90,620 220,700 380,660 S560,590 700,630 S820,680 870,660"/>
+        <path class="scribble-line ink"  d="M60,0 C80,160 40,330 90,500 S50,680 100,860 S60,990 80,990"/>
+      </svg>
+    </div>
+    <div class="assemblage-num">Conclusion</div>
+    <div class="section-title">RECLAIMING LAND, MEMORY, AND VOICE</div>
+    <div class="section-subtitle">Sindhupalchok · Timal · Dupcheshwar · Bolgau · Shemjong</div>
+
+    <p class="body-text">This digital storytelling journey began as a search — for places, for histories, and for fragments of a cultural world that often remains unseen. What unfolded across Sindhupalchok, Timal, Dupcheshwar, Bolgau, and Shemjong was not simply a series of visits, but an encounter with <em>living archives</em> — landscapes where memory is embedded in ritual, song, naming, and everyday practice.</p>
+
+    <p class="body-text">Across these sites, a common thread emerged: <em>the deep relational bond between the Tamang people and their land</em>. Whether through Simebhume Puja, where soil and water are treated as sacred, or through the preservation of ancestral sites connected to <em>ghley</em> lineages, the land is not an object of ownership but a source of identity, responsibility, and continuity. These practices challenge dominant ways of seeing land as merely economic or territorial — they instead foreground a worldview rooted in <em>respect, reciprocity, and coexistence</em>.</p>
+
+    <p class="body-text">At the same time, this journey revealed the ongoing realities of <em>erasure and marginalization</em>. The renaming of Indigenous places, the fading awareness of rituals among younger generations, and the historical weight of discriminatory systems like the <em>Muluki Ain</em> all point to the layered pressures that have shaped Tamang identity over time. Yet, these are not stories of loss alone.</p>
+
+    <p class="body-text"><em>What stands out most powerfully is resilience.</em></p>
+
+    <p class="body-text">In Bolgau, cultural practices persist in relative isolation. In Timal, histories are still sung through <em>Tamang Selo</em>. In Shemjong, a community is actively reclaiming its name and identity after generations of concealment. These are not passive survivals — they are <em>active, conscious acts of cultural continuity and resurgence</em>.</p>
+
+    <p class="body-text">This project, therefore, is not only about documentation. It is about <em>witnessing and participating in a broader movement of Indigenous resurgence</em>. By recording these narratives through film, text, and lived experience, I aim to contribute — however modestly — to the preservation and revitalization of Tamang knowledge systems.</p>
+
+    <p class="body-text">For me, this journey is also deeply personal. As someone from the Tamang community, this work is not distant research — it is a <em>process of reconnecting, relearning, and re-situating myself within a lineage that continues to endure</em> despite historical and ongoing challenges.</p>
+
+    <p class="body-text">Ultimately, this digital storytelling project invites viewers and readers to see these places not as remote or marginal, but as <em>central to understanding alternative ways of being in the world</em>. It calls for a recognition of Indigenous knowledge not as something of the past, but as <em>vital, dynamic, and necessary for imagining more just and sustainable futures</em>.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:3rem 2rem 4rem;text-align:center;border-top:1px solid rgba(200,168,75,0.05);">
+  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.5em;color:rgba(200,168,75,0.2);text-transform:uppercase;">Global South Solidarities</div>
+  <div style="font-family:'Caveat',cursive;font-size:1rem;color:rgba(200,168,75,0.15);margin-top:0.5rem;font-style:italic;">land · memory · voice</div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:rgba(200,168,75,0.08);letter-spacing:0.3em;margin-top:1rem;">FILE CLOSED // 21.05.2026</div>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1500);
+});
+
+// PROGRESS
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  document.getElementById('progress').style.width =
+    (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
+}, {passive: true});
+
+// REVEAL on scroll
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      ro.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal, .content-box').forEach(el => ro.observe(el));
+
+// Close TOC on link click
+document.querySelectorAll('#toc .toc-link').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('toc').classList.remove('open'));
+});
+</script>
+</body>
+</html>
