@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cecil Decker — Artificial Intelligence and Modern Warfare</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Black+Ops+One&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050a0d;
+            --bg-card: #0a1219;
+            --bg-card-2: #0d1825;
+            --bg-quote: #060d10;
+            --green: #4ade80;
+            --green-dim: #1f5733;
+            --green-bright: #86efac;
+            --green-glow: rgba(74,222,128,0.18);
+            --amber: #f59e0b;
+            --amber-bright: #fbbf24;
+            --red: #ef4444;
+            --red-dim: #7f1d1d;
+            --text: #c9d4c9;
+            --text-dim: #6b7a6b;
+            --text-bright: #e8efe8;
+            --border: #1f5733;
+            --border-dim: #0f2a1c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+            background: var(--bg-deep);
+            color: var(--text);
+            line-height: 1.75;
+            overflow-x: hidden;
+            font-size: 15.5px;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* CRT scan lines */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                rgba(0,0,0,0.08) 2px,
+                rgba(0,0,0,0.08) 3px
+            );
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.5;
+        }
+        /* Tactical grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(74,222,128,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74,222,128,0.04) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Top Nav */
+        nav#gss-topnav {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 7000;
+            display: flex; align-items: center; justify-content: center;
+            gap: 32px; padding: 0 24px; height: 44px;
+            background: rgba(5,10,13,0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(74,222,128,0.18);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        nav#gss-topnav a {
+            font-size: 11px; letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(201,212,201,0.7);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 14px;
+            transition: all .22s;
+        }
+        nav#gss-topnav a:hover {
+            background: rgba(74,222,128,0.15);
+            color: var(--green-bright);
+        }
+
+        /* Top ticker / status bar */
+        .status-bar {
+            position: fixed;
+            top: 44px; left: 0; right: 0;
+            z-index: 6999;
+            height: 26px;
+            background: rgba(31,87,51,0.18);
+            border-bottom: 1px solid var(--green-dim);
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 0 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--green);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .status-bar span {
+            display: flex; align-items: center; gap: 6px;
+        }
+        .status-bar .dot {
+            width: 6px; height: 6px;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            border-radius: 50%;
+            animation: blink 1.6s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .status-bar .sep { color: var(--green-dim); }
+        .status-bar .amber { color: var(--amber); }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 70px; left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green), var(--amber));
+            z-index: 6998;
+            width: 0%;
+            transition: width 0.1s;
+            box-shadow: 0 0 8px var(--green);
+        }
+
+        /* MAIN */
+        main {
+            position: relative;
+            z-index: 2;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 110px 24px 80px;
+        }
+
+        /* Section wrapper */
+        section {
+            margin-bottom: 38px;
+            position: relative;
+        }
+
+        /* Card base */
+        .card {
+            border: 1px solid var(--border-dim);
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-card-2));
+            padding: 32px 30px;
+            position: relative;
+        }
+        .card.green-edge {
+            border-top: 2px solid var(--green);
+        }
+        .card.amber-edge {
+            border-top: 2px solid var(--amber);
+        }
+        .card.red-edge {
+            border-top: 2px solid var(--red);
+        }
+        .card::before, .card::after {
+            content: '';
+            position: absolute;
+            width: 16px; height: 16px;
+            opacity: 0.55;
+        }
+        .card::before {
+            top: 6px; left: 6px;
+            border-top: 1px solid var(--green);
+            border-left: 1px solid var(--green);
+        }
+        .card::after {
+            bottom: 6px; right: 6px;
+            border-bottom: 1px solid var(--green);
+            border-right: 1px solid var(--green);
+        }
+
+        /* Card label tab */
+        .card-label {
+            position: absolute;
+            top: -10px; left: 22px;
+            background: var(--bg-deep);
+            padding: 0 12px;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            color: var(--green);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+        .card-label.amber { color: var(--amber); }
+        .card-label.red { color: var(--red); }
+        .card-id {
+            position: absolute;
+            top: -10px; right: 22px;
+            background: var(--bg-deep);
+            padding: 0 12px;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── HERO ── */
+        .hero h1 {
+            font-family: 'Black Ops One', 'Oswald', sans-serif;
+            font-size: 2.6em;
+            line-height: 1.15;
+            color: var(--green-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 14px;
+            text-shadow: 0 0 30px rgba(74,222,128,0.35);
+        }
+        .hero .subtitle {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.18em;
+            color: var(--amber);
+            letter-spacing: 0.05em;
+            font-weight: 400;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-top: 22px;
+            border-top: 1px dashed var(--green-dim);
+            padding-top: 20px;
+        }
+        .meta-item {
+            font-size: 0.86em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .meta-label {
+            color: var(--green);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 0.84em;
+            margin-bottom: 4px;
+            opacity: 0.85;
+        }
+        .meta-value {
+            color: var(--text-bright);
+            line-height: 1.4;
+        }
+
+        /* ── AUTHOR CARD ── */
+        .author-card {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+        .author-mug {
+            aspect-ratio: 1;
+            border: 1px solid var(--green);
+            background:
+                radial-gradient(circle at 50% 35%, rgba(74,222,128,0.18), transparent 65%),
+                repeating-linear-gradient(45deg, var(--bg-card-2), var(--bg-card-2) 4px, var(--bg-card) 4px, var(--bg-card) 8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--green-bright);
+            font-family: 'Black Ops One', sans-serif;
+            font-size: 3.6em;
+            letter-spacing: 0.06em;
+            position: relative;
+            text-shadow: 0 0 16px var(--green-glow);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
+        }
+        .author-mug::before,
+        .author-mug::after {
+            content: '';
+            position: absolute;
+            width: 14px; height: 14px;
+            border-color: var(--green);
+            border-style: solid;
+        }
+        .author-mug::before {
+            top: 6px; left: 6px;
+            border-width: 2px 0 0 2px;
+        }
+        .author-mug::after {
+            bottom: 6px; right: 6px;
+            border-width: 0 2px 2px 0;
+        }
+        .author-mug .id-tag {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.18em;
+            color: var(--text-dim);
+            letter-spacing: 0.3em;
+            margin-top: 12px;
+        }
+        .author-info h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.7em;
+            color: var(--green-bright);
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+        .author-info .role {
+            color: var(--amber);
+            font-size: 0.92em;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .author-info .field-line {
+            display: flex;
+            gap: 10px;
+            margin: 4px 0;
+            font-size: 0.92em;
+        }
+        .author-info .field-line .key {
+            color: var(--green);
+            min-width: 110px;
+            letter-spacing: 0.12em;
+            font-size: 0.92em;
+            text-transform: uppercase;
+        }
+        .author-info .field-line .val { color: var(--text-bright); }
+
+        /* ── SECTION HEADERS ── */
+        .part-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 48px 0 22px;
+            padding: 14px 18px;
+            background: rgba(74,222,128,0.05);
+            border-left: 4px solid var(--green);
+            position: relative;
+        }
+        .part-header .badge {
+            font-family: 'Black Ops One', sans-serif;
+            font-size: 1.4em;
+            color: var(--green-bright);
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 12px var(--green-glow);
+            flex-shrink: 0;
+        }
+        .part-header .sep-line {
+            flex: 1;
+            height: 1px;
+            background: repeating-linear-gradient(90deg, var(--green-dim) 0 8px, transparent 8px 14px);
+        }
+        .part-header .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.86em;
+            color: var(--amber);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* H3 inline header (for "Part 1: Critique Content:" lines from the doc) */
+        .doc-heading {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.35em;
+            color: var(--green-bright);
+            letter-spacing: 0.04em;
+            margin: 24px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--green-dim);
+            text-transform: uppercase;
+        }
+
+        /* Body paragraphs */
+        .card p {
+            margin-bottom: 16px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.96em;
+            line-height: 1.85;
+        }
+        .card p:last-child { margin-bottom: 0; }
+        .card em { color: var(--green-bright); font-style: italic; }
+        .card strong { color: var(--amber-bright); }
+        .card a {
+            color: var(--green);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--green-dim);
+            transition: all 0.2s;
+        }
+        .card a:hover {
+            color: var(--green-bright);
+            text-decoration-color: var(--green-bright);
+        }
+
+        /* ── INTEL DUMP (BLOCK QUOTES) ── */
+        .intel {
+            margin: 22px 0;
+            border: 1px solid var(--green-dim);
+            border-left: 3px solid var(--amber);
+            background: var(--bg-quote);
+            padding: 20px 24px;
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .intel::before {
+            content: 'INTEL // TRANSCRIPT';
+            position: absolute;
+            top: -10px; left: 16px;
+            background: var(--bg-deep);
+            padding: 0 10px;
+            font-size: 9.5px;
+            letter-spacing: 0.3em;
+            color: var(--amber);
+        }
+        .intel::after {
+            content: '';
+            position: absolute;
+            top: 14px; right: 14px;
+            width: 8px; height: 8px;
+            background: var(--amber);
+            box-shadow: 0 0 8px var(--amber);
+            border-radius: 50%;
+            animation: blink 2.2s ease-in-out infinite;
+        }
+        .intel p {
+            color: var(--text-bright);
+            font-style: italic;
+            font-size: 0.94em;
+            line-height: 1.7;
+        }
+        .intel .source {
+            display: block;
+            margin-top: 10px;
+            color: var(--green);
+            font-style: normal;
+            font-size: 0.82em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* EPIGRAPH (Zuboff opening quote) */
+        .epigraph {
+            border: 1px solid var(--green-dim);
+            border-left: 3px solid var(--green);
+            background: var(--bg-quote);
+            padding: 28px 30px;
+            margin: 26px 0 36px;
+            position: relative;
+            text-align: center;
+        }
+        .epigraph::before {
+            content: '⟦ EPIGRAPH ⟧';
+            position: absolute;
+            top: -10px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-deep);
+            padding: 0 12px;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: var(--green);
+        }
+        .epigraph p {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.18em;
+            color: var(--green-bright);
+            font-style: italic;
+            line-height: 1.55;
+            letter-spacing: 0.01em;
+        }
+        .epigraph .source {
+            display: block;
+            margin-top: 14px;
+            color: var(--amber);
+            font-family: 'JetBrains Mono', monospace;
+            font-style: normal;
+            font-size: 0.78em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        /* INTERVENTION LIST */
+        .intervention-list {
+            margin: 20px 0;
+            counter-reset: ivx;
+        }
+        .intervention-list .item {
+            border: 1px solid var(--border-dim);
+            border-left: 3px solid var(--green);
+            background: rgba(74,222,128,0.03);
+            padding: 16px 18px 16px 56px;
+            margin-bottom: 12px;
+            position: relative;
+            counter-increment: ivx;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95em;
+            line-height: 1.75;
+        }
+        .intervention-list .item::before {
+            content: '0' counter(ivx);
+            position: absolute;
+            top: 14px; left: 14px;
+            font-family: 'Black Ops One', sans-serif;
+            color: var(--green-bright);
+            font-size: 1.25em;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+        .intervention-list .item::after {
+            content: '';
+            position: absolute;
+            top: 22px; left: 44px;
+            width: 1px; height: calc(100% - 28px);
+            background: var(--green-dim);
+        }
+
+        /* WORKS CITED */
+        .works-cited .item {
+            padding: 14px 16px;
+            border-left: 2px solid var(--green-dim);
+            margin-bottom: 12px;
+            font-size: 0.88em;
+            line-height: 1.65;
+            color: var(--text);
+            background: rgba(13,24,37,0.4);
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.25s;
+        }
+        .works-cited .item:hover {
+            border-left-color: var(--amber);
+            background: rgba(74,222,128,0.04);
+            transform: translateX(4px);
+        }
+        .works-cited .item .num {
+            color: var(--green);
+            font-family: 'Black Ops One', sans-serif;
+            letter-spacing: 0.1em;
+            font-size: 0.92em;
+            margin-right: 10px;
+        }
+        .works-cited .item .author {
+            color: var(--amber-bright);
+            font-weight: 700;
+        }
+        .works-cited .item em {
+            color: var(--green-bright);
+            font-style: italic;
+        }
+        .works-cited .item a {
+            color: var(--green);
+            text-decoration: underline;
+            text-decoration-color: var(--green-dim);
+            text-underline-offset: 2px;
+            word-break: break-all;
+        }
+        .works-cited .item a:hover {
+            color: var(--green-bright);
+            text-decoration-color: var(--green-bright);
+        }
+
+        /* Section anchor offset for sticky nav */
+        section[id] { scroll-margin-top: 86px; }
+
+        /* MEDIA QUERIES */
+        @media (max-width: 900px) {
+            main { padding: 110px 16px 60px; }
+            .hero h1 { font-size: 2em; }
+            .hero .subtitle { font-size: 1.05em; }
+            .author-card { grid-template-columns: 110px 1fr; gap: 18px; }
+            .author-mug { font-size: 2.4em; }
+            .author-info h2 { font-size: 1.4em; }
+            .card { padding: 26px 22px; }
+            .part-header .badge { font-size: 1.15em; }
+            .doc-heading { font-size: 1.15em; }
+            .epigraph p { font-size: 1em; }
+        }
+        @media (max-width: 600px) {
+            body { font-size: 14.5px; }
+            .status-bar { gap: 12px; padding: 0 12px; font-size: 9px; }
+            .status-bar span:nth-child(n+5) { display: none; }
+            .hero h1 { font-size: 1.55em; }
+            .author-card { grid-template-columns: 1fr; }
+            .author-mug { max-width: 140px; margin: 0 auto; font-size: 2.6em; }
+            .card { padding: 22px 18px; }
+            .meta-grid { grid-template-columns: 1fr 1fr; }
+            .intervention-list .item { padding: 14px 14px 14px 50px; }
+            .intel { padding: 18px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="gss-topnav">
+    <a href="/">Home</a>
+    <a href="/contributions">Contributions</a>
+</nav>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+    <span><span class="dot"></span> TRANSMISSION ACTIVE</span>
+    <span class="sep">//</span>
+    <span class="amber">CLEARANCE: PUBLIC</span>
+    <span class="sep">//</span>
+    <span>OPS-AI-BIO-2026</span>
+    <span class="sep">//</span>
+    <span>14 MAY 2026</span>
+    <span class="sep">//</span>
+    <span>WSU // GSS</span>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<main>
+
+    <!-- ═══ HERO / PROJECT BRIEFING ═══ -->
+    <section id="briefing">
+        <div class="card green-edge hero">
+            <span class="card-label">PROJECT BRIEFING</span>
+            <span class="card-id">DOC // 001</span>
+            <h1>Artificial Intelligence and Modern Warfare</h1>
+            <div class="subtitle">Narratives of US Military Force and Video Game Realities</div>
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Project title</div>
+                    <div class="meta-value">Artificial Intelligence and Modern Warfare: Narratives of US Military Force and Video Game Realities</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Digital format</div>
+                    <div class="meta-value">Essay / (Zine TBD)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Course</div>
+                    <div class="meta-value">AI, Biopolitics &amp; Engineered Oppression</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Published</div>
+                    <div class="meta-value">14 May 2026</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ AUTHOR FILE ═══ -->
+    <section id="author">
+        <div class="card amber-edge author-card">
+            <span class="card-label amber">AUTHOR FILE</span>
+            <span class="card-id">ID // CD-26</span>
+            <div class="author-mug">
+                CD
+                <span class="id-tag">AGENT</span>
+            </div>
+            <div class="author-info">
+                <h2>Cecil Decker</h2>
+                <div class="role">AI · Biopolitics · Engineered Oppression</div>
+                <div class="field-line">
+                    <span class="key">Course</span>
+                    <span class="val">AI, Biopolitics &amp; Engineered Oppression</span>
+                </div>
+                <div class="field-line">
+                    <span class="key">Published</span>
+                    <span class="val">14 May 2026</span>
+                </div>
+                <div class="field-line">
+                    <span class="key">Institution</span>
+                    <span class="val">Washington State University</span>
+                </div>
+                <div class="field-line">
+                    <span class="key">Document</span>
+                    <span class="val">First Publishing Draft — AI Narratives</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ PROJECT ABSTRACT (PART 1) ═══ -->
+    <section id="abstract-p1">
+        <div class="part-header">
+            <span class="badge">▸ PART 01</span>
+            <span class="label">Critique Content</span>
+            <span class="sep-line"></span>
+            <span class="label">Abstract</span>
+        </div>
+        <div class="card green-edge">
+            <span class="card-label">SECTION // ABSTRACT</span>
+            <span class="card-id">PART // 01</span>
+            <p class="doc-heading">Part 1: Critique Content:</p>
+            <p>This project (“Artificial Intelligence and Modern Warfare: Narratives of US Military Force and Video Game Realities”) considers the ways in which AI contributes to narratives of combat based in simulation, with lethal consequences for those in the real world – and the ways in which video games become entangled in such narratives. It also explores some aspects of the work done to make US military actions public knowledge, and positions critiques of propagandistic video games as methods of intervention – at some level – for these systemic issues. An additional aspect of critique arises in the fact that the games discussed are released by media conglomerates that also release AI products, some of which are used by the US military. For example, Microsoft owns Activision, which releases Call of Duty; Microsoft also collaborates closely with OpenAI, which contracts to the US government. The major objects of consideration here are Pete Hegseth (Secretary of “War”)’s speech at the SpaceX location in Starbase, Texas, in which he discussed AI and its integration into the Pentagon; <em>Six Days in Fallujah</em> and <em>Call of Duty: Modern Warfare 2</em> (2019); and, with supporting sources ranging more widely here, controversies within the U.S. government over OpenAI’s Claude service.</p>
+        </div>
+    </section>
+
+    <!-- ═══ PROJECT ABSTRACT (PART 2) ═══ -->
+    <section id="abstract-p2">
+        <div class="part-header">
+            <span class="badge">▸ PART 02</span>
+            <span class="label">Intervention Content</span>
+            <span class="sep-line"></span>
+            <span class="label">Abstract</span>
+        </div>
+        <div class="card green-edge">
+            <span class="card-label">SECTION // ABSTRACT</span>
+            <span class="card-id">PART // 02</span>
+            <p class="doc-heading">Part 2: Intervention Content:</p>
+            <p>There are a few different approaches available for intervention here. One option is to lean into Sara Ahmed’s idea of the feminist killjoy – to argue that people need to respond to what they encounter, and not simply leave it alone or mark things like video games as inherently nonserious. Within that model, noticing the attempts to naturalize propagandistic narratives via a variety of fronts and making such attempts visible to others serves as an intervention. That spans a range of critical awarenesses, from video games to the rhetoric used by the current Pentagon regarding its capacity for war-fighting.</p>
+            <p>Methods of intervention in these systems are complex, and will take time. Some general methods include:</p>
+            <div class="intervention-list">
+                <div class="item">Community involvement and organizing; solutions to a given issue can best be found and enacted in partnership with others, particularly when those partnerships occur across difference.</div>
+                <div class="item">Creation of art and media; continuing to write, making art using whatever medium, practices making meaning without AI. To an extent, one can prevent their work from being used to train AI by keeping to the physical; this ties back into reinvigorating local connection, as it shifts how one would approach sharing their work.</div>
+                <div class="item">While working on the local, keeping an eye on the broader global context remains incredibly important.</div>
+                <div class="item">If it can be avoided – do not work for the companies embroiled in all of this, do not believe your ethics will fix the company, do not imagine that we (generally, each in our various positions) are not implicated in the actions being taken globally.</div>
+                <div class="item">Think about the art and entertainment you consume; it is full of messaging, and cannot be separated from its wider context – no matter what those who financially benefit from its acceptability may claim.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FULL ESSAY TITLE + EPIGRAPH ═══ -->
+    <section id="essay">
+        <div class="part-header">
+            <span class="badge">▸ FULL DEPLOYMENT</span>
+            <span class="sep-line"></span>
+            <span class="label">Essay // Unredacted</span>
+        </div>
+        <div class="card green-edge">
+            <span class="card-label">ESSAY // FULL TEXT</span>
+            <span class="card-id">DOC // MAIN</span>
+            <h1 style="font-family:'Black Ops One',sans-serif; font-size:1.9em; color:var(--green-bright); text-transform:uppercase; letter-spacing:0.03em; line-height:1.2; text-shadow:0 0 22px var(--green-glow); margin-bottom:8px;">Artificial Intelligence and Modern Warfare:</h1>
+            <p style="font-family:'Oswald',sans-serif; font-size:1.15em; color:var(--amber); letter-spacing:0.04em; margin-bottom:0;">Narratives of US Military Force and Video Game Realities</p>
+
+            <div class="epigraph">
+                <p>“A first challenge [...] is the confusion between surveillance capitalism and the technologies it employs. Surveillance capitalism is not technology; it is a logic that imbues technology and commands it into action”</p>
+                <span class="source">— Zuboff 23</span>
+            </div>
+
+            <p class="doc-heading">Part 1: Critique Content:</p>
+
+            <p>On January 12th, 2026, Pete Hegseth (Secretary of “War”) gave a speech at the SpaceX location in Starbase, Texas, a city which was renamed to reflect the Musk-owned corporation. These remarks were given to celebrate the incorporation of xAI’s tool, Grok, into Pentagon systems. Hegseth’s comments regarding the US’ war-readiness come to hold greater significance given that the United States started a war with Iran on February 28th. Within that speech, Hegseth stated the following:</p>
+
+            <div class="intel">
+                <p>“AI is only as good as the data that feeds it, and the US military has an asymmetric data advantage from two decades of military and intelligence operations that no other military in the world can replicate. But right now, we are underutilizing this advantage. Too much of our data is stranded. It's stuck in bespoke program databases locked behind Title 10 or Title 50 stovepipes, invisible to operators, engineers and industry who could help us exploit it with winning speed and scale. And that's why today, at my direction, CDAO will exercise its full authority to enforce the DOW data decrees and make all appropriate data available across federated IT systems for AI exploitation, including mission systems across every service and component”</p>
+                <span class="source">— “Remarks by Secretary of War Pete Hegseth at SpaceX”</span>
+            </div>
+
+            <p>As can be interpreted from the inclusion of Elon Musk and SpaceX in this conversation, the role of AI also represents a move toward increasingly explicit connections between the US military and private corporations, especially tech companies. These connections are not new. The specific reference toward making departmental data available to not just vague “operators, engineers” but also to “industry” stands out in this quote from Hegseth. That connection is only strengthened when we remember that Hegseth’s speech was held at SpaceX’s location in Starbase, Texas.</p>
+
+            <p>This project will show the ways in which AI contributes to narratives of combat based in simulation, with lethal consequences for those in the real world – and the ways in which video games become entangled in such narratives. It will also position the work done to make US military actions public knowledge and critiques of propagandistic video games as methods of intervention for these systemic issues. One route by which popular narratives regarding state violence, particularly that produced by the United States, can be analyzed arrives via first person shooter (FPS) video games. Another way of tying big tech corporations to the US military arises in their function as myth-makers for the vision of US-centric wars, glorifying violence in a conservative mission of global dominance through force. However, despite incorporating military input into these FPS games, there is a continued claim that the creation and reception of such games is apolitical (Totilo). In fact, video games often claim to be apolitical – either through developer statements or fan consensus – which is not possible. The untruth of the claim stands in particularly stark relief when games make use of historical periods for their settings, even starker when those settings are real wars, and one does not tend to need to dig far to find the real-world structures which enforce their political intent. World War II, the Vietnam War, and the wars the United States have engaged in within the Middle East are central to the storylines of several recent mainstream first person shooter games, though this paper will center <em>Six Days at Fallujah</em> and the <em>Call of Duty</em> franchise. These games are released by media conglomerates which also release AI products, some of which are used by the US military. For example, Microsoft owns Activision, which releases <em>Call of Duty</em>; Microsoft also collaborates closely with OpenAI, which contracts to the US government – past Microsoft’s own contracting work (Microsoft Corporate Blogs).</p>
+
+            <p>As a caveat to this discussion: the intention of including video games within the discussion is not to minimize real-world violences; instead, it begins the process of tracking the normalization of rhetoric which has been rapidly mainstreamed regarding the United States’ war practices. Though AI serves as a connector, as some forms are advertised as making acts of war feel like a video game, the first-person shooter as a genre is treated with a level of flippancy that both aligns with apparent US military attitudes and protects them from serious critique. I have no interest in playing these games and am therefore at risk of misrepresenting their content or tone; however, I center the discussion over their rhetorics versus a close reading of the games themselves.</p>
+
+            <p>The usage of AI within the United States military, and official rhetoric around its usage, center its position as a technology of the future; its ability to optimize a variety of combat scenarios and governmental processes; and the promise of United States dominance due to such optimization. The United States began a war in Iran shortly after I started working on this project, giving it an especial immediacy. The rhetoric of the war as offered by the US government underscores the colonial intentions behind the push toward increased warfighting capacity, and continues, with greater openness, the intention of Christian religious domination of the Middle East in cooperation with Israel’s ongoing colonial project. Obfuscated within official rhetoric are AI’s role in minimizing human accountability for acts of violence. This push toward a reliance on AI by the US military is representative of the new Jim Code, as expressed by Ruha Benjamin, in its capacity to deflect responsibility for bias, to the extent of covering over intentions behind any act of warfare; and, as Benjamin states in the first chapter of <em>Race after Technology</em>, “private companies are the ones developing [these computer systems], thereby acting like political entities but with none of the checks and balances” (56). The governmental-private connections created within the expansion of AI usage by the federal government, as expressed via Hegseth, contribute to the advancement of surveillance capital. As quoted from Hegseth, “AI is only as good as the data that feeds it;” this is a rationalization for the endless collection of “data,” herein meaning actions taken during “two decades of military and intelligence operations” (“Remarks by Secretary of War Pete Hegseth at SpaceX”). The enmeshing of military operations and private contractors, in this as in many related contexts, allows for greater secrecy regarding decisions made or actions taken in relation to these technological projects, including but not limited to AI usage.</p>
+
+            <p>As explored by Shoshana Zuboff in <em>The Age of Surveillance Capitalism</em>, systemic actors are often able to sell their actions as the fault of the technologies in use, not the technology’s use as representative of the systems’ interests. A consideration of those interests can illuminate the ways that AI is being used as both an excuse and method for reducing military oversight, and the ways in which military and corporate interests’ connections become increasingly visible through projects like AI tech integration. The technology being placed into use, the data it becomes trained on, and the ways in which its predictions may impact action are choices made outside of the tech itself, reflecting wider goals and ideologies. Such consideration also opens the question of what kinds of data come to be considered valuable and stored under the framework of “war-winning,” the term Hegseth continually returned to in his speech on the integration of Grok AI into Pentagon servers (“Remarks by Secretary of War Pete Hegseth at SpaceX”).</p>
+
+            <p>As Mbembe states in “Fanon’s Pharmacy,” a chapter of <em>Necropolitics</em>, under hegemonic racism and colonialism “a situation of madness is created, the perpetuation of which requires unceasing violence with a mythical function, insofar as it is ceaselessly derealized. It is not recognized by the dominant, who, for that matter, never stop denying or euphemizing it. It exists, but those producing it remain invisible and anonymous” (138). This system of anonymity can be taken as further expanding through the uses of systems like AI, which is described explicitly as being used for the purpose of creating further violences in its description by Hegseth (“Remarks by Secretary of War Pete Hegseth at SpaceX”). Introducing AI into the picture simplifies the process of making such violence, and the roles of those either active within it or complicit to it, more easily rendered “invisible and anonymous.”</p>
+
+            <p>Necropolitics, as elaborated by Mbembe, apply directly to an even more abstracted violence through AI decision-making, wherein biases and cruelties within US military practices become reproduced algorithmically; populations which have been previously marked as disposable then marked as so disposable that there may not even be another human being involved in authorizing the decisions which will be fatal to them. The process of euphemism by the dominant remains intensely dehumanizing, as previously enacted violences are marked as data and used to decide (or otherwise rationalize) which future violences would best serve US interests. Such usages of dehumanization are central within the US military, as a capitalist-colonial structure. The usage of AI in the US military amplifies a colonial and racial capitalist mission. This can be seen directly in the current war with Iran, which is being led by the US and Israel (another colonial state), and has been discussed in mainstream news primarily in terms of its impact on economies.</p>
+
+            <p>The Washington Post article “Anthropic’s AI tool Claude central to U.S. campaign in Iran, amid a bitter feud,” published on March 4th, 2026, walks its readers through both the use of Claude in early attacks on Iran and issues between Anthropic and the US government. Within the article, one unnamed US military official was quoted as saying “[w]hether his morals are right or wrong or whatever, we’re not going to let [Amodei’s] [sic] decision making cost a single American life,” (Copp et al.). Dario Amodei, invoked within the statement, is the CEO of Anthropic. The quote was stated in reference to disagreements between the Pentagon and Anthropic, the creators of Claude, an AI system which has been used alongside and in combination with Palantir’s Maven.</p>
+
+            <p>Racial and religious colonization efforts in the Middle East become wrapped in narratives of a new form of technological war, one which is notably pointed toward the preservation of US citizens’ lives at the cost of lives marked as foreign. The lack of interest in the moral or ethical implications of AI usage is notable, as is the importance placed on exclusively American lives; AI is positioned as being for the enactment of uncritical violence against vague, non-American others. Given the profit motives of private corporations which create these AI systems, racial capitalism’s systemic motivation toward extraction represents a portion of the unsettling implications of potentially life-or-death decisions being made by a sold product. In an NPR interview between Ayesha Roscoe, the host, and Lauren Kahn, of Georgetown University's Center for Security and Emerging Technology, the usage of AI in the war with Iran and the confrontation between Anthropic and the US government come to center stage. Notably, within this interview Lauren Kahn states that “what's interesting about that kind of debate is that it's - the difference between Anthropic and the Pentagon wasn't very large, right? The Pentagon said, we wanted to use it for all lethal - all, excuse me, legal applications that we're allowed to use it in” (Benk and Roscoe). Outside of the Freudian slip, there is a question here as to what it means for the application of AI in wartime to be legal; when laws have not yet been made in response to new technologies, their unregulated usage becomes phrased as a given. That trend runs especially true when the users include the United States government, providing active and consistent disincentive for efforts to regulate. However, this lack of accountability becomes a compounding problem for everyone else. When humans are supposedly removed – as oversight is lessened and bureaucratic procedures marked unnecessary – accountability for state violence, already minimal, becomes even less prioritized or prioritizable. Using the relation between logic and technology as presented by Zuboff, it becomes clear such obfuscation is purposeful, confusing calls for responsibility behind actions taken by the US military in an increasingly turbulent time for international relations.</p>
+
+            <p>AI contributes to an environment of unreality, which is particularly dangerous when its purpose is explicitly domination through superior violence. That element of unreality is tied to the positioning of AI as a technology of the future; to open Hegseth’s speech, referenced above, Elon Musk stated his goal was to be involved as “science fiction turns to science fact,” that it’s “like we want to make Star Trek real, ok?” (“Remarks by Secretary of War Pete Hegseth at SpaceX”). In Musk’s invocation of unreality or “science fiction [turning] to science fact,” the general usage of nerdy content as a way of coding real-world actions reappears; for example, Palantir and Anduril’s names being sourced from <em>The Lord of the Rings</em> (“Remarks by Secretary of War Pete Hegseth at SpaceX”). That framing avoids approaching real-world implications of technology, filling them in instead with a pre-built, idealized fictional world. As the military invests itself into uses of AI, such conversations also mark who is invited into that idealized future and whose exclusion is predefined by their complete invisibility within the narrative; this serves as a method of skipping past the violences involved in exclusion from a future.</p>
+
+            <p>Returning to the issue of video game representations of such violences, as it ties to the nerd-cool normalization of military action under an aestheticized nationalism, it seems suitable to tug on the thread of apoliticism again. First, an explanation of one source: <em>Six Days in Fallujah</em>. The video game experienced a troubled development, initially having been intended for release in 2010 and instead releasing in 2023. These issues have, at certain points, been related to its intent: to recreate the real-world battle in the city of Fallujah in Iraq, with the claim that it will be true to what happened on the ground. This claim excludes US war crimes, however; in regard to the use of white phosphorus by the US military, Peter Tamte, CEO of the company publishing <em>Six Days in Fallujah</em> stated that “I don't think that we need to portray the atrocities in order for people to understand the human cost” (Batchelor). There is a tension in claiming to represent a historical truth while knowingly leaving such information out; one may not want to force the player to commit a war crime, but to exclude them without comment is to tell players such events never occurred.</p>
+
+            <p>The choices described within <em>Six Days in Fallujah</em> can be illuminated further by considering an interview with major players in the creation of <em>Call of Duty: Modern Warfare</em> (2019). Infinity Ward – the primary developer behind <em>Call of Duty: Modern Warfare</em> – studio art director Joel Emslie and single-player design director Jacob Minkoff commented on the role of war as a source of content inspiration in a Eurogamer article on <em>Call of Duty: Modern Warfare</em> close to the game’s release. Regarding the political position of the game, which is set in a fictionalized Middle East and involves covert conflict between the United States and Russia, Minkoff stated “We want to make a game that is true to the spirit of modern war and modern conflicts, but we don't want to speak to any specific political message [...] What this is is a piece of entertainment” (Kent).</p>
+
+            <p>Similarly, Emslie stated that those at Infinity Ward “have a saying at the studio 'Jaws not Saw', and we're absolutely mindful of being respectful to people and what they've gone through,” continuing that the game “is supposed to be fun, it's supposed to be a first-person shooter, you're supposed to have a good time with it,” as they “don't want to drag you down into a state” by playing the game (Kent). This conflict between entertainment and the political, supposedly capable of being separated, gains further tension with recent claims that Activision pressured Infinity Ward to create a <em>Call of Duty</em> game based on Iran invading Israel (Makar). These claims were made by Chance Glasco, co-founder of Infinity Ward, who further elaborated upon the claims toward apoliticality as such:</p>
+
+            <div class="intel">
+                <p>“When asked why depictions of an Iranian invasion of Israel felt like political propaganda, while fictional military depictions in other countries like the UK and Mexico were okay, Glasco elaborated on his stance. He said: ‘My point is that the government would happily use entertainment, including video games, as a way to sway public opinion on major issues. There have been decades of pressure for a war with Iran across multiple administrations. The scenarios you mentioned, not so much’”</p>
+                <span class="source">— Makar</span>
+            </div>
+
+            <p class="doc-heading">Part 2: Intervention Content:</p>
+
+            <p>Amidst issues that feel, and are, larger than a single person can approach alone, I now move toward the interventions and refusals that are available to us. It is impossible to collect the ever-expanding amount of information which AI drives its users to idealize, though that will not stop corporate and government interests from trying. Additionally, I would like to note that the existence of the documents used in this project, and projects like BigTechSellsWar, serve as a significant refusal of AI practices. Continued learning and engagement with sources of world-context form the basis of any action one takes, including their intentions and goals when involved in community organizing. Staying checked in, to the extent one can, is incredibly important.</p>
+
+            <p>Methods of intervention in these systems are complex, and will take time. Some general methods include:</p>
+
+            <div class="intervention-list">
+                <div class="item">Community involvement and organizing; solutions to a given issue can best be found and enacted in partnership with others, particularly when those partnerships occur across difference.</div>
+                <div class="item">Creation of art and media; continuing to write, making art using whatever medium, practices making meaning without AI. To an extent, one can prevent their work from being used to train AI by keeping to the physical; this ties back into reinvigorating local connection, as it shifts how one would approach sharing their work.</div>
+                <div class="item">While working on the local, keeping an eye on the broader global context remains incredibly important.</div>
+                <div class="item">If it can be avoided survivably – do not work for the companies embroiled in all of this, do not believe your ethics will fix the company, do not imagine that we (generally, each in our various positions) are not implicated in the actions being taken globally.</div>
+                <div class="item">Think about the art and entertainment you consume; it is full of messaging, and cannot be separated from its wider context – no matter what those who financially benefit from its acceptability may claim.</div>
+            </div>
+
+            <p>As the saying goes, “It’s easier to imagine the end of the world than the end of capitalism.” However, in the meantime, we can think through Sara Ahmed’s concept of the feminist killjoy – that people need to respond to what they encounter, not simply leave it alone for the sake of maintaining smooth relations. Noticing the attempts to naturalize propagandistic narratives via a variety of fronts and making such attempts visible to others is, in a way, an intervention. That spans from video games to the rhetoric used by the current Pentagon regarding its capacity for war-fighting and far, far beyond. Ideally, you’ll leave considering the narratives that have been naturalized around you and the impact such naturalization has had in creating and sustaining the world we live in, with all of its inter- and disconnections. Hopefully we can make meaning in alternative ways for ourselves and feel called to work toward community on the local scale, a step toward wider collaboration against systems which are so threatening to the most vulnerable.</p>
+        </div>
+    </section>
+
+    <!-- ═══ WORKS CITED ═══ -->
+    <section id="works-cited">
+        <div class="part-header">
+            <span class="badge">▸ ARCHIVE</span>
+            <span class="sep-line"></span>
+            <span class="label">Works Cited // Source Index</span>
+        </div>
+        <div class="card amber-edge works-cited">
+            <span class="card-label amber">SOURCE INDEX</span>
+            <span class="card-id">REFS // 12</span>
+            <p class="doc-heading">Works Cited:</p>
+
+            <div class="item">
+                <span class="num">[01]</span>
+                <span class="author">Batchelor, James.</span> “Six Days in Fallujah Dev: ‘I Don't Think We Need to Portray the Atrocities.’” <em>GamesIndustry.biz</em>, 16 Feb. 2021, <a href="https://www.gamesindustry.biz/articles/2021-02-16-six-days-of-fallujah-dev-i-dont-think-we-need-to-portray-the-atrocities" target="_blank" rel="noopener">https://www.gamesindustry.biz/articles/2021-02-16-six-days-of-fallujah-dev-i-dont-think-we-need-to-portray-the-atrocities</a>.
+            </div>
+
+            <div class="item">
+                <span class="num">[02]</span>
+                <span class="author">Benjamin, Ruha.</span> <em>Captivating Technology: Race, Carceral Technoscience, and Liberatory Imagination in Everyday Life.</em> Duke University Press, 2019.
+            </div>
+
+            <div class="item">
+                <span class="num">[03]</span>
+                <span class="author">Benjamin, Ruha.</span> <em>Race after Technology: Abolitionist Tools for the New Jim Code.</em> Polity Press, 2019.
+            </div>
+
+            <div class="item">
+                <span class="num">[04]</span>
+                <span class="author">Benk, Ryan, and Ayesha Roscoe.</span> “How the U.S. Is Using AI in the War in Iran.” <em>NPR</em>, 15 Mar. 2026, .
+            </div>
+
+            <div class="item">
+                <span class="num">[05]</span>
+                <span class="author">Copp, Tara, et al.</span> “Anthropic’s AI Tool Claude Central to U.S. Campaign in Iran, amid a Bitter Feud.” <em>The Washington Post</em>, 4 Mar. 2026, .
+            </div>
+
+            <div class="item">
+                <span class="num">[06]</span>
+                <span class="author">Kent, Emma.</span> “Call of Duty: Modern Warfare and the Problem with Its Child Soldier Level.” <em>Eurogamer.net</em>, 20 June 2019, .
+            </div>
+
+            <div class="item">
+                <span class="num">[07]</span>
+                <span class="author">Makar, Connor.</span> “Call of Duty Co-Founder Claims Activision Put ‘Very Awkward Pressure’ on Infinity Ward to Make a Game about Iran Invading Israel.” <em>Eurogamer.net</em>, 5 Mar. 2026, .
+            </div>
+
+            <div class="item">
+                <span class="num">[08]</span>
+                <span class="author">Mbembe, Achille.</span> <em>Necropolitics.</em> Durham, Duke University Press, 2003.
+            </div>
+
+            <div class="item">
+                <span class="num">[09]</span>
+                <span class="author">Microsoft Corporate Blogs.</span> “The next Chapter of the Microsoft–OpenAI Partnership - the Official Microsoft Blog.” <em>The Official Microsoft Blog</em>, 28 Oct. 2025, <a href="https://blogs.microsoft.com/blog/2025/10/28/the-next-chapter-of-the-microsoft-openai-partnership/" target="_blank" rel="noopener">blogs.microsoft.com/blog/2025/10/28/the-next-chapter-of-the-microsoft-openai-partnership/</a>.
+            </div>
+
+            <div class="item">
+                <span class="num">[10]</span>
+                <span class="author">“Remarks by Secretary of War Pete Hegseth at SpaceX.”</span> <em>U.S. Department of War</em>, 2026, .
+            </div>
+
+            <div class="item">
+                <span class="num">[11]</span>
+                <span class="author">Totilo, Stephen.</span> “Call of Duty Creators Say Oliver North Helped Make Their Game More Authentic.” <em>Kotaku</em>, Kotaku, 14 Aug. 2019, <a href="https://kotaku.com/call-of-duty-creators-say-oliver-north-helped-make-thei-5913092" target="_blank" rel="noopener">https://kotaku.com/call-of-duty-creators-say-oliver-north-helped-make-thei-5913092</a>.
+            </div>
+
+            <div class="item">
+                <span class="num">[12]</span>
+                <span class="author">Zuboff, Shoshana.</span> <em>The Age of Surveillance Capitalism: The Fight for a Human Future at the New Frontier of Power,</em> PublicAffairs, 2019. ProQuest Ebook Central.
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    // Progress bar
+    const progressBar = document.getElementById('progressBar');
+    function updateProgress() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = progress + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+</script>
+
+</body>
+</html>
