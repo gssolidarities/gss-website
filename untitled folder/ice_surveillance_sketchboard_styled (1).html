@@ -40,6 +40,15 @@
             padding-bottom: 0;
             font-size: 19px;
         }
+        @media (max-width: 1100px) {
+            body { font-size: 17px; }
+        }
+        @media (max-width: 700px) {
+            body { font-size: 15.5px; cursor: default; }
+        }
+        @media (max-height: 800px) {
+            body { font-size: 16.5px; }
+        }
 
         /* Grain overlay */
         body::before {
@@ -56,7 +65,6 @@
         .sketch-container {
             position: relative;
             width: 100%;
-            min-height: 1800vh;
         }
 
         .fixed-canvas {
@@ -71,11 +79,21 @@
         .scroll-section {
             position: relative;
             z-index: 2;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 80px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             pointer-events: none;
+        }
+        @media (max-height: 900px) {
+            .scroll-section {
+                min-height: auto;
+                padding: 60px 16px;
+            }
+        }
+        @media (max-width: 700px) {
+            .scroll-section { padding: 50px 12px; }
         }
 
         .content-box {
@@ -90,6 +108,20 @@
             pointer-events: all;
             position: relative;
             overflow: hidden;
+        }
+        @media (max-width: 900px) {
+            .content-box {
+                padding: 24px 22px;
+                transform: rotate(-0.3deg);
+            }
+            .content-box.right { transform: rotate(0.3deg); }
+        }
+        @media (max-width: 600px) {
+            .content-box {
+                padding: 20px 18px;
+                width: 94%;
+                transform: none !important;
+            }
         }
 
         /* Corner brackets */
@@ -141,6 +173,12 @@
             text-transform: uppercase;
             line-height: 1.2;
         }
+        @media (max-width: 900px) {
+            h1 { font-size: 1.8em; }
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5em; }
+        }
 
         h2 {
             font-family: 'Oswald', sans-serif;
@@ -152,6 +190,12 @@
             border-bottom: 1px solid var(--border-dim);
             letter-spacing: 0.08em;
             text-transform: uppercase;
+        }
+        @media (max-width: 900px) {
+            h2 { font-size: 1.45em; }
+        }
+        @media (max-width: 600px) {
+            h2 { font-size: 1.25em; }
         }
 
         p { line-height: 1.7; color: var(--text); font-size: 1.05em; }
