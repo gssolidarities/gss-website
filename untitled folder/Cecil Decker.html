@@ -572,6 +572,372 @@
         /* Section anchor offset for sticky nav */
         section[id] { scroll-margin-top: 86px; }
 
+        /* ════════════════════════════════════════════ */
+        /* ══════════════ HUD SIDE RAILS ═══════════════ */
+        /* ════════════════════════════════════════════ */
+        .hud-rail {
+            position: fixed;
+            top: 92px;
+            width: 178px;
+            z-index: 50;
+            font-family: 'JetBrains Mono', monospace;
+            display: none;
+        }
+        .hud-rail.left { left: 18px; }
+        .hud-rail.right { right: 18px; }
+
+        .hud-panel {
+            background: linear-gradient(135deg, rgba(10,18,25,0.78), rgba(5,10,13,0.82));
+            border: 1px solid var(--green-dim);
+            padding: 16px 13px 14px;
+            margin-bottom: 14px;
+            position: relative;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .hud-panel::before, .hud-panel::after {
+            content: '';
+            position: absolute;
+            width: 10px; height: 10px;
+            border-color: var(--green);
+            border-style: solid;
+            opacity: 0.7;
+        }
+        .hud-panel::before {
+            top: 4px; left: 4px;
+            border-width: 1px 0 0 1px;
+        }
+        .hud-panel::after {
+            bottom: 4px; right: 4px;
+            border-width: 0 1px 1px 0;
+        }
+        .hud-panel-label {
+            position: absolute;
+            top: -7px; left: 10px;
+            background: var(--bg-deep);
+            padding: 0 8px;
+            font-size: 9px;
+            letter-spacing: 0.28em;
+            color: var(--green);
+            font-weight: 700;
+        }
+        .hud-panel-label.amber { color: var(--amber); }
+
+        /* MISSION LOG */
+        .mission-log .log-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 6px 4px;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.25s;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-left: 1px solid transparent;
+            margin-left: -4px;
+            padding-left: 8px;
+        }
+        .mission-log .log-item:hover {
+            color: var(--green-bright);
+            border-left-color: var(--green);
+            background: rgba(74,222,128,0.04);
+        }
+        .mission-log .log-item.active {
+            color: var(--green-bright);
+            border-left-color: var(--green-bright);
+            background: rgba(74,222,128,0.08);
+        }
+        .mission-log .log-item.completed { color: var(--green); }
+        .mission-log .log-item .dot {
+            width: 6px; height: 6px;
+            background: var(--text-dim);
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .mission-log .log-item.active .dot {
+            background: var(--green-bright);
+            box-shadow: 0 0 8px var(--green-bright);
+            animation: blink 1.4s ease-in-out infinite;
+        }
+        .mission-log .log-item.completed .dot { background: var(--green); }
+        .mission-log .log-num {
+            font-family: 'Black Ops One', sans-serif;
+            color: inherit;
+            font-size: 0.92em;
+            opacity: 0.6;
+            margin-right: 2px;
+        }
+
+        /* CHRONOMETER */
+        .chrono-time {
+            font-family: 'Black Ops One', sans-serif;
+            font-size: 1.4em;
+            color: var(--green-bright);
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 12px var(--green-glow);
+            margin-bottom: 2px;
+        }
+        .chrono-line {
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 0.18em;
+            margin: 3px 0;
+        }
+        .chrono-line .key { color: var(--green); }
+        .chrono-sector {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--green-dim);
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            color: var(--amber);
+        }
+
+        /* RADAR */
+        .radar {
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%),
+                rgba(5,10,13,0.6);
+            border: 1px solid var(--green-dim);
+            overflow: hidden;
+            margin: 4px 0;
+        }
+        .radar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: conic-gradient(from 0deg, transparent 0%, transparent 78%, rgba(74,222,128,0.5) 96%, transparent 100%);
+            animation: radarSpin 4s linear infinite;
+        }
+        .radar::after {
+            content: '';
+            position: absolute;
+            inset: 25%;
+            border: 1px solid rgba(74,222,128,0.18);
+            border-radius: 50%;
+        }
+        .radar-rings {
+            position: absolute;
+            inset: 8%;
+            border: 1px solid rgba(74,222,128,0.12);
+            border-radius: 50%;
+        }
+        .radar-rings::before {
+            content: '';
+            position: absolute;
+            inset: 35%;
+            border: 1px solid rgba(74,222,128,0.2);
+            border-radius: 50%;
+        }
+        .radar-rings::after {
+            content: '';
+            position: absolute;
+            inset: 50%;
+            transform: translate(-50%,-50%);
+            width: 4px; height: 4px;
+            background: var(--green-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--green-bright);
+        }
+        @keyframes radarSpin {
+            to { transform: rotate(360deg); }
+        }
+        .radar-blip {
+            position: absolute;
+            width: 5px; height: 5px;
+            background: var(--green-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green-bright);
+            animation: blipFade 4s linear infinite;
+        }
+        @keyframes blipFade {
+            0%, 88% { opacity: 0; }
+            5%, 35% { opacity: 1; }
+            90%, 100% { opacity: 0; }
+        }
+
+        /* INTEL FEED */
+        .intel-pulse {
+            position: absolute;
+            top: 8px; right: 10px;
+            width: 7px; height: 7px;
+            background: var(--amber);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--amber);
+            animation: blink 1.6s ease-in-out infinite;
+        }
+        .intel-quote {
+            font-size: 10.5px;
+            line-height: 1.6;
+            color: var(--text-bright);
+            font-style: italic;
+            min-height: 60px;
+            transition: opacity 0.35s;
+        }
+        .intel-source {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--green-dim);
+            font-size: 8.5px;
+            letter-spacing: 0.2em;
+            color: var(--amber);
+            text-transform: uppercase;
+            transition: opacity 0.35s;
+        }
+
+        /* PACKET COUNTER */
+        .packet-count {
+            font-family: 'Black Ops One', sans-serif;
+            font-size: 1.9em;
+            color: var(--green-bright);
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 14px var(--green-glow);
+            line-height: 1;
+        }
+        .packet-label {
+            margin-top: 6px;
+            font-size: 8.5px;
+            letter-spacing: 0.22em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+        .packet-bar {
+            margin-top: 10px;
+            height: 3px;
+            background: rgba(31,87,51,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .packet-bar-fill {
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 30%;
+            background: linear-gradient(90deg, var(--green), var(--amber));
+            animation: packetSlide 2.4s ease-in-out infinite;
+        }
+        @keyframes packetSlide {
+            0%, 100% { left: -30%; }
+            50% { left: 100%; }
+        }
+
+        /* CORNER TARGETING RETICLES */
+        .corner-hud {
+            position: fixed;
+            width: 38px; height: 38px;
+            pointer-events: none;
+            z-index: 49;
+            opacity: 0.4;
+            display: none;
+        }
+        .corner-hud span {
+            position: absolute;
+            display: block;
+            background: var(--green);
+        }
+        .corner-hud span.h { height: 1px; width: 100%; }
+        .corner-hud span.v { width: 1px; height: 100%; }
+        .corner-hud.tl { top: 76px; left: 6px; }
+        .corner-hud.tl span.h { top: 0; }
+        .corner-hud.tl span.v { left: 0; }
+        .corner-hud.tr { top: 76px; right: 6px; }
+        .corner-hud.tr span.h { top: 0; right: 0; }
+        .corner-hud.tr span.v { right: 0; }
+        .corner-hud.bl { bottom: 12px; left: 6px; }
+        .corner-hud.bl span.h { bottom: 0; }
+        .corner-hud.bl span.v { left: 0; }
+        .corner-hud.br { bottom: 12px; right: 6px; }
+        .corner-hud.br span.h { bottom: 0; right: 0; }
+        .corner-hud.br span.v { right: 0; }
+
+        /* EDGE DATA STREAMS */
+        .data-stream {
+            position: fixed;
+            top: 76px;
+            bottom: 12px;
+            width: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: rgba(74,222,128,0.14);
+            letter-spacing: 0.32em;
+            overflow: hidden;
+            z-index: 4;
+            pointer-events: none;
+            display: none;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+        .data-stream.left { left: 0; }
+        .data-stream.right { right: 0; }
+        .data-stream-inner {
+            white-space: nowrap;
+            animation: dataScroll 60s linear infinite;
+        }
+        .data-stream.right .data-stream-inner {
+            animation: dataScrollRev 60s linear infinite;
+        }
+        @keyframes dataScroll {
+            from { transform: translateY(0); }
+            to { transform: translateY(-50%); }
+        }
+        @keyframes dataScrollRev {
+            from { transform: translateY(-50%); }
+            to { transform: translateY(0); }
+        }
+
+        /* SHOW HUD ABOVE 1400px viewport */
+        @media (min-width: 1400px) {
+            .hud-rail,
+            .corner-hud,
+            .data-stream { display: block; }
+        }
+
+        /* SCROLL-TRIGGERED FLASH BANNER (transmission alerts) */
+        .transmission-banner {
+            position: fixed;
+            top: 76px; right: 20px;
+            background: rgba(5,10,13,0.92);
+            border: 1px solid var(--amber);
+            border-left: 3px solid var(--amber);
+            padding: 10px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--amber-bright);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            z-index: 70;
+            opacity: 0;
+            transform: translateX(120%);
+            transition: all 0.45s cubic-bezier(.2,.9,.3,1.2);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 320px;
+        }
+        .transmission-banner.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .transmission-banner .dot {
+            width: 8px; height: 8px;
+            background: var(--amber);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--amber);
+            animation: blink 1s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @media (max-width: 700px) {
+            .transmission-banner { max-width: 240px; font-size: 9.5px; padding: 8px 12px; }
+        }
+
         /* MEDIA QUERIES */
         @media (max-width: 900px) {
             main { padding: 110px 16px 60px; }
@@ -876,8 +1242,83 @@
 
 </main>
 
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════ LEFT HUD RAIL (MISSION LOG) ════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<aside class="hud-rail left" aria-hidden="true">
+    <div class="hud-panel mission-log">
+        <span class="hud-panel-label">▸ MISSION LOG</span>
+        <a href="#briefing" class="log-item" data-target="briefing"><span class="dot"></span><span class="log-num">01</span>BRIEFING</a>
+        <a href="#author" class="log-item" data-target="author"><span class="dot"></span><span class="log-num">02</span>AUTHOR FILE</a>
+        <a href="#abstract-p1" class="log-item" data-target="abstract-p1"><span class="dot"></span><span class="log-num">03</span>PART 01 // ABS</a>
+        <a href="#abstract-p2" class="log-item" data-target="abstract-p2"><span class="dot"></span><span class="log-num">04</span>PART 02 // ABS</a>
+        <a href="#essay" class="log-item" data-target="essay"><span class="dot"></span><span class="log-num">05</span>ESSAY // FULL</a>
+        <a href="#works-cited" class="log-item" data-target="works-cited"><span class="dot"></span><span class="log-num">06</span>ARCHIVE</a>
+    </div>
+    <div class="hud-panel">
+        <span class="hud-panel-label amber">⟁ CHRONOMETER</span>
+        <div class="chrono-time" id="chronoTime">00:00:00</div>
+        <div class="chrono-line"><span class="key">LAT</span> <span id="chronoLat">46.7298°N</span></div>
+        <div class="chrono-line"><span class="key">LON</span> <span id="chronoLon">117.1542°W</span></div>
+        <div class="chrono-line"><span class="key">UTC</span> <span id="chronoUtc">--:--Z</span></div>
+        <div class="chrono-sector">SECTOR · WSU-09</div>
+    </div>
+    <div class="hud-panel" style="text-align:center;">
+        <span class="hud-panel-label">⌖ TARGET</span>
+        <div style="font-family:'Black Ops One',sans-serif; font-size:0.92em; color:var(--green-bright); letter-spacing:0.08em; line-height:1.4;">PROPAGANDA<br>NETWORK</div>
+        <div style="font-size:8.5px; color:var(--text-dim); letter-spacing:0.18em; margin-top:6px;">STATUS · DECODED</div>
+    </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════ RIGHT HUD RAIL (TACTICAL) ══════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<aside class="hud-rail right" aria-hidden="true">
+    <div class="hud-panel" style="text-align:center;">
+        <span class="hud-panel-label">⊕ RADAR</span>
+        <div class="radar">
+            <div class="radar-rings"></div>
+            <div class="radar-blip" style="top:28%;left:36%;animation-delay:0s;"></div>
+            <div class="radar-blip" style="top:62%;left:68%;animation-delay:1.3s;"></div>
+            <div class="radar-blip" style="top:48%;left:22%;animation-delay:2.6s;"></div>
+            <div class="radar-blip" style="top:72%;left:42%;animation-delay:3.4s;"></div>
+        </div>
+        <div style="font-size:8.5px; color:var(--green); letter-spacing:0.22em; margin-top:8px;">CONTACTS · 04</div>
+    </div>
+    <div class="hud-panel">
+        <span class="hud-panel-label amber">▣ INTEL FEED</span>
+        <div class="intel-pulse"></div>
+        <div class="intel-quote" id="intelQuote">"AI is only as good as the data that feeds it"</div>
+        <div class="intel-source" id="intelSource">— HEGSETH · 12 JAN 2026</div>
+    </div>
+    <div class="hud-panel" style="text-align:center;">
+        <span class="hud-panel-label">▤ PACKETS</span>
+        <div class="packet-count" id="packetCount">0000</div>
+        <div class="packet-label">SIGNALS ACQUIRED</div>
+        <div class="packet-bar"><div class="packet-bar-fill"></div></div>
+    </div>
+</aside>
+
+<!-- ═══════════════ CORNER TARGETING RETICLES ══════════════════ -->
+<div class="corner-hud tl"><span class="h"></span><span class="v"></span></div>
+<div class="corner-hud tr"><span class="h"></span><span class="v"></span></div>
+<div class="corner-hud bl"><span class="h"></span><span class="v"></span></div>
+<div class="corner-hud br"><span class="h"></span><span class="v"></span></div>
+
+<!-- ═══════════════════ EDGE DATA STREAMS ══════════════════════ -->
+<div class="data-stream left"><div class="data-stream-inner" id="dataStreamL"></div></div>
+<div class="data-stream right"><div class="data-stream-inner" id="dataStreamR"></div></div>
+
+<!-- ════════════════ TRANSMISSION ALERT BANNER ═════════════════ -->
+<div class="transmission-banner" id="transmissionBanner">
+    <span class="dot"></span>
+    <span id="transmissionText">INCOMING TRANSMISSION</span>
+</div>
+
 <script>
-    // Progress bar
+    // ═══════════════════════════════════════════════════
+    // PROGRESS BAR
+    // ═══════════════════════════════════════════════════
     const progressBar = document.getElementById('progressBar');
     function updateProgress() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -887,6 +1328,190 @@
     }
     window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
+
+    // ═══════════════════════════════════════════════════
+    // CHRONOMETER — live time + drifting coordinates
+    // ═══════════════════════════════════════════════════
+    const chronoTime = document.getElementById('chronoTime');
+    const chronoUtc = document.getElementById('chronoUtc');
+    const chronoLat = document.getElementById('chronoLat');
+    const chronoLon = document.getElementById('chronoLon');
+    const baseLat = 46.7298;
+    const baseLon = 117.1542;
+    function updateChronometer() {
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        chronoTime.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        chronoUtc.textContent = `${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}Z`;
+        // Coords drift slightly with scroll progress
+        const sp = Math.min(window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight), 1);
+        const latDrift = (Math.sin(now.getTime() / 4000) * 0.0008) + sp * 0.0042;
+        const lonDrift = (Math.cos(now.getTime() / 4000) * 0.0008) + sp * 0.0058;
+        chronoLat.textContent = (baseLat + latDrift).toFixed(4) + '°N';
+        chronoLon.textContent = (baseLon + lonDrift).toFixed(4) + '°W';
+    }
+    setInterval(updateChronometer, 1000);
+    updateChronometer();
+
+    // ═══════════════════════════════════════════════════
+    // PACKET COUNTER — increments continuously
+    // ═══════════════════════════════════════════════════
+    const packetCount = document.getElementById('packetCount');
+    let packets = 1247;
+    function tickPackets() {
+        packets += Math.floor(Math.random() * 4) + 1;
+        packetCount.textContent = String(packets).padStart(4, '0');
+    }
+    setInterval(tickPackets, 1200);
+    tickPackets();
+
+    // ═══════════════════════════════════════════════════
+    // MISSION LOG — section tracking via IntersectionObserver
+    // ═══════════════════════════════════════════════════
+    const trackedSections = document.querySelectorAll('main section[id]');
+    const logItems = document.querySelectorAll('.mission-log .log-item');
+    const sectionOrder = Array.from(trackedSections).map(s => s.id);
+
+    function setActiveSection(id) {
+        const activeIdx = sectionOrder.indexOf(id);
+        logItems.forEach(item => {
+            const target = item.dataset.target;
+            const idx = sectionOrder.indexOf(target);
+            item.classList.remove('active', 'completed');
+            if (idx < activeIdx) item.classList.add('completed');
+            else if (idx === activeIdx) item.classList.add('active');
+        });
+        updateIntelFeed(id);
+    }
+
+    const sectionObserver = new IntersectionObserver(entries => {
+        // Pick the entry with the largest visible area
+        let best = null;
+        entries.forEach(e => {
+            if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
+                best = e;
+            }
+        });
+        if (best) setActiveSection(best.target.id);
+    }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75] });
+
+    trackedSections.forEach(s => sectionObserver.observe(s));
+
+    // Smooth scroll on click
+    logItems.forEach(item => {
+        item.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.getElementById(item.dataset.target);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // ═══════════════════════════════════════════════════
+    // INTEL FEED — rotating quotes based on current section
+    // ═══════════════════════════════════════════════════
+    const intelQuote = document.getElementById('intelQuote');
+    const intelSource = document.getElementById('intelSource');
+    const intelMap = {
+        'briefing': { q: '"AI is only as good as the data that feeds it"', s: '— HEGSETH · 12 JAN 2026' },
+        'author': { q: '"Surveillance capitalism is not technology; it is a logic that imbues technology and commands it into action"', s: '— ZUBOFF 23' },
+        'abstract-p1': { q: '"Microsoft owns Activision, which releases Call of Duty; Microsoft also collaborates closely with OpenAI"', s: '— PROJECT BRIEF' },
+        'abstract-p2': { q: '"Lean into Sara Ahmed’s idea of the feminist killjoy"', s: '— INTERVENTION' },
+        'essay': { q: '"Private companies are the ones developing [these computer systems], thereby acting like political entities but with none of the checks and balances"', s: '— BENJAMIN 56' },
+        'works-cited': { q: '"Race after Technology: Abolitionist Tools for the New Jim Code"', s: '— BENJAMIN · 2019' }
+    };
+    let lastIntelId = '';
+    function updateIntelFeed(id) {
+        const data = intelMap[id];
+        if (!data || id === lastIntelId) return;
+        lastIntelId = id;
+        intelQuote.style.opacity = 0;
+        intelSource.style.opacity = 0;
+        setTimeout(() => {
+            intelQuote.textContent = data.q;
+            intelSource.textContent = data.s;
+            intelQuote.style.opacity = 1;
+            intelSource.style.opacity = 1;
+        }, 280);
+    }
+
+    // ═══════════════════════════════════════════════════
+    // TRANSMISSION BANNER — fires when entering new section
+    // ═══════════════════════════════════════════════════
+    const transBanner = document.getElementById('transmissionBanner');
+    const transText = document.getElementById('transmissionText');
+    const transMessages = {
+        'briefing': 'PACKET DECRYPTED · BRIEFING ACQUIRED',
+        'author': 'AGENT FILE · CD-26 · UNSEALED',
+        'abstract-p1': 'CRITIQUE PROTOCOL · ENGAGED',
+        'abstract-p2': 'INTERVENTION MAP · LOADED',
+        'essay': 'FULL DEPLOYMENT · TRANSMITTING',
+        'works-cited': 'ARCHIVE INDEX · SYNCED'
+    };
+    let lastTransId = '';
+    let transTimer = null;
+    function fireTransmission(id) {
+        if (id === lastTransId) return;
+        lastTransId = id;
+        const msg = transMessages[id];
+        if (!msg) return;
+        transText.textContent = msg;
+        transBanner.classList.add('show');
+        clearTimeout(transTimer);
+        transTimer = setTimeout(() => transBanner.classList.remove('show'), 2400);
+    }
+    // Hook into section observer
+    const origSetActive = setActiveSection;
+    // Wrap setActiveSection to also fire transmission
+    sectionObserver.disconnect();
+    const sectionObserver2 = new IntersectionObserver(entries => {
+        let best = null;
+        entries.forEach(e => {
+            if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
+                best = e;
+            }
+        });
+        if (best) {
+            origSetActive(best.target.id);
+            fireTransmission(best.target.id);
+        }
+    }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75] });
+    trackedSections.forEach(s => sectionObserver2.observe(s));
+
+    // ═══════════════════════════════════════════════════
+    // DATA STREAMS — generate vertical scrolling text
+    // ═══════════════════════════════════════════════════
+    const hexChars = '0123456789ABCDEF';
+    const milCodes = ['NOFORN', 'TS//SI', 'CDAO-7', 'WSU-09', 'AOR/CENTCOM', 'OPSEC', 'KL-7', 'XAI-3', 'DOW', 'DELTA', 'GROK', 'CLAUDE'];
+    function buildStream(chunks) {
+        let out = '';
+        for (let i = 0; i < chunks; i++) {
+            const r = Math.random();
+            if (r < 0.3) {
+                // Hex blob
+                let hex = '0x';
+                for (let j = 0; j < 4; j++) hex += hexChars[Math.floor(Math.random() * 16)];
+                out += hex + '  ';
+            } else if (r < 0.55) {
+                // Military code
+                out += milCodes[Math.floor(Math.random() * milCodes.length)] + '  ';
+            } else if (r < 0.75) {
+                // Timestamp
+                const h = String(Math.floor(Math.random() * 24)).padStart(2, '0');
+                const m = String(Math.floor(Math.random() * 60)).padStart(2, '0');
+                out += `${h}${m}Z  `;
+            } else {
+                // Coords-ish
+                out += `${(Math.random() * 90).toFixed(2)}N  `;
+            }
+        }
+        return out;
+    }
+    const streamL = document.getElementById('dataStreamL');
+    const streamR = document.getElementById('dataStreamR');
+    if (streamL) streamL.textContent = buildStream(180) + buildStream(180);
+    if (streamR) streamR.textContent = buildStream(180) + buildStream(180);
 </script>
 
 </body>
