@@ -331,7 +331,7 @@ body::after{
 
 /* AUTHOR FOOTER  ====================================================== */
 .author{
-  padding:50px 6vw;
+  padding:60px 6vw;
   border-top:6px double var(--rule);
   background:var(--paper-warm);
 }
@@ -339,28 +339,252 @@ body::after{
   max-width:1180px; margin:0 auto;
   display:grid; grid-template-columns:1fr 1fr; gap:48px;
 }
-.author-grid > div{
-  border-left:3px solid var(--red); padding-left:22px;
+.bio-card{
+  display:flex; flex-direction:column;
+  background:var(--paper);
+  border:1px solid var(--rule-soft);
+  padding:24px 26px 28px;
+  box-shadow:6px 8px 0 rgba(22,17,8,0.18), 0 2px 14px rgba(22,17,8,0.10);
+  position:relative;
 }
-.author-grid .lbl{
+.bio-card:nth-child(odd){ transform:rotate(-0.35deg); }
+.bio-card:nth-child(even){ transform:rotate(0.35deg); }
+.bio-header{
+  display:flex; align-items:flex-start; gap:18px;
+  margin-bottom:18px;
+  padding-bottom:18px;
+  border-bottom:1px dashed var(--rule-soft);
+}
+.bio-photo{
+  flex-shrink:0;
+  width:108px; height:108px;
+  border:1px solid var(--ink);
+  padding:5px;
+  background:var(--paper-warm);
+  box-shadow:3px 4px 0 rgba(22,17,8,0.25);
+  position:relative;
+}
+.bio-photo img{
+  display:block; width:100%; height:100%;
+  object-fit:cover;
+  filter:contrast(1.04) sepia(0.06);
+}
+.bio-photo::before{
+  content:''; position:absolute;
+  top:-1px; left:-1px; right:-1px; bottom:-1px;
+  border:1px solid var(--red);
+  opacity:.5; pointer-events:none;
+}
+.bio-meta{ flex:1; min-width:0; }
+.bio-meta .lbl{
   font-family:var(--mono);
-  font-size:10.5px; letter-spacing:.32em; text-transform:uppercase;
+  font-size:10px; letter-spacing:.32em; text-transform:uppercase;
   color:var(--red);
-  margin-bottom:8px;
-}
-.author-grid .nm{
-  font-family:var(--nepali-disp);
-  font-size:clamp(1.35rem, 2.4vw, 1.9rem);
-  color:var(--ink);
   margin-bottom:6px;
-  font-weight:500;
 }
-.author-grid .rl{
-  font-family:var(--serif); font-style:italic; font-size:14.5px;
+.bio-meta .nm{
+  font-family:var(--nepali-disp);
+  font-size:clamp(1.4rem, 2.6vw, 1.95rem);
+  color:var(--ink);
+  margin-bottom:2px;
+  font-weight:500;
+  line-height:1.2;
+}
+.bio-meta .rl{
+  font-family:var(--serif); font-style:italic;
+  font-size:15px;
   color:var(--ink-soft);
 }
+.bio-body{
+  font-family:var(--serif);
+  font-size:14.5px;
+  line-height:1.75;
+  color:var(--ink-soft);
+  margin-bottom:14px;
+}
+.bio-body.np{
+  font-family:var(--nepali);
+  font-style:normal;
+  font-size:14px;
+  line-height:1.85;
+  padding-top:14px;
+  border-top:1px dotted var(--rule-soft);
+  color:var(--ink);
+}
+.bio-card .lang-tag{
+  font-family:var(--mono);
+  font-size:9px; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--red);
+  display:inline-block;
+  margin-bottom:8px;
+  border-bottom:1px solid var(--red);
+  padding-bottom:1px;
+}
 @media (max-width: 760px){
-  .author-grid{ grid-template-columns:1fr; gap:28px; }
+  .author-grid{ grid-template-columns:1fr; gap:32px; }
+  .bio-header{ flex-direction:column; gap:14px; }
+  .bio-photo{ width:140px; height:140px; }
+  .bio-card{ transform:none !important; }
+}
+
+/* PROJECT ABSTRACT ===================================================== */
+.abstract-block{
+  max-width:980px; margin:36px auto 16px;
+  padding:0 6vw;
+}
+.abstract-card{
+  background:var(--paper-warm);
+  border:1px solid var(--rule);
+  border-top:5px double var(--red);
+  border-bottom:5px double var(--red);
+  padding:32px 36px 30px;
+  position:relative;
+  box-shadow:0 4px 18px rgba(22,17,8,0.10);
+}
+.abstract-stamp{
+  position:absolute;
+  top:-12px; left:30px;
+  background:var(--paper);
+  padding:0 12px;
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--red);
+}
+.abstract-card h3{
+  font-family:var(--nepali-disp);
+  font-weight:500;
+  font-size:clamp(1.4rem, 2.6vw, 1.85rem);
+  color:var(--ink);
+  line-height:1.35;
+  margin-bottom:18px;
+  border-bottom:1px solid var(--rule-soft);
+  padding-bottom:12px;
+}
+.abstract-card p{
+  font-family:var(--nepali);
+  font-size:15.5px;
+  line-height:1.95;
+  color:var(--ink);
+  text-align:justify;
+}
+.abstract-card p + p{ margin-top:14px; }
+
+/* PAIRED CLIPPING ENTRIES ============================================== */
+.clippings{
+  max-width:1180px; margin:0 auto;
+  padding:14px 6vw 60px;
+}
+.clip-entry{
+  display:grid;
+  grid-template-columns:1.05fr 1.6fr;
+  gap:34px;
+  padding:28px 0;
+  border-bottom:1px solid var(--hairline);
+  align-items:start;
+}
+.clip-entry:last-child{ border-bottom:none; }
+.clip-entry-meta{
+  position:sticky; top:90px;
+  font-family:var(--nepali);
+  align-self:start;
+}
+.clip-entry-num{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:34px; font-weight:700;
+  color:var(--red);
+  line-height:1;
+  padding-bottom:6px;
+  border-bottom:3px solid var(--red);
+  margin-bottom:14px;
+  letter-spacing:.05em;
+}
+.clip-entry-headline{
+  font-family:var(--nepali-disp);
+  font-size:clamp(1.15rem, 1.9vw, 1.4rem);
+  line-height:1.4;
+  color:var(--ink);
+  margin-bottom:12px;
+  font-weight:500;
+}
+.clip-entry-headline-en{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:14px;
+  color:var(--ink-soft);
+  margin-bottom:18px;
+  line-height:1.55;
+  padding-bottom:14px;
+  border-bottom:1px dashed var(--rule-soft);
+}
+.clip-meta-row{
+  display:flex; gap:10px;
+  font-family:var(--mono);
+  font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ink-faded);
+  padding:5px 0;
+}
+.clip-meta-row .key{
+  color:var(--red);
+  min-width:78px;
+  display:inline-block;
+}
+.clip-meta-row .val{
+  font-family:var(--nepali);
+  color:var(--ink);
+  letter-spacing:.05em;
+  text-transform:none;
+  font-size:13.5px;
+}
+.clip-entry-images{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.clip-entry-images.multi{
+  grid-template-columns:1fr 1fr;
+}
+.clip-entry-image{
+  background:var(--paper-warm);
+  border:1px solid var(--rule-soft);
+  padding:8px 8px 22px;
+  box-shadow:4px 6px 0 rgba(22,17,8,0.18), 0 2px 14px rgba(22,17,8,0.10);
+  cursor:zoom-in;
+  position:relative;
+  transition:transform .35s cubic-bezier(.18,1,.3,1), box-shadow .35s ease;
+}
+.clip-entry-image:nth-child(odd){ transform:rotate(-0.4deg); }
+.clip-entry-image:nth-child(even){ transform:rotate(0.4deg); }
+.clip-entry-image:hover{
+  transform:rotate(0deg) translateY(-3px);
+  box-shadow:6px 10px 0 rgba(22,17,8,0.26), 0 8px 22px rgba(184,28,16,0.15);
+  z-index:3;
+}
+.clip-entry-image img{
+  display:block; width:100%; height:auto;
+  filter:contrast(1.05) sepia(0.07);
+}
+.clip-entry-image-cap{
+  position:absolute; bottom:6px; left:8px; right:8px;
+  font-family:var(--mono);
+  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ink-faded);
+  display:flex; justify-content:space-between;
+}
+.clip-entry-image-cap .pg{ color:var(--red); font-weight:700; }
+.clip-page-badge{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
+  background:var(--red); color:var(--paper);
+  padding:2px 8px;
+  margin-left:8px;
+  vertical-align:middle;
+}
+@media (max-width: 800px){
+  .clip-entry{ grid-template-columns:1fr; gap:18px; padding:24px 0; }
+  .clip-entry-meta{ position:static; }
+  .clip-entry-images.multi{ grid-template-columns:1fr; }
 }
 
 /* COLOPHON / FOOTER ==================================================== */
@@ -422,11 +646,20 @@ footer a:hover{ color:var(--paper); border-color:var(--paper); }
 
   <div class="byline rv">
     <div><span class="lbl">Researcher</span><span class="val">रोहेज खतिवडा</span></div>
-    <div><span class="lbl">Co-researcher</span><span class="val">सम्झना विश्वकर्मा</span></div>
+    <div><span class="lbl">Co-researcher</span><span class="val">सम्झना बिक</span></div>
     <div><span class="lbl">Period</span><span class="val">वि. सं. २०५६ / २०५७</span></div>
-    <div><span class="lbl">Material</span><span class="val">४१ + समाचार / ४५ + फोटो</span></div>
+    <div><span class="lbl">Material</span><span class="val">४१ सामग्री / ३९ अभिलेख</span></div>
   </div>
 </header>
+
+<!-- PROJECT ABSTRACT ==================================================== -->
+<section class="abstract-block">
+  <div class="abstract-card rv">
+    <span class="abstract-stamp">▸ Project Abstract</span>
+    <h3>चमार जातिको ऐतिहासिक सिनो बहिष्कार आन्दोलन: नेपालका राष्ट्रिय पत्रिकाहरुले दिएको स्थान</h3>
+    <p>झन्डै तीन हजार वर्षदेखि दक्षिण एसियाका दलितहरूले जात व्यवस्थाको भार बोकिरहेका छन् र यसबाट मुक्तिका लागि विभिन्न प्रयास गरिरहेका छन् । दलित समुदायले आफ्नो मुक्तिका लागि गरेका साना-ठूला विभिन्न आन्दोलन गरेका छन्, जसमध्ये स्थानीयस्तरका थुप्रै स-साना आन्दोलनहरू बिस्तारै सार्वजनिक सम्झनाबाट मेटिन थालेका छन् । वि.सं. २०५६-५७ सालमा नेपालको सप्तरी र सिराहा जिल्लामा भएको सिनो बहिष्कार आन्दोलन यस्तै एउटा आन्दोलन हो । परम्पारगत रूपमा गाउँमा मरेका गाई लगायत घरपालुवा पशुको सिनो बहिष्कार गर्दै आएका चमार समुदायले यो बाध्यकारी जातिय कामबाट मुक्ति खोजे र सिनो उठाउन अस्वीकार गरे । परिणामस्वरूप, उनीहरू समाजको कथित उपल्लो जातिको दमनमा परे । यो दमन विरूद्ध उनीहरूले निरन्तर आन्दोलन गरे र सफलता पनि प्राप्त गरे । यो सफल दलित आन्दोलनलाई नेपालका राष्ट्रिय दैनिक तथा साप्ताहिक पत्रिकाहरूले कति महत्व दिए र कस्ता कस्ता सामग्री प्रकाशित गरे भन्नेमा यो अनुसन्धान केन्द्रीत छ । आन्दोलन चलेको करिब दुई वर्षको अविधिमा प्रकाशित भएका ४१ सामग्री प्रकाशित भएको हामीले प्राप्त गर्‍यौं । यो संख्याले नै नेपाली पत्रिकाहरूले उक्त आन्दोलनलाई खासै महत्वका साथ नहेरेको देखिन्छ । यो अनुसन्धानले सामाजिक रूपान्तरण र सामाजिक न्यायका लागि अत्यन्तै महत्वपूर्ण उक्त आन्दोलनलाई पत्रिकाहरूले अन्य सामान्य घटनासरह लिएको देखिन्छ । यो अनुसन्धानमा हामीले पहिलो त्यसबेला प्रकाशित भएका सामग्रीहरूलाई संकलन गरी डिजिटल संग्रहमा ल्याएका छौं भने पत्रिकारहरूले उक्त आन्दोलनलाई दिएको महत्वबारे सामान्य विश्लेषण पनि गरेका छौं ।</p>
+  </div>
+</section>
 
 <!-- SECTION I · ESSAY =================================================== -->
 <div class="rubric">
@@ -469,43 +702,15 @@ footer a:hover{ color:var(--paper); border-color:var(--paper); }
   </div>
 </section>
 
-<!-- SECTION II · THE LOG ================================================ -->
+<!-- SECTION II · CLIPPINGS (paired captions + images) =================== -->
 <div class="rubric">
   <span class="rubric-num">§ II</span>
-  <span class="rubric-name">अभिलेख · The Log</span>
+  <span class="rubric-name">अभिलेख · The Clippings Archive</span>
   <span class="rubric-rule"></span>
 </div>
 
-<section class="log">
-  <div class="log-tabs rv">
-    <button class="log-tab active" data-lang="ne">देवनागरी · Nepali</button>
-    <button class="log-tab" data-lang="en">English Translation</button>
-    <span class="log-count" id="logCount"></span>
-  </div>
-
-  <table class="log-table ne" id="logTable">
-    <thead>
-      <tr>
-        <th>क्र.सं.</th>
-        <th>मिति</th>
-        <th>पत्रिकाको नाम</th>
-        <th>पृष्ठ</th>
-        <th>समाचारको शिर्षक</th>
-      </tr>
-    </thead>
-    <tbody id="logBody"></tbody>
-  </table>
-</section>
-
-<!-- SECTION III · ARCHIVE =============================================== -->
-<div class="rubric">
-  <span class="rubric-num">§ III</span>
-  <span class="rubric-name">फोटो संग्रह · The Newspaper Archive</span>
-  <span class="rubric-rule"></span>
-</div>
-
-<section class="archive">
-  <div class="archive-grid" id="archiveGrid"></div>
+<section class="clippings">
+  <div class="clippings-list" id="clippingsList"></div>
 </section>
 
 <!-- LIGHTBOX -->
@@ -515,19 +720,44 @@ footer a:hover{ color:var(--paper); border-color:var(--paper); }
   <div class="lb-cap" id="lbCap"></div>
 </div>
 
-<!-- AUTHOR FOOTER ====================================================== -->
+<!-- AUTHOR + CO-RESEARCHER BIOS ======================================== -->
 <section class="author">
   <div class="author-grid">
-    <div class="rv">
-      <div class="lbl">Researcher</div>
-      <div class="nm">रोहेज खतिवडा</div>
-      <div class="rl">Rohej Khatiwada</div>
-    </div>
-    <div class="rv">
-      <div class="lbl">Co-researcher</div>
-      <div class="nm">सम्झना विश्वकर्मा</div>
-      <div class="rl">Samjhana Bishwakarma</div>
-    </div>
+
+    <!-- Rohej Khatiwada -->
+    <article class="bio-card rv">
+      <div class="bio-header">
+        <div class="bio-photo">
+          <img src="rohej-assets/rohej-portrait.jpeg" alt="Rohej Khatiwada">
+        </div>
+        <div class="bio-meta">
+          <div class="lbl">Researcher</div>
+          <div class="nm">रोहेज खतिवडा</div>
+          <div class="rl">Rohej Khatiwada</div>
+        </div>
+      </div>
+      <span class="lang-tag">English</span>
+      <p class="bio-body">Rohej Khatiwada is a Nepali writer, translator, independent journalist, and political analyst. His intellectual and journalistic work engages critically with neoliberalism and its socio-political consequences, particularly in the context of the Global South. He has a longstanding interest in the history of ancient South Asia, with a particular focus on the origins and historical evolution of the caste system. Alongside his historical interests, he writes regularly on global political affairs, international relations, and contemporary political developments. He is also the editor and translator of the anthology <em>21au Shatabdima Nigarani Ra Swatantrata</em> (<em>Surveillance and Freedom in the 21st Century</em>), a collection of contemporary essays.</p>
+      <p class="bio-body np">रोहेज खतिवडा नेपाली लेखक, अनुवादक, स्वतन्त्र पत्रकार तथा राजनीतिक विश्लेषक हुन्। उनी नवउदारवाद र तेस्रो विश्वमा यसले पारेका प्रभावका आलाेचकका रुपमा परिचित छन्। उनी दक्षिण एसियाको प्राचीन इतिहास, खासगरी जात-व्यवस्थाको उत्पत्ति र यसको ऐतिहासिक विकासक्रमको अध्ययनमा गहिरो रुचि राख्छन्। उनले विश्व राजनीतिक घटनाक्रम, अन्तर्राष्ट्रिय सम्बन्ध तथा समसामयिक राजनीतिक विषयहरूमा नियमित रूपमा लेख्दै आएका छन्। उनको सम्पादन तथा अनुवादमा समकालीन निबन्धहरूको सङ्ग्रह <em>‘२१औँ शताब्दीमा निगरानी र स्वतन्त्रता’</em> (Surveillance and Freedom in the 21st Century) प्रकाशित छ।</p>
+    </article>
+
+    <!-- Samjhana BK -->
+    <article class="bio-card rv">
+      <div class="bio-header">
+        <div class="bio-photo">
+          <img src="rohej-assets/samjhana-portrait.jpeg" alt="Samjhana BK">
+        </div>
+        <div class="bio-meta">
+          <div class="lbl">Co-researcher</div>
+          <div class="nm">सम्झना  बिक</div>
+          <div class="rl">Samjhana BK</div>
+        </div>
+      </div>
+      <span class="lang-tag">English</span>
+      <p class="bio-body">Samjhana is a Nepali journalist committed to representing women, Dalit, and marginalized communities. Her journalistic work focuses on amplifying voices that are often underrepresented in mainstream discourse, with a particular interest in social justice and grassroots narratives. She is pursuing her Master's in Media Studies from Kathmandu University, Nepal.</p>
+      <p class="bio-body np">सम्झना बीक पत्रकार हुन्। उनी पत्रकारिता मार्फत दलित, महिला तथा सीमान्तकृत समुदायको आवाज उठाउन प्रतिबद्ध छिन्। उनको पत्रकारिता खासगरी सामाजिक न्याय र समुदायको भोगाई तथा अनुभवलाई मूलधारको सार्वजनिक विमर्शमा ल्याउनमा केन्द्रीत छ। समाजमा पर्याप्त रूपमा प्रतिनिधित्व नपाएका आवाजलाई उजागर गर्दै उनी आफ्नो पत्रकारितामार्फत समावेशी संवाद निर्माणमा योगदान पुर्‍याइरहेकी छन्। सम्झना अहिले काठमाडौं विश्वविद्यालयबाट मिडिया स्टडिजमा स्नातकोत्तर अध्ययनरत छिन्।</p>
+    </article>
+
   </div>
 </section>
 
@@ -540,8 +770,47 @@ footer a:hover{ color:var(--paper); border-color:var(--paper); }
 </footer>
 
 <!-- DATA + JS =========================================================== -->
-<script id="logData" type="application/json">{"np_header": ["क्र.सं.", "मिति", "पत्रिकाको नाम", "पृष्ठ", "समाचारको शिर्षक"], "np_entries": [{"sn": "१", "date": "२०५७/४/४", "paper": "कान्तिपुर", "page": "७", "headline": "चमार जाति र मानव अधिकार"}, {"sn": "२", "date": "२०५७/४/२१", "paper": "कान्तिपुर", "page": "७", "headline": "छुवाछुत विरुद्धका सम्मानित योद्धा"}, {"sn": "३", "date": "२०५७/११/२३", "paper": "कान्तिपुर", "page": "२", "headline": "जातीय छुवाछुत गर्नेमाथि कारबाहीको माग गर्दै धर्ना"}, {"sn": "४", "date": "२०५७/११/२५", "paper": "कान्तिपुर", "page": "४", "headline": "छुवाछुत विरोधी आन्दोलन सिंहदरबारतिर"}, {"sn": "५", "date": "२०५७/११/२५", "paper": "कान्तिपुर", "page": "१७", "headline": "फोटो"}, {"sn": "६", "date": "२०५७/११/२६", "paper": "कान्तिपुर", "page": "३", "headline": "छुवाछुत विरुद्ध भद्रकालीमा धर्ना"}, {"sn": "७", "date": "२०५७/१२/२", "paper": "कान्तिपुर", "page": "५", "headline": "दलित उत्थानका लागि जिल्ला परिषदबाट विशेष विरोध"}, {"sn": "८", "date": "२०५७/१२/५", "paper": "कान्तिपुर", "page": "७", "headline": "दलितहरुको मुक्तिको लागि हामी मर्न तयार छौः विश्वेन्द्र पासवान"}, {"sn": "९", "date": "२०५७/१२/६", "paper": "कान्तिपुर", "page": "३", "headline": "चमार बहिष्कार विरुद्ध पाँचौ चरणको आन्दोलन घोषणा"}, {"sn": "१०", "date": "२०५७/१२/८", "paper": "कान्तिपुर", "page": "१", "headline": "लहानका चमार माग्दै हिंड्दैनन् अचेल"}, {"sn": "११", "date": "२०५७/१२/११", "paper": "कान्तिपुर", "page": "४", "headline": "दलितद्धारा लहानमा “कालो दिवस”"}, {"sn": "१२", "date": "२०५७/१२/१३", "paper": "कान्तिपुर", "page": "३", "headline": "छुवाछुत र जातीय भेदभाव अन्त्य गर्न a गरिने"}, {"sn": "१३", "date": "२०५७/१२/१३", "paper": "नेपाल समाचार पत्र", "page": "२", "headline": "दलित गैरसरकारी संस्था महासंघले आज सर्वोच्व अदालतमा मुद्दा दायर गर्ने"}, {"sn": "१४", "date": "२०५७/१२/१३", "paper": "गोरखापत्र", "page": "११", "headline": "छुवाछुत प्रथाविरुद्ध मुद्दा दायर गरिने"}, {"sn": "१५", "date": "२०५७/१२/१२", "paper": "गोरखापत्र", "page": "३", "headline": "जातीय विभेद र समानताका लागि स्पष्ट नीति र कार्यक्रमको खाँचो"}, {"sn": "१६", "date": "२०५७/५/११", "paper": "ब्लास्ट दैनिक", "page": "सप्तरीमा दलितहरुको सशक्त आन्दोलन", "headline": "१७"}, {"sn": "२०५७/५/१४", "date": "ब्लास्ट दैनिक", "paper": "दलितहरुका गाँउ पुगेको प्रतिनिधि मण्डलमाथि हातपात", "page": "१८", "headline": "२०५८/१०/३"}, {"sn": "कान्तिपुर", "date": "१२", "paper": "चमार बहिष्कार सम्बन्धी मुद्दाको फैसला तयार", "page": "१९", "headline": "२०५७/५/११"}, {"sn": "हिमालय  टाइम्स", "date": "३", "paper": "चमार जातिले सिनो फाल्नुपर्ने बाध्यता अन्त्यको माग", "page": "२०", "headline": "२०५७/१/२७"}, {"sn": "दृष्टि साप्ताहिक", "date": "७", "paper": "जातीय दंगाले विष्पोटकको रुप लिने", "page": "२१", "headline": "२०५७/१/२१"}, {"sn": "साप्ताहिक नयाँ करेन्ट", "date": "१/८", "paper": "जातीय भेदका कारण लहान तनावग्रस्त चमार समुदायमा सार्वजनिक भोज", "page": "२२", "headline": "२०५७/१/२७"}, {"sn": "साप्ताहिक नयाँ करेन्ट", "date": "७", "paper": "चमारहरुको पानी चलाइयो", "page": "२३", "headline": "२०५७/५/२६"}, {"sn": "साप्ताहिक प्रकाश", "date": "५", "paper": "सप्तहरी सिनो आन्दोलनले जातीय द्वन्द्व निम्त्यायो", "page": "२४", "headline": "२०५७/१/११"}, {"sn": "साप्ताहिक छलफल", "date": "१/८", "paper": "दलितहरु आन्दोलनमा उत्रिए", "page": "२५", "headline": "२०५७/७/२७"}, {"sn": "साप्ताहिक छलफल", "date": "१/८", "paper": "चमारलाई औषधिमा पनि प्रतिबन्ध", "page": "२६", "headline": "२०५७/१०/१५"}, {"sn": "साप्ताहिक छलफल", "date": "७", "paper": "चमारलाई अझै नाकाबन्दी लगाइदैछ", "page": "२७", "headline": "२०५७/५/१७"}, {"sn": "साप्ताहिक जन्मभूमि", "date": "३", "paper": "पत्रकारहरु माथि फेरि आक्रमण", "page": "२८", "headline": "२०५७/११/२३"}, {"sn": "नेपाल समाचार पत्र", "date": "२", "paper": "चमार जातिको आन्दोलनलाई सम्पूर्ण दलितले अगाडि बढाउने घोषणा", "page": "२९", "headline": "२०५७/५/१"}, {"sn": "कान्तिपुर", "date": "५", "paper": "हरिजनहरुले सिनो नफाल्ने भएपछि", "page": "३०", "headline": "२०५७/५/२"}, {"sn": "कान्तिपुर", "date": "१", "paper": "बरु गर्धन जाओस् – सिनो चाहिँ फालिँदैन", "page": "३१", "headline": "२०५७/५/ ४"}, {"sn": "कान्तिपुर", "date": "१", "paper": "लालटिन बालेर विरोध(तस्वीर)", "page": "३२", "headline": "२०५७/५/ ५"}, {"sn": "कान्तिपुर", "date": "३", "paper": "चमार जातिको खानेपान पाइपमा सिनो फालियो", "page": "३३", "headline": "२०५७/५/१५"}, {"sn": "कान्तिपुर", "date": "३", "paper": "चमार जाति आन्दोलनको तयारीमा", "page": "३४", "headline": "२०५७/५/१५"}, {"sn": "कान्तिपुर", "date": "२०", "paper": "चमार नाकाबन्दी अध्ययन टोली माथि हातपात", "page": "३५", "headline": "२०५७/५/२४"}, {"sn": "कान्तिपुर", "date": "१८", "paper": "सप्तरी जिप्रकामा भएको धर्ना स्थगित", "page": "३६", "headline": "२०५७/५/ २२"}, {"sn": "गोरखापत्र", "date": "७", "paper": "चमार बहिष्कारमा नलाग्ने निर्णय", "page": "३७", "headline": "२०५८/९/ १२"}, {"sn": "कान्तिपुर", "date": "४", "paper": "चमारको पक्षमा वकालत गर्ने पक्राउ", "page": "३८", "headline": "19 March, 2000"}, {"sn": "The Kathmandu post", "date": "1", "paper": "Chamars renew their demands for action", "page": "३९", "headline": "26 March, 2000"}], "en_header": ["S.N.", "Date (B.S.)", "Newspaper", "Page", "News Headline (English)"], "en_entries": [{"sn": "1", "date": "2057/4/4", "paper": "Kantipur", "page": "7", "headline": "Chamar Caste and Human Rights"}, {"sn": "2", "date": "2057/4/21", "paper": "Kantipur", "page": "7", "headline": "Honored Warriors Against Untouchability"}, {"sn": "3", "date": "2057/11/23", "paper": "Kantipur", "page": "2", "headline": "Sit-in Protest Demanding Action Against Untouchability"}, {"sn": "4", "date": "2057/11/25", "paper": "Kantipur", "page": "4", "headline": "Anti-Untouchability Movement Towards Singha Durbar"}, {"sn": "5", "date": "2057/11/25", "paper": "Kantipur", "page": "17", "headline": "Photo"}, {"sn": "6", "date": "2057/11/26", "paper": "Kantipur", "page": "3", "headline": "Sit-in Protest at Bhadrakali Against Untouchability"}, {"sn": "7", "date": "2057/12/2", "paper": "Kantipur", "page": "5", "headline": "Special Protest by District Council for Dalit Upliftment"}, {"sn": "8", "date": "2057/12/5", "paper": "Kantipur", "page": "7", "headline": "“We Are Ready to Die for Dalit Liberation” – Bishwendra Paswan"}, {"sn": "9", "date": "2057/12/6", "paper": "Kantipur", "page": "3", "headline": "Fifth Phase of Movement Announced Against Chamar Boycott"}, {"sn": "10", "date": "2057/12/8", "paper": "Kantipur", "page": "1", "headline": "Chamars of Lahan No Longer Go Around Asking"}, {"sn": "11", "date": "2057/12/11", "paper": "Kantipur", "page": "4", "headline": "“Black Day” Observed by Dalits in Lahan"}, {"sn": "12", "date": "2057/12/13", "paper": "Kantipur", "page": "3", "headline": "Writ Petition to End Untouchability and Caste Discrimination"}, {"sn": "13", "date": "2057/12/13", "paper": "Nepal Samacharpatra", "page": "2", "headline": "Dalit NGO Federation Filing Case in Supreme Court"}, {"sn": "14", "date": "2057/12/13", "paper": "Gorkhapatra", "page": "11", "headline": "Case to Be Filed Against Untouchability Practice"}, {"sn": "15", "date": "2057/12/12", "paper": "Gorkhapatra", "page": "3", "headline": "Need for Clear Policy and Programs for Equality"}, {"sn": "16", "date": "2057/5/11", "paper": "Blast Daily", "page": "—", "headline": "Strong Dalit Movement in Saptari"}, {"sn": "17", "date": "2057/5/14", "paper": "Blast Daily", "page": "—", "headline": "Delegation Visiting Dalit Villages Attacked"}, {"sn": "18", "date": "2058/10/3", "paper": "Kantipur", "page": "12", "headline": "Verdict Ready in Chamar Boycott Case"}, {"sn": "19", "date": "2057/5/11", "paper": "Himalaya Times", "page": "3", "headline": "Demand to End Compulsion for Chamars to Dispose Dead Animals"}, {"sn": "20", "date": "2057/1/27", "paper": "Drishti Weekly", "page": "7", "headline": "Caste Conflict May Become Explosive"}, {"sn": "21", "date": "2057/1/21", "paper": "Weekly Naya Current", "page": "1/8", "headline": "Lahan Tense Due to Caste Discrimination; Public Feast in Chamar Community"}, {"sn": "22", "date": "2057/1/27", "paper": "Weekly Naya Current", "page": "7", "headline": "Water Access Restored for Chamars"}, {"sn": "23", "date": "2057/5/26", "paper": "Weekly Prakash", "page": "5", "headline": "Saptari Sino Movement Triggered Caste Conflict"}, {"sn": "24", "date": "2057/1/11", "paper": "Weekly Chhalphal", "page": "1/8", "headline": "Dalits Launch Protest Movement"}, {"sn": "25", "date": "2057/7/27", "paper": "Weekly Chhalphal", "page": "1/8", "headline": "Chamars Restricted Even From Medicine"}, {"sn": "26", "date": "2057/10/15", "paper": "Weekly Chhalphal", "page": "7", "headline": "Blockade Against Chamars Continues"}, {"sn": "27", "date": "2057/5/17", "paper": "Weekly Janmabhumi", "page": "3", "headline": "Journalists Attacked Again"}, {"sn": "28", "date": "2057/11/23", "paper": "Nepal Samacharpatra", "page": "2", "headline": "Dalits Announce Support for Chamar Movement"}, {"sn": "29", "date": "2057/5/1", "paper": "Kantipur", "page": "5", "headline": "After Harijans Refused to Dispose Dead Animals"}, {"sn": "30", "date": "2057/5/2", "paper": "Kantipur", "page": "1", "headline": "“Let Our Heads Go, But We Won’t Dispose Dead Animals”"}, {"sn": "31", "date": "2057/5/4", "paper": "Kantipur", "page": "1", "headline": "Lantern Protest (Photo)"}, {"sn": "32", "date": "2057/5/5", "paper": "Kantipur", "page": "3", "headline": "Dead Animal Thrown into Water Supply Pipe of Chamar Community"}, {"sn": "33", "date": "2057/5/15", "paper": "Kantipur", "page": "3", "headline": "Chamar Community Preparing for Movement"}, {"sn": "34", "date": "2057/5/15", "paper": "Kantipur", "page": "20", "headline": "Study Team on Chamar Blockade Attacked"}, {"sn": "35", "date": "2057/5/24", "paper": "Kantipur", "page": "18", "headline": "Sit-in at Saptari District Police Office Postponed"}, {"sn": "36", "date": "2057/5/22", "paper": "Gorkhapatra", "page": "7", "headline": "Decision Not to Participate in Chamar Boycott"}, {"sn": "37", "date": "2058/9/12", "paper": "Kantipur", "page": "4", "headline": "Advocate Supporting Chamars Arrested"}, {"sn": "38", "date": "March 19, 2000", "paper": "The Kathmandu Post", "page": "1", "headline": "Chamars Renew Their Demands for Action"}, {"sn": "39", "date": "March 26, 2000", "paper": "The Kathmandu Post", "page": "8", "headline": "Chamars of Siraha Take the Case to Court"}]}</script>
-<script id="photoData" type="application/json">["1.jpg", "2.jpeg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg", "16+.jpg", "17.jpg", "17+.jpg", "18.jpeg", "19.jpg", "20.jpg", "21.jpg", "22.jpg", "23.jpg", "24.jpg", "24+.jpg", "25.jpg", "26.jpg", "27.jpg", "28.jpg", "29.jpg", "30.jpg", "31.jpg", "32.jpg", "33.jpg", "34.jpg", "35.jpg", "36.jpg", "37.jpg", "38.jpeg", "39.jpeg", "20260102_160259.jpg", "20260102_160305.jpg", "20260104_120002.jpg", "clipping.jpg"]</script>
+<script id="clipData" type="application/json">[
+  {"sn":"१","sn_en":"01","date_np":"२०५७ साउन ४","date_en":"Saun 4, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"७","page_en":"7","headline_np":"चमार जाति र मानव अधिकार","headline_en":"Chamar Caste and Human Rights","files":["1.jpg"]},
+  {"sn":"२","sn_en":"02","date_np":"२०५७ साउन २१","date_en":"Saun 21, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"७","page_en":"7","headline_np":"छुवाछुत विरुद्धका सम्मानित योद्धा","headline_en":"Honored Warriors Against Untouchability","files":["2.jpeg"]},
+  {"sn":"३","sn_en":"03","date_np":"२०५७ फागुन २३","date_en":"Falgun 23, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"२","page_en":"2","headline_np":"जातीय छुवाछुत गर्नेमाथि कारबाहीको माग गर्दै धर्ना","headline_en":"Sit-in Protest Demanding Action Against Untouchability","files":["3.jpg"]},
+  {"sn":"४","sn_en":"04","date_np":"२०५७ फागुन २५","date_en":"Falgun 25, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"४","page_en":"4","headline_np":"छुवाछुत विरोधी आन्दोलन सिंहदरबारतिर","headline_en":"Anti-Untouchability Movement Towards Singha Durbar","files":["4.jpg"]},
+  {"sn":"५","sn_en":"05","date_np":"२०५७ फागुन २५","date_en":"Falgun 25, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"१७","page_en":"17","headline_np":"फोटो","headline_en":"Photo","files":["5.jpg"]},
+  {"sn":"६","sn_en":"06","date_np":"२०५७ फागुन २६","date_en":"Falgun 26, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"३","page_en":"3","headline_np":"छुवाछुत विरुद्ध भद्रकालीमा धर्ना","headline_en":"Sit-in Protest at Bhadrakali Against Untouchability","files":["6.jpg"]},
+  {"sn":"७","sn_en":"07","date_np":"२०५७ चैत २","date_en":"Chaitra 2, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"५","page_en":"5","headline_np":"दलित उत्थानका लागि जिल्ला परिषदबाट विशेष विरोध","headline_en":"Special Protest by District Council for Dalit Upliftment","files":["7.jpg"]},
+  {"sn":"८","sn_en":"08","date_np":"२०५७ चैत ५","date_en":"Chaitra 5, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"७","page_en":"7","headline_np":"दलितहरुको मुक्तिको लागि हामी मर्न तयार छौः विश्वेन्द्र पासवान","headline_en":"\"We Are Ready to Die for Dalit Liberation\" — Bishwendra Paswan","files":["8.jpg"]},
+  {"sn":"९","sn_en":"09","date_np":"२०५७ चैत ६","date_en":"Chaitra 6, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"३","page_en":"3","headline_np":"चमार बहिष्कार विरुद्ध पाँचौ चरणको आन्दोलन घोषणा","headline_en":"Fifth Phase of Movement Announced Against Chamar Boycott","files":["9.jpg"]},
+  {"sn":"१०","sn_en":"10","date_np":"२०५७ चैत ८","date_en":"Chaitra 8, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"१","page_en":"1","headline_np":"लहानका चमार माग्दै हिंड्दैनन् अचेल","headline_en":"Chamars of Lahan No Longer Go Around Asking","files":["10.jpg"]},
+  {"sn":"११","sn_en":"11","date_np":"२०५७ चैत ११","date_en":"Chaitra 11, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"४","page_en":"4","headline_np":"दलितद्वारा लहानमा “कालो दिवस”","headline_en":"\"Black Day\" Observed by Dalits in Lahan","files":["11.jpg"]},
+  {"sn":"१२","sn_en":"12","date_np":"२०५७ चैत १३","date_en":"Chaitra 13, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"३","page_en":"3","headline_np":"छुवाछुत र जातीय भेदभाव अन्त्य गर्न रिट गरिने","headline_en":"Writ Petition to End Untouchability and Caste Discrimination","files":["12.jpg"]},
+  {"sn":"१३","sn_en":"13","date_np":"२०५७ चैत १३","date_en":"Chaitra 13, 2057 BS","paper_np":"नेपाल समाचार पत्र","paper_en":"Nepal Samacharpatra","page_np":"२","page_en":"2","headline_np":"दलित गैरसरकारी संस्था महासंघले सर्वोच्च अदालतमा मुद्दा दायर गर्ने","headline_en":"Dalit NGO Federation to File Case in Supreme Court","files":["13.jpg"]},
+  {"sn":"१४","sn_en":"14","date_np":"२०५७ चैत १३","date_en":"Chaitra 13, 2057 BS","paper_np":"गोरखापत्र","paper_en":"Gorkhapatra","page_np":"११","page_en":"11","headline_np":"छुवाछुत प्रथाविरुद्ध मुद्दा दायर गरिने","headline_en":"Case to Be Filed Against Untouchability Practice","files":["14.jpg"]},
+  {"sn":"१५","sn_en":"15","date_np":"२०५७ चैत १२","date_en":"Chaitra 12, 2057 BS","paper_np":"गोरखापत्र","paper_en":"Gorkhapatra","page_np":"३","page_en":"3","headline_np":"जातीय विभेद र समानताका लागि स्पष्ट नीति र कार्यक्रमको खाँचो","headline_en":"Need for Clear Policy and Programs for Equality","files":["15.jpg"]},
+  {"sn":"१६","sn_en":"16","date_np":"२०५७ साउन ११","date_en":"Saun 11, 2057 BS","paper_np":"ब्लास्ट दैनिक","paper_en":"Blast Daily","page_np":"—","page_en":"—","headline_np":"सप्तरीमा दलितहरूको सशक्त आन्दोलन","headline_en":"Strong Dalit Movement in Saptari","files":["16+.jpg"]},
+  {"sn":"१७","sn_en":"17","date_np":"२०५७ साउन १४","date_en":"Saun 14, 2057 BS","paper_np":"ब्लास्ट दैनिक","paper_en":"Blast Daily","page_np":"—","page_en":"—","headline_np":"दलितहरूको गाउँ पुगेको प्रतिनिधिमण्डलमाथि हातपात","headline_en":"Delegation Visiting Dalit Villages Attacked","files":["17.jpg","17+.jpg"]},
+  {"sn":"१८","sn_en":"18","date_np":"२०५८ फागुन ३","date_en":"Falgun 3, 2058 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"१२","page_en":"12","headline_np":"चमार बहिष्कार सम्बन्धी मुद्दाको फैसला तयार","headline_en":"Verdict Ready in Chamar Boycott Case","files":["18.jpeg"]},
+  {"sn":"१९","sn_en":"19","date_np":"२०५७ साउन ११","date_en":"Saun 11, 2057 BS","paper_np":"हिमालय टाइम्स","paper_en":"Himalaya Times","page_np":"३","page_en":"3","headline_np":"चमार जातिले सिनो फाल्नुपर्ने बाध्यता अन्त्यको माग","headline_en":"Demand to End Compulsion for Chamars to Dispose Dead Animals","files":["19.jpg"]},
+  {"sn":"२०","sn_en":"20","date_np":"२०५७ माघ २७","date_en":"Magh 27, 2057 BS","paper_np":"दृष्टि साप्ताहिक","paper_en":"Drishti Weekly","page_np":"७","page_en":"7","headline_np":"जातीय दंगाले विस्फोटक रूप लिने","headline_en":"Caste Conflict May Become Explosive","files":["20.jpg"]},
+  {"sn":"२१","sn_en":"21","date_np":"२०५७ माघ २१","date_en":"Magh 21, 2057 BS","paper_np":"साप्ताहिक नयाँ करेन्ट","paper_en":"Weekly Naya Current","page_np":"१ / ८","page_en":"1 / 8","headline_np":"जातीय भेदका कारण लहान तनावग्रस्त, चमार समुदायमा सार्वजनिक भोज","headline_en":"Lahan Tense Due to Caste Discrimination; Public Feast in Chamar Community","files":["21.jpg"]},
+  {"sn":"२२","sn_en":"22","date_np":"२०५७ माघ २७","date_en":"Magh 27, 2057 BS","paper_np":"साप्ताहिक नयाँ करेन्ट","paper_en":"Weekly Naya Current","page_np":"७","page_en":"7","headline_np":"चमारहरूको पानी चलाइयो","headline_en":"Water Access Restored for Chamars","files":["22.jpg"]},
+  {"sn":"२३","sn_en":"23","date_np":"२०५७ साउन २६","date_en":"Saun 26, 2057 BS","paper_np":"साप्ताहिक प्रकाश","paper_en":"Weekly Prakash","page_np":"५","page_en":"5","headline_np":"सप्तरी सिनो आन्दोलनले जातीय द्वन्द्व निम्त्यायो","headline_en":"Saptari Sino Movement Triggered Caste Conflict","files":["23.jpg"]},
+  {"sn":"२४","sn_en":"24","date_np":"२०५७ माघ ११","date_en":"Magh 11, 2057 BS","paper_np":"साप्ताहिक छलफल","paper_en":"Weekly Chhalphal","page_np":"१ / ८","page_en":"1 / 8","headline_np":"दलितहरू आन्दोलनमा उत्रिए","headline_en":"Dalits Launch Protest Movement","files":["24.jpg","24+.jpg"]},
+  {"sn":"२५","sn_en":"25","date_np":"२०५७ भदौ २७","date_en":"Bhadau 27, 2057 BS","paper_np":"साप्ताहिक छलफल","paper_en":"Weekly Chhalphal","page_np":"१ / ८","page_en":"1 / 8","headline_np":"चमारलाई औषधिमा पनि प्रतिबन्ध","headline_en":"Chamars Restricted Even From Medicine","files":["25.jpg"]},
+  {"sn":"२६","sn_en":"26","date_np":"२०५७ मंसिर १५","date_en":"Mangsir 15, 2057 BS","paper_np":"साप्ताहिक छलफल","paper_en":"Weekly Chhalphal","page_np":"७","page_en":"7","headline_np":"चमारलाई अझै नाकाबन्दी लगाइँदैछ","headline_en":"Blockade Against Chamars Continues","files":["26.jpg"]},
+  {"sn":"२७","sn_en":"27","date_np":"२०५७ साउन १७","date_en":"Saun 17, 2057 BS","paper_np":"साप्ताहिक जन्मभूमि","paper_en":"Weekly Janmabhumi","page_np":"३","page_en":"3","headline_np":"पत्रकारहरूमाथि फेरि आक्रमण","headline_en":"Journalists Attacked Again","files":["27.jpg"]},
+  {"sn":"२८","sn_en":"28","date_np":"२०५७ फागुन २३","date_en":"Falgun 23, 2057 BS","paper_np":"नेपाल समाचार पत्र","paper_en":"Nepal Samacharpatra","page_np":"२","page_en":"2","headline_np":"चमार जातिको आन्दोलनलाई सम्पूर्ण दलितले अगाडि बढाउने घोषणा","headline_en":"Dalits Announce Support for Chamar Movement","files":["28.jpg"]},
+  {"sn":"२९","sn_en":"29","date_np":"२०५७ साउन १","date_en":"Saun 1, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"५","page_en":"5","headline_np":"हरिजनहरूले सिनो नफाल्ने भएपछि","headline_en":"After Harijans Refused to Dispose Dead Animals","files":["29.jpg"]},
+  {"sn":"३०","sn_en":"30","date_np":"२०५७ साउन २","date_en":"Saun 2, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"१","page_en":"1","headline_np":"बरु घाँटी जाओस् तर सिनो चाहिँ फालिँदैन","headline_en":"\"Let Our Heads Go, But We Won't Dispose Dead Animals\"","files":["30.jpg"]},
+  {"sn":"३१","sn_en":"31","date_np":"२०५७ साउन ४","date_en":"Saun 4, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"१","page_en":"1","headline_np":"लालटिन बालेर विरोध (तस्वीर)","headline_en":"Lantern Protest (Photo)","files":["31.jpg"]},
+  {"sn":"३२","sn_en":"32","date_np":"२०५७ साउन ५","date_en":"Saun 5, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"३","page_en":"3","headline_np":"चमार जातिको खानेपानी पाइपमा सिनो फालियो","headline_en":"Dead Animal Thrown into Water Supply Pipe of Chamar Community","files":["32.jpg"]},
+  {"sn":"३३","sn_en":"33","date_np":"२०५७ साउन १५","date_en":"Saun 15, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"३","page_en":"3","headline_np":"चमार जाति आन्दोलनको तयारीमा","headline_en":"Chamar Community Preparing for Movement","files":["33.jpg"]},
+  {"sn":"३४","sn_en":"34","date_np":"२०५७ साउन १५","date_en":"Saun 15, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"२०","page_en":"20","headline_np":"चमार नाकाबन्दी अध्ययन टोलीमाथि हातपात","headline_en":"Study Team on Chamar Blockade Attacked","files":["34.jpg"]},
+  {"sn":"३५","sn_en":"35","date_np":"२०५७ साउन २४","date_en":"Saun 24, 2057 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"१८","page_en":"18","headline_np":"सप्तरी जिल्ला प्रशासन कार्यालयमा भएको धर्ना स्थगित","headline_en":"Sit-in at Saptari District Administration Office Postponed","files":["35.jpg"]},
+  {"sn":"३६","sn_en":"36","date_np":"२०५७ साउन २२","date_en":"Saun 22, 2057 BS","paper_np":"गोरखापत्र","paper_en":"Gorkhapatra","page_np":"७","page_en":"7","headline_np":"चमार बहिष्कारमा नलाग्ने निर्णय","headline_en":"Decision Not to Participate in Chamar Boycott","files":["36.jpg"]},
+  {"sn":"३७","sn_en":"37","date_np":"२०५८ भदौ १२","date_en":"Bhadau 12, 2058 BS","paper_np":"कान्तिपुर","paper_en":"Kantipur","page_np":"४","page_en":"4","headline_np":"चमारको पक्षमा वकालत गर्ने पक्राउ","headline_en":"Advocate Supporting Chamars Arrested","files":["37.jpg"]},
+  {"sn":"३८","sn_en":"38","date_np":"१९ मार्च, २०००","date_en":"March 19, 2000","paper_np":"The Kathmandu Post","paper_en":"The Kathmandu Post","page_np":"१","page_en":"1","headline_np":"Chamars renew their demands for action","headline_en":"Chamars Renew Their Demands for Action","files":["38.jpeg"]},
+  {"sn":"३९","sn_en":"39","date_np":"२६ मार्च, २०००","date_en":"March 26, 2000","paper_np":"The Kathmandu Post","paper_en":"The Kathmandu Post","page_np":"८","page_en":"8","headline_np":"Chamars of Irahata take to court","headline_en":"Chamars of Irahata Take the Case to Court","files":["39.jpeg"]}
+]</script>
 
 <script>
 // Progress thread
@@ -557,54 +826,46 @@ const ro = new IntersectionObserver(es => {
 }, {threshold:.06, rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(el => ro.observe(el));
 
-// Load data + render
-const logData = JSON.parse(document.getElementById('logData').textContent);
-const photos = JSON.parse(document.getElementById('photoData').textContent);
+// Load clipping data + render paired entries
+const clipData = JSON.parse(document.getElementById('clipData').textContent);
+const list = document.getElementById('clippingsList');
 
-const tbody = document.getElementById('logBody');
-const table = document.getElementById('logTable');
-function renderLog(lang){
-  const data = lang === 'en' ? logData.en_entries : logData.np_entries;
-  const headers = lang === 'en' ? logData.en_header : logData.np_header;
-  // update headers
-  document.querySelectorAll('#logTable thead th').forEach((th,i) => { th.textContent = headers[i] || ''; });
-  // class for serif vs devanagari
-  table.className = 'log-table ' + (lang === 'en' ? 'eng' : 'ne');
-  tbody.innerHTML = data.map(e => `
-    <tr>
-      <td class="sn">${e.sn || ''}</td>
-      <td class="date">${e.date || ''}</td>
-      <td class="paper">${e.paper || ''}</td>
-      <td class="page">${e.page || ''}</td>
-      <td class="headline">${e.headline || ''}</td>
-    </tr>
-  `).join('');
-  document.getElementById('logCount').textContent = data.length + ' entries · ' + (lang === 'en' ? 'EN' : 'NE');
-}
-renderLog('ne');
-document.querySelectorAll('.log-tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.log-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderLog(btn.dataset.lang);
-  });
-});
+list.innerHTML = clipData.map(c => {
+  const multi = c.files.length > 1;
+  const imgs = c.files.map((f, i) => {
+    const pgLabel = c.files.length > 1
+      ? (i === 0 ? 'P.1' : (i === 1 ? 'P.2' : 'P.' + (i+1)))
+      : '';
+    return `
+      <div class="clip-entry-image" data-src="rohej-assets/${encodeURIComponent(f)}" data-name="${c.headline_np}">
+        <img src="rohej-assets/${encodeURIComponent(f)}" alt="Clipping ${c.sn_en} — ${f}" loading="lazy">
+        <div class="clip-entry-image-cap"><span>${f}</span>${pgLabel ? `<span class="pg">${pgLabel}</span>` : ''}</div>
+      </div>`;
+  }).join('');
 
-// Photo grid
-const grid = document.getElementById('archiveGrid');
-grid.innerHTML = photos.map((f, i) => `
-  <div class="clip" data-src="rohej-assets/${encodeURIComponent(f)}" data-name="${f}">
-    <img src="rohej-assets/${encodeURIComponent(f)}" alt="Newspaper clipping ${f}" loading="lazy">
-    <div class="clip-cap"><span class="num">${String(i+1).padStart(2,'0')}</span><span>${f}</span></div>
-  </div>
-`).join('');
+  return `
+    <article class="clip-entry rv">
+      <div class="clip-entry-meta">
+        <div class="clip-entry-num">${c.sn}<span style="font-size:0.45em; color:var(--ink-faded); margin-left:8px;">/${c.sn_en}</span></div>
+        <div class="clip-entry-headline">${c.headline_np}${multi ? `<span class="clip-page-badge">${c.files.length} pages</span>` : ''}</div>
+        <div class="clip-entry-headline-en">${c.headline_en}</div>
+        <div class="clip-meta-row"><span class="key">मिति</span><span class="val">${c.date_np}</span></div>
+        <div class="clip-meta-row"><span class="key">Date</span><span class="val" style="font-family:var(--mono); font-size:12px; letter-spacing:.05em;">${c.date_en}</span></div>
+        <div class="clip-meta-row"><span class="key">पत्रिका</span><span class="val">${c.paper_np}</span></div>
+        <div class="clip-meta-row"><span class="key">Paper</span><span class="val" style="font-family:var(--serif); font-style:italic; font-size:13.5px; letter-spacing:0;">${c.paper_en}</span></div>
+        <div class="clip-meta-row"><span class="key">पृष्ठ</span><span class="val">${c.page_np}</span></div>
+      </div>
+      <div class="clip-entry-images${multi ? ' multi' : ''}">${imgs}</div>
+    </article>
+  `;
+}).join('');
 
 // Lightbox
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImg');
 const lbCap = document.getElementById('lbCap');
-grid.addEventListener('click', e => {
-  const card = e.target.closest('.clip');
+list.addEventListener('click', e => {
+  const card = e.target.closest('.clip-entry-image');
   if (!card) return;
   lbImg.src = card.dataset.src;
   lbCap.textContent = card.dataset.name;
@@ -612,6 +873,9 @@ grid.addEventListener('click', e => {
 });
 lb.addEventListener('click', () => lb.classList.remove('open'));
 window.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+// Re-observe newly rendered .rv elements
+document.querySelectorAll('.clippings .rv').forEach(el => ro.observe(el));
 </script>
 </body>
 </html>
