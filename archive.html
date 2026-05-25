@@ -10,27 +10,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&family=Space+Mono:wght@400;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --oak:          #14100c;
-  --oak-deep:     #0a0805;
-  --oak-warm:     #1c1611;
-  --oak-soft:     #25201a;
-  --paper:        #ece2c5;
-  --paper-warm:   #ddd0a8;
-  --paper-deep:   #c4b58c;
+  --oak:          #0a0a08;      /* sharper near-black bg */
+  --oak-deep:     #050503;
+  --oak-warm:     #131210;
+  --oak-soft:     #1d1c18;
+  --paper:        #f0e6cb;      /* slightly warmer card paper */
+  --paper-warm:   #e1d4ac;
+  --paper-deep:   #c8b990;
   --paper-edge:   rgba(36,28,16,0.20);
-  --brass:        #b89656;
-  --brass-bright: #d4b06d;
-  --brass-dim:    #6e5732;
+  --white-warm:   #faf5e8;      /* crisp off-white for big titles */
+  --white-soft:   #ede2c2;      /* bright body text on dark bg */
+  --brass:        #c8a45e;
+  --brass-bright: #e6c47a;      /* brighter brass for accents */
+  --brass-dim:    #7a6238;
   --ink:          #1f1610;
   --ink-soft:     #3b2d1d;
   --ink-faded:    #5a4630;
-  --oxblood:      #a02a1f;
-  --oxblood-deep: #6e1810;
-  --oxblood-br:   #c0392b;
+  --oxblood:      #b8332a;
+  --oxblood-deep: #7e1f15;
+  --oxblood-br:   #d94a3e;      /* punchier red accent */
   --green-led:    #2f6a4e;
-  --text-dark:    #d6c9a8;
-  --text-faded:   #8e8266;
-  --hairline:     rgba(184,150,86,0.18);
+  --text-dark:    #e8dcb8;      /* brighter body text */
+  --text-faded:   #a89972;
+  --hairline:     rgba(200,164,94,0.22);
   --serif:        "EB Garamond","Playfair Display",Georgia,serif;
   --display:      "Playfair Display","EB Garamond",Georgia,serif;
   --mono:         "Special Elite","Space Mono",ui-monospace,monospace;
@@ -54,14 +56,13 @@ body{
 body::before{
   content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
-    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(184,150,86,0.05), transparent 60%),
-    radial-gradient(ellipse 70% 60% at 85% 100%, rgba(160,42,31,0.05), transparent 60%),
-    repeating-linear-gradient(90deg, transparent 0 96px, rgba(184,150,86,0.025) 96px 97px);
+    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(200,164,94,0.035), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 85% 100%, rgba(184,51,42,0.04), transparent 60%);
 }
 body::after{
   content:''; position:fixed; inset:0; z-index:9000; pointer-events:none;
-  mix-blend-mode:multiply; opacity:.55;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0 0.05  0 0 0 0.10 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode:overlay; opacity:.30;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.06  0 0 0 0 0.04  0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 /* === TOP NAV (GSS) === */
@@ -110,9 +111,10 @@ body::after{
   font-size:clamp(52px, 11vw, 168px);
   line-height:0.88;
   letter-spacing:-2px;
-  color:var(--paper);
+  color:var(--white-warm);
   text-transform:uppercase;
   margin-bottom:18px;
+  text-shadow:0 2px 0 rgba(0,0,0,0.50);
 }
 .hero-title .row{ display:block; }
 .hero-title .alt{ color:var(--brass-bright); font-style:italic; font-weight:400; }
@@ -121,8 +123,8 @@ body::after{
 .hero-deck{
   font-family:var(--serif);
   font-size:clamp(17px,1.7vw,21px);
-  line-height:1.65;
-  color:var(--text-dark);
+  line-height:1.7;
+  color:var(--white-soft);
   max-width:760px;
   margin-top:24px;
   font-style:italic;
@@ -667,7 +669,7 @@ body::after{
   font-size:clamp(34px, 5vw, 56px);
   line-height:0.95;
   text-transform:uppercase;
-  color:var(--paper);
+  color:var(--white-warm);
   letter-spacing:1px;
 }
 .foot-brand .alt{ color:var(--brass-bright); font-style:italic; font-weight:400;}
