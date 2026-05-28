@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Muslim Holocaust, Muslim Genocide — A Data Anarchive · GSS</title>
+<meta name="description" content="An interactive data visualization of the post-9/11 Muslim Holocaust and Muslim Genocide, presenting the research and mortality estimates compiled by Dr. Gideon Polya. Global South Solidarities Anarchive.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Amiri:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Leaflet (free, no API key) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+<style>
+:root{
+  --black:        #07090a;
+  --void:         #040605;
+  --panel:        #0b1410;
+  --panel-2:      #0f1c16;
+  --green:        #1f9d6b;
+  --green-bright: #3fe0a0;
+  --green-dim:    #145d40;
+  --green-deep:   #0a2e20;
+  --gold:         #d9b44a;
+  --gold-bright:  #f0cf6b;
+  --crimson:      #c0392b;
+  --crimson-br:   #e8503c;
+  --crimson-deep: #6e1810;
+  --bone:         #f2efe6;
+  --bone-dim:     #c9c4b4;
+  --ash:          #8a8676;
+  --ash-dim:      #5d5a4e;
+  --hair:         rgba(217,180,74,0.16);
+  --hair-green:   rgba(63,224,160,0.14);
+  --display:      "Cormorant Garamond", Georgia, serif;
+  --arabic:       "Amiri", "Cormorant Garamond", serif;
+  --body:         "Inter", system-ui, sans-serif;
+  --mono:         "Space Mono", ui-monospace, monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--black);
+  color:var(--bone);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background:var(--crimson); color:#fff; }
+
+/* subtle grain */
+body::after{
+  content:''; position:fixed; inset:0; z-index:9000; pointer-events:none;
+  opacity:.30; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+
+/* ── TOP NAV ── */
+#topbar{
+  position:fixed; top:0; left:0; right:0; z-index:8000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 26px; height:46px;
+  background:rgba(4,6,5,0.82);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--hair-green);
+  font-family:var(--mono);
+}
+#topbar a{
+  font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--bone-dim); text-decoration:none;
+  transition:color .22s;
+}
+#topbar a:hover{ color:var(--green-bright); }
+#topbar .brand{ color:var(--gold); letter-spacing:3px; }
+
+/* scroll progress */
+#scrollbar{
+  position:fixed; top:46px; left:0; height:2px; width:0%;
+  background:linear-gradient(90deg, var(--green), var(--gold), var(--crimson));
+  z-index:8001; transition:width .1s linear;
+}
+
+/* ── SECTION SCAFFOLD ── */
+section{ position:relative; }
+.wrap{ max-width:1180px; margin:0 auto; padding:0 6vw; }
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.4em; text-transform:uppercase;
+  color:var(--green-bright);
+  display:inline-flex; align-items:center; gap:12px;
+  margin-bottom:24px;
+}
+.eyebrow::before{ content:''; width:30px; height:1px; background:var(--green); }
+.sec-title{
+  font-family:var(--display);
+  font-weight:600;
+  font-size:clamp(32px, 5vw, 60px);
+  line-height:1.05;
+  letter-spacing:-0.5px;
+  color:var(--bone);
+  margin-bottom:24px;
+}
+.sec-title .gold{ color:var(--gold-bright); font-style:italic; font-weight:500; }
+.sec-title .crimson{ color:var(--crimson-br); }
+.lede{
+  font-family:var(--display);
+  font-size:clamp(19px, 2.2vw, 26px);
+  line-height:1.55;
+  color:var(--bone-dim);
+  max-width:760px;
+  font-style:italic;
+}
+.body-p{
+  font-size:16.5px;
+  line-height:1.85;
+  color:var(--bone-dim);
+  max-width:720px;
+  margin-bottom:18px;
+}
+.body-p strong{ color:var(--bone); font-weight:600; }
+.body-p .hl{ color:var(--gold-bright); }
+
+/* reveal */
+.rv{ opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.9,.3,1); }
+.rv.vis{ opacity:1; transform:translateY(0); }
+
+/* ═══════════════════════════════════════════════ */
+/* ════════════════════ HERO ═════════════════════ */
+/* ═══════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:120px 6vw 80px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--hair);
+}
+/* faint world-dots backdrop */
+.hero::before{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(31,157,107,0.10), transparent 45%),
+    radial-gradient(circle at 75% 65%, rgba(192,57,43,0.10), transparent 45%);
+  pointer-events:none;
+}
+.hero-inner{ position:relative; z-index:2; max-width:1100px; }
+.hero .bismillah{
+  font-family:var(--arabic);
+  font-style:italic;
+  font-size:clamp(18px, 2.4vw, 26px);
+  color:var(--green-bright);
+  letter-spacing:1px;
+  margin-bottom:30px;
+  opacity:.9;
+}
+.hero h1{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(44px, 8.5vw, 132px);
+  line-height:0.92;
+  letter-spacing:-2px;
+  color:var(--bone);
+  margin-bottom:14px;
+}
+.hero h1 .ln2{ color:var(--crimson-br); display:block; }
+.hero h1 .ln3{ color:var(--gold-bright); display:block; font-style:italic; font-weight:500; }
+.hero-sub{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:clamp(18px, 2.3vw, 28px);
+  color:var(--bone-dim);
+  max-width:680px;
+  margin-top:26px;
+  line-height:1.5;
+}
+
+/* the giant number */
+.deathcount{
+  margin-top:54px;
+  display:flex; align-items:flex-end; gap:24px; flex-wrap:wrap;
+}
+.deathcount .num{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(64px, 13vw, 184px);
+  line-height:0.85;
+  color:var(--crimson-br);
+  letter-spacing:-3px;
+  text-shadow:0 0 60px rgba(192,57,43,0.35);
+  font-variant-numeric:tabular-nums;
+}
+.deathcount .label{
+  font-family:var(--mono);
+  font-size:13px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--bone-dim);
+  max-width:280px;
+  line-height:1.7;
+  padding-bottom:18px;
+}
+.deathcount .label b{ color:var(--gold-bright); font-weight:700; }
+
+.scroll-hint{
+  position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:.35em; text-transform:uppercase;
+  color:var(--ash);
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  z-index:3;
+}
+.scroll-hint .dot{
+  width:1px; height:40px;
+  background:linear-gradient(var(--green), transparent);
+  animation:scrolldot 2s ease-in-out infinite;
+}
+@keyframes scrolldot{ 0%,100%{opacity:.3; transform:scaleY(.6);} 50%{opacity:1; transform:scaleY(1);} }
+
+/* ── ATTRIBUTION STRIP ── */
+.attribution{
+  background:var(--panel);
+  border-top:1px solid var(--hair);
+  border-bottom:1px solid var(--hair);
+  padding:30px 6vw;
+}
+.attribution .wrap-flex{
+  max-width:1180px; margin:0 auto;
+  display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:12px; letter-spacing:.06em;
+  color:var(--ash);
+  line-height:1.7;
+}
+.attribution .seal{
+  flex-shrink:0;
+  width:54px; height:54px; border:1px solid var(--gold);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold); font-family:var(--display); font-size:24px;
+}
+.attribution b{ color:var(--gold-bright); }
+.attribution a{ color:var(--green-bright); text-decoration:none; border-bottom:1px solid var(--green-dim); }
+.attribution a:hover{ border-color:var(--green-bright); }
+
+/* ═══════════════════════════════════════════════ */
+/* ══════════════ STANDARD SECTION ═══════════════ */
+/* ═══════════════════════════════════════════════ */
+.block{ padding:clamp(70px, 11vh, 130px) 0; border-bottom:1px solid var(--hair); }
+.block.tight{ padding:clamp(50px, 7vh, 90px) 0; }
+
+/* ── THE SPLIT (5M / 27M) ── */
+.split-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  margin-top:50px;
+  border:1px solid var(--hair);
+}
+.split-cell{
+  padding:48px 40px;
+  position:relative;
+}
+.split-cell.violence{ background:linear-gradient(180deg, rgba(192,57,43,0.10), transparent); border-right:1px solid var(--hair); }
+.split-cell.deprivation{ background:linear-gradient(180deg, rgba(217,180,74,0.08), transparent); }
+.split-cell .big{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(56px, 9vw, 110px);
+  line-height:0.9;
+  letter-spacing:-2px;
+}
+.split-cell.violence .big{ color:var(--crimson-br); }
+.split-cell.deprivation .big{ color:var(--gold-bright); }
+.split-cell .cap{
+  font-family:var(--mono);
+  font-size:12px; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--bone-dim);
+  margin-top:16px; line-height:1.7;
+}
+.split-cell .desc{
+  font-size:15px; color:var(--ash);
+  margin-top:14px; line-height:1.7; max-width:380px;
+}
+.split-bar{
+  display:flex; height:14px; margin-top:30px; border:1px solid var(--hair);
+}
+.split-bar .v{ background:var(--crimson); width:15.6%; }
+.split-bar .d{ background:var(--gold); width:84.4%; }
+.split-barlbl{
+  display:flex; justify-content:space-between;
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ash); margin-top:8px;
+}
+@media(max-width:720px){ .split-grid{ grid-template-columns:1fr; } .split-cell.violence{ border-right:none; border-bottom:1px solid var(--hair);} }
+
+/* ═══════════════════════════════════════════════ */
+/* ════════════════ THE MAP ══════════════════════ */
+/* ═══════════════════════════════════════════════ */
+.map-block{
+  padding:clamp(70px,11vh,120px) 0 0;
+  border-bottom:1px solid var(--hair);
+  background:linear-gradient(180deg, var(--black), var(--void));
+}
+.map-shell{
+  position:relative;
+  margin-top:46px;
+  border-top:1px solid var(--hair);
+}
+#earthMap{
+  width:100%; height:74vh; min-height:520px;
+  background:var(--void);
+  filter:saturate(1.05);
+}
+/* Leaflet dark overrides */
+.leaflet-container{ background:#040605; font-family:var(--mono); }
+.leaflet-popup-content-wrapper{
+  background:var(--panel-2); color:var(--bone);
+  border:1px solid var(--gold); border-radius:0;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+.leaflet-popup-tip{ background:var(--gold); }
+.leaflet-popup-content{ margin:14px 18px; font-family:var(--body); }
+.leaflet-popup-content .pp-country{
+  font-family:var(--display); font-size:24px; font-weight:700; color:var(--gold-bright); line-height:1.1; margin-bottom:4px;
+}
+.leaflet-popup-content .pp-deaths{
+  font-family:var(--display); font-size:34px; font-weight:700; color:var(--crimson-br); line-height:1;
+}
+.leaflet-popup-content .pp-meta{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ash); margin-top:8px; line-height:1.6;
+}
+.leaflet-control-zoom a{
+  background:var(--panel-2); color:var(--gold); border:1px solid var(--hair);
+}
+.leaflet-control-zoom a:hover{ background:var(--green-deep); color:var(--green-bright); }
+.leaflet-control-attribution{ background:rgba(4,6,5,0.7)!important; color:var(--ash)!important; }
+.leaflet-control-attribution a{ color:var(--green-bright)!important; }
+
+.map-legend{
+  position:absolute; bottom:26px; left:26px; z-index:600;
+  background:rgba(7,9,10,0.86);
+  border:1px solid var(--hair);
+  padding:16px 18px;
+  font-family:var(--mono);
+  backdrop-filter:blur(6px);
+  max-width:230px;
+}
+.map-legend .lg-title{
+  font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:12px;
+}
+.map-legend .lg-row{ display:flex; align-items:center; gap:10px; margin:7px 0; font-size:11px; color:var(--bone-dim); }
+.map-legend .lg-dot{ border-radius:50%; background:rgba(192,57,43,0.55); border:1px solid var(--crimson-br); flex-shrink:0; }
+@media(max-width:640px){ .map-legend{ left:12px; bottom:12px; padding:12px; max-width:180px; } #earthMap{ height:62vh; } }
+
+/* ═══════════════════════════════════════════════ */
+/* ═════════════ CHART SECTIONS ══════════════════ */
+/* ═══════════════════════════════════════════════ */
+.chart-wrap{
+  margin-top:46px;
+  background:var(--panel);
+  border:1px solid var(--hair);
+  padding:36px 34px;
+  position:relative;
+}
+.chart-wrap .chart-head{
+  display:flex; align-items:baseline; justify-content:space-between; gap:18px; flex-wrap:wrap;
+  margin-bottom:26px;
+  padding-bottom:16px; border-bottom:1px dashed var(--hair);
+}
+.chart-wrap .chart-head h3{
+  font-family:var(--display); font-weight:600; font-size:26px; color:var(--bone);
+}
+.chart-wrap .chart-head .unit{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--ash);
+}
+.chart-canvas-box{ position:relative; height:clamp(360px, 50vh, 540px); }
+
+/* ── REFUGEE STAT GRID ── */
+.refugee-total{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(48px,8vw,96px); color:var(--green-bright);
+  line-height:0.9; letter-spacing:-2px; margin:30px 0 6px;
+  text-shadow:0 0 50px rgba(63,224,160,0.25);
+}
+
+/* ═══════════════════════════════════════════════ */
+/* ════════ HISTORICAL COMPARISON BARS ═══════════ */
+/* ═══════════════════════════════════════════════ */
+.comp-list{ margin-top:48px; display:flex; flex-direction:column; gap:26px; }
+.comp-row{ }
+.comp-row .comp-top{
+  display:flex; justify-content:space-between; align-items:baseline; gap:14px; margin-bottom:9px;
+}
+.comp-row .comp-name{ font-family:var(--display); font-size:clamp(18px,2.4vw,24px); color:var(--bone); font-weight:600; }
+.comp-row .comp-name span{ display:block; font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--ash); text-transform:uppercase; margin-top:2px; }
+.comp-row .comp-val{ font-family:var(--display); font-size:clamp(20px,2.6vw,30px); font-weight:700; }
+.comp-track{ height:26px; background:rgba(255,255,255,0.03); border:1px solid var(--hair); position:relative; overflow:hidden; }
+.comp-fill{ height:100%; width:0; transition:width 1.6s cubic-bezier(.2,.9,.3,1); }
+.comp-fill.crimson{ background:linear-gradient(90deg, var(--crimson-deep), var(--crimson-br)); }
+.comp-fill.gold{ background:linear-gradient(90deg, var(--green-deep), var(--gold)); }
+.comp-fill.bone{ background:linear-gradient(90deg, #3a3a3a, var(--bone-dim)); }
+.comp-note{
+  margin-top:30px; font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--ash); line-height:1.8;
+  border-left:2px solid var(--green-dim); padding-left:16px;
+}
+
+/* ═══════════════════════════════════════════════ */
+/* ═══════════════ TIMELINE ══════════════════════ */
+/* ═══════════════════════════════════════════════ */
+.timeline{ margin-top:50px; position:relative; padding-left:28px; }
+.timeline::before{ content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:linear-gradient(var(--green), var(--crimson)); }
+.tl-item{ position:relative; padding:0 0 34px 26px; }
+.tl-item::before{
+  content:''; position:absolute; left:-22px; top:6px;
+  width:11px; height:11px; border-radius:50%;
+  background:var(--void); border:2px solid var(--gold);
+}
+.tl-item .tl-year{ font-family:var(--mono); font-size:12px; letter-spacing:.2em; color:var(--gold-bright); }
+.tl-item .tl-event{ font-family:var(--display); font-size:clamp(19px,2.4vw,26px); color:var(--bone); font-weight:600; margin:4px 0 6px; }
+.tl-item .tl-desc{ font-size:14.5px; color:var(--ash); max-width:620px; line-height:1.7; }
+
+/* ═══════════════════════════════════════════════ */
+/* ═══════════ GENOCIDE DEFINITION ═══════════════ */
+/* ═══════════════════════════════════════════════ */
+.def-block{
+  background:linear-gradient(180deg, var(--green-deep), var(--void));
+  border-top:1px solid var(--hair-green);
+  border-bottom:1px solid var(--hair-green);
+}
+.def-card{
+  margin-top:40px;
+  border:1px solid var(--green-dim);
+  background:rgba(7,9,10,0.5);
+  padding:44px 46px;
+  position:relative;
+}
+.def-card::before{
+  content:'“'; position:absolute; top:6px; left:20px;
+  font-family:var(--display); font-size:120px; color:var(--green-dim); line-height:1;
+}
+.def-card .src{ font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--green-bright); margin-bottom:18px; }
+.def-card .quote{ font-family:var(--display); font-style:italic; font-size:clamp(20px,2.6vw,30px); line-height:1.5; color:var(--bone); }
+.def-card .acts{ margin-top:26px; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:14px; }
+.def-card .act{
+  border-left:2px solid var(--green); padding:8px 14px;
+  font-size:14px; color:var(--bone-dim); line-height:1.6;
+  background:rgba(31,157,107,0.05);
+}
+
+/* ═══════════════════════════════════════════════ */
+/* ════════════ CLIMATE PROJECTION ═══════════════ */
+/* ═══════════════════════════════════════════════ */
+.climate-num{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(60px,12vw,160px); color:var(--crimson-br);
+  line-height:0.85; letter-spacing:-3px; margin:30px 0 8px;
+  text-shadow:0 0 70px rgba(192,57,43,0.3);
+}
+.climate-grid{ margin-top:46px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px; }
+.climate-cell{
+  border:1px solid var(--hair); padding:26px 22px;
+  background:linear-gradient(180deg, rgba(192,57,43,0.06), transparent);
+}
+.climate-cell .cnum{ font-family:var(--display); font-size:clamp(32px,4vw,52px); font-weight:700; color:var(--gold-bright); line-height:1; }
+.climate-cell .cgrp{ font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--bone-dim); margin-top:10px; }
+
+/* ═══════════════════════════════════════════════ */
+/* ═══════════════ SOURCES ═══════════════════════ */
+/* ═══════════════════════════════════════════════ */
+.sources-block{ background:var(--void); }
+.src-grid{ margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.src-item{
+  border:1px solid var(--hair); padding:20px 22px;
+  font-size:14px; color:var(--bone-dim); line-height:1.65;
+  background:var(--panel);
+  transition:border-color .25s, transform .25s;
+}
+.src-item:hover{ border-color:var(--green-dim); transform:translateY(-3px); }
+.src-item .src-name{ font-family:var(--display); font-size:19px; color:var(--bone); font-weight:600; margin-bottom:4px; }
+.src-item .src-role{ font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--green-bright); }
+.primary-source{
+  margin-top:40px;
+  border:1px solid var(--gold);
+  background:linear-gradient(135deg, rgba(217,180,74,0.10), transparent);
+  padding:34px 36px;
+  display:flex; gap:26px; align-items:center; flex-wrap:wrap;
+}
+.primary-source .ps-body{ flex:1; min-width:260px; }
+.primary-source .ps-label{ font-family:var(--mono); font-size:10.5px; letter-spacing:.26em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:10px; }
+.primary-source .ps-title{ font-family:var(--display); font-size:clamp(22px,3vw,32px); font-weight:600; color:var(--bone); line-height:1.2; margin-bottom:8px; }
+.primary-source .ps-meta{ font-size:14px; color:var(--ash); }
+.primary-source a.ps-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--void); background:var(--gold); padding:14px 22px; text-decoration:none;
+  border:1px solid var(--gold); transition:all .25s; white-space:nowrap;
+}
+.primary-source a.ps-btn:hover{ background:var(--gold-bright); transform:translateY(-2px); box-shadow:0 8px 22px rgba(217,180,74,0.25); }
+
+/* disclaimer */
+.disclaimer{
+  margin-top:36px;
+  font-family:var(--mono); font-size:11.5px; line-height:1.9; color:var(--ash);
+  border-left:2px solid var(--crimson-deep); padding:4px 0 4px 18px;
+  max-width:820px;
+}
+.disclaimer b{ color:var(--bone-dim); }
+
+/* ── FOOTER ── */
+footer{
+  background:var(--black);
+  padding:60px 6vw 50px;
+  border-top:1px solid var(--hair);
+  text-align:center;
+}
+footer .f-arabic{ font-family:var(--arabic); font-style:italic; font-size:clamp(20px,3vw,30px); color:var(--green-bright); margin-bottom:18px; }
+footer .f-line{ font-family:var(--mono); font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--ash); line-height:2; }
+footer a{ color:var(--gold-bright); text-decoration:none; border-bottom:1px solid var(--gold); }
+footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
+
+@media(max-width:700px){
+  .wrap{ padding:0 7vw; }
+  .split-cell{ padding:34px 26px; }
+  .chart-wrap{ padding:24px 18px; }
+  .def-card{ padding:30px 24px; }
+  .primary-source{ padding:26px 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="topbar">
+  <a href="/archive.html" class="brand">◂ GSS · The Anarchive</a>
+  <a href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener">Primary Source ↗</a>
+</nav>
+<div id="scrollbar"></div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="bismillah rv">إِنَّا لِلّهِ وَإِنَّا إِلَيْهِ رَاجِعُون — “To God we belong, and to Him we return.”</div>
+    <h1 class="rv" style="transition-delay:.1s;">
+      The Muslim<span class="ln2">Holocaust,</span><span class="ln3">Muslim Genocide</span>
+    </h1>
+    <p class="hero-sub rv" style="transition-delay:.25s;">
+      An interactive data anarchive of the post-9/11 mortality estimates compiled by Dr.&nbsp;Gideon Polya — deaths from violence and from war-imposed deprivation, across twenty countries.
+    </p>
+
+    <div class="deathcount rv" style="transition-delay:.4s;">
+      <div class="num" id="heroCount" data-target="32">0</div>
+      <div class="label">
+        <b>million</b> Muslim deaths from violence &amp; imposed deprivation in 20 countries invaded or assaulted by the US Alliance, <b>2001–2015</b>.
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll to witness</span><span class="dot"></span></div>
+</section>
+
+<!-- ATTRIBUTION -->
+<div class="attribution">
+  <div class="wrap-flex">
+    <div class="seal">∎</div>
+    <div>
+      Data &amp; estimates throughout this anarchive are drawn from the research of <b>Dr.&nbsp;Gideon Polya</b> — Australian biochemist, author of <i>“US-Imposed Post-9/11 Muslim Holocaust &amp; Muslim Genocide”</i> (Korsgaard Publishing, 2020) — and the body of avoidable-mortality analysis published at
+      <a href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener">muslimholocaustmuslimgenocide</a>.
+      Figures are the author's documented estimates of <b>avoidable death</b> (violent deaths + deaths from war-imposed deprivation).
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ THE THESIS ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 01 · The Argument</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Lying by omission is <span class="crimson">worse</span> than lying by commission.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">
+      Polya's central contention: Western military interventions since 9/11 have caused mass Muslim death — most of it invisible, because most of it comes not from bombs but from the <span style="color:var(--gold-bright);font-style:normal;">deprivation that follows them</span>: shattered water, food, medicine, and public health.
+    </p>
+    <div style="margin-top:40px; max-width:760px;">
+      <p class="body-p rv">Under the <strong>UN Genocide Convention</strong>, genocide includes not only killing, but “deliberately inflicting on the group conditions of life calculated to bring about its physical destruction.” Polya argues that <span class="hl">sustained, remorseless action</span> establishes intent — no formal declaration is required.</p>
+      <p class="body-p rv">What follows is that argument rendered as data: the dead counted, the displaced mapped, the scale set against the great atrocities of the modern record. These are <strong>one scholar's estimates</strong>, presented faithfully and in full.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ THE SPLIT ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 02 · Anatomy of 32 Million</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Most of the dead never <span class="gold">saw a soldier.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">Of the 32 million, roughly one in six died by direct violence. The rest — five out of six — died of what war takes away.</p>
+
+    <div class="split-grid rv" style="transition-delay:.15s;">
+      <div class="split-cell violence">
+        <div class="big" data-count="5">0</div>
+        <div class="cap">Million · Direct Violence</div>
+        <div class="desc">Bombs, bullets, drones, raids, and the immediate kinetic toll of invasion and occupation.</div>
+      </div>
+      <div class="split-cell deprivation">
+        <div class="big" data-count="27">0</div>
+        <div class="cap">Million · Imposed Deprivation</div>
+        <div class="desc">Death from destroyed water, food, sanitation, and health systems — the slow violence that follows the loud kind.</div>
+      </div>
+    </div>
+    <div class="split-bar rv"><div class="v"></div><div class="d"></div></div>
+    <div class="split-barlbl rv"><span>◂ 15.6% violence</span><span>84.4% deprivation ▸</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════ THE MAP ═══════════════ -->
+<section class="map-block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 03 · The Geography of Avoidable Death</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Twenty countries. <span class="crimson">One map of mourning.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">Each circle is sized to the scale of avoidable death Polya attributes to that nation. Tap any to read its toll. Pan and zoom the earth.</p>
+  </div>
+  <div class="map-shell rv">
+    <div id="earthMap"></div>
+    <div class="map-legend">
+      <div class="lg-title">Avoidable deaths</div>
+      <div class="lg-row"><span class="lg-dot" style="width:34px;height:34px;"></span> ≈ 5 million</div>
+      <div class="lg-row"><span class="lg-dot" style="width:22px;height:22px;"></span> ≈ 2 million</div>
+      <div class="lg-row"><span class="lg-dot" style="width:12px;height:12px;"></span> ≈ 0.2 million</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DEATHS BY CONFLICT ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 04 · The Toll, Counted</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Avoidable deaths by nation</h2>
+    <div class="chart-wrap rv" style="transition-delay:.1s;">
+      <div class="chart-head">
+        <h3>Post-invasion / post-assault avoidable mortality</h3>
+        <span class="unit">millions of people · Polya estimates</span>
+      </div>
+      <div class="chart-canvas-box"><canvas id="conflictChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ REFUGEES ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 05 · The Displaced</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">The largest forced migration <span class="gold">since 1945.</span></h2>
+    <div class="refugee-total rv" data-count="30" data-suffix="M+">0</div>
+    <p class="lede rv" style="transition-delay:.1s; font-style:normal; font-family:var(--mono); font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--ash);">Muslim refugees &amp; internally displaced — 2015 estimate</p>
+    <div class="chart-wrap rv" style="transition-delay:.15s;">
+      <div class="chart-head">
+        <h3>Displacement by origin</h3>
+        <span class="unit">millions displaced · 2015</span>
+      </div>
+      <div class="chart-canvas-box"><canvas id="refugeeChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HISTORICAL COMPARISON ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 06 · Against the Record</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Setting the scale.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">Polya situates the post-9/11 toll within the longer arithmetic of empire. The British-Raj “Indian Holocaust” dwarfs all — a reminder that this is one chapter of a far longer ledger.</p>
+
+    <div class="comp-list rv" style="transition-delay:.15s;">
+      <div class="comp-row">
+        <div class="comp-top">
+          <div class="comp-name">Jewish Holocaust <span>1941–1945</span></div>
+          <div class="comp-val" style="color:var(--bone-dim);">5–6 M</div>
+        </div>
+        <div class="comp-track"><div class="comp-fill bone" data-w="0.31"></div></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-top">
+          <div class="comp-name">WW2 Bengali Famine <span>1942–1945 · British-engineered</span></div>
+          <div class="comp-val" style="color:var(--bone-dim);">6–7 M</div>
+        </div>
+        <div class="comp-track"><div class="comp-fill bone" data-w="0.36"></div></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-top">
+          <div class="comp-name">Post-9/11 Muslim Holocaust <span>2001–2015</span></div>
+          <div class="comp-val" style="color:var(--crimson-br);">32 M</div>
+        </div>
+        <div class="comp-track"><div class="comp-fill crimson" data-w="1"></div></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-top">
+          <div class="comp-name">Indian Holocaust <span>British Raj · incl. 350M Muslim</span></div>
+          <div class="comp-val" style="color:var(--gold-bright);">1.8 Billion</div>
+        </div>
+        <div class="comp-track"><div class="comp-fill gold" data-w="1"></div></div>
+      </div>
+      <p class="comp-note">
+        Bars within each tier are scaled to the 32-million post-9/11 figure (top three) and shown at full width for the 1.8-billion Indian Holocaust, which is ~56× larger and cannot share a linear axis. Figures are Polya's avoidable-death estimates.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COLONIAL LEDGER ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 07 · The Longer Ledger</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Avoidable deaths under occupation, <span class="gold">1950–2005.</span></h2>
+    <div class="chart-wrap rv" style="transition-delay:.1s;">
+      <div class="chart-head">
+        <h3>Avoidable deaths in occupied countries, by occupying power</h3>
+        <span class="unit">millions · 1950–2005 · Polya estimates</span>
+      </div>
+      <div class="chart-canvas-box"><canvas id="colonialChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 08 · Chronology</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">A sequence of interventions.</h2>
+    <div class="timeline rv" style="transition-delay:.1s;">
+      <div class="tl-item"><div class="tl-year">2001</div><div class="tl-event">Invasion of Afghanistan</div><div class="tl-desc">Polya attributes ≈ 5.6 million Afghan avoidable deaths (2001–2011); 3–4 million refugees.</div></div>
+      <div class="tl-item"><div class="tl-year">2003</div><div class="tl-event">Invasion of Iraq</div><div class="tl-desc">≈ 4.6 million Iraqi avoidable deaths counted from 1990; 5–6 million refugees.</div></div>
+      <div class="tl-item"><div class="tl-year">2011</div><div class="tl-event">Libya intervention</div><div class="tl-desc">60,000–100,000 killed; ~1 million, many Black Libyans &amp; migrants, displaced.</div></div>
+      <div class="tl-item"><div class="tl-year">2012</div><div class="tl-event">Syria war intensifies</div><div class="tl-desc">≈ 1 million dead (2012–2015); 6 million internally displaced, 5 million external refugees.</div></div>
+      <div class="tl-item"><div class="tl-year">2015</div><div class="tl-event">Yemen war &amp; blockade</div><div class="tl-desc">≈ 111,000 avoidable deaths per year from imposed deprivation; 2.4 million refugees.</div></div>
+      <div class="tl-item"><div class="tl-year">2017</div><div class="tl-event">Rohingya expulsion, Myanmar</div><div class="tl-desc">Up to 650,000 displaced; ~2 million rendered stateless.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GENOCIDE DEFINITION ═══════════════ -->
+<section class="block def-block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 09 · The Legal Standard</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">What the law actually says.</h2>
+    <div class="def-card rv" style="transition-delay:.1s;">
+      <div class="src">UN Convention on the Prevention &amp; Punishment of Genocide · Article II</div>
+      <div class="quote">“…any of the following acts committed with intent to destroy, in whole or in part, a national, ethnical, racial or religious group…”</div>
+      <div class="acts">
+        <div class="act">Killing members of the group</div>
+        <div class="act">Causing serious bodily or mental harm</div>
+        <div class="act">Deliberately inflicting conditions of life calculated to bring about physical destruction</div>
+        <div class="act">Imposing measures intended to prevent births</div>
+        <div class="act">Forcibly transferring children of the group</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CLIMATE PROJECTION ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 10 · The Century Ahead</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Polya's climate-genocide projection.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">Beyond the wars, Polya warns of a far larger toll this century from unaddressed global heating — falling disproportionately on the Global South.</p>
+    <div class="climate-num rv" data-count="10" data-suffix="B">0</div>
+    <p class="rv" style="font-family:var(--mono); font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--ash); margin-top:-4px;">potential avoidable deaths this century · projection</p>
+
+    <div class="climate-grid rv" style="transition-delay:.15s;">
+      <div class="climate-cell"><div class="cnum">3.0 B</div><div class="cgrp">Muslims</div></div>
+      <div class="climate-cell"><div class="cnum">2.0 B</div><div class="cgrp">Indians</div></div>
+      <div class="climate-cell"><div class="cnum">1.3 B</div><div class="cgrp">non-Arab Africans</div></div>
+      <div class="climate-cell"><div class="cnum">0.5 B</div><div class="cgrp">Bengalis</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SOURCES ═══════════════ -->
+<section class="block sources-block">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 11 · Voices &amp; Sources</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">The witnesses Polya cites.</h2>
+
+    <div class="src-grid rv" style="transition-delay:.1s;">
+      <div class="src-item"><div class="src-name">Denis Halliday</div><div class="src-role">Former UN Assistant Secretary-General</div><p style="margin-top:8px;">Resigned over the Iraq sanctions regime he called genocidal.</p></div>
+      <div class="src-item"><div class="src-name">Nafeez Ahmed</div><div class="src-role">Investigative journalist</div><p style="margin-top:8px;">Estimated 4–6 million deaths across Iraq &amp; Afghanistan.</p></div>
+      <div class="src-item"><div class="src-name">Nicolas Davies</div><div class="src-role">Author / analyst</div><p style="margin-top:8px;">Minimum ~2 million post-9/11 war deaths.</p></div>
+      <div class="src-item"><div class="src-name">IPPNW &amp; physicians' bodies</div><div class="src-role">2015 “Body Count” report</div><p style="margin-top:8px;">Documented millions killed in the “War on Terror.”</p></div>
+      <div class="src-item"><div class="src-name">John Pilger</div><div class="src-role">Journalist &amp; filmmaker</div><p style="margin-top:8px;">On Western complicity &amp; media silence.</p></div>
+      <div class="src-item"><div class="src-name">Paul Craig Roberts</div><div class="src-role">Former US Asst. Treasury Secretary</div><p style="margin-top:8px;">Critic of post-9/11 war narratives.</p></div>
+    </div>
+
+    <div class="primary-source rv" style="transition-delay:.15s;">
+      <div class="ps-body">
+        <div class="ps-label">▸ Primary Source</div>
+        <div class="ps-title">US-Imposed Post-9/11 Muslim Holocaust &amp; Muslim Genocide</div>
+        <div class="ps-meta">Dr. Gideon Polya · Korsgaard Publishing, 2020 · and the companion research site.</div>
+      </div>
+      <a class="ps-btn" href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener">Read the source ↗</a>
+    </div>
+
+    <div class="disclaimer">
+      <b>On these figures.</b> The mortality numbers presented here are the documented <b>estimates</b> of Dr. Gideon Polya, derived from his avoidable-mortality methodology (UN demographic data, observed vs. expected deaths). They are larger than several other published counts and are the subject of scholarly debate. GSS presents them here as a faithful visualization of one rigorous, dissenting body of work — part of the anarchive's commitment to amplifying analyses silenced or omitted by mainstream accounts. Engage critically; follow the source; count the dead.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-arabic">وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا</div>
+  <div class="f-line">
+    “Whoever saves one life, it is as if he saved all of humanity.” — Qur'an 5:32<br><br>
+    Global South Solidarities · The Anarchive · <span id="footYear">2026</span><br>
+    <a href="/archive.html">◂ Return to The Archive</a>
+  </div>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script>
+// ─────────────────────────────────────────────
+//  SCROLL PROGRESS + REVEAL
+// ─────────────────────────────────────────────
+const scrollbar = document.getElementById('scrollbar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  scrollbar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+}, { passive:true });
+
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      // trigger counters
+      e.target.querySelectorAll?.('[data-count]').forEach(animateCount);
+      if (e.target.matches?.('[data-count]')) animateCount(e.target);
+      // trigger comparison bars
+      e.target.querySelectorAll?.('.comp-fill').forEach(f => { f.style.width = (parseFloat(f.dataset.w)*100) + '%'; });
+      revObs.unobserve(e.target);
+    }
+  });
+}, { threshold:.12 });
+document.querySelectorAll('.rv').forEach(el => revObs.observe(el));
+
+// ─────────────────────────────────────────────
+//  COUNT-UP ANIMATION
+// ─────────────────────────────────────────────
+function animateCount(el){
+  if (el.dataset.done) return;
+  el.dataset.done = '1';
+  const target = parseFloat(el.dataset.count || el.dataset.target || el.textContent);
+  const suffix = el.dataset.suffix || '';
+  const dur = 1600;
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min((now - start)/dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = target * eased;
+    el.textContent = (target % 1 === 0 ? Math.round(val) : val.toFixed(1)) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = (target % 1 === 0 ? target : target.toFixed(1)) + suffix;
+  }
+  requestAnimationFrame(tick);
+}
+// hero count
+const heroCount = document.getElementById('heroCount');
+setTimeout(() => animateCount(heroCount), 700);
+
+// ─────────────────────────────────────────────
+//  THE EARTH MAP (Leaflet + free CartoDB dark tiles)
+// ─────────────────────────────────────────────
+const conflictData = [
+  { country:"Afghanistan", deaths:5.6,  period:"2001–2011",            note:"Post-invasion avoidable deaths", lat:33.94, lng:67.71 },
+  { country:"Iraq",        deaths:4.6,  period:"1990–2011",            note:"Post-sanctions & invasion",      lat:33.22, lng:43.68 },
+  { country:"Iran",        deaths:4.0,  period:"violence + sanctions", note:"≈1M violence · ≈3M deprivation",  lat:32.43, lng:53.69 },
+  { country:"Somalia",     deaths:2.2,  period:"1992–present",         note:"≈0.4M violence · ≈1.8M deprivation", lat:5.15, lng:46.20 },
+  { country:"Palestine",   deaths:2.0,  period:"since WW1",            note:"Long-run avoidable deaths",      lat:31.95, lng:35.23 },
+  { country:"Syria",       deaths:1.0,  period:"2012–2015",            note:"War dead",                       lat:34.80, lng:38.997 },
+  { country:"Yemen",       deaths:0.2,  period:"2015–2017",            note:"≈111k/yr from deprivation",      lat:15.55, lng:48.52 },
+  { country:"Libya",       deaths:0.15, period:"2011–present",         note:"60k–100k killed",                lat:26.34, lng:17.23 },
+];
+
+const map = L.map('earthMap', {
+  center:[27, 44], zoom:4, minZoom:2, maxZoom:7,
+  scrollWheelZoom:false, worldCopyJump:true, attributionControl:true
+});
+map.on('click', () => { if(!map.scrollWheelZoom.enabled()){ map.scrollWheelZoom.enable(); } });
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution:'&copy; OpenStreetMap &copy; CARTO · data: G. Polya',
+  subdomains:'abcd', maxZoom:19
+}).addTo(map);
+
+// proportional circles (area ~ deaths)
+conflictData.forEach((d, i) => {
+  const radius = Math.sqrt(d.deaths) * 11 + 6; // px
+  const circle = L.circleMarker([d.lat, d.lng], {
+    radius: radius,
+    color:'#e8503c', weight:1.5,
+    fillColor:'#c0392b', fillOpacity:0.42
+  }).addTo(map);
+  // pulsing inner dot
+  L.circleMarker([d.lat, d.lng], {
+    radius:3, color:'#f0cf6b', weight:0, fillColor:'#f0cf6b', fillOpacity:0.9
+  }).addTo(map);
+  circle.bindPopup(
+    `<div class="pp-country">${d.country}</div>
+     <div class="pp-deaths">${d.deaths} <span style="font-size:15px;color:var(--bone-dim);">M</span></div>
+     <div class="pp-meta">${d.note}<br>${d.period}</div>`
+  );
+  circle.on('mouseover', function(){ this.setStyle({ fillOpacity:0.62, weight:2.5 }); });
+  circle.on('mouseout',  function(){ this.setStyle({ fillOpacity:0.42, weight:1.5 }); });
+});
+
+// ─────────────────────────────────────────────
+//  CHART.JS — shared styling
+// ─────────────────────────────────────────────
+const FONT = "'Space Mono', monospace";
+Chart.defaults.color = '#8a8676';
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 12;
+
+function gridCfg(){
+  return {
+    grid:{ color:'rgba(217,180,74,0.08)', drawTicks:false },
+    border:{ display:false },
+    ticks:{ color:'#8a8676', font:{ family:FONT, size:11 } }
+  };
+}
+
+let chartsBuilt = false;
+function buildCharts(){
+  if (chartsBuilt) return; chartsBuilt = true;
+
+  // 1 ── Deaths by conflict (vertical bars)
+  const cd = [...conflictData].sort((a,b)=>b.deaths-a.deaths);
+  new Chart(document.getElementById('conflictChart'), {
+    type:'bar',
+    data:{
+      labels: cd.map(d=>d.country),
+      datasets:[{
+        data: cd.map(d=>d.deaths),
+        backgroundColor: cd.map((d,i)=>{
+          const g = document.getElementById('conflictChart').getContext('2d')
+            .createLinearGradient(0,0,0,420);
+          g.addColorStop(0,'#e8503c'); g.addColorStop(1,'#6e1810');
+          return g;
+        }),
+        borderColor:'#e8503c', borderWidth:1, borderRadius:2, maxBarThickness:64
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ backgroundColor:'#0f1c16', borderColor:'#d9b44a', borderWidth:1,
+          titleFont:{family:"'Cormorant Garamond',serif",size:18}, bodyColor:'#f2efe6',
+          callbacks:{ label:(c)=>` ${c.parsed.y} million avoidable deaths` } } },
+      scales:{ x:gridCfg(), y:{ ...gridCfg(), title:{display:true,text:'millions',color:'#8a8676',font:{family:FONT,size:10}} } }
+    }
+  });
+
+  // 2 ── Refugees (horizontal bars)
+  const rf = [
+    {c:"Syria",m:12},{c:"Palestine",m:7},{c:"Iraq",m:6},{c:"Yemen",m:2.4},
+    {c:"Rohingya (Myanmar)",m:2},{c:"Pakistan",m:2},{c:"Somalia",m:2},
+    {c:"Libya",m:1},{c:"C. African Rep.",m:0.5}
+  ];
+  new Chart(document.getElementById('refugeeChart'), {
+    type:'bar',
+    data:{
+      labels: rf.map(r=>r.c),
+      datasets:[{
+        data: rf.map(r=>r.m),
+        backgroundColor:'rgba(63,224,160,0.55)',
+        borderColor:'#3fe0a0', borderWidth:1, borderRadius:2, maxBarThickness:30
+      }]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ backgroundColor:'#0f1c16', borderColor:'#3fe0a0', borderWidth:1,
+          bodyColor:'#f2efe6', callbacks:{ label:(c)=>` ${c.parsed.x} million displaced` } } },
+      scales:{ x:{ ...gridCfg(), title:{display:true,text:'millions displaced',color:'#8a8676',font:{family:FONT,size:10}} }, y:gridCfg() }
+    }
+  });
+
+  // 3 ── Colonial ledger (1950–2005)
+  const col = [
+    {o:"British-occupied",d:727},{o:"France-occupied",d:142},
+    {o:"US-occupied",d:82},{o:"Indonesia (Dutch)",d:72}
+  ];
+  new Chart(document.getElementById('colonialChart'), {
+    type:'bar',
+    data:{
+      labels: col.map(c=>c.o),
+      datasets:[{
+        data: col.map(c=>c.d),
+        backgroundColor:'rgba(217,180,74,0.5)',
+        borderColor:'#f0cf6b', borderWidth:1, borderRadius:2, maxBarThickness:54
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ backgroundColor:'#0f1c16', borderColor:'#d9b44a', borderWidth:1,
+          bodyColor:'#f2efe6', callbacks:{ label:(c)=>` ${c.parsed.y} million avoidable deaths` } } },
+      scales:{ x:gridCfg(), y:{ ...gridCfg(), title:{display:true,text:'millions',color:'#8a8676',font:{family:FONT,size:10}} } }
+    }
+  });
+}
+
+// build charts when first chart section scrolls in
+const chartObs = new IntersectionObserver((entries) => {
+  if (entries.some(e=>e.isIntersecting)) { buildCharts(); chartObs.disconnect(); }
+}, { threshold:.05 });
+chartObs.observe(document.getElementById('conflictChart'));
+
+document.getElementById('footYear').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
