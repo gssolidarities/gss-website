@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSS·AI — Global South Solidarities</title>
+  <meta name="description" content="A small language model, trained from scratch, for scholarship in postcolonial thought, decolonial theory, and the study of empire and atrocity." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <script>
+    (function () {
+      try { document.documentElement.setAttribute("data-theme", localStorage.getItem("gss-theme") || "dark"); }
+      catch (e) { document.documentElement.setAttribute("data-theme", "dark"); }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg:#100f0d; --bg-2:#16140f; --text:#f4efe6; --dim:#bcb2a2; --faint:#8c8273;
+      --line:#2b2721; --line-2:#403a31; --accent:#ed9a44; --accent-2:#e0703f; --accent-dim:#3a2c19;
+      --display:"Fraunces",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    }
+    :root[data-theme="light"] {
+      --bg:#f4f1ea; --bg-2:#fbf9f4; --text:#12100b; --dim:#4a4339; --faint:#766d5e;
+      --line:#ded6c5; --line-2:#cbc0ab; --accent:#a85918; --accent-2:#94401f; --accent-dim:#efe2cf;
+    }
+    @media (prefers-color-scheme: light) {
+      :root[data-theme="system"] {
+        --bg:#f4f1ea; --bg-2:#fbf9f4; --text:#12100b; --dim:#4a4339; --faint:#766d5e;
+        --line:#ded6c5; --line-2:#cbc0ab; --accent:#a85918; --accent-2:#94401f; --accent-dim:#efe2cf;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: var(--display); font-optical-sizing: auto;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--accent); color: var(--bg); }
+    a { color: inherit; }
+
+    /* ── nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 32px; font-family: var(--mono);
+      transition: background 240ms ease, border-color 240ms ease, padding 240ms ease;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom-color: var(--line);
+      padding: 14px 32px;
+    }
+    .nav-mark { font-size: 14px; font-weight: 500; letter-spacing: 0.22em; }
+    .nav-mark .t { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none; transition: color 160ms ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--bg) !important; background: var(--accent); padding: 9px 16px; border-radius: 8px;
+      text-decoration: none; transition: transform 160ms ease, background 160ms ease;
+    }
+    .nav-cta:hover { background: var(--accent-2); transform: translateY(-1px); }
+    @media (max-width: 680px) { .nav-links .hide-sm { display: none; } nav { padding: 16px 20px; } }
+
+    /* ── hero ── */
+    .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 0 32px; overflow: hidden; }
+    #constellation { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+    .hero-inner { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+    .hero-kicker {
+      font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--faint); margin: 0 0 30px; opacity: 0; animation: fadeIn 800ms ease 200ms forwards;
+    }
+    .hero-kicker .s { color: var(--accent); }
+    .hero h1 {
+      font-family: var(--display); font-weight: 400; font-size: clamp(48px, 9vw, 116px);
+      line-height: 0.94; letter-spacing: -0.025em; margin: 0 0 32px;
+    }
+    .hero h1 .word { display: inline-block; opacity: 0; transform: translateY(28px); animation: wordUp 900ms cubic-bezier(0.16,1,0.3,1) forwards; }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-family: var(--display); font-size: clamp(17px, 2.4vw, 22px); font-weight: 400;
+      line-height: 1.55; color: var(--dim); max-width: 600px; margin: 0 0 44px;
+      opacity: 0; animation: fadeIn 800ms ease 1100ms forwards;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; opacity: 0; animation: fadeIn 800ms ease 1300ms forwards; }
+    .btn-primary {
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--bg); background: var(--accent); padding: 15px 26px; border-radius: 10px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+      box-shadow: 0 4px 24px color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .btn-primary:hover { background: var(--accent-2); transform: translateY(-2px); box-shadow: 0 8px 32px color-mix(in srgb, var(--accent) 40%, transparent); }
+    .btn-primary .ar { transition: transform 180ms ease; }
+    .btn-primary:hover .ar { transform: translateX(4px); }
+    .btn-ghost {
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none; padding: 15px 8px; transition: color 160ms ease;
+    }
+    .btn-ghost:hover { color: var(--text); }
+    .scroll-cue {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 2;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--faint); opacity: 0; animation: fadeIn 800ms ease 1600ms forwards;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-cue .line { width: 1px; height: 34px; background: linear-gradient(var(--accent), transparent); animation: cue 2s ease-in-out infinite; }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes wordUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes cue { 0%,100% { transform: scaleY(0.6); opacity: 0.5; } 50% { transform: scaleY(1); opacity: 1; } }
+
+    /* ── generic section ── */
+    section.block { padding: clamp(80px, 14vh, 160px) 32px; position: relative; }
+    .wrap { max-width: 900px; margin: 0 auto; }
+    .narrow { max-width: 720px; margin: 0 auto; }
+    .eyebrow {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--accent); margin: 0 0 24px;
+    }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 900ms cubic-bezier(0.16,1,0.3,1), transform 900ms cubic-bezier(0.16,1,0.3,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* manifesto */
+    .manifesto { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 4.2vw, 46px); line-height: 1.3; letter-spacing: -0.015em; }
+    .manifesto em { font-style: italic; color: var(--accent); }
+    .manifesto .dim { color: var(--faint); }
+
+    /* stats */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .stat { background: var(--bg-2); padding: 36px 24px; text-align: center; }
+    .stat .num { font-family: var(--display); font-weight: 400; font-size: clamp(32px, 5vw, 52px); line-height: 1; color: var(--text); letter-spacing: -0.02em; }
+    .stat .num .unit { color: var(--accent); }
+    .stat .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-top: 12px; }
+    .stat .sub { font-family: var(--display); font-style: italic; font-size: 13px; color: var(--dim); margin-top: 6px; }
+    @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+    /* demo terminal */
+    .demo { border: 1px solid var(--line-2); border-radius: 16px; background: var(--bg-2); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+    .demo-bar { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+    .demo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); }
+    .demo-dot.live { background: var(--accent); }
+    .demo-bar .lbl { margin-left: 8px; }
+    .demo-body { padding: 26px 26px 30px; min-height: 220px; }
+    .demo-q { font-family: var(--mono); font-size: 13px; color: var(--dim); letter-spacing: 0.04em; margin-bottom: 20px; }
+    .demo-q .mk { color: var(--accent); }
+    .demo-a { font-family: var(--display); font-size: 18px; line-height: 1.7; color: var(--text); min-height: 1.7em; }
+    .demo-a .cite { font-family: var(--mono); font-size: 0.62em; color: var(--accent); vertical-align: super; }
+    .demo-a .caret { display: inline-block; width: 8px; height: 1.05em; background: var(--accent); vertical-align: -2px; margin-left: 2px; animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .demo-src { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11px; color: var(--faint); letter-spacing: 0.04em; opacity: 0; transition: opacity 500ms ease; }
+    .demo-src.show { opacity: 1; }
+    .demo-src .n { color: var(--accent); }
+
+    /* difference cards */
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 760px) { .cards { grid-template-columns: 1fr; } }
+    .card { border: 1px solid var(--line); border-radius: 14px; padding: 30px 26px; background: var(--bg-2); transition: border-color 200ms ease, transform 200ms ease; }
+    .card:hover { border-color: var(--line-2); transform: translateY(-3px); }
+    .card .cnum { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 18px; }
+    .card h3 { font-family: var(--display); font-weight: 400; font-size: 23px; margin: 0 0 12px; letter-spacing: -0.01em; }
+    .card p { font-family: var(--display); font-size: 15.5px; line-height: 1.62; color: var(--dim); margin: 0; }
+
+    /* people */
+    .people { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 680px) { .people { grid-template-columns: 1fr; } }
+    .person { border-top: 2px solid var(--accent); padding-top: 22px; }
+    .person .role { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 10px; }
+    .person .name { font-family: var(--display); font-size: 26px; font-weight: 400; margin: 0 0 8px; letter-spacing: -0.01em; }
+    .person .desc { font-family: var(--display); font-size: 15px; line-height: 1.6; color: var(--dim); font-style: italic; margin: 0; }
+
+    /* final cta */
+    .final { text-align: center; padding: clamp(100px, 18vh, 200px) 32px; }
+    .final h2 { font-family: var(--display); font-weight: 400; font-size: clamp(40px, 7vw, 86px); line-height: 1; letter-spacing: -0.025em; margin: 0 0 36px; }
+    .final h2 em { font-style: italic; color: var(--accent); }
+
+    /* footer */
+    footer { border-top: 1px solid var(--line); padding: 36px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--faint); text-transform: uppercase; }
+    footer .t { color: var(--accent); }
+
+    /* ── interaction chrome ── */
+    .progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      z-index: 60; box-shadow: 0 0 10px var(--accent);
+    }
+    .hero-inner { will-change: transform; transition: transform 220ms cubic-bezier(0.16,1,0.3,1); }
+    .btn-primary, .nav-cta { will-change: transform; }
+    .card { will-change: transform; transform-style: preserve-3d; }
+    /* cursor spotlight on hero */
+    .spotlight {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(280px circle at var(--mx, -999px) var(--my, -999px),
+        color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+      transition: background 80ms linear;
+    }
+
+    /* ── beta banner ── */
+    .beta-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 56; height: 34px;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      padding: 0 16px; background: var(--accent); color: var(--bg);
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .beta-banner b { font-weight: 600; }
+    .beta-banner .x { position: absolute; right: 14px; cursor: pointer; opacity: 0.7; font-size: 14px; line-height: 1; background:none;border:none;color:var(--bg); }
+    .beta-banner .x:hover { opacity: 1; }
+    body.has-banner nav { top: 34px; }
+
+    /* ── auth modal ── */
+    .auth-scrim {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.62); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center; z-index: 90; padding: 20px;
+    }
+    .auth-scrim.open { display: flex; }
+    .auth-card {
+      position: relative; width: min(410px, 100%); background: var(--bg-2);
+      border: 1px solid var(--line-2); border-radius: 18px; padding: 34px 32px 30px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55); animation: rise 360ms cubic-bezier(0.16,1,0.3,1);
+    }
+    .auth-kick { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+    .auth-card h3 { font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.01em; }
+    .auth-card .sub { font-family: var(--display); font-style: italic; font-size: 15px; color: var(--dim); margin: 0 0 26px; }
+    .auth-field { margin-bottom: 14px; }
+    .auth-field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 7px; }
+    .auth-field input {
+      width: 100%; background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px;
+      padding: 13px 15px; font-family: var(--display); font-size: 16px; color: var(--text);
+      outline: none; transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+    .auth-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .auth-submit {
+      width: 100%; margin-top: 10px; background: var(--accent); color: var(--bg); border: none;
+      border-radius: 10px; padding: 15px; font-family: var(--mono); font-size: 12px;
+      letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 140ms ease;
+    }
+    .auth-submit:hover:not(:disabled) { background: var(--accent-2); }
+    .auth-submit:disabled { opacity: 0.5; cursor: progress; }
+    .auth-err { color: var(--accent-2); font-family: var(--display); font-style: italic; font-size: 14px; margin-top: 12px; min-height: 1.1em; }
+    .auth-note { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; color: var(--faint); margin-top: 20px; text-transform: uppercase; line-height: 1.7; }
+    .auth-x { position: absolute; top: 16px; right: 18px; background: none; border: none; color: var(--dim); font-size: 20px; cursor: pointer; line-height: 1; }
+    .auth-x:hover { color: var(--accent); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .hero-kicker, .hero-sub, .hero-actions, .scroll-cue, .reveal, .hero h1 .word { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body class="has-banner">
+
+  <div class="progress" id="progress"></div>
+
+  <div class="beta-banner" id="betaBanner">
+    <span><b>Beta</b> — public release coming soon. Beta testers, log in to try GSS·AI.</span>
+    <button class="x" id="bannerX" aria-label="Dismiss">×</button>
+  </div>
+
+  <nav id="nav">
+    <a href="/" class="nav-mark" style="text-decoration:none;">GSS<span class="t">·</span>AI</a>
+    <span class="nav-links">
+      <a href="#what" class="hide-sm">Manifesto</a>
+      <a href="#how" class="hide-sm">How it works</a>
+      <a href="#people" class="hide-sm">People</a>
+      <a href="https://gss-ai-wsu--gss-ai-site-site.modal.run/chat" class="nav-cta">Beta Login</a>
+    </span>
+  </nav>
+
+  <!-- ── hero ── -->
+  <header class="hero" id="hero">
+    <canvas id="constellation" aria-hidden="true"></canvas>
+    <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-kicker">Global South Solidarities <span class="s">/</span> A Research Instrument</p>
+      <h1 id="heroTitle">
+        <span class="word" style="animation-delay:.30s">Memory,</span>
+        <span class="word" style="animation-delay:.42s">against</span><br />
+        <span class="word" style="animation-delay:.54s">the</span>
+        <span class="word" style="animation-delay:.66s">grain</span>
+        <span class="word" style="animation-delay:.78s">of</span>
+        <span class="word" style="animation-delay:.90s"><em>empire.</em></span>
+      </h1>
+      <p class="hero-sub">
+        GSS·AI is a small language model, trained from scratch, for scholarship in
+        postcolonial thought, decolonial theory, and the study of empire and atrocity.
+        Not a general-purpose chatbot — a study partner, raised on a particular library.
+      </p>
+      <div class="hero-actions">
+        <a href="https://gss-ai-wsu--gss-ai-site-site.modal.run/chat" class="btn-primary">Beta Login <span class="ar">→</span></a>
+        <a href="#what" class="btn-ghost">What is GSS·AI ↓</a>
+      </div>
+    </div>
+    <div class="scroll-cue"><span>scroll</span><span class="line"></span></div>
+  </header>
+
+  <!-- ── manifesto ── -->
+  <section class="block" id="what">
+    <div class="narrow">
+      <p class="eyebrow reveal">The premise</p>
+      <p class="manifesto reveal">
+        Most models are trained to be <span class="dim">everything to everyone</span> —
+        and quietly reproduce the center of gravity of the web. GSS·AI is the opposite
+        by design: small, specialized, and built to hold <em>counter-hegemonic
+        perspectives</em> as first-class, not as footnotes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── stats ── -->
+  <section class="block" id="numbers" style="padding-top:0;">
+    <div class="wrap">
+      <div class="stats reveal" id="stats">
+        <div class="stat"><div class="num" data-to="458"><span class="v">0</span><span class="unit">M</span></div><div class="cap">Parameters</div><div class="sub">trained from scratch</div></div>
+        <div class="stat"><div class="num" data-to="9.2"><span class="v">0</span><span class="unit">B</span></div><div class="cap">Tokens</div><div class="sub">≈ Chinchilla-optimal</div></div>
+        <div class="stat"><div class="num" data-to="1.3"><span class="v">0</span><span class="unit">M</span></div><div class="cap">Sources indexed</div><div class="sub">retrieved & cited</div></div>
+        <div class="stat"><div class="num" data-prefix="$" data-to="285"><span class="v">0</span></div><div class="cap">Cost to train</div><div class="sub">not a trillion-dollar lab</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── live demo ── -->
+  <section class="block" id="demo" style="padding-top:0;">
+    <div class="wrap">
+      <p class="eyebrow reveal">It grounds what it says</p>
+      <div class="demo reveal" id="demoCard">
+        <div class="demo-bar">
+          <span class="demo-dot live"></span><span class="demo-dot"></span><span class="demo-dot"></span>
+          <span class="lbl">GSS·AI — retrieval-grounded</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-q"><span class="mk">›</span> <span id="demoQ"></span></div>
+          <div class="demo-a" id="demoA"></div>
+          <div class="demo-src" id="demoSrc"><span class="n">[1]</span> The Wretched of the Earth — retrieved passage · score 0.74</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── how it's different ── -->
+  <section class="block" id="how">
+    <div class="wrap">
+      <p class="eyebrow reveal">Three commitments</p>
+      <div class="cards">
+        <div class="card reveal">
+          <div class="cnum">01</div>
+          <h3>Specialized</h3>
+          <p>Not a general-purpose assistant. Small, focused, and shaped around a deliberate corpus and a clear set of commitments.</p>
+        </div>
+        <div class="card reveal" style="transition-delay:.1s">
+          <div class="cnum">02</div>
+          <h3>Provenance-aware</h3>
+          <p>Grounds its claims in a corpus of anti-imperialist journalism and decolonial scholarship, and cites where ideas come from.</p>
+        </div>
+        <div class="card reveal" style="transition-delay:.2s">
+          <div class="cnum">03</div>
+          <h3>Honest</h3>
+          <p>Small and early by design. It won't pretend to certainty it doesn't have — a thinking partner to check, not an oracle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── people ── -->
+  <section class="block" id="people">
+    <div class="wrap">
+      <p class="eyebrow reveal">Built by a very small team</p>
+      <div class="people">
+        <div class="person reveal">
+          <div class="role">Principal Investigator</div>
+          <h3 class="name">Dr. Bibhushana Poudyal</h3>
+          <p class="desc">The intellectual and pedagogical vision — the reason the instrument was built.</p>
+        </div>
+        <div class="person reveal" style="transition-delay:.1s">
+          <div class="role">Technical Lead</div>
+          <h3 class="name">Rahul Malik</h3>
+          <p class="desc">The architecture, training, and engineering — from raw tokens to a deployed model.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── final cta ── -->
+  <section class="final">
+    <div class="narrow">
+      <h2 class="reveal">Ask it <em>something</em>.</h2>
+      <a href="https://gss-ai-wsu--gss-ai-site-site.modal.run/chat" class="btn-primary reveal">Beta Login <span class="ar">→</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <span>GSS<span class="t">·</span>AI — Global South Solidarities</span>
+    <span>Open-sourced at launch · Built by Rahul Malik · PI Dr. Bibhushana Poudyal</span>
+  </footer>
+
+  <script>
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ── beta banner dismiss ── */
+    document.getElementById("bannerX").addEventListener("click", () => {
+      document.getElementById("betaBanner").style.display = "none";
+      document.body.classList.remove("has-banner");
+    });
+
+    // Login lives on the Modal-hosted chat page (same origin as the API), so the
+    // "Beta Login" buttons are just plain links to it. This landing makes ZERO
+    // backend calls — it's pure static HTML and can be hosted anywhere, always-on.
+
+    /* ── nav scroll state + scroll progress ── */
+    const nav = document.getElementById("nav");
+    const prog = document.getElementById("progress");
+    addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", scrollY > 40);
+      const h = document.documentElement;
+      const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+      prog.style.width = (pct * 100).toFixed(2) + "%";
+    }, { passive: true });
+
+    /* ── cursor spotlight only (parallax + magnetic-button effects removed
+           so buttons stay steady when the cursor is near them) ── */
+    if (!reduced) {
+      const hero = document.getElementById("hero");
+      const spotlight = document.getElementById("spotlight");
+      hero.addEventListener("mousemove", (e) => {
+        const r = hero.getBoundingClientRect();
+        spotlight.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        spotlight.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+      hero.addEventListener("mouseleave", () => {
+        spotlight.style.setProperty("--mx", "-999px");
+      });
+    }
+
+    /* ── 3D tilt on cards + stat tiles ── */
+    if (!reduced) {
+      document.querySelectorAll(".card").forEach((card) => {
+        card.addEventListener("mousemove", (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(820px) rotateY(${px * 6}deg) rotateX(${-py * 6}deg) translateY(-4px)`;
+        });
+        card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+      });
+    }
+
+    /* ── reveal on scroll ── */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.18 });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+    /* ── count-up stats ── */
+    const statsEl = document.getElementById("stats");
+    let counted = false;
+    const statsIO = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !counted) {
+        counted = true;
+        document.querySelectorAll(".stat .num").forEach((el) => {
+          const to = parseFloat(el.dataset.to);
+          const decimals = (el.dataset.to.split(".")[1] || "").length;
+          const prefix = el.dataset.prefix || "";
+          const vEl = el.querySelector(".v");
+          const dur = 1400, t0 = performance.now();
+          (function tick(now) {
+            const p = Math.min((now - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            vEl.textContent = prefix + (to * eased).toFixed(decimals);
+            if (p < 1) requestAnimationFrame(tick);
+            else vEl.textContent = prefix + to.toFixed(decimals);
+          })(t0);
+        });
+      }
+    }, { threshold: 0.4 });
+    statsIO.observe(statsEl);
+
+    /* ── live demo typewriter ── */
+    const demoCard = document.getElementById("demoCard");
+    const qEl = document.getElementById("demoQ");
+    const aEl = document.getElementById("demoA");
+    const srcEl = document.getElementById("demoSrc");
+    const QUESTION = "Who was Frantz Fanon?";
+    const ANSWER = "Frantz Fanon was a Martinican psychiatrist and revolutionary theorist whose work on colonialism, race, and violence — written from inside the Algerian struggle for independence — became foundational to anti-colonial and decolonial thought.@1@";
+    let demoPlayed = false;
+    function typeText(el, text, speed, done) {
+      let i = 0;
+      const caret = document.createElement("span"); caret.className = "caret";
+      el.appendChild(caret);
+      (function step() {
+        if (i < text.length) {
+          // handle citation token @1@
+          if (text.slice(i, i + 3) === "@1@") {
+            const sup = document.createElement("span"); sup.className = "cite"; sup.textContent = "[1]";
+            el.insertBefore(sup, caret); i += 3;
+          } else {
+            el.insertBefore(document.createTextNode(text[i]), caret); i++;
+          }
+          setTimeout(step, speed);
+        } else { caret.remove(); if (done) done(); }
+      })();
+    }
+    function playDemo() {
+      if (demoPlayed) return; demoPlayed = true;
+      typeText(qEl, QUESTION, 38, () => {
+        setTimeout(() => typeText(aEl, ANSWER, 16, () => srcEl.classList.add("show")), 450);
+      });
+    }
+    const demoIO = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) playDemo(); }, { threshold: 0.45 });
+    demoIO.observe(demoCard);
+
+    /* ── interactive constellation (the corpus as a star-field) ── */
+    (function () {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const canvas = document.getElementById("constellation");
+      const ctx = canvas.getContext("2d");
+      let W, H, nodes = [], mouse = { x: -9999, y: -9999 };
+      const COUNT = Math.min(70, Math.floor(innerWidth / 22));
+      function accentRGB() {
+        // read accent from CSS var, fall back to ochre
+        const c = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#e0913f";
+        const m = c.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+        return m ? [parseInt(m[1],16), parseInt(m[2],16), parseInt(m[3],16)] : [224,145,63];
+      }
+      let RGB = accentRGB();
+      function resize() {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        W = canvas.width = innerWidth * dpr; H = canvas.height = canvas.offsetHeight * dpr;
+        canvas.style.width = innerWidth + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        W = innerWidth; H = canvas.offsetHeight;
+      }
+      function init() {
+        nodes = [];
+        for (let i = 0; i < COUNT; i++) {
+          nodes.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-0.5)*0.18, vy: (Math.random()-0.5)*0.18, r: Math.random()*1.6 + 0.6 });
+        }
+      }
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        const [r,g,b] = RGB;
+        for (const n of nodes) {
+          n.x += n.vx; n.y += n.vy;
+          if (n.x < 0 || n.x > W) n.vx *= -1;
+          if (n.y < 0 || n.y > H) n.vy *= -1;
+          // gentle pull toward mouse
+          const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
+          if (d < 160) { n.x += dx * 0.0009 * (160 - d) / 160 * 6; n.y += dy * 0.0009 * (160 - d) / 160 * 6; }
+        }
+        // links
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const a = nodes[i], c = nodes[j];
+            const dist = Math.hypot(a.x - c.x, a.y - c.y);
+            if (dist < 140) {
+              ctx.strokeStyle = `rgba(${r},${g},${b},${(1 - dist/140) * 0.26})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(c.x, c.y); ctx.stroke();
+            }
+          }
+        }
+        // nodes
+        for (const n of nodes) {
+          const dm = Math.hypot(mouse.x - n.x, mouse.y - n.y);
+          const glow = dm < 160 ? 1.0 : 0.6;
+          ctx.fillStyle = `rgba(${r},${g},${b},${glow})`;
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fill();
+        }
+        requestAnimationFrame(frame);
+      }
+      addEventListener("resize", () => { resize(); init(); RGB = accentRGB(); });
+      addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+      addEventListener("mouseleave", () => { mouse.x = mouse.y = -9999; });
+      // re-read accent if theme changes elsewhere
+      const mo = new MutationObserver(() => { RGB = accentRGB(); });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+      resize(); init(); frame();
+    })();
+  </script>
+</body>
+</html>
