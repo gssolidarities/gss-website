@@ -3,3 +3,4 @@
 # Buddha Lo field-recording videos (host externally — Vimeo / R2 / etc.)
 untitled folder/buddha-assets/*.mp4
 .claude/
+.DS_Store
