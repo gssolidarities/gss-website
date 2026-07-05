@@ -519,12 +519,413 @@ footer .f-line{ font-family:var(--mono); font-size:11px; letter-spacing:.28em; t
 footer a{ color:var(--gold-bright); text-decoration:none; border-bottom:1px solid var(--gold); }
 footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═════════════════ CHAPTER RAIL (sticky sidebar) ═══════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.chapter-rail{
+  position:fixed; top:82px; left:16px; z-index:50;
+  width:210px;
+  max-height:calc(100vh - 100px);
+  overflow:hidden;
+  padding:16px 12px;
+  background:linear-gradient(180deg, rgba(11,20,16,0.88), rgba(4,6,5,0.92));
+  border:1px solid var(--hair);
+  backdrop-filter:blur(6px);
+  font-family:var(--mono);
+  transform:translateX(-240px);
+  transition:transform .35s cubic-bezier(.2,.9,.3,1), opacity .3s;
+  opacity:0;
+  display:none;
+}
+.chapter-rail.ready{ display:block; }
+.chapter-rail.open{ transform:translateX(0); opacity:1; }
+.cr-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding-bottom:12px; border-bottom:1px dashed var(--hair);
+  margin-bottom:12px;
+}
+.cr-title{
+  font-size:9.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-bright);
+}
+.cr-close{
+  background:transparent; border:0; color:var(--ash); cursor:pointer;
+  font-size:16px; line-height:1; padding:2px 6px;
+}
+.cr-close:hover{ color:var(--crimson-br); }
+.cr-list{
+  overflow-y:auto; max-height:calc(100vh - 190px);
+  padding-right:4px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--green-dim) transparent;
+}
+.cr-list::-webkit-scrollbar{ width:5px; }
+.cr-list::-webkit-scrollbar-thumb{ background:var(--green-dim); }
+.cr-item{
+  display:flex; gap:8px; align-items:baseline;
+  padding:7px 6px;
+  font-size:10.5px; letter-spacing:.06em;
+  color:var(--bone-dim);
+  text-decoration:none;
+  border-left:2px solid transparent;
+  transition:all .18s;
+  line-height:1.5;
+}
+.cr-item:hover{ color:var(--bone); border-left-color:var(--green-dim); background:rgba(31,157,107,0.05); }
+.cr-item.active{ color:var(--gold-bright); border-left-color:var(--gold); background:rgba(217,180,74,0.06); }
+.cr-item .num{ color:var(--ash); font-size:9px; letter-spacing:.15em; min-width:22px; flex-shrink:0; }
+.cr-item.active .num{ color:var(--gold-bright); }
+.cr-toggle{
+  position:fixed; top:82px; left:16px; z-index:51;
+  width:44px; height:44px;
+  background:var(--panel);
+  border:1px solid var(--gold);
+  color:var(--gold-bright);
+  cursor:pointer;
+  font-family:var(--display);
+  font-size:22px;
+  display:none;
+  align-items:center; justify-content:center;
+  transition:background .2s;
+}
+.cr-toggle:hover{ background:var(--panel-2); }
+.cr-toggle.ready{ display:flex; }
+@media(min-width:1180px){
+  .chapter-rail{ display:block; }
+  .chapter-rail.ready{ transform:translateX(0); opacity:1; }
+  .cr-toggle{ display:none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════════ NATION FILES ═══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.nation-grid{
+  margin-top:48px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:20px;
+}
+.nation-card{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--hair);
+  padding:26px 24px 22px;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1), border-color .3s, background .3s;
+  overflow:hidden;
+}
+.nation-card::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--accent-color, var(--crimson));
+  transition:height .3s;
+}
+.nation-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--green-dim);
+  background:var(--panel-2);
+}
+.nation-card:hover::before{ height:5px; }
+.nc-flag{
+  font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--accent-color, var(--crimson-br));
+  font-family:var(--mono);
+  margin-bottom:6px;
+}
+.nc-name{
+  font-family:var(--display);
+  font-weight:600;
+  font-size:26px;
+  line-height:1.1;
+  color:var(--bone);
+  margin-bottom:16px;
+}
+.nc-deaths{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:44px;
+  line-height:1;
+  color:var(--crimson-br);
+  letter-spacing:-1px;
+  margin-bottom:2px;
+}
+.nc-deaths .unit{
+  font-size:0.5em; color:var(--bone-dim); font-weight:400; margin-left:4px;
+}
+.nc-deaths-lbl{
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ash);
+  margin-bottom:14px;
+  padding-bottom:14px; border-bottom:1px dashed var(--hair);
+}
+.nc-stat{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:5px 0;
+  font-family:var(--mono); font-size:11px;
+  color:var(--bone-dim);
+}
+.nc-stat .k{ color:var(--ash); letter-spacing:.14em; text-transform:uppercase; font-size:10px; }
+.nc-stat .v{ color:var(--gold-bright); font-family:var(--display); font-size:16px; font-weight:600; }
+.nc-period{
+  margin-top:12px; padding-top:12px;
+  border-top:1px dashed var(--hair);
+  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ash);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════ FEATURED DOCUMENTS ═════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.docs-list{ margin-top:44px; }
+.doc-card{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:28px;
+  padding:28px 0;
+  border-top:1px solid var(--hair);
+  transition:padding .3s;
+}
+.doc-card:hover{ padding:32px 6px; background:linear-gradient(180deg, transparent, rgba(217,180,74,0.03), transparent); }
+.doc-card:last-child{ border-bottom:1px solid var(--hair); }
+.dc-date{
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold-bright);
+  padding-top:6px;
+}
+.dc-date .yr{ display:block; font-family:var(--display); font-size:34px; font-weight:600; color:var(--gold); letter-spacing:0; margin-top:6px; line-height:1; }
+.dc-title{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(20px, 2.4vw, 26px);
+  line-height:1.25;
+  color:var(--bone);
+  margin-bottom:10px;
+}
+.dc-title em{ color:var(--gold-bright); font-style:italic; }
+.dc-author{
+  font-family:var(--mono);
+  font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--green-bright);
+  margin-bottom:14px;
+}
+.dc-excerpt{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:16px; line-height:1.65;
+  color:var(--bone-dim);
+  border-left:2px solid var(--green-dim); padding-left:16px;
+  margin-bottom:16px;
+}
+.dc-link{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--green-bright); text-decoration:none;
+  border-bottom:1px solid var(--green-dim);
+  padding-bottom:2px; transition:all .22s;
+}
+.dc-link:hover{ color:var(--gold-bright); border-bottom-color:var(--gold-bright); gap:12px; }
+@media(max-width:640px){ .doc-card{ grid-template-columns:1fr; gap:14px; padding:24px 0; } .dc-date .yr{ font-size:28px; } }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════ AUSTRALIA'S SECRET GENOCIDE ═══════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.aus-block{ background:linear-gradient(180deg, rgba(160,42,31,0.08), transparent); border-top:1px solid var(--hair); }
+.aus-callout{
+  margin-top:44px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:36px; align-items:center;
+  padding:44px 40px;
+  border:1px solid var(--crimson-deep);
+  background:linear-gradient(135deg, rgba(160,42,31,0.10), rgba(11,20,16,0.5));
+}
+.aus-big{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(72px, 12vw, 140px);
+  line-height:0.85; color:var(--crimson-br);
+  letter-spacing:-3px;
+  text-shadow:0 0 60px rgba(192,57,43,0.3);
+  min-width:140px;
+}
+.aus-txt{
+  font-family:var(--display); font-size:20px; line-height:1.55; color:var(--bone);
+}
+.aus-txt strong{ color:var(--gold-bright); }
+.aus-txt .lbl{
+  display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--crimson-br); margin-bottom:10px;
+}
+@media(max-width:700px){ .aus-callout{ grid-template-columns:1fr; padding:32px 24px; text-align:left; } }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════════ 60 HOLOCAUSTS ══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.holo-controls{ margin:36px 0 26px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.holo-search{
+  flex:1; min-width:220px;
+  background:rgba(4,6,5,0.6);
+  border:1px solid var(--hair);
+  color:var(--bone);
+  padding:12px 16px;
+  font-family:var(--display); font-size:15px; font-style:italic;
+  outline:none;
+  transition:border-color .22s;
+}
+.holo-search:focus{ border-color:var(--green); }
+.holo-search::placeholder{ color:var(--ash); font-style:italic; }
+.holo-chip{
+  background:transparent;
+  border:1px solid var(--brass-dim, var(--green-dim));
+  color:var(--bone-dim);
+  padding:9px 14px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  cursor:pointer; transition:all .22s;
+}
+.holo-chip:hover{ color:var(--gold-bright); border-color:var(--gold); }
+.holo-chip.on{ background:var(--gold); color:var(--void); border-color:var(--gold); }
+.holo-count{ margin-left:auto; font-family:var(--mono); font-size:10.5px; letter-spacing:.18em; color:var(--ash); text-transform:uppercase; }
+.holo-list{
+  display:grid; grid-template-columns:1fr; gap:8px;
+  max-height:640px; overflow-y:auto;
+  padding:6px;
+  border:1px solid var(--hair);
+  background:rgba(4,6,5,0.35);
+  scrollbar-width:thin; scrollbar-color:var(--green-dim) transparent;
+}
+.holo-list::-webkit-scrollbar{ width:8px; }
+.holo-list::-webkit-scrollbar-thumb{ background:var(--green-dim); }
+.holo-row{
+  display:grid; grid-template-columns:80px 1fr auto;
+  gap:16px; align-items:center;
+  padding:12px 18px;
+  border-left:2px solid var(--hair);
+  background:rgba(11,20,16,0.6);
+  transition:all .18s;
+}
+.holo-row:hover{ background:rgba(11,20,16,0.9); border-left-color:var(--gold); }
+.holo-row .hr-yr{ font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; color:var(--gold-bright); }
+.holo-row .hr-name{ font-family:var(--display); font-size:16px; color:var(--bone); line-height:1.35; }
+.holo-row .hr-name em{ color:var(--gold-bright); font-style:normal; }
+.holo-row .hr-toll{ font-family:var(--display); font-size:16px; color:var(--crimson-br); font-weight:600; text-align:right; }
+.holo-row .hr-tag{ display:inline-block; font-family:var(--mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--ash); margin-left:8px; }
+.holo-note{
+  margin-top:16px; font-family:var(--mono); font-size:10.5px; letter-spacing:.05em;
+  color:var(--ash); line-height:1.8;
+  border-left:2px solid var(--green-dim); padding-left:14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════ VOICES EXPANDED ═══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.voice-card{
+  border:1px solid var(--hair); padding:24px 22px;
+  background:var(--panel);
+  cursor:pointer;
+  transition:border-color .25s, transform .25s, background .3s;
+}
+.voice-card:hover{ border-color:var(--green-dim); transform:translateY(-3px); background:var(--panel-2); }
+.voice-card.open{ border-color:var(--gold); background:linear-gradient(180deg, rgba(217,180,74,0.05), var(--panel-2)); }
+.voice-card .v-name{
+  font-family:var(--display); font-size:22px; font-weight:600; color:var(--bone); margin-bottom:4px; line-height:1.15;
+}
+.voice-card .v-role{
+  font-family:var(--mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--green-bright); margin-bottom:14px;
+}
+.voice-card .v-quote{
+  font-family:var(--display); font-style:italic; font-size:15.5px; line-height:1.65;
+  color:var(--bone-dim);
+  padding-left:12px; border-left:2px solid var(--green-dim);
+}
+.voice-card .v-full{
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .5s ease, opacity .3s, margin .3s;
+  font-family:var(--display); font-size:14.5px; line-height:1.75;
+  color:var(--bone-dim);
+}
+.voice-card.open .v-full{
+  max-height:800px; opacity:1; margin-top:16px; padding-top:16px;
+  border-top:1px dashed var(--hair);
+}
+.voice-card .v-more{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:12px;
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold-bright);
+}
+.voice-card.open .v-more .arr{ transform:rotate(180deg); }
+.voice-card .v-more .arr{ display:inline-block; transition:transform .3s; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════ REMEMBRANCE + GENEVA ══════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.remembrance{
+  margin-top:42px;
+  padding:52px 44px;
+  text-align:center;
+  border:1px solid var(--green-dim);
+  background:radial-gradient(ellipse at center, rgba(31,157,107,0.10), transparent 70%), var(--panel);
+  position:relative;
+  overflow:hidden;
+}
+.remembrance::before{
+  content:'☾'; position:absolute; top:20px; right:26px;
+  font-size:40px; color:var(--gold); opacity:.35;
+}
+.rem-date{ font-family:var(--mono); font-size:12px; letter-spacing:.32em; text-transform:uppercase; color:var(--green-bright); margin-bottom:20px; }
+.rem-title{ font-family:var(--display); font-weight:600; font-size:clamp(30px, 5vw, 50px); color:var(--bone); line-height:1.15; margin-bottom:14px; }
+.rem-title em{ color:var(--gold-bright); font-style:italic; }
+.rem-sub{ font-family:var(--display); font-style:italic; font-size:18px; color:var(--bone-dim); max-width:560px; margin:0 auto; }
+
+.geneva-card{
+  margin-top:26px;
+  border:1px solid var(--green-dim);
+  background:rgba(7,9,10,0.5);
+  padding:34px 36px;
+  position:relative;
+}
+.geneva-card .src{ font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--green-bright); margin-bottom:16px; }
+.geneva-card .g-quote{ font-family:var(--display); font-style:italic; font-size:19px; line-height:1.6; color:var(--bone); }
+.geneva-card .g-articles{ margin-top:22px; display:flex; gap:14px; flex-wrap:wrap; }
+.geneva-card .g-art{ flex:1; min-width:220px; border-left:2px solid var(--green); padding:8px 14px; font-size:14px; color:var(--bone-dim); line-height:1.6; background:rgba(31,157,107,0.05); }
+.geneva-card .g-art b{ color:var(--gold-bright); }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════ REFERENCE INDEX ═══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.ref-index{ margin-top:40px; }
+.ref-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+  gap:8px;
+}
+.ref-link{
+  display:flex; gap:10px; align-items:baseline;
+  padding:11px 14px;
+  border:1px solid var(--hair);
+  background:rgba(11,20,16,0.4);
+  font-family:var(--mono); font-size:11px;
+  color:var(--bone-dim); text-decoration:none;
+  transition:all .22s;
+  line-height:1.5;
+}
+.ref-link:hover{
+  border-color:var(--green-dim); background:rgba(11,20,16,0.8);
+  color:var(--bone); transform:translateX(4px);
+}
+.ref-link .r-arr{ color:var(--green-bright); flex-shrink:0; }
+.ref-link .r-txt{ letter-spacing:.02em; }
+
 @media(max-width:700px){
   .wrap{ padding:0 7vw; }
   .split-cell{ padding:34px 26px; }
   .chart-wrap{ padding:24px 18px; }
   .def-card{ padding:30px 24px; }
   .primary-source{ padding:26px 22px; }
+  .doc-card{ padding:22px 0; }
+  .aus-callout{ padding:30px 22px; }
+  .remembrance{ padding:38px 24px; }
+  .geneva-card{ padding:26px 22px; }
+  .holo-row{ grid-template-columns:60px 1fr; gap:10px; padding:10px 12px; }
+  .holo-row .hr-toll{ grid-column:1/-1; text-align:left; padding-top:4px; color:var(--crimson-br); }
 }
 </style>
 </head>
@@ -537,8 +938,37 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </nav>
 <div id="scrollbar"></div>
 
+<!-- ═══════════════ STICKY CHAPTER RAIL ═══════════════ -->
+<button class="cr-toggle" id="crToggle" aria-label="Open chapters">§</button>
+<aside class="chapter-rail" id="chapterRail" aria-label="Chapter index">
+  <div class="cr-head">
+    <span class="cr-title">▸ Chapters</span>
+    <button class="cr-close" id="crClose" aria-label="Close">×</button>
+  </div>
+  <nav class="cr-list" id="crList">
+    <a href="#hero"        class="cr-item"><span class="num">◈</span>Overture</a>
+    <a href="#ch-argument" class="cr-item"><span class="num">01</span>The Argument</a>
+    <a href="#ch-anatomy"  class="cr-item"><span class="num">02</span>Anatomy of 32M</a>
+    <a href="#ch-map"      class="cr-item"><span class="num">03</span>The Geography</a>
+    <a href="#ch-toll"     class="cr-item"><span class="num">04</span>The Toll</a>
+    <a href="#ch-nations"  class="cr-item"><span class="num">05</span>Nation Files</a>
+    <a href="#ch-refugees" class="cr-item"><span class="num">06</span>The Displaced</a>
+    <a href="#ch-docs"     class="cr-item"><span class="num">07</span>Featured Documents</a>
+    <a href="#ch-record"   class="cr-item"><span class="num">08</span>Against the Record</a>
+    <a href="#ch-ledger"   class="cr-item"><span class="num">09</span>The Longer Ledger</a>
+    <a href="#ch-australia"class="cr-item"><span class="num">10</span>Australia's Genocides</a>
+    <a href="#ch-timeline" class="cr-item"><span class="num">11</span>Chronology</a>
+    <a href="#ch-legal"    class="cr-item"><span class="num">12</span>The Legal Standard</a>
+    <a href="#ch-60"       class="cr-item"><span class="num">13</span>The 60 Holocausts</a>
+    <a href="#ch-climate"  class="cr-item"><span class="num">14</span>The Century Ahead</a>
+    <a href="#ch-voices"   class="cr-item"><span class="num">15</span>Voices in Full</a>
+    <a href="#ch-remembrance" class="cr-item"><span class="num">16</span>Day of Remembrance</a>
+    <a href="#ch-index"    class="cr-item"><span class="num">17</span>Reference Index</a>
+  </nav>
+</aside>
+
 <!-- ═══════════════════ HERO ═══════════════════ -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-inner">
     <div class="bismillah rv">إِنَّا لِلّهِ وَإِنَّا إِلَيْهِ رَاجِعُون — “To God we belong, and to Him we return.”</div>
     <h1 class="rv" style="transition-delay:.1s;">
@@ -571,7 +1001,7 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </div>
 
 <!-- ═══════════════ THE THESIS ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-argument">
   <div class="wrap">
     <div class="eyebrow rv">§ 01 · The Argument</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Lying by omission is <span class="crimson">worse</span> than lying by commission.</h2>
@@ -586,7 +1016,7 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </section>
 
 <!-- ═══════════════ THE SPLIT ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-anatomy">
   <div class="wrap">
     <div class="eyebrow rv">§ 02 · Anatomy of 32 Million</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Most of the dead never <span class="gold">saw a soldier.</span></h2>
@@ -610,7 +1040,7 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </section>
 
 <!-- ═══════════════ THE MAP ═══════════════ -->
-<section class="map-block">
+<section class="map-block" id="ch-map">
   <div class="wrap">
     <div class="eyebrow rv">§ 03 · The Geography of Avoidable Death</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Twenty countries. <span class="crimson">One map of mourning.</span></h2>
@@ -628,7 +1058,7 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </section>
 
 <!-- ═══════════════ DEATHS BY CONFLICT ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-toll">
   <div class="wrap">
     <div class="eyebrow rv">§ 04 · The Toll, Counted</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Avoidable deaths by nation</h2>
@@ -642,8 +1072,141 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
   </div>
 </section>
 
+<!-- ═══════════════ NATION FILES ═══════════════ -->
+<section class="block" id="ch-nations">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 05 · Nation Files</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Twelve country dossiers.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">A closer read of each nation Polya documents — post-invasion avoidable deaths, forced displacement, and the years these numbers cover.</p>
+
+    <div class="nation-grid rv" style="transition-delay:.15s;">
+
+      <article class="nation-card" style="--accent-color:#e8503c;">
+        <div class="nc-flag">▸ Afghanistan</div>
+        <div class="nc-name">Afghan Holocaust,<br>Afghan Genocide</div>
+        <div class="nc-deaths">4.5<span class="unit">M+</span></div>
+        <div class="nc-deaths-lbl">Post-invasion excess deaths</div>
+        <div class="nc-stat"><span class="k">Refugees</span><span class="v">3–4 M</span></div>
+        <div class="nc-stat"><span class="k">Full toll</span><span class="v">≈ 5.6 M</span></div>
+        <div class="nc-period">2001 — 2011</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#e8503c;">
+        <div class="nc-flag">▸ Iraq</div>
+        <div class="nc-name">Iraqi Holocaust,<br>Iraqi Genocide</div>
+        <div class="nc-deaths">4.4<span class="unit">M+</span></div>
+        <div class="nc-deaths-lbl">Post-1990 excess deaths</div>
+        <div class="nc-stat"><span class="k">Refugees</span><span class="v">5–6 M</span></div>
+        <div class="nc-stat"><span class="k">Full toll</span><span class="v">≈ 4.6 M</span></div>
+        <div class="nc-period">1990 — 2011</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#d9b44a;">
+        <div class="nc-flag">▸ Iran</div>
+        <div class="nc-name">4-Decade War<br>on Iran</div>
+        <div class="nc-deaths">4.0<span class="unit">M</span></div>
+        <div class="nc-deaths-lbl">Violence + imposed deprivation</div>
+        <div class="nc-stat"><span class="k">Violence</span><span class="v">1 M</span></div>
+        <div class="nc-stat"><span class="k">Sanctions</span><span class="v">3 M</span></div>
+        <div class="nc-period">since 1979</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#e8503c;">
+        <div class="nc-flag">▸ Palestine</div>
+        <div class="nc-name">Palestinian<br>Genocide</div>
+        <div class="nc-deaths">0.3<span class="unit">M+</span></div>
+        <div class="nc-deaths-lbl">Post-invasion excess deaths</div>
+        <div class="nc-stat"><span class="k">Refugees</span><span class="v">7 M</span></div>
+        <div class="nc-stat"><span class="k">Long toll</span><span class="v">≈ 2 M</span></div>
+        <div class="nc-period">since WW1</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#3fe0a0;">
+        <div class="nc-flag">▸ Somalia</div>
+        <div class="nc-name">Somali Genocide</div>
+        <div class="nc-deaths">2.2<span class="unit">M</span></div>
+        <div class="nc-deaths-lbl">Violence + deprivation</div>
+        <div class="nc-stat"><span class="k">Violence</span><span class="v">0.4 M</span></div>
+        <div class="nc-stat"><span class="k">Deprivation</span><span class="v">1.8 M</span></div>
+        <div class="nc-period">1992 — present</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#d9b44a;">
+        <div class="nc-flag">▸ Yemen</div>
+        <div class="nc-name">Yemeni<br>War & Blockade</div>
+        <div class="nc-deaths">0.2<span class="unit">M+</span></div>
+        <div class="nc-deaths-lbl">War dead — annual avoidable ≈ 111k</div>
+        <div class="nc-stat"><span class="k">Refugees</span><span class="v">2.4 M</span></div>
+        <div class="nc-stat"><span class="k">Culpability</span><span class="v">US · KSA · UAE</span></div>
+        <div class="nc-period">2015 — 2017</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#e8503c;">
+        <div class="nc-flag">▸ Syria</div>
+        <div class="nc-name">Syrian War</div>
+        <div class="nc-deaths">1.0<span class="unit">M</span></div>
+        <div class="nc-deaths-lbl">War dead</div>
+        <div class="nc-stat"><span class="k">Refugees (ext.)</span><span class="v">5 M</span></div>
+        <div class="nc-stat"><span class="k">IDPs</span><span class="v">6 M</span></div>
+        <div class="nc-period">2012 — 2015</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#d9b44a;">
+        <div class="nc-flag">▸ Libya</div>
+        <div class="nc-name">Libya Intervention</div>
+        <div class="nc-deaths">100<span class="unit">k</span></div>
+        <div class="nc-deaths-lbl">Killed (60k–100k range)</div>
+        <div class="nc-stat"><span class="k">Displaced</span><span class="v">1 M+</span></div>
+        <div class="nc-stat"><span class="k">Note</span><span class="v">Black Libyans, migrants</span></div>
+        <div class="nc-period">2011 — present</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#3fe0a0;">
+        <div class="nc-flag">▸ Myanmar</div>
+        <div class="nc-name">Rohingya<br>Genocide</div>
+        <div class="nc-deaths">2.0<span class="unit">M</span></div>
+        <div class="nc-deaths-lbl">Rendered stateless</div>
+        <div class="nc-stat"><span class="k">Displaced</span><span class="v">up to 650k</span></div>
+        <div class="nc-stat"><span class="k">Voice</span><span class="v">Kevin Barrett</span></div>
+        <div class="nc-period">recent · ongoing</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#d9b44a;">
+        <div class="nc-flag">▸ Central African Rep.</div>
+        <div class="nc-name">C.A.R. Muslim<br>Genocide</div>
+        <div class="nc-deaths">0.5<span class="unit">M+</span></div>
+        <div class="nc-deaths-lbl">Muslims driven from the west</div>
+        <div class="nc-stat"><span class="k">Displaced</span><span class="v">500k</span></div>
+        <div class="nc-stat"><span class="k">Killings</span><span class="v">thousands</span></div>
+        <div class="nc-period">contemporary</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#3fe0a0;">
+        <div class="nc-flag">▸ Ethiopia / Eritrea</div>
+        <div class="nc-name">Occupation-era<br>Excess Deaths</div>
+        <div class="nc-deaths">1.8<span class="unit">M</span></div>
+        <div class="nc-deaths-lbl">Excess deaths under occupation</div>
+        <div class="nc-stat"><span class="k">Period</span><span class="v">1990 — 2005</span></div>
+        <div class="nc-stat"><span class="k">Source</span><span class="v">Polya</span></div>
+        <div class="nc-period">1990 — 2005</div>
+      </article>
+
+      <article class="nation-card" style="--accent-color:#c8a45e;">
+        <div class="nc-flag">▸ + 8 more</div>
+        <div class="nc-name">Twenty Countries<br>in Total</div>
+        <div class="nc-deaths">32<span class="unit">M</span></div>
+        <div class="nc-deaths-lbl">Combined avoidable deaths, 2001–2015</div>
+        <div class="nc-stat"><span class="k">Coverage</span><span class="v">US-Alliance</span></div>
+        <div class="nc-stat"><span class="k">See</span><span class="v">§ 03 · Map</span></div>
+        <div class="nc-period">post-9/11 era</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ REFUGEES ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-refugees">
   <div class="wrap">
     <div class="eyebrow rv">§ 05 · The Displaced</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">The largest forced migration <span class="gold">since 1945.</span></h2>
@@ -659,8 +1222,71 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
   </div>
 </section>
 
+<!-- ═══════════════ FEATURED DOCUMENTS ═══════════════ -->
+<section class="block" id="ch-docs">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 07 · Featured Documents</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Five documents that <span class="gold">indict.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">The primary papers, formal complaints, and reckonings collected on Polya's site. Each links to the original.</p>
+
+    <div class="docs-list rv" style="transition-delay:.15s;">
+
+      <article class="doc-card">
+        <div class="dc-date">Article<span class="yr">2015</span>09 · 09</div>
+        <div>
+          <h3 class="dc-title">Muslim Holocaust, Muslim Genocide & <em>collateral</em> American Holocaust</h3>
+          <div class="dc-author">Gideon Polya · Countercurrents</div>
+          <p class="dc-excerpt">“11 Million Muslim war deaths & 23 Million preventable American deaths since the US Government's false-flag 9-11 atrocity.”</p>
+          <a class="dc-link" href="https://sites.google.com/site/muslimholocaustmuslimgenocide/2015-09-09" target="_blank" rel="noopener">Read on the source site <span>↗</span></a>
+        </div>
+      </article>
+
+      <article class="doc-card">
+        <div class="dc-date">Article<span class="yr">2015</span>11 · 18</div>
+        <div>
+          <h3 class="dc-title">Horrendous US and French state terrorism led to the appalling <em>non-state</em> Paris atrocity</h3>
+          <div class="dc-author">Gideon Polya · post-Bataclan analysis</div>
+          <p class="dc-excerpt">On the blowback logic of decades of state violence in the Muslim world.</p>
+          <a class="dc-link" href="https://sites.google.com/site/muslimholocaustmuslimgenocide/2015-11-18" target="_blank" rel="noopener">Read on the source site <span>↗</span></a>
+        </div>
+      </article>
+
+      <article class="doc-card">
+        <div class="dc-date">Article<span class="yr">2019</span>07 · 20</div>
+        <div>
+          <h3 class="dc-title">4-Decade US War On Iran — Global Opiate Holocaust, Iranian Genocide, <em>4 Million Iranian Deaths</em></h3>
+          <div class="dc-author">Gideon Polya</div>
+          <p class="dc-excerpt">A ledger of four decades of violence and imposed deprivation on the Iranian people.</p>
+          <a class="dc-link" href="https://sites.google.com/site/muslimholocaustmuslimgenocide/2019-07-20" target="_blank" rel="noopener">Read on the source site <span>↗</span></a>
+        </div>
+      </article>
+
+      <article class="doc-card">
+        <div class="dc-date">ICC Complaint<span class="yr">2013</span>09 · 03</div>
+        <div>
+          <h3 class="dc-title">Complaint to the ICC by SEARCH accusing <em>John Howard</em> of war crimes</h3>
+          <div class="dc-author">SEARCH · addressed to the International Criminal Court</div>
+          <p class="dc-excerpt">A formal legal filing against the former Prime Minister of Australia over the illegal invasion of Iraq.</p>
+          <a class="dc-link" href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener">See on the source site <span>↗</span></a>
+        </div>
+      </article>
+
+      <article class="doc-card">
+        <div class="dc-date">ICC Complaint<span class="yr">2010</span>01 · 09</div>
+        <div>
+          <h3 class="dc-title">Formal ICC Complaint by <em>Dr Gideon Polya</em> — Palestinian, Iraqi, Afghan, Muslim, Aboriginal, Biofuel & Climate Genocides</h3>
+          <div class="dc-author">Gideon Polya · to the International Criminal Court</div>
+          <p class="dc-excerpt">Polya's own filing to the ICC, naming the connected genocides of the US Alliance and beyond.</p>
+          <a class="dc-link" href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener">See on the source site <span>↗</span></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ HISTORICAL COMPARISON ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-record">
   <div class="wrap">
     <div class="eyebrow rv">§ 06 · Against the Record</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Setting the scale.</h2>
@@ -703,7 +1329,7 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </section>
 
 <!-- ═══════════════ COLONIAL LEDGER ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-ledger">
   <div class="wrap">
     <div class="eyebrow rv">§ 07 · The Longer Ledger</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Avoidable deaths under occupation, <span class="gold">1950–2005.</span></h2>
@@ -717,8 +1343,26 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
   </div>
 </section>
 
+<!-- ═══════════════ AUSTRALIA'S SECRET GENOCIDE ═══════════════ -->
+<section class="block aus-block" id="ch-australia">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 10 · Australia's Secret Genocide History</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">A settler-colonial ledger, largely <span class="crimson">unspoken.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">Polya documents Australia's involvement in twenty-two genocides — half of them affecting substantially Muslim populations. A record obscured by the same "lying by omission" that shrouds the wider empire.</p>
+
+    <div class="aus-callout rv" style="transition-delay:.15s;">
+      <div class="aus-big" data-count="22">0</div>
+      <div class="aus-txt">
+        <span class="lbl">▸ The count</span>
+        <strong>Twenty-two genocides</strong> — <strong>eleven of them substantially Muslim.</strong>
+        From the Aboriginal Genocide at home to complicity in Palestinian, Iraqi, Afghan, Iranian, Syrian, Libyan, Yemeni, Somali, Rohingya, and other genocides abroad. The pattern Polya names is a <em>continuous</em> one: an Anglosphere state that has never fully faced its own record.
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ TIMELINE ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-timeline">
   <div class="wrap">
     <div class="eyebrow rv">§ 08 · Chronology</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">A sequence of interventions.</h2>
@@ -734,7 +1378,7 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </section>
 
 <!-- ═══════════════ GENOCIDE DEFINITION ═══════════════ -->
-<section class="block def-block">
+<section class="block def-block" id="ch-legal">
   <div class="wrap">
     <div class="eyebrow rv">§ 09 · The Legal Standard</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">What the law actually says.</h2>
@@ -749,11 +1393,48 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
         <div class="act">Forcibly transferring children of the group</div>
       </div>
     </div>
+
+    <div class="geneva-card rv" style="transition-delay:.15s;">
+      <div class="src">Geneva Convention (IV) · Articles 55 &amp; 56 · Protection of Civilians in Time of War</div>
+      <div class="g-quote">“The occupying power must supply life-sustaining requisites <em>to the fullest extent of the means available to it</em>.”</div>
+      <div class="g-articles">
+        <div class="g-art"><b>Article 55.</b> The occupier has a duty to ensure the food and medical supplies of the population.</div>
+        <div class="g-art"><b>Article 56.</b> The occupier has a duty to ensure public health and hygiene, including hospitals and epidemic prevention.</div>
+      </div>
+      <div style="margin-top:16px; font-family:var(--mono); font-size:11px; color:var(--ash); letter-spacing:.06em; line-height:1.75;">
+        The failure to meet these duties — under sanctions, blockade, or systematic destruction of civilian infrastructure — is the technical substance of what Polya calls <b style="color:var(--gold-bright);">war-imposed deprivation</b>: the 27 million of the 32-million count.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 60 HOLOCAUSTS ═══════════════ -->
+<section class="block" id="ch-60">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 13 · Sixty Holocausts &amp; Genocides in Context</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">The longer <span class="gold">ledger.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">Polya sets the Muslim Holocaust within a list of sixty historical genocides and holocausts. A partial view of that ledger — filter, search, remember.</p>
+
+    <div class="holo-controls rv" style="transition-delay:.15s;">
+      <input type="search" class="holo-search" id="holoSearch" placeholder="Search by name, place, period…" spellcheck="false">
+      <button class="holo-chip on" data-filter="all">All</button>
+      <button class="holo-chip" data-filter="muslim">Muslim</button>
+      <button class="holo-chip" data-filter="colonial">Colonial</button>
+      <button class="holo-chip" data-filter="20c">20th c.</button>
+      <button class="holo-chip" data-filter="contemp">Contemporary</button>
+      <span class="holo-count" id="holoCount">— of —</span>
+    </div>
+
+    <div class="holo-list rv" id="holoList" style="transition-delay:.2s;"></div>
+
+    <p class="holo-note">
+      Polya's full list on the source site includes sixty entries covering three millennia of documented mass atrocity. The rows above are the ones his site foregrounds. Follow the <a href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener" style="color:var(--gold-bright); border-bottom:1px solid var(--gold-bright);">source</a> for the complete ledger and citations.
+    </p>
   </div>
 </section>
 
 <!-- ═══════════════ CLIMATE PROJECTION ═══════════════ -->
-<section class="block">
+<section class="block" id="ch-climate">
   <div class="wrap">
     <div class="eyebrow rv">§ 10 · The Century Ahead</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">Polya's climate-genocide projection.</h2>
@@ -771,18 +1452,143 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
 </section>
 
 <!-- ═══════════════ SOURCES ═══════════════ -->
-<section class="block sources-block">
+<section class="block sources-block" id="ch-voices">
   <div class="wrap">
     <div class="eyebrow rv">§ 11 · Voices &amp; Sources</div>
     <h2 class="sec-title rv" style="transition-delay:.05s;">The witnesses Polya cites.</h2>
 
-    <div class="src-grid rv" style="transition-delay:.1s;">
-      <div class="src-item"><div class="src-name">Denis Halliday</div><div class="src-role">Former UN Assistant Secretary-General</div><p style="margin-top:8px;">Resigned over the Iraq sanctions regime he called genocidal.</p></div>
-      <div class="src-item"><div class="src-name">Nafeez Ahmed</div><div class="src-role">Investigative journalist</div><p style="margin-top:8px;">Estimated 4–6 million deaths across Iraq &amp; Afghanistan.</p></div>
-      <div class="src-item"><div class="src-name">Nicolas Davies</div><div class="src-role">Author / analyst</div><p style="margin-top:8px;">Minimum ~2 million post-9/11 war deaths.</p></div>
-      <div class="src-item"><div class="src-name">IPPNW &amp; physicians' bodies</div><div class="src-role">2015 “Body Count” report</div><p style="margin-top:8px;">Documented millions killed in the “War on Terror.”</p></div>
-      <div class="src-item"><div class="src-name">John Pilger</div><div class="src-role">Journalist &amp; filmmaker</div><p style="margin-top:8px;">On Western complicity &amp; media silence.</p></div>
-      <div class="src-item"><div class="src-name">Paul Craig Roberts</div><div class="src-role">Former US Asst. Treasury Secretary</div><p style="margin-top:8px;">Critic of post-9/11 war narratives.</p></div>
+    <p class="body-p rv" style="transition-delay:.08s; margin-bottom:24px;">Click any card to unfurl the fuller quote.</p>
+
+    <div class="src-grid rv" id="voicesGrid" style="transition-delay:.1s;">
+
+      <article class="voice-card">
+        <div class="v-name">Denis Halliday</div>
+        <div class="v-role">Former UN Assistant Secretary-General</div>
+        <div class="v-quote">Resigned over the Iraq sanctions regime he named genocidal.</div>
+        <div class="v-full">Halliday, the head of the UN humanitarian program in Iraq in the late 1990s, resigned in protest and called the sanctions “a policy that satisfies the definition of genocide.” His resignation became a rallying point for critics of the post-1991 sanctions death toll.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Nafeez Ahmed</div>
+        <div class="v-role">Investigative journalist</div>
+        <div class="v-quote">“Total deaths from Western interventions… likely constitute around 4 million.”</div>
+        <div class="v-full">“Total deaths from Western interventions in Iraq and Afghanistan since the 1990s — from direct killings and the longer-term impact of war-imposed deprivation — likely constitute around 4 million (2 million in Iraq from 1991–2003, plus 2 million from the ‘war on terror’), and could be as high as 6–8 million people when accounting for higher avoidable death estimates in Afghanistan.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Nicolas Davies</div>
+        <div class="v-role">US writer / analyst</div>
+        <div class="v-quote">“Our post-9/11 wars have probably killed at least 2 million people.”</div>
+        <div class="v-full">“Our post-9/11 wars have probably killed at least 2 million people in the countries we have attacked, occupied or destabilized.” A minimum-count figure meant to withstand even the most sceptical accounting.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">IPPNW · PSR · PGS</div>
+        <div class="v-role">2015 “Body Count” Report</div>
+        <div class="v-quote">The physicians' organizations documented millions killed in the War on Terror.</div>
+        <div class="v-full">The joint 2015 report from International Physicians for the Prevention of Nuclear War, Physicians for Social Responsibility, and Physicians for Global Survival was among the first medical-community accountings to quantify Iraq, Afghanistan, and Pakistan deaths — arriving at figures in the millions rather than the hundreds of thousands mainstream sources had reported.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">John Pilger</div>
+        <div class="v-role">UK-Australian journalist &amp; filmmaker</div>
+        <div class="v-quote">“That the most numerous victims of terrorism — western terrorism — are Muslims is unsayable.”</div>
+        <div class="v-full">“That the most numerous victims of terrorism — western terrorism — are Muslims is unsayable, if it is known… holocausts arising from Anglo-American dominance of resource-rich regions.” Pilger estimates 12 million dead in the War on Terror.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Paul Craig Roberts</div>
+        <div class="v-role">Former US Asst. Treasury Secretary · “Father of Reaganomics”</div>
+        <div class="v-quote">On the Iraqi Holocaust and Iraqi Genocide.</div>
+        <div class="v-full">Roberts, a conservative former Reagan administration official, has become a persistent critic of the post-9/11 wars and of the state narratives around them — writing extensively on what he calls the Iraqi Holocaust.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Bernard Keane</div>
+        <div class="v-role">Australian journalist · Crikey</div>
+        <div class="v-quote">On the enormous death toll of the War on Terror.</div>
+        <div class="v-full">Keane's reporting from Australia has helped bring the massive avoidable-death figures out of the specialist literature and into mainstream Australian public discourse — a rare exception to the “lying by omission” pattern Polya names.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Kevin Barrett</div>
+        <div class="v-role">US scholar</div>
+        <div class="v-quote">“The international community and particularly the West has not pressured Myanmar to stop this genocide.”</div>
+        <div class="v-full">Dr Kevin Barrett on the Rohingya Muslim Genocide: “the international community and particularly the West has not pressured the government in Myanmar to stop the violence and to stop this genocide or ethnic cleansing of the Rohingya people.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Mohamad Bazzi</div>
+        <div class="v-role">Journalist &amp; academic</div>
+        <div class="v-quote">“American officials could be prosecuted for war crimes in Yemen.”</div>
+        <div class="v-full">“American officials could be prosecuted for war crimes in Yemen. Under international law, Washington — during both the Obama and Trump administrations — has been a co-belligerent with Saudi Arabia and the United Arab Emirates.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Ghali Hassan</div>
+        <div class="v-role">Writer on Islamophobia</div>
+        <div class="v-quote">On Islamophobia, racism, violence &amp; “The road to the Muslim Holocaust.”</div>
+        <div class="v-full">Hassan traces the ideological roads by which state-sanctioned Islamophobia and racism made the mass violence of the War on Terror politically thinkable and publicly permissible.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Jay Janson</div>
+        <div class="v-role">Writer / activist</div>
+        <div class="v-quote">“Americans are guilty of genocide right now in Yemen, Somalia, Afghanistan, Libya, Iraq, Syria.”</div>
+        <div class="v-full">Janson names contemporary US genocides across the greater Middle East and Horn of Africa — refusing to soften the term for the sake of political comfort.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Peter Kuznick &amp; Oliver Stone</div>
+        <div class="v-role">Historian &amp; filmmaker · <em>The Untold History</em></div>
+        <div class="v-quote">“Many of the U.S.-backed jihadis who had fought in Afghanistan joined the Islamist cause in Chechnya, Bosnia, Algeria, Iraq, the Philippines, Saudi Arabia, Kashmir, and elsewhere.”</div>
+        <div class="v-full">“United States continued to fuel Islamic radicalism. Many of the U.S.-backed jihadis who had fought against the Soviets in Afghanistan joined the Islamist cause in Chechnya, Bosnia, Algeria, Iraq, the Philippines, Saudi Arabia, Kashmir, and elsewhere.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Rabbi Michael Lerner</div>
+        <div class="v-role">Editor · <em>Tikkun</em> · Jews Against Racist Zionism</div>
+        <div class="v-quote">“They're appalled by the continuing Palestinian, Iraqi, and Afghan genocides that have killed and dispossessed millions.”</div>
+        <div class="v-full">“Jews Against Racist Zionism… They decry ‘anti-Arab anti-Semitic racist Zionists running Apartheid Israel and their Western backers.’ They're appalled by the continuing Palestinian, Iraqi, and Afghan genocides that have killed and dispossessed millions. They see Zionism as a threat to all Jews and humanity.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Kit O'Connell</div>
+        <div class="v-role">US journalist</div>
+        <div class="v-quote">“4 million Muslims killed in Western wars: should we call it genocide?”</div>
+        <div class="v-full">O'Connell's question makes explicit the linguistic double standard by which mass Muslim deaths are counted as “casualties” rather than as the acts of genocide the numbers would justify calling them.</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Sam Wainwright</div>
+        <div class="v-role">Writer / activist</div>
+        <div class="v-quote">“The post-9/11 US-led invasions have laid waste to great swathes of the Middle East.”</div>
+        <div class="v-full">“The post-September 11, 2001, US-led invasions have laid waste to great swathes of the Middle-East, leaving millions dead and millions more displaced.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
+      <article class="voice-card">
+        <div class="v-name">Mike Whitney</div>
+        <div class="v-role">Writer · US foreign-policy critic</div>
+        <div class="v-quote">On US &amp; Gulf-allied funding of jihadist militias in Syria.</div>
+        <div class="v-full">“Along with its Gulf allies, the US has funded, armed and trained the bulk of the jihadi hoodlums that have ripped the state apart and killed nearly one quarter of a million people.”</div>
+        <span class="v-more">More <span class="arr">▾</span></span>
+      </article>
+
     </div>
 
     <div class="primary-source rv" style="transition-delay:.15s;">
@@ -800,6 +1606,37 @@ footer a:hover{ color:var(--green-bright); border-color:var(--green-bright); }
     <div class="disclaimer" style="border-left-color:var(--green-dim); margin-top:18px;">
       <b>Note.</b> Dr. Polya does not necessarily endorse the media outlets that republish his articles.
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════ REMEMBRANCE DAY ═══════════════ -->
+<section class="block" id="ch-remembrance">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 16 · Day of Remembrance</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">A day held for the <span class="gold">unwitnessed.</span></h2>
+
+    <div class="remembrance rv" style="transition-delay:.1s;">
+      <div class="rem-date">◈ 15 July · Muslims Against Terrorism (MAT)</div>
+      <div class="rem-title">Muslim's Holocaust &amp; Genocide <em>Remembrance Day</em></div>
+      <div class="rem-sub">Instituted by MAT as an annual observance for the millions who died, in the words of the observance, “from violence and imposed deprivation, whose names the record refuses to keep.”</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ REFERENCE INDEX ═══════════════ -->
+<section class="block" id="ch-index" style="background:var(--void);">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 17 · Full Reference Index</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Every doorway back to the source.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">The complete list of pages Polya keeps on the source site — one link per chapter, in his own hand.</p>
+
+    <div class="ref-index rv" style="transition-delay:.15s;">
+      <div class="ref-grid" id="refGrid"></div>
+    </div>
+
+    <p class="body-p" style="margin-top:36px; font-size:14px; color:var(--ash); border-left:2px solid var(--green-dim); padding-left:16px;">
+      All URLs above resolve to <a href="https://sites.google.com/site/muslimholocaustmuslimgenocide/" target="_blank" rel="noopener" style="color:var(--green-bright); border-bottom:1px solid var(--green-dim);">sites.google.com/site/muslimholocaustmuslimgenocide</a> — the primary source of every figure on this page.
+    </p>
   </div>
 </section>
 
@@ -986,10 +1823,15 @@ function buildCharts(){
     }
   });
 
-  // 3 ── Colonial ledger (1950–2005)
+  // 3 ── Colonial ledger (1950–2005 for British/US · 1990–2005 for the rest)
   const col = [
-    {o:"British-occupied",d:727},{o:"France-occupied",d:142},
-    {o:"US-occupied",d:82},{o:"Indonesia (Dutch)",d:72}
+    {o:"British-occupied · 1950–2005", d:727},
+    {o:"France-occupied · 1990–2005",  d:142},
+    {o:"US-occupied · 1950–2005",      d:82},
+    {o:"Indonesia (Dutch) · 1990–2005",d:72},
+    {o:"Israeli-occupied · 1990–2005", d:24},
+    {o:"Portuguese-occupied · 1990–2005", d:23},
+    {o:"Spanish-occupied · 1990–2005", d:8.7}
   ];
   new Chart(document.getElementById('colonialChart'), {
     type:'bar',
@@ -1018,6 +1860,177 @@ const chartObs = new IntersectionObserver((entries) => {
 chartObs.observe(document.getElementById('conflictChart'));
 
 document.getElementById('footYear').textContent = new Date().getFullYear();
+
+// ─────────────────────────────────────────────
+//  CHAPTER RAIL — sticky nav with scroll tracking
+// ─────────────────────────────────────────────
+const rail = document.getElementById('chapterRail');
+const railToggle = document.getElementById('crToggle');
+const railClose = document.getElementById('crClose');
+const railItems = document.querySelectorAll('.cr-item');
+
+// Reveal rail after page paints
+setTimeout(() => {
+  rail.classList.add('ready');
+  railToggle.classList.add('ready');
+}, 400);
+
+// Toggle open on mobile/narrow screens
+railToggle.addEventListener('click', () => rail.classList.toggle('open'));
+railClose.addEventListener('click', () => rail.classList.remove('open'));
+
+// Smooth scroll + close on link click
+railItems.forEach(a => a.addEventListener('click', () => {
+  if (window.innerWidth < 1180) rail.classList.remove('open');
+}));
+
+// Highlight current chapter as user scrolls
+const chapterIds = Array.from(railItems).map(a => a.getAttribute('href').slice(1));
+const chapterEls = chapterIds.map(id => document.getElementById(id)).filter(Boolean);
+const chapObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      railItems.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      // scroll active item into rail view
+      const active = rail.querySelector('.cr-item.active');
+      if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+chapterEls.forEach(el => chapObs.observe(el));
+
+// ─────────────────────────────────────────────
+//  VOICE CARDS — click to expand full quote
+// ─────────────────────────────────────────────
+document.querySelectorAll('.voice-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    card.classList.toggle('open');
+  });
+});
+
+// ─────────────────────────────────────────────
+//  60 HOLOCAUSTS — filterable/searchable ledger
+// ─────────────────────────────────────────────
+const HOLOCAUSTS = [
+  {yr:"1943–45", name:"WW2 Bengali Holocaust — Churchill's Bengal Famine",   toll:"6–7 M",     tags:["20c","colonial"],     ex:"6–7 million Hindus & Muslims died"},
+  {yr:"1941–45", name:"Jewish Holocaust — Nazi Europe",                       toll:"5–6 M",     tags:["20c"],                ex:"the paradigmatic case in international law"},
+  {yr:"1650s+",  name:"Indian Holocaust — British Raj (excess deaths)",       toll:"1.8 B",     tags:["colonial"],           ex:"350 M Muslim excess deaths — largely ignored"},
+  {yr:"2001–15", name:"Post-9/11 Muslim Holocaust — 20 US-Alliance countries",toll:"32 M",      tags:["muslim","contemp"],   ex:"5 M violence · 27 M imposed deprivation"},
+  {yr:"1990–11", name:"Iraqi Holocaust · Iraqi Genocide",                     toll:"4.6 M",     tags:["muslim","contemp"],   ex:"post-1990 excess · 5–6 M refugees"},
+  {yr:"2001–11", name:"Afghan Holocaust · Afghan Genocide",                   toll:"5.6 M",     tags:["muslim","contemp"],   ex:"post-invasion · 3–4 M refugees"},
+  {yr:"since WW1",name:"Palestinian Genocide",                                toll:"2.0 M",     tags:["muslim","contemp"],   ex:"7 M refugees · ongoing"},
+  {yr:"1979–",   name:"4-Decade War on Iran",                                 toll:"4.0 M",     tags:["muslim","contemp"],   ex:"1 M violence · 3 M sanctions"},
+  {yr:"2015–",   name:"Yemeni Holocaust — war & blockade",                    toll:"111 k/yr", tags:["muslim","contemp"],   ex:"annual avoidable deaths"},
+  {yr:"2011–",   name:"Libyan war & aftermath",                               toll:"60–100 k", tags:["muslim","contemp"],   ex:"1 M+ displaced · Black Libyans exiled"},
+  {yr:"1992–",   name:"Somali Genocide",                                      toll:"2.2 M",     tags:["muslim","contemp"],   ex:"0.4 M violence · 1.8 M deprivation"},
+  {yr:"2012–15", name:"Syrian War",                                           toll:"~1 M",      tags:["muslim","contemp"],   ex:"11 M displaced (5 M ext · 6 M IDP)"},
+  {yr:"contemp.",name:"Central African Republic Muslim Genocide",             toll:"~500 k",   tags:["muslim","contemp"],   ex:"Muslims driven from the west"},
+  {yr:"contemp.",name:"Myanmar Rohingya Genocide",                            toll:"2 M stateless", tags:["muslim","contemp"], ex:"up to 650 k displaced"},
+  {yr:"1990–05", name:"Ethiopia occupation of Eritrea",                        toll:"1.8 M",     tags:["contemp"],           ex:"excess deaths under occupation"},
+  {yr:"1950–05", name:"UK-occupied countries (avoidable deaths)",              toll:"727 M",    tags:["colonial","muslim"],  ex:"many substantially Muslim"},
+  {yr:"1950–05", name:"US-occupied countries (avoidable deaths)",              toll:"82 M",     tags:["colonial","contemp"], ex:"some substantially Muslim"},
+  {yr:"1990–05", name:"France-occupied countries (excess deaths)",             toll:"142 M",    tags:["colonial","muslim"],  ex:"many substantially Muslim"},
+  {yr:"1990–05", name:"Netherlands / Indonesia occupation",                    toll:"72 M",     tags:["colonial","muslim"],  ex:"Indonesia mainly Muslim"},
+  {yr:"1990–05", name:"Israeli-occupied countries (excess deaths)",            toll:"24 M",     tags:["muslim","contemp"],   ex:"all substantially Muslim"},
+  {yr:"1990–05", name:"Portuguese-occupied countries (excess deaths)",         toll:"23 M",     tags:["colonial","muslim"],  ex:"some significantly Muslim"},
+  {yr:"1990–05", name:"Spanish-occupied countries (excess deaths)",            toll:"8.7 M",    tags:["colonial","muslim"],  ex:"all substantially Muslim"},
+  {yr:"1990–05", name:"Global Avoidable Mortality — Muslim excess",           toll:"0.6 B",    tags:["muslim","contemp"],   ex:"total Muslim excess deaths in period"},
+  {yr:"this c.", name:"Climate Genocide — non-European projection",            toll:"10 B",     tags:["contemp"],           ex:"3 B Muslims · 2 B Indians · 1.3 B non-Arab Africans · 0.5 B Bengalis"},
+  {yr:"1788–",   name:"Australian Aboriginal Genocide",                        toll:"…",         tags:["colonial"],           ex:"settler-colonial project · Polya names 22 Australian genocides"},
+];
+
+const holoList = document.getElementById('holoList');
+const holoSearch = document.getElementById('holoSearch');
+const holoCount = document.getElementById('holoCount');
+let holoFilter = 'all';
+
+function renderHolo(){
+  const q = holoSearch.value.trim().toLowerCase();
+  const filtered = HOLOCAUSTS.filter(h => {
+    const tagsMatch = holoFilter === 'all' || h.tags.includes(holoFilter);
+    if (!tagsMatch) return false;
+    if (!q) return true;
+    return (h.name + ' ' + h.yr + ' ' + h.ex).toLowerCase().includes(q);
+  });
+  holoList.innerHTML = filtered.length === 0
+    ? '<div style="padding:26px; text-align:center; color:var(--ash); font-family:var(--mono); font-size:11px; letter-spacing:.18em;">— no matches —</div>'
+    : filtered.map(h => `
+        <div class="holo-row">
+          <span class="hr-yr">${h.yr}</span>
+          <span class="hr-name">${h.name}<span class="hr-tag">${h.ex}</span></span>
+          <span class="hr-toll">${h.toll}</span>
+        </div>
+      `).join('');
+  holoCount.textContent = filtered.length + ' of ' + HOLOCAUSTS.length + ' shown';
+}
+holoSearch.addEventListener('input', renderHolo);
+document.querySelectorAll('.holo-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.holo-chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    holoFilter = chip.dataset.filter;
+    renderHolo();
+  });
+});
+renderHolo();
+
+// ─────────────────────────────────────────────
+//  REFERENCE INDEX — all specific source pages
+// ─────────────────────────────────────────────
+const REFS = [
+  ["Home",                                     "home?authuser=0"],
+  ["2015-09-09 · 11M Muslim + 23M American deaths since 9-11", "2015-09-09?authuser=0"],
+  ["2015-11-18 · Paris atrocity & state terrorism", "2015-11-18?authuser=0"],
+  ["2019-07-20 · 4-Decade US War on Iran",     "2019-07-20?authuser=0"],
+  ["Bernard Keane · deaths in the War on Terror", "keane-bernard-australian-journalist-on-deaths-in-war-on-terror?authuser=0"],
+  ["Nafeez Ahmad · 4–6 M dead in Iraq & Afghanistan", ""],
+  ["Kevin Barrett · Rohingya Genocide",         ""],
+  ["Mohamad Bazzi · Yemen war crimes",          ""],
+  ["Nicolas Davies · 2 M post-9/11 war deaths", ""],
+  ["Ghali Hassan · road to the Muslim Holocaust", ""],
+  ["Jay Janson · genocide right now in Yemen…", ""],
+  ["Peter Kuznick & Oliver Stone",              ""],
+  ["Michael Lerner · Jews Against Racist Zionism", ""],
+  ["Kit O'Connell · 4 M Muslims killed",         ""],
+  ["John Pilger · 12 M dead in the War on Terror", ""],
+  ["Gideon Polya · full author page",            ""],
+  ["Paul Craig Roberts · Iraqi Holocaust",       ""],
+  ["Sam Wainwright · post-9/11 devastation",     ""],
+  ["Mike Whitney · US-funded jihadis in Syria",  ""],
+  ["Afghan Holocaust · Afghan Genocide",         ""],
+  ["Iraqi Holocaust · Iraqi Genocide",           ""],
+  ["Palestinian Genocide",                        ""],
+  ["Central African Republic Muslim Genocide",   ""],
+  ["Myanmar Rohingya Genocide",                   ""],
+  ["Ethiopia occupation of Eritrea · 1.8 M excess", ""],
+  ["Global Avoidable Mortality · 0.6 B Muslim excess", ""],
+  ["Indian Holocaust under British Raj · 1.8 B",  ""],
+  ["WW2 Bengali Holocaust · 6–7 M",              ""],
+  ["Climate Genocide · 3 B Muslim victims",       ""],
+  ["Australia's Secret Genocide History · 22",   ""],
+  ["Muslim Holocaust in Context · list of 60",    ""],
+  ["Muslims Against Terrorism · Remembrance Day", ""],
+  ["3 Sep 2013 · ICC Complaint re John Howard",  ""],
+  ["9 Jan 2010 · Polya's ICC Complaint",          ""],
+  ["UK-occupied countries · 727 M (1950–2005)",  ""],
+  ["France-occupied countries · 142 M",           ""],
+  ["US-occupied countries · 82 M (1950–2005)",   ""],
+  ["Netherlands / Indonesia · 72 M",              ""],
+  ["Israeli-occupied countries · 24 M",           ""],
+  ["Portuguese-occupied countries · 23 M",        ""],
+  ["Spanish-occupied countries · 8.7 M",          ""],
+  ["Russian-occupied countries · far better outcomes", ""],
+  ["UN Genocide Convention",                      ""],
+  ["Geneva Convention · Articles 55 & 56",       ""],
+  ["IPPNW · PSR · PGS 2015 Report",              ""],
+];
+const BASE = "https://sites.google.com/site/muslimholocaustmuslimgenocide/";
+const refGrid = document.getElementById('refGrid');
+refGrid.innerHTML = REFS.map(([label, slug]) => {
+  const href = slug ? (BASE + slug) : BASE;
+  return `<a class="ref-link" href="${href}" target="_blank" rel="noopener"><span class="r-arr">↗</span><span class="r-txt">${label}</span></a>`;
+}).join('');
 </script>
 </body>
 </html>
