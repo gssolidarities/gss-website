@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="85%">
+      <stop offset="0%" stop-color="#171226"/><stop offset="100%" stop-color="#0b0a12"/>
+    </radialGradient>
+    <linearGradient id="tie" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e0637f"/><stop offset="100%" stop-color="#d9b36b"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect x="22" y="22" width="556" height="756" fill="none" stroke="#d9b36b" stroke-opacity=".35" stroke-width="1.5"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M90 470 Q 210 300 330 380" stroke="url(#tie)" stroke-width="2.4" opacity=".95"/>
+    <path d="M330 380 Q 430 320 510 410" stroke="url(#tie)" stroke-width="2.2" opacity=".8"/>
+    <path d="M120 560 Q 300 430 480 520" stroke="#e0637f" stroke-width="1.4" stroke-dasharray="1 7" opacity=".85"/>
+    <path d="M90 470 Q 260 560 480 520" stroke="#9d7bd8" stroke-width="1.4" stroke-dasharray="1 7" opacity=".7"/>
+    <path d="M200 330 Q 340 250 510 410" stroke="#6fbf8f" stroke-width="1.4" stroke-dasharray="1 7" opacity=".7"/>
+    <path d="M120 560 Q 180 480 200 330" stroke="#5db8e8" stroke-width="1.4" stroke-dasharray="1 7" opacity=".6"/>
+  </g>
+  <g>
+    <circle cx="90" cy="470" r="7" fill="#9d7bd8"/><circle cx="90" cy="470" r="13" fill="none" stroke="#9d7bd8" stroke-opacity=".4"/>
+    <circle cx="330" cy="380" r="7" fill="#e0637f"/><circle cx="330" cy="380" r="13" fill="none" stroke="#e0637f" stroke-opacity=".4"/>
+    <circle cx="510" cy="410" r="7" fill="#e8985a"/><circle cx="510" cy="410" r="13" fill="none" stroke="#e8985a" stroke-opacity=".4"/>
+    <circle cx="200" cy="330" r="7" fill="#6fbf8f"/>
+    <circle cx="120" cy="560" r="7" fill="#5db8e8"/>
+    <circle cx="480" cy="520" r="6.5" fill="none" stroke="#d9b36b" stroke-width="2.5"/>
+  </g>
+  <text x="300" y="120" text-anchor="middle" font-family="Courier New, monospace" font-size="15" letter-spacing="6" fill="#d9b36b">GSS · ANARCHIVE</text>
+  <text x="300" y="655" text-anchor="middle" font-family="Palatino, Georgia, serif" font-size="52" fill="#f2ecf4">Planetary</text>
+  <text x="300" y="710" text-anchor="middle" font-family="Palatino, Georgia, serif" font-size="52" fill="#f2ecf4">Justice Map</text>
+  <text x="300" y="748" text-anchor="middle" font-family="Courier New, monospace" font-size="12.5" letter-spacing="2.5" fill="#e0637f">GENDERED NETWORKS OF REVOLUTIONARY SOLIDARITY</text>
+</svg>

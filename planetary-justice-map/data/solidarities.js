@@ -42,7 +42,7 @@ window.GSS_SOLIDARITIES = {
 
   meta: {
     code: "PJM-GNRS",
-    version: "0.4.0",
+    version: "0.4.1",
     updated: "2026-07-06",
     title: "Planetary Justice Map",
     theme: "Gendered Networks of Revolutionary Solidarity",
@@ -85,19 +85,19 @@ window.GSS_SOLIDARITIES = {
       status: "documented",
       materials: [
         { kind: "text", title: "“I'll Never Return” — Meena's poem", date: "c. 1981",
-          holder: "RAWA", url: "https://www.rawa.org", deepLink: false,
+          holder: "RAWA", url: "http://www.rawa.org/ill.htm",
           note: "Her best-known poem — return and refusal as feminist resistance; circulated by RAWA in Persian and in English translation." },
         { kind: "press", title: "Payam-e-Zan (“Women's Message”) — the magazine Meena founded", date: "1981 –",
-          holder: "RAWA", url: "https://www.rawa.org", deepLink: false,
+          holder: "RAWA", url: "http://www.rawa.org/payam.html",
           note: "Bilingual organ of clandestine feminist politics, published continuously since 1981." },
         { kind: "film", title: "Footage: address to the French Socialist Party congress, Valence", date: "1981",
-          holder: "RAWA (video archive)", url: "https://www.rawa.org", deepLink: false,
+          holder: "RAWA (video archive)", url: "http://www.rawa.org", deepLink: false,
           note: "Meena carrying the Afghan women's resistance into a European political arena." }
       ],
       sources: [
-        { publisher: "RAWA", title: "Biography of Martyred Meena, founding leader of RAWA", date: "rawa.org", url: "https://www.rawa.org/meena.html" },
+        { publisher: "RAWA", title: "Biography of Martyred Meena, founding leader of RAWA", date: "rawa.org", url: "http://www.rawa.org/meena.html" },
         { publisher: "Melody Ermachild Chavis", title: "Meena: Heroine of Afghanistan (St. Martin's Press)", date: "2003", url: "https://us.macmillan.com", deepLink: false },
-        { publisher: "TIME", title: "100 Women of the Year — 1987: Meena Keshwar Kamal", date: "2020", url: "https://time.com", deepLink: false }
+        { publisher: "TIME", title: "“60 Asian Heroes” — Meena (special issue; mirrored by RAWA)", date: "13 Nov 2006", url: "http://www.rawa.org/meena_time.htm" }
       ]
     },
 
@@ -170,7 +170,7 @@ window.GSS_SOLIDARITIES = {
       ],
       sources: [
         { publisher: "Sakine Cansız", title: "Sara: My Whole Life Was a Struggle (Pluto Press, trans. Janet Biehl)", date: "2018", url: "https://www.plutobooks.com", deepLink: false },
-        { publisher: "BBC News", title: "Three Kurdish women political activists shot dead in Paris", date: "10 Jan 2013", url: "https://www.bbc.com", deepLink: false }
+        { publisher: "BBC News", title: "Three Kurdish women political activists shot dead in Paris", date: "10 Jan 2013", url: "https://www.bbc.com/news/world-europe-20968375" }
       ]
     },
 
@@ -231,21 +231,21 @@ window.GSS_SOLIDARITIES = {
       status: "documented",
       materials: [
         { kind: "text", title: "“An End to the Neglect of the Problems of the Negro Woman!”", date: "Political Affairs, June 1949",
-          holder: "Marxists Internet Archive (archival text)", url: "https://www.marxists.org", deepLink: false,
+          holder: "Marxists Internet Archive — Claudia Jones archive", url: "https://www.marxists.org/archive/jones-claudia/",
           note: "The foundational essay: superexploitation and the triple oppression of Black working women." },
         { kind: "press", title: "West Indian Gazette and Afro-Asian Caribbean News", date: "1958 – 1965",
           holder: "British Library (holdings)", url: "https://www.bl.uk", deepLink: false,
           note: "Britain's first major Black newspaper — diaspora institution-building in print." },
         { kind: "text", title: "“The Caribbean Community in Britain”", date: "Freedomways, 1964",
-          holder: "Freedomways (archival text)", url: "https://www.marxists.org", deepLink: false,
+          holder: "Freedomways · listed in the MIA Claudia Jones archive", url: "https://www.marxists.org/archive/jones-claudia/",
           note: "Her late statement on migration, racism and community defence." },
         { kind: "photo", title: "Photographs: the Gazette offices and the 1959 St Pancras Caribbean Carnival", date: "1958 – 1962",
           holder: "British Library · press archives", url: "https://www.bl.uk", deepLink: false,
           note: "Carnival as political defence, in images." }
       ],
       sources: [
-        { publisher: "Carole Boyce Davies", title: "Left of Karl Marx: The Political Life of Black Communist Claudia Jones (Duke University Press)", date: "2007", url: "https://www.dukeupress.edu", deepLink: false },
-        { publisher: "Claudia Jones", title: "“An End to the Neglect of the Problems of the Negro Woman!” — Political Affairs", date: "June 1949", url: "https://www.marxists.org", deepLink: false },
+        { publisher: "Carole Boyce Davies", title: "Left of Karl Marx: The Political Life of Black Communist Claudia Jones (Duke University Press)", date: "2007", url: "https://www.dukeupress.edu/left-of-karl-marx" },
+        { publisher: "Claudia Jones", title: "“An End to the Neglect of the Problems of the Negro Woman!” — Political Affairs", date: "June 1949", url: "https://www.marxists.org/archive/jones-claudia/" },
         { publisher: "British Library", title: "Claudia Jones — people & collections", date: "bl.uk", url: "https://www.bl.uk", deepLink: false }
       ]
     },
@@ -310,14 +310,14 @@ window.GSS_SOLIDARITIES = {
           holder: "Kichwa People of Sarayaku", url: "https://sarayaku.org", deepLink: false,
           note: "Sarayaku's juridical-cosmological proposal for the forest as a living, rights-bearing entity." },
         { kind: "doc", title: "Sarayaku v. Ecuador — judgment of the Inter-American Court", date: "27 June 2012",
-          holder: "Inter-American Court of Human Rights", url: "https://www.corteidh.or.cr", deepLink: false,
+          holder: "Inter-American Court of Human Rights", url: "https://www.corteidh.or.cr/docs/casos/articulos/seriec_245_ing.pdf",
           note: "The landmark consultation ruling won by her community — the ground she organises from." },
         { kind: "film", title: "Speeches and interventions at UN climate summits", date: "2019 – 2022",
           holder: "UNFCCC · press coverage", url: "https://www.reuters.com", deepLink: false,
           note: "COP25–COP27: Indigenous youth addressing the carbon order." }
       ],
       sources: [
-        { publisher: "Inter-American Court of Human Rights", title: "Kichwa Indigenous People of Sarayaku v. Ecuador — judgment of 27 June 2012", date: "2012", url: "https://www.corteidh.or.cr", deepLink: false },
+        { publisher: "Inter-American Court of Human Rights", title: "Kichwa Indigenous People of Sarayaku v. Ecuador — judgment of 27 June 2012", date: "2012", url: "https://www.corteidh.or.cr/docs/casos/articulos/seriec_245_ing.pdf" },
         { publisher: "Reuters", title: "Profile & climate-summit reporting on Helena Gualinga", date: "2019–2023", url: "https://www.reuters.com", deepLink: false }
       ]
     },
@@ -346,17 +346,17 @@ window.GSS_SOLIDARITIES = {
       status: "documented",
       materials: [
         { kind: "film", title: "Clandestine footage of the execution of Zarmeena, Ghazi Stadium, Kabul", date: "November 1999",
-          holder: "RAWA", url: "https://www.rawa.org", deepLink: false,
+          holder: "RAWA", url: "http://www.rawa.org/zarmeena.htm",
           note: "Filmed beneath a burqa at mortal risk — the footage that showed the world the Taliban's public executions of women. Viewer discretion." },
         { kind: "press", title: "Payam-e-Zan (“Women's Message”) — the magazine Meena founded", date: "1981 –",
-          holder: "RAWA", url: "https://www.rawa.org", deepLink: false,
+          holder: "RAWA", url: "http://www.rawa.org/payam.html",
           note: "Bilingual organ of clandestine feminist politics, published continuously since 1981." },
         { kind: "doc", title: "RAWA statements & documents archive", date: "1977 –",
-          holder: "RAWA", url: "https://www.rawa.org", deepLink: false,
+          holder: "RAWA", url: "http://www.rawa.org", deepLink: false,
           note: "Communiqués, reports and appeals across four decades of clandestine feminist politics." }
       ],
       sources: [
-        { publisher: "RAWA", title: "About RAWA — aims, history and publications", date: "rawa.org", url: "https://www.rawa.org", deepLink: false },
+        { publisher: "RAWA", title: "About RAWA — aims, history and publications", date: "rawa.org", url: "http://www.rawa.org/rawa.html" },
         { publisher: "Anne E. Brodsky", title: "With All Our Strength: The Revolutionary Association of the Women of Afghanistan (Routledge)", date: "2003", url: "https://www.routledge.com", deepLink: false }
       ]
     },

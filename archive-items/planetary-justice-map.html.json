@@ -1,0 +1,13 @@
+{
+  "title": "Planetary Justice Map",
+  "subtitle": "Gendered Networks of Revolutionary Solidarity",
+  "authors": ["GSS Anarchive"],
+  "year": 2026,
+  "type": "multimedia",
+  "tags": ["interactive", "map", "solidarity", "feminism", "wgss", "global-souths", "living-archive"],
+  "abstract": "An interactive research map of radical solidarities across borders: seven revolutionary figures and three movements of the Global Souths, their trajectories and documented ties. Node dossiers pair factual annotations with labelled interpretive readings, 29 coded primary materials (photographs, speeches, writings — linked at their holding archives), a century timeline, a coordinate gazetteer, and Chicago/BibTeX citation export. Research design: Bibhushana Poudyal. Open source, built on MapLibre GL.",
+  "language": "English",
+  "cover": "covers/planetary-justice-map.svg",
+  "url": "https://gssolidarities.org/planetary-justice-map/",
+  "added": "2026-07-06"
+}
