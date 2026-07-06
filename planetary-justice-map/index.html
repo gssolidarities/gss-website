@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Planetary Justice Map — Gendered Networks of Revolutionary Solidarity</title>
+<meta name="description" content="A living map of radical solidarities across borders — revolutionary figures and movements of the Global Souths, connected in space and time. A Global South Solidarities Anarchive project." />
+
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+<style>
+  :root {
+    --bg:        #0b0a12;
+    --panel:     #141020;
+    --panel-2:   #1b1526;
+    --line:      #2b2340;
+    --line-soft: #221b33;
+    --text:      #f2ecf4;
+    --muted:     #a99bbd;
+    --faint:     #71638a;
+    --rose:      #e0637f;   /* praxis rose — primary accent */
+    --gold:      #d9b36b;   /* archival gold — secondary   */
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    --serif: Palatino, "Palatino Linotype", "Book Antiqua", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow: hidden; }
+
+  #map { position: absolute; inset: 0; background: var(--bg); }
+  /* depth vignette over the basemap */
+  .wash { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 50% 40%, rgba(11,10,18,0) 40%, rgba(11,10,18,.55) 100%),
+      linear-gradient(0deg, rgba(11,10,18,.55), rgba(11,10,18,0) 30%);
+  }
+
+  .maplibregl-ctrl-attrib { background: rgba(11,10,18,.72) !important; color: var(--faint) !important;
+    font-size: 10px !important; }
+  .maplibregl-ctrl-attrib a { color: var(--muted) !important; }
+  .maplibregl-ctrl-bottom-right { bottom: 128px !important; }
+
+  /* ----------------------------- Masthead ----------------------------- */
+  .masthead { position: absolute; top: 0; left: 0; z-index: 6; padding: 18px 20px;
+    pointer-events: none; max-width: 400px; }
+  .masthead > * { pointer-events: auto; }
+  .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .34em; color: var(--gold); }
+  .kicker a { color: inherit; text-decoration: none; }
+  .title { margin: 8px 0 0; font-family: var(--serif); font-size: 30px; font-weight: 600;
+    letter-spacing: .2px; line-height: 1.04; text-shadow: 0 2px 22px rgba(0,0,0,.9); }
+  .theme-line { margin: 7px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .22em;
+    color: var(--rose); text-transform: uppercase; }
+  .subtitle { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 350px;
+    line-height: 1.5; text-shadow: 0 1px 12px rgba(0,0,0,.9); }
+  .counts { margin: 10px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+    color: var(--faint); }
+  .counts b { color: var(--gold); font-weight: 600; }
+
+  /* ----------------------------- Constellation index ----------------------------- */
+  .cindex { position: absolute; top: 178px; left: 20px; z-index: 6; width: 264px;
+    background: rgba(17,13,27,.86); border: 1px solid var(--line); border-radius: 10px;
+    backdrop-filter: blur(10px); overflow: hidden; display: flex; flex-direction: column;
+    max-height: calc(100vh - 480px); }
+  .cindex .head { display: flex; align-items: center; gap: 8px; padding: 10px 12px 9px;
+    border-bottom: 1px solid var(--line-soft); }
+  .cindex .head h4 { margin: 0; font-family: var(--mono); font-size: 9.5px; letter-spacing: .2em;
+    color: var(--faint); font-weight: 600; }
+  .cindex .head button { margin-left: auto; font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: .1em; color: var(--muted); background: none; border: 1px solid var(--line);
+    border-radius: 5px; padding: 3px 8px; cursor: pointer; }
+  .cindex .head button:hover { color: var(--text); border-color: #3d3158; }
+  .cindex .rows { overflow-y: auto; padding: 5px 6px 7px; }
+  .cindex .n { display: flex; align-items: baseline; gap: 9px; padding: 6px 8px; border-radius: 7px;
+    cursor: pointer; transition: .12s; }
+  .cindex .n:hover, .cindex .n.hot { background: rgba(255,255,255,.05); }
+  .cindex .n .g { width: 9px; height: 9px; border-radius: 50%; flex: none; align-self: center;
+    box-shadow: 0 0 8px -1px currentColor; }
+  .cindex .n.mv .g { background: transparent !important; border: 2px solid currentColor; }
+  .cindex .n .nm { font-family: var(--serif); font-size: 14px; letter-spacing: .2px; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cindex .n .yr { margin-left: auto; font-family: var(--mono); font-size: 9.5px; color: var(--faint);
+    flex: none; }
+
+  /* ----------------------------- Top controls ----------------------------- */
+  .topbar { position: absolute; top: 16px; right: 16px; z-index: 6; display: flex; gap: 8px; }
+  .tbtn { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--muted);
+    background: rgba(17,13,27,.82); border: 1px solid var(--line); border-radius: 7px;
+    padding: 8px 11px; cursor: pointer; backdrop-filter: blur(8px); transition: .15s; }
+  .tbtn:hover { color: var(--text); border-color: #3d3158; }
+  .seg { display: inline-flex; background: rgba(17,13,27,.82); border: 1px solid var(--line);
+    border-radius: 7px; overflow: hidden; backdrop-filter: blur(8px); }
+  .seg button { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--muted);
+    background: transparent; border: 0; padding: 8px 12px; cursor: pointer; transition: .15s; }
+  .seg button.active { color: #140d18; background: var(--gold); font-weight: 700; }
+  .seg button:not(.active):hover { color: var(--text); }
+
+  /* ----------------------------- Legend / filters ----------------------------- */
+  .legend { position: absolute; left: 20px; bottom: 148px; z-index: 6; width: 264px;
+    background: rgba(17,13,27,.86); border: 1px solid var(--line); border-radius: 10px;
+    padding: 11px 12px 12px; backdrop-filter: blur(10px); }
+  .legend h4 { margin: 0 0 8px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--faint); font-weight: 600; }
+  .legend .row { display: flex; align-items: center; gap: 9px; padding: 3.5px 5px; margin: 0 -5px;
+    border-radius: 6px; cursor: pointer; user-select: none; transition: .12s; }
+  .legend .row:hover { background: rgba(255,255,255,.04); }
+  .legend .row.off { opacity: .3; }
+  .legend .sw { width: 10px; height: 10px; border-radius: 50%; flex: none;
+    box-shadow: 0 0 9px -1px currentColor; }
+  .legend .lab { font-size: 11.5px; color: var(--text); line-height: 1.25; }
+  .legend .ct { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--faint); }
+  .legend .key { margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--line-soft);
+    display: flex; flex-direction: column; gap: 5px; }
+  .legend .key .k { display: flex; align-items: center; gap: 9px; font-size: 10.5px; color: var(--muted); }
+  .legend .key .traj { width: 26px; height: 0; border-top: 2px dashed var(--faint); flex: none; }
+  .legend .key .tie { width: 26px; height: 2px; flex: none;
+    background: linear-gradient(90deg, var(--rose), var(--gold)); border-radius: 2px;
+    box-shadow: 0 0 6px rgba(224,99,127,.7); }
+
+  /* ----------------------------- Timeline ----------------------------- */
+  .timeline { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; height: 118px;
+    background: linear-gradient(0deg, rgba(11,10,18,.97) 58%, rgba(11,10,18,0));
+    border-top: 1px solid var(--line-soft); padding: 13px 22px 14px; }
+  .tl-head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .tl-play { width: 33px; height: 33px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--panel-2); color: var(--text); cursor: pointer; font-size: 12px;
+    display: grid; place-items: center; transition: .15s; flex: none; }
+  .tl-play:hover { border-color: var(--rose); color: var(--rose); }
+  .tl-readout { font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: .06em; }
+  .tl-readout b { color: var(--rose); font-weight: 600; }
+  .tl-mode { margin-left: auto; }
+  .tl-showall { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--muted);
+    background: rgba(17,13,27,.82); border: 1px solid var(--line); border-radius: 7px;
+    padding: 7px 11px; cursor: pointer; }
+  .tl-showall:hover { color: var(--text); border-color: #3d3158; }
+  .tl-track-wrap { position: relative; height: 48px; }
+  .tl-axis { position: absolute; left: 0; right: 0; top: 25px; height: 1px; background: var(--line); }
+  .tl-fill { position: absolute; left: 0; top: 25px; height: 1px; background: var(--rose);
+    box-shadow: 0 0 8px var(--rose); }
+  .tl-tick { position: absolute; top: 18px; width: 2px; height: 15px; border-radius: 2px;
+    transform: translateX(-1px); cursor: pointer; transition: height .12s, top .12s; }
+  .tl-tick:hover { height: 23px; top: 14px; }
+  .tl-year { position: absolute; top: 34px; transform: translateX(-50%); font-family: var(--mono);
+    font-size: 9.5px; color: var(--faint); }
+  .tl-cursor { position: absolute; top: 8px; width: 1px; height: 34px; background: var(--text);
+    transform: translateX(-.5px); pointer-events: none; opacity: .85; }
+  .tl-cursor::after { content: ""; position: absolute; top: -4px; left: -3px; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--text); }
+  .tl-range { position: absolute; left: 0; right: 0; top: 17px; height: 18px; width: 100%;
+    -webkit-appearance: none; appearance: none; background: transparent; cursor: ew-resize; margin: 0; }
+  .tl-range::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px;
+    border-radius: 50%; background: var(--text); border: 2px solid var(--bg); cursor: ew-resize; }
+  .tl-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--text);
+    border: 2px solid var(--bg); cursor: ew-resize; }
+
+  /* ----------------------------- Node dossier panel ----------------------------- */
+  .panel { position: absolute; top: 0; right: 0; bottom: 0; z-index: 8; width: 404px; max-width: 94vw;
+    background: var(--panel); border-left: 1px solid var(--line);
+    transform: translateX(105%); transition: transform .32s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column; box-shadow: -24px 0 60px -30px #000; }
+  .panel.open { transform: none; }
+  .panel-scroll { overflow-y: auto; padding: 22px 24px 32px; }
+  .panel .close { position: absolute; top: 14px; right: 14px; z-index: 2; width: 30px; height: 30px;
+    border-radius: 7px; border: 1px solid var(--line); background: var(--panel-2); color: var(--muted);
+    cursor: pointer; font-size: 16px; line-height: 1; }
+  .panel .close:hover { color: var(--text); border-color: #3d3158; }
+  .p-kind { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono);
+    font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; }
+  .p-kind .sw { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 8px -1px currentColor; }
+  .p-kind.mv .sw { background: transparent !important; border: 2px solid currentColor; }
+  .p-title { margin: 12px 0 0; font-family: var(--serif); font-size: 27px; line-height: 1.12;
+    font-weight: 600; letter-spacing: .2px; }
+  .p-role { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+  .p-dates { margin: 10px 0 0; font-family: var(--mono); font-size: 11px; color: var(--gold);
+    letter-spacing: .08em; }
+  .p-divider { height: 1px; background: var(--line-soft); margin: 16px 0; }
+  .p-summary { font-size: 13.5px; line-height: 1.62; color: #ded4e4; }
+  .p-summary em { color: var(--text); }
+  .p-lens { margin-top: 14px; border-left: 2px solid var(--rose); padding: 8px 0 8px 13px;
+    background: linear-gradient(90deg, rgba(224,99,127,.07), transparent 70%); border-radius: 0 8px 8px 0; }
+  .p-lens .h { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; color: var(--rose);
+    margin-bottom: 5px; }
+  .p-lens .b { font-size: 12.5px; line-height: 1.6; color: #d8c9d9; font-style: italic; }
+  .p-sec-h { margin: 20px 0 9px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--faint); font-weight: 600; }
+  .p-place { display: flex; align-items: baseline; gap: 9px; padding: 6px 0;
+    border-bottom: 1px dashed var(--line-soft); }
+  .p-place:last-of-type { border-bottom: 0; }
+  .p-place .pl { font-size: 12.5px; color: var(--text); font-weight: 600; flex: none; }
+  .p-place .pd { font-size: 11px; color: var(--muted); line-height: 1.45; }
+  .p-place .co { display: block; font-family: var(--mono); font-size: 9.5px; color: var(--faint);
+    margin-top: 2px; }
+  .p-place .co b { color: var(--gold); font-weight: 600; }
+  .p-tie { border: 1px solid var(--line-soft); border-left: 2px solid var(--rose); border-radius: 8px;
+    padding: 9px 11px; margin-bottom: 8px; cursor: pointer; transition: .14s; }
+  .p-tie:hover { border-color: #3d3158; background: var(--panel-2); }
+  .p-tie .k { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; color: var(--rose); }
+  .p-tie .who { font-family: var(--serif); font-size: 14px; margin-top: 3px; }
+  .p-tie .nt { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .src { display: flex; gap: 9px; align-items: baseline; text-decoration: none; color: inherit;
+    border: 1px solid var(--line-soft); border-radius: 8px; padding: 9px 11px; margin-bottom: 8px;
+    transition: .14s; }
+  .src:hover { border-color: #3d3158; background: var(--panel-2); }
+  .mat { display: flex; gap: 9px; align-items: baseline; text-decoration: none; color: inherit;
+    border: 1px solid var(--line-soft); border-left: 2px solid var(--gold); border-radius: 8px;
+    padding: 9px 11px; margin-bottom: 8px; transition: .14s; }
+  .mat:hover { border-color: #3d3158; background: var(--panel-2); }
+  .mat .kd { font-family: var(--mono); font-size: 8.5px; letter-spacing: .1em; font-weight: 700;
+    color: #140d18; border-radius: 4px; padding: 2px 6px 2.5px; flex: none; }
+  .mat .w { min-width: 0; }
+  .mat .ti { font-size: 12.5px; font-weight: 600; color: var(--text); line-height: 1.35; }
+  .mat .nt { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .mat .meta { margin-top: 4px; font-family: var(--mono); font-size: 9.5px; color: var(--faint);
+    display: flex; gap: 10px; flex-wrap: wrap; }
+  .mat .meta .flag { color: #c08a4a; }
+  .evc { font-family: var(--mono); font-size: 9px; letter-spacing: .06em; color: var(--gold);
+    border: 1px solid rgba(217,179,107,.4); border-radius: 4px; padding: 1px 4px; flex: none; }
+  .src .w { min-width: 0; }
+  .src .pub { font-size: 12px; font-weight: 600; color: var(--text); }
+  .src .ti { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .src .meta { margin-top: 4px; font-family: var(--mono); font-size: 9.5px; color: var(--faint);
+    display: flex; gap: 10px; flex-wrap: wrap; }
+  .src .flag { color: #c08a4a; }
+  .p-note { margin-top: 14px; font-size: 11px; line-height: 1.55; color: var(--faint);
+    border-left: 2px solid var(--line); padding: 2px 0 2px 11px; }
+
+  /* ----------------------------- Node markers (DOM) ----------------------------- */
+  .node { display: flex; align-items: center; gap: 8px; pointer-events: auto; cursor: pointer;
+    filter: drop-shadow(0 2px 7px rgba(0,0,0,.85)); }
+  .node.flip { flex-direction: row-reverse; }
+  .node .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #120d1c; flex: none;
+    position: relative; }
+  .node.mv .dot { background: transparent !important; border: 2.5px solid currentColor;
+    width: 13px; height: 13px; }
+  .node .dot::after { content: ""; position: absolute; inset: -5px; border-radius: 50%;
+    border: 1px solid currentColor; opacity: .45; animation: ping 2.6s ease-out infinite; }
+  @keyframes ping { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(1.6); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .node .dot::after { animation: none; opacity: .3; } }
+  .node .tag { background: rgba(14,10,22,.82); border: 1px solid var(--line); border-radius: 6px;
+    padding: 3px 8px 4px; white-space: nowrap; transition: .15s; }
+  .node:hover .tag, .node.hot .tag { border-color: currentColor; }
+  .node .nm { font-family: var(--serif); font-size: 13px; letter-spacing: .2px; color: #fff;
+    display: block; line-height: 1.15; }
+  .node .yr { font-family: var(--mono); font-size: 8.5px; letter-spacing: .08em; color: var(--muted);
+    display: block; margin-top: 1px; }
+
+  /* ----------------------------- Modals ----------------------------- */
+  .overlay { position: absolute; inset: 0; z-index: 20; background: rgba(8,6,13,.7);
+    backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 24px; }
+  .overlay.open { display: flex; }
+  .modal { width: 680px; max-width: 100%; max-height: 86vh; overflow-y: auto; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 12px; padding: 28px 32px 34px; }
+  .modal h2 { margin: 0; font-family: var(--serif); font-size: 23px; font-weight: 600; }
+  .modal .lede { color: var(--muted); font-size: 12px; margin: 5px 0 0; font-family: var(--mono);
+    letter-spacing: .04em; }
+  .modal p { font-size: 13.5px; line-height: 1.64; color: #dcd1e0; }
+  .modal h3 { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--rose); margin: 22px 0 8px; }
+  .modal ul { padding-left: 18px; margin: 6px 0; }
+  .modal li { font-size: 13px; line-height: 1.6; color: #dcd1e0; margin-bottom: 4px; }
+  .modal code { font-family: var(--mono); font-size: 12px; color: var(--gold);
+    background: var(--panel-2); padding: 1px 5px; border-radius: 4px; }
+  .modal .close-x { float: right; background: none; border: 0; color: var(--muted); font-size: 22px;
+    cursor: pointer; line-height: 1; margin: -6px -8px 0 0; }
+  .modal a { color: var(--gold); }
+  .modal .q { font-family: var(--serif); font-style: italic; font-size: 15.5px; line-height: 1.55;
+    color: var(--text); border-left: 2px solid var(--rose); padding: 4px 0 4px 14px; margin: 12px 0; }
+  .modal table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 10.5px; }
+  .modal th { text-align: left; color: var(--faint); font-weight: 500; letter-spacing: .1em;
+    font-size: 9px; padding: 5px 8px 5px 0; border-bottom: 1px solid var(--line); }
+  .modal td { padding: 5px 8px 5px 0; border-bottom: 1px solid var(--line-soft); color: var(--muted);
+    vertical-align: top; }
+  .modal td:first-child { color: var(--text); }
+  .modal td.ap { color: var(--gold); } .modal td.ex { color: #6fbf8f; }
+  .modal pre { background: #0e0a17; border: 1px solid var(--line-soft); border-radius: 8px;
+    padding: 12px 13px; font-family: var(--mono); font-size: 11px; line-height: 1.6; color: #dcd1e0;
+    white-space: pre-wrap; word-break: break-word; margin: 8px 0 0; }
+  .modal .cp { margin-top: 8px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em;
+    color: #140d18; background: var(--gold); border: none; border-radius: 6px; padding: 7px 12px;
+    cursor: pointer; font-weight: 700; }
+
+  /* telemetry readout */
+  .mhud { position: absolute; right: 16px; bottom: 128px; z-index: 6; pointer-events: none;
+    text-align: right; font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+    color: var(--muted); text-shadow: 0 1px 4px rgba(0,0,0,.9);
+    display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .mhud .scale { display: flex; align-items: baseline; gap: 6px; color: var(--faint); }
+  .mhud .bar { display: inline-block; height: 3px; background: var(--muted); position: relative;
+    transition: width .25s; }
+  .mhud .bar::before, .mhud .bar::after { content: ""; position: absolute; bottom: 0;
+    width: 1px; height: 7px; background: var(--muted); }
+  .mhud .bar::before { left: 0; } .mhud .bar::after { right: 0; }
+  .mhud .ver { color: #4e4165; font-size: 9px; letter-spacing: .14em; }
+  @media (max-width: 900px) { .mhud { display: none; } }
+
+  /* hover tooltip */
+  .tip { position: absolute; z-index: 9; pointer-events: none; background: rgba(14,10,22,.95);
+    border: 1px solid var(--line); border-radius: 7px; padding: 7px 10px; font-size: 12px;
+    max-width: 250px; transform: translate(-50%, -130%); display: none; box-shadow: 0 8px 24px -10px #000; }
+  .tip .t { font-family: var(--serif); font-size: 13px; font-weight: 600; line-height: 1.25; }
+  .tip .d { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-top: 3px; line-height: 1.45; }
+
+  @media (max-width: 860px) {
+    .cindex, .legend { display: none; }
+    .subtitle, .counts { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="wash"></div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="kicker"><a href="https://gssolidarities.org" target="_blank" rel="noopener">GLOBAL SOUTH SOLIDARITIES · ANARCHIVE</a></div>
+  <h1 class="title">Planetary Justice Map</h1>
+  <div class="theme-line" id="theme-line">Gendered Networks of Revolutionary Solidarity</div>
+  <p class="subtitle">A living map of radical solidarities across borders — revolutionary figures
+    and movements of the Global Souths, placed in shared space and time, every claim traceable
+    to a named source.</p>
+  <div class="counts" id="counts"></div>
+</div>
+
+<!-- Constellation index -->
+<div class="cindex" id="cindex">
+  <div class="head"><h4 id="cindex-h">CONSTELLATION</h4><button id="world-btn" title="Fit the whole constellation">⌂ WORLD</button></div>
+  <div class="rows" id="cindex-rows"></div>
+</div>
+
+<!-- Top controls -->
+<div class="topbar">
+  <div class="seg" id="basemap-seg">
+    <button data-base="dark" class="active">MAP</button>
+    <button data-base="satellite">SATELLITE</button>
+  </div>
+  <button class="tbtn" id="about-btn">ABOUT</button>
+  <button class="tbtn" id="method-btn">METHOD</button>
+  <button class="tbtn" id="cite-btn">CITE</button>
+</div>
+
+<!-- Legend / filters -->
+<div class="legend">
+  <h4>Threads — click to filter</h4>
+  <div id="legend-rows"></div>
+  <div class="key">
+    <div class="k"><span class="traj"></span> trajectory — a life or movement moving through the world</div>
+    <div class="k"><span class="tie"></span> solidarity tie — a documented connection between nodes</div>
+  </div>
+</div>
+
+<!-- Timeline -->
+<div class="timeline">
+  <div class="tl-head">
+    <button class="tl-play" id="tl-play" title="Play through the century">▶</button>
+    <div class="tl-readout">Revealed through <b id="tl-date">all time</b></div>
+    <div class="tl-mode"><button class="tl-showall" id="tl-showall">ALL TIME</button></div>
+  </div>
+  <div class="tl-track-wrap" id="tl-track">
+    <div class="tl-axis"></div>
+    <div class="tl-fill" id="tl-fill"></div>
+    <div class="tl-cursor" id="tl-cursor" style="left:100%"></div>
+    <input type="range" class="tl-range" id="tl-range" min="0" max="1000" value="1000" />
+  </div>
+</div>
+
+<!-- Node dossier panel -->
+<aside class="panel" id="panel">
+  <button class="close" id="panel-close">×</button>
+  <div class="panel-scroll" id="panel-body"></div>
+</aside>
+
+<!-- Telemetry readout -->
+<div class="mhud" id="mhud" aria-hidden="true">
+  <span id="mhud-ll">—</span>
+  <span class="scale"><span class="bar" id="mhud-bar" style="width:80px"></span><span id="mhud-lb">—</span></span>
+  <span class="ver" id="mhud-ver"></span>
+</div>
+
+<!-- Tooltip -->
+<div class="tip" id="tip"><div class="t"></div><div class="d"></div></div>
+
+<!-- About modal -->
+<div class="overlay" id="about-overlay">
+  <div class="modal">
+    <button class="close-x" data-close>×</button>
+    <h2>The Planetary Justice Map</h2>
+    <p class="lede">Global South Solidarities Anarchive · open source · evidence-first</p>
+    <p>This is a living, citation-grounded map of <em>radical solidarities across borders</em>:
+      revolutionary figures and movements of the Global Souths, the trajectories their lives cut
+      across the world — birth, exile, organising, return — and the documented ties between them.
+      It is a research instrument and a teaching instrument, built to be read closely.</p>
+    <div class="q" id="about-q"></div>
+    <h3>How to read it</h3>
+    <ul>
+      <li><b>Nodes</b> are figures (filled points) and movements (rings), coloured by thread.</li>
+      <li><b>Dashed arcs</b> trace a node's real trajectory through the world; <b>gradient arcs</b>
+        are documented solidarity ties between nodes.</li>
+      <li>Click any node — on the map or in the constellation index — for its dossier: a factual
+        annotation, an explicitly-labelled interpretive <em>reading</em>, every place with its
+        coordinates and precision class, and named sources with stable evidence codes.</li>
+      <li>Scrub or play the <b>timeline</b> to watch the network assemble across a century.</li>
+    </ul>
+    <h3>Standards</h3>
+    <p>No node without named institutional or scholarly sources. Factual annotation and interpretive
+      reading are kept apart and labelled. Area-level coordinates are flagged <code>APPROX</code> and
+      must not be read as precise. Ties appear only where documented — or where the project's research
+      design itself pairs nodes, in which case the tie says so. Primary materials — photographs,
+      speeches, writings, records — are linked at their holding archives, never re-hosted; rights
+      remain with their holders. The dataset is a versioned file; every change is auditable.</p>
+    <h3>Project</h3>
+    <p id="about-proj"></p>
+  </div>
+</div>
+
+<!-- Method modal -->
+<div class="overlay" id="method-overlay">
+  <div class="modal">
+    <button class="close-x" data-close>×</button>
+    <h2>Method &amp; data provenance</h2>
+    <p class="lede" id="method-lede"></p>
+    <div id="method-body"></div>
+  </div>
+</div>
+
+<!-- Cite modal -->
+<div class="overlay" id="cite-overlay">
+  <div class="modal">
+    <button class="close-x" data-close>×</button>
+    <h2>Cite this map</h2>
+    <div id="cite-body"></div>
+  </div>
+</div>
+
+<script src="data/solidarities.js"></script>
+<script>
+(function () {
+  "use strict";
+  const D = window.GSS_SOLIDARITIES;
+  const THEMES = D.themes;
+  const byId = id => document.getElementById(id);
+  const nodeOf = {}; D.nodes.forEach(n => nodeOf[n.id] = n);
+  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const Y0 = D.meta.timeline.min, Y1 = D.meta.timeline.max, SPAN = Y1 - Y0;
+
+  /* ---------------------- evidence registry (E-codes) ---------------------- */
+  const REG = [], regIdx = {};
+  D.nodes.forEach(n => (n.sources || []).forEach(s => {
+    const k = s.publisher + "|" + s.title;
+    if (!(k in regIdx)) {
+      regIdx[k] = REG.length;
+      REG.push({ ...s, code: "E" + String(REG.length + 1).padStart(2, "0"), nodes: [] });
+    }
+    if (!REG[regIdx[k]].nodes.includes(n.id)) REG[regIdx[k]].nodes.push(n.id);
+  }));
+  const evOf = s => REG[regIdx[s.publisher + "|" + s.title]];
+
+  /* ---------------------- primary-materials registry (M-codes) ---------------------- */
+  const MREG = [], mregIdx = {};
+  D.nodes.forEach(n => (n.materials || []).forEach(m => {
+    const k = m.holder + "|" + m.title;
+    if (!(k in mregIdx)) {
+      mregIdx[k] = MREG.length;
+      MREG.push({ ...m, code: "M" + String(MREG.length + 1).padStart(2, "0"), nodes: [] });
+    }
+    if (!MREG[mregIdx[k]].nodes.includes(n.id)) MREG[mregIdx[k]].nodes.push(n.id);
+  }));
+  const matOf = m => MREG[mregIdx[m.holder + "|" + m.title]];
+  const KIND = {
+    text:  { label: "TEXT",  color: "#d9b36b" },
+    photo: { label: "PHOTO", color: "#5db8e8" },
+    film:  { label: "FILM",  color: "#e0637f" },
+    doc:   { label: "DOC",   color: "#9d7bd8" },
+    press: { label: "PRESS", color: "#6fbf8f" }
+  };
+
+  /* ---------------------- masthead counts ---------------------- */
+  const nFig = D.nodes.filter(n => n.type === "figure").length;
+  const nMov = D.nodes.filter(n => n.type === "movement").length;
+  const nPl = D.nodes.reduce((a, n) => a + n.places.length, 0);
+  byId("counts").innerHTML =
+    `<b>${nFig}</b> FIGURES · <b>${nMov}</b> MOVEMENTS · <b>${nPl}</b> PLACES · <b>${MREG.length}</b> PRIMARY MATERIALS · <b>${REG.length}</b> SOURCES`;
+  byId("cindex-h").textContent = `CONSTELLATION — ${nFig} FIGURES · ${nMov} MOVEMENTS`;
+  byId("mhud-ver").textContent = D.meta.code + " · v" + D.meta.version;
+  byId("about-q").textContent = "“" + D.meta.question + "”";
+  byId("about-proj").innerHTML =
+    `Research theme: <em>${D.meta.theme}</em> — research design by Bibhushana Poudyal, for the
+     <a href="${D.meta.orgUrl}" target="_blank" rel="noopener">${D.meta.org}</a>. Built on MapLibre GL JS,
+     open source, no API keys. Dataset <code>data/solidarities.js</code> · ${D.meta.code} v${D.meta.version}
+     · updated ${D.meta.updated}.`;
+
+  /* ---------------------- basemap style (key-free) ---------------------- */
+  const carto = s => `https://${s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`;
+  const cartoLab = s => `https://${s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png`;
+  const style = {
+    version: 8,
+    sources: {
+      "carto-dark": { type: "raster", tileSize: 256, tiles: ["a","b","c","d"].map(carto),
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>' },
+      "esri-sat": { type: "raster", tileSize: 256,
+        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+        attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' },
+      "carto-labels": { type: "raster", tileSize: 256, tiles: ["a","b","c","d"].map(cartoLab) }
+    },
+    layers: [
+      { id: "bg", type: "background", paint: { "background-color": "#0b0a12" } },
+      { id: "carto-dark", type: "raster", source: "carto-dark", paint: { "raster-opacity": .82 } },
+      { id: "esri-sat", type: "raster", source: "esri-sat", layout: { visibility: "none" } },
+      { id: "carto-labels", type: "raster", source: "carto-labels", layout: { visibility: "none" } }
+    ]
+  };
+
+  const map = new maplibregl.Map({
+    container: "map", style,
+    center: [-20, 18], zoom: 1.7, minZoom: 1.1, maxZoom: 14,
+    attributionControl: false
+  });
+  map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+  map.dragRotate.disable();
+
+  /* ---------------------- telemetry readout ---------------------- */
+  const fmtLL = (lat, lng) =>
+    `${Math.abs(lat).toFixed(3)}°${lat >= 0 ? "N" : "S"} ${Math.abs(lng).toFixed(3)}°${lng >= 0 ? "E" : "W"}`;
+  const NICE_SCALE = [5000000, 2000000, 1000000, 500000, 200000, 100000, 50000, 20000, 10000, 5000, 2000, 1000, 500];
+  let hoverLL = null;
+  function updHud() {
+    const c = map.getCenter(), z = map.getZoom();
+    byId("mhud-ll").textContent =
+      (hoverLL ? "CUR " + fmtLL(hoverLL.lat, hoverLL.lng) : "CTR " + fmtLL(c.lat, c.lng)) +
+      " · Z " + z.toFixed(2);
+    const mpp = 156543.03392 * Math.cos(c.lat * Math.PI / 180) / Math.pow(2, z);
+    const nice = NICE_SCALE.find(v => v / mpp <= 120) || 500;
+    byId("mhud-bar").style.width = (nice / mpp) + "px";
+    byId("mhud-lb").textContent = nice >= 1000 ? (nice / 1000) + " km" : nice + " m";
+  }
+  map.on("move", updHud);
+  map.on("mousemove", e => { hoverLL = e.lngLat; updHud(); });
+  map.getCanvas().addEventListener("mouseleave", () => { hoverLL = null; updHud(); });
+  updHud();
+
+  /* ---------------------- great-circle arcs ---------------------- */
+  function arc(a, b, n) {
+    n = n || 64;
+    const R = Math.PI / 180, Dg = 180 / Math.PI;
+    const l1 = a[0]*R, f1 = a[1]*R, l2 = b[0]*R, f2 = b[1]*R;
+    const d = 2 * Math.asin(Math.sqrt(
+      Math.sin((f2-f1)/2)**2 + Math.cos(f1)*Math.cos(f2)*Math.sin((l2-l1)/2)**2));
+    if (d < 1e-7) return [a, b];
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, A = Math.sin((1-t)*d)/Math.sin(d), B = Math.sin(t*d)/Math.sin(d);
+      const x = A*Math.cos(f1)*Math.cos(l1) + B*Math.cos(f2)*Math.cos(l2);
+      const y = A*Math.cos(f1)*Math.sin(l1) + B*Math.cos(f2)*Math.sin(l2);
+      const z = A*Math.sin(f1) + B*Math.sin(f2);
+      pts.push([Math.atan2(y, x)*Dg, Math.atan2(z, Math.hypot(x, y))*Dg]);
+    }
+    return pts;
+  }
+
+  /* trajectories: consecutive places of each node */
+  const trajFC = { type: "FeatureCollection", features: [] };
+  D.nodes.forEach(n => {
+    for (let i = 0; i + 1 < n.places.length; i++) {
+      const p = n.places[i], q = n.places[i+1];
+      trajFC.features.push({ type: "Feature",
+        geometry: { type: "LineString", coordinates: arc([p.lng, p.lat], [q.lng, q.lat]) },
+        properties: { theme: n.theme, t0: q.year, node: n.id } });
+    }
+  });
+  /* solidarity ties between nodes (anchor place = first place of each) */
+  const tieFC = { type: "FeatureCollection", features: D.ties.map(t => {
+    const a = nodeOf[t.a].places[0], b = nodeOf[t.b].places[0];
+    return { type: "Feature",
+      geometry: { type: "LineString", coordinates: arc([a.lng, a.lat], [b.lng, b.lat]) },
+      properties: { t0: t.year, aTheme: nodeOf[t.a].theme, bTheme: nodeOf[t.b].theme,
+        a: t.a, b: t.b, kind: t.kind } };
+  }) };
+  /* waypoints: every place of every node */
+  const wpFC = { type: "FeatureCollection", features: [] };
+  D.nodes.forEach(n => n.places.forEach(p => {
+    wpFC.features.push({ type: "Feature",
+      geometry: { type: "Point", coordinates: [p.lng, p.lat] },
+      properties: { theme: n.theme, t0: p.year, node: n.id, name: n.name,
+        label: p.label, period: p.period, precision: p.precision } });
+  }));
+
+  const themeColorExpr = ["match", ["get", "theme"]];
+  Object.keys(THEMES).forEach(k => themeColorExpr.push(k, THEMES[k].color));
+  themeColorExpr.push("#999");
+
+  /* ---------------------- filters & timeline state ---------------------- */
+  const activeThemes = new Set(Object.keys(THEMES));
+  let timeMode = false;
+  let cursorY = Y1;
+
+  function glFilter(extra) {
+    const f = ["all", ["in", ["get", "theme"], ["literal", Array.from(activeThemes)]]];
+    if (timeMode) f.push(["<=", ["get", "t0"], cursorY]);
+    if (extra) f.push(extra);
+    return f;
+  }
+  function applyFilters() {
+    if (map.getLayer("traj")) {
+      map.setFilter("traj", glFilter());
+      map.setFilter("wp-glow", glFilter());
+      map.setFilter("wp-core", glFilter());
+      const tf = ["all",
+        ["in", ["get", "aTheme"], ["literal", Array.from(activeThemes)]],
+        ["in", ["get", "bTheme"], ["literal", Array.from(activeThemes)]]];
+      if (timeMode) tf.push(["<=", ["get", "t0"], cursorY]);
+      map.setFilter("tie-glow", tf); map.setFilter("tie", tf);
+    }
+    D.nodes.forEach(n => {
+      const on = activeThemes.has(n.theme) && (!timeMode || n.origin <= cursorY);
+      if (n._el) n._el.style.display = on ? "" : "none";
+    });
+  }
+
+  /* ---------------------- map layers ---------------------- */
+  map.on("load", () => {
+    map.addSource("traj", { type: "geojson", data: trajFC });
+    map.addSource("ties", { type: "geojson", data: tieFC, lineMetrics: true });
+    map.addSource("wps",  { type: "geojson", data: wpFC });
+
+    map.addLayer({ id: "traj", type: "line", source: "traj",
+      layout: { "line-cap": "round" },
+      paint: { "line-color": themeColorExpr, "line-width": 1.6,
+        "line-opacity": .8, "line-dasharray": [0.1, 2.2] } });
+
+    map.addLayer({ id: "tie-glow", type: "line", source: "ties",
+      layout: { "line-cap": "round" },
+      paint: { "line-color": "#e0637f", "line-width": 7, "line-opacity": .16, "line-blur": 4 } });
+    map.addLayer({ id: "tie", type: "line", source: "ties",
+      layout: { "line-cap": "round" },
+      paint: { "line-width": 2,
+        "line-gradient": ["interpolate", ["linear"], ["line-progress"],
+          0, "#e0637f", 1, "#d9b36b"] } });
+
+    map.addLayer({ id: "wp-glow", type: "circle", source: "wps",
+      paint: { "circle-color": themeColorExpr, "circle-opacity": .22, "circle-blur": .9,
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 6, 8, 13] } });
+    map.addLayer({ id: "wp-core", type: "circle", source: "wps",
+      paint: { "circle-color": themeColorExpr, "circle-stroke-color": "#120d1c",
+        "circle-stroke-width": 1.2,
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 2.2, 8, 4.5] } });
+
+    applyFilters();
+
+    // gentle breathing on the glow layer
+    if (!RM) {
+      let ph = 0;
+      setInterval(() => {
+        ph += 0.28;
+        if (map.getLayer("wp-glow"))
+          map.setPaintProperty("wp-glow", "circle-opacity", .16 + .10 * (0.5 + 0.5 * Math.sin(ph)));
+      }, 120);
+    }
+
+    // waypoint tooltip + click-through to the node dossier
+    map.on("mousemove", "wp-core", e => {
+      const p = e.features[0].properties;
+      map.getCanvas().style.cursor = "pointer";
+      showTip(e.point, p.name, `${p.label} — ${p.period}` + (p.precision === "approx" ? " · APPROX" : ""));
+    });
+    map.on("mouseleave", "wp-core", () => { map.getCanvas().style.cursor = ""; hideTip(); });
+    map.on("click", "wp-core", e => openPanel(e.features[0].properties.node));
+    map.on("click", "tie", e => {
+      const p = e.features[0].properties;
+      openPanel(p.a);
+    });
+
+    fitWorld(true);
+  });
+
+  /* ---------------------- DOM node markers ---------------------- */
+  D.nodes.forEach(n => {
+    const p = n.places[0];
+    const el = document.createElement("div");
+    el.className = "node" + (n.type === "movement" ? " mv" : "") + (n.anchor === "right" ? " flip" : "");
+    el.style.color = THEMES[n.theme].color;
+    el.innerHTML = `<span class="dot" style="background:${THEMES[n.theme].color}"></span>
+      <span class="tag"><span class="nm">${n.name}</span><span class="yr">${n.dates}</span></span>`;
+    el.addEventListener("click", ev => { ev.stopPropagation(); openPanel(n.id); });
+    n._el = el;
+    new maplibregl.Marker({ element: el, anchor: n.anchor === "right" ? "right" : "left" })
+      .setLngLat([p.lng, p.lat]).addTo(map);
+  });
+
+  /* ---------------------- constellation index ---------------------- */
+  const rowsEl = byId("cindex-rows");
+  D.nodes.slice().sort((a, b) => a.origin - b.origin).forEach(n => {
+    const r = document.createElement("div");
+    r.className = "n" + (n.type === "movement" ? " mv" : "");
+    r.style.color = THEMES[n.theme].color;
+    r.innerHTML = `<span class="g" style="background:${THEMES[n.theme].color}"></span>
+      <span class="nm">${n.name}</span><span class="yr">${n.dates}</span>`;
+    r.onclick = () => openPanel(n.id);
+    r.onmouseenter = () => n._el && n._el.classList.add("hot");
+    r.onmouseleave = () => n._el && n._el.classList.remove("hot");
+    rowsEl.appendChild(r);
+  });
+  function fitWorld(instant) {
+    const b = new maplibregl.LngLatBounds();
+    D.nodes.forEach(n => n.places.forEach(p => b.extend([p.lng, p.lat])));
+    map.fitBounds(b, { padding: { top: 90, bottom: 160, left: 90, right: 90 },
+      duration: (instant || RM) ? 0 : 1400 });
+  }
+  byId("world-btn").addEventListener("click", () => { closePanel(); fitWorld(); });
+
+  /* ---------------------- legend ---------------------- */
+  (function buildLegend() {
+    const counts = {};
+    D.nodes.forEach(n => counts[n.theme] = (counts[n.theme] || 0) + 1);
+    const wrap = byId("legend-rows");
+    Object.keys(THEMES).forEach(k => {
+      const t = THEMES[k];
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `<span class="sw" style="background:${t.color};color:${t.color}"></span>
+        <span class="lab">${t.label}</span><span class="ct">${counts[k] || 0}</span>`;
+      row.onclick = () => {
+        if (activeThemes.has(k)) { activeThemes.delete(k); row.classList.add("off"); }
+        else { activeThemes.add(k); row.classList.remove("off"); }
+        applyFilters();
+      };
+      wrap.appendChild(row);
+    });
+  })();
+
+  /* ---------------------- timeline ---------------------- */
+  const range = byId("tl-range"), cursorEl = byId("tl-cursor"),
+        fillEl = byId("tl-fill"), dateEl = byId("tl-date");
+  (function buildTimeline() {
+    const track = byId("tl-track");
+    for (let y = Math.ceil(Y0 / 10) * 10; y <= Y1; y += 10) {
+      const p = (y - Y0) / SPAN;
+      const yr = document.createElement("div");
+      yr.className = "tl-year"; yr.style.left = (p * 100) + "%"; yr.textContent = y;
+      track.appendChild(yr);
+    }
+    D.nodes.forEach(n => {
+      const p = (n.origin - Y0) / SPAN;
+      const tk = document.createElement("div");
+      tk.className = "tl-tick";
+      tk.style.left = (p * 100) + "%";
+      tk.style.background = THEMES[n.theme].color;
+      tk.style.boxShadow = "0 0 7px " + THEMES[n.theme].color;
+      tk.title = `${n.origin} — ${n.name}`;
+      tk.onclick = () => openPanel(n.id);
+      track.appendChild(tk);
+    });
+  })();
+  function setCursor(y) {
+    cursorY = y;
+    const p = (y - Y0) / SPAN;
+    cursorEl.style.left = (p * 100) + "%";
+    fillEl.style.width = (p * 100) + "%";
+    range.value = Math.round(p * 1000);
+    dateEl.textContent = timeMode ? Math.round(y) : "all time";
+  }
+  setCursor(Y1);
+  range.addEventListener("input", () => {
+    timeMode = true; stopPlay();
+    setCursor(Y0 + (range.value / 1000) * SPAN);
+    applyFilters();
+  });
+  byId("tl-showall").addEventListener("click", () => {
+    stopPlay(); timeMode = false; setCursor(Y1); applyFilters();
+  });
+  let playT = null;
+  const playBtn = byId("tl-play");
+  playBtn.addEventListener("click", () => playT ? stopPlay() : startPlay());
+  function startPlay() {
+    timeMode = true;
+    if (cursorY >= Y1 - 0.5) cursorY = Y0;
+    playBtn.textContent = "❚❚";
+    const STEP = SPAN / (RM ? 60 : 420);           // ~14 s sweep at 30 ms/frame
+    playT = setInterval(() => {
+      const y = Math.min(Y1, cursorY + STEP);
+      setCursor(y); applyFilters();
+      if (y >= Y1) stopPlay();
+    }, 30);
+  }
+  function stopPlay() {
+    if (playT) clearInterval(playT);
+    playT = null; playBtn.textContent = "▶";
+  }
+
+  /* ---------------------- node dossier panel ---------------------- */
+  const panel = byId("panel");
+  let currentId = null;
+  const order = D.nodes.map(n => n.id);
+
+  function openPanel(id) {
+    const n = nodeOf[id];
+    if (!n) return;
+    currentId = id;
+    const c = THEMES[n.theme];
+
+    const placesHtml = n.places.map(p => `
+      <div class="p-place">
+        <span class="pl">${p.label}</span>
+        <span class="pd">${p.period}
+          <span class="co">${fmtLL(p.lat, p.lng)} ${p.precision === "approx" ? "<b>· APPROX</b>" : "· EXACT"}</span>
+        </span>
+      </div>`).join("");
+
+    const ties = D.ties.filter(t => t.a === id || t.b === id);
+    const tiesHtml = ties.length ? ties.map(t => {
+      const other = nodeOf[t.a === id ? t.b : t.a];
+      return `<div class="p-tie" data-go="${other.id}">
+        <div class="k">${t.kind.toUpperCase()} · ${t.year}</div>
+        <div class="who" style="color:${THEMES[other.theme].color}">→ ${other.name}</div>
+        <div class="nt">${t.note}</div>
+      </div>`;
+    }).join("") : `<div class="p-note" style="margin-top:0">No documented inter-node tie is asserted for this
+      node yet. Ties are added only where documented — see METHOD.</div>`;
+
+    const srcHtml = (n.sources || []).map(s => `
+      <a class="src" href="${s.url}" target="_blank" rel="noopener">
+        <span class="evc">${evOf(s).code}</span>
+        <span class="w">
+          <div class="pub">${s.publisher}</div>
+          <div class="ti">${s.title}</div>
+          <div class="meta"><span>${s.date}</span><span>↗ ${hostOf(s.url)}</span>${s.deepLink === false ? '<span class="flag">precise link pending verification</span>' : ""}</div>
+        </span>
+      </a>`).join("");
+
+    const matHtml = (n.materials || []).map(m => {
+      const kd = KIND[m.kind] || KIND.doc;
+      return `
+      <a class="mat" href="${m.url}" target="_blank" rel="noopener">
+        <span class="evc">${matOf(m).code}</span>
+        <span class="kd" style="background:${kd.color}">${kd.label}</span>
+        <span class="w">
+          <div class="ti">${m.title}</div>
+          <div class="nt">${m.note}</div>
+          <div class="meta"><span>${m.date}</span><span>${m.holder}</span><span>↗ ${hostOf(m.url)}</span>${m.deepLink === false ? '<span class="flag">precise link pending verification</span>' : ""}</div>
+        </span>
+      </a>`;
+    }).join("");
+
+    byId("panel-body").innerHTML = `
+      <div class="p-kind ${n.type === "movement" ? "mv" : ""}" style="color:${c.color}">
+        <span class="sw" style="background:${c.color}"></span>${n.type === "movement" ? "Movement" : "Figure"} — ${c.label}</div>
+      <h2 class="p-title">${n.name}</h2>
+      <div class="p-role">${n.role}</div>
+      <div class="p-dates">${n.dates.toUpperCase()} · STATUS: ${(n.status || "documented").toUpperCase()}</div>
+      <div class="p-divider"></div>
+      <div class="p-summary">${n.annotation}</div>
+      <div class="p-lens"><div class="h">READING — GENDER &amp; SOLIDARITY</div><div class="b">${n.lens}</div></div>
+      ${matHtml ? `<div class="p-sec-h">Primary materials · ${(n.materials || []).length} item${(n.materials || []).length > 1 ? "s" : ""}</div>${matHtml}` : ""}
+      <div class="p-sec-h">Trajectory · ${n.places.length} place${n.places.length > 1 ? "s" : ""}</div>
+      ${placesHtml}
+      <div class="p-sec-h">Solidarity ties</div>
+      ${tiesHtml}
+      <div class="p-sec-h">Evidence · ${(n.sources || []).length} items</div>
+      ${srcHtml}
+      <div class="p-note">Annotation and reading are kept deliberately apart: the annotation is factual
+        and sourceable; the reading is this project's interpretive claim. Coordinates flagged APPROX are
+        area-level. This record is part of an open, versioned dataset and will be revised as research develops.</div>`;
+
+    byId("panel-body").querySelectorAll("[data-go]").forEach(el =>
+      el.addEventListener("click", () => openPanel(el.dataset.go)));
+
+    panel.classList.add("open");
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+
+    const b = new maplibregl.LngLatBounds();
+    n.places.forEach(p => b.extend([p.lng, p.lat]));
+    map.fitBounds(b, { padding: { top: 110, bottom: 180, left: 110, right: 460 },
+      maxZoom: 6.2, duration: RM ? 0 : 1200 });
+  }
+  function closePanel() {
+    panel.classList.remove("open"); currentId = null;
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  }
+  byId("panel-close").addEventListener("click", closePanel);
+  function hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } }
+
+  /* ---------------------- tooltip ---------------------- */
+  const tip = byId("tip");
+  function showTip(pt, t, d) {
+    tip.querySelector(".t").textContent = t;
+    tip.querySelector(".d").textContent = d;
+    tip.style.left = pt.x + "px"; tip.style.top = pt.y + "px"; tip.style.display = "block";
+  }
+  function hideTip() { tip.style.display = "none"; }
+
+  /* ---------------------- basemap toggle ---------------------- */
+  byId("basemap-seg").addEventListener("click", e => {
+    const btn = e.target.closest("button"); if (!btn) return;
+    document.querySelectorAll("#basemap-seg button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const sat = btn.dataset.base === "satellite";
+    map.setLayoutProperty("carto-dark", "visibility", sat ? "none" : "visible");
+    map.setLayoutProperty("esri-sat", "visibility", sat ? "visible" : "none");
+    map.setLayoutProperty("carto-labels", "visibility", sat ? "visible" : "none");
+  });
+
+  /* ---------------------- method modal (auto-generated) ---------------------- */
+  byId("method-lede").textContent =
+    `${D.meta.code} · v${D.meta.version} · updated ${D.meta.updated} · ${REG.length} evidence items`;
+  (function buildMethod() {
+    const gaz = [];
+    D.nodes.forEach(n => n.places.forEach(p =>
+      gaz.push({ node: n.name, label: p.label, lat: p.lat, lng: p.lng, precision: p.precision })));
+    byId("method-body").innerHTML = `
+      <h3>Engine</h3>
+      <p>MapLibre GL JS (open source, no API keys) over CARTO/OSM dark tiles and Esri World Imagery.
+        Trajectories and ties are great-circle arcs computed from the versioned dataset
+        (<code>data/solidarities.js</code>); nothing is hand-drawn. The timeline reveals the network
+        by year; <code>prefers-reduced-motion</code> is honoured. Static site, no build step.</p>
+      <h3>Annotation standard</h3>
+      <p>Each node separates a <em>factual annotation</em> (sourceable, attributed) from an explicitly
+        labelled <em>interpretive reading</em> addressing the project's core question. Sources carry
+        stable evidence codes (E01…) deduplicated across the map; <code>deepLink:false</code> flags a
+        citation whose precise URL is pending verification — the listed link is the publisher's real
+        root domain in the meantime. Timeline years on places and ties are reveal metadata, not
+        date claims; the citable statement is the human-readable period string.</p>
+      <h3>Coordinate gazetteer</h3>
+      <p>Entries flagged <span style="color:#d9b36b">APPROX</span> are area-level (villages, territories,
+        founding sites) and must not be read as precise. City and campus points are gazetteer-grade.</p>
+      <table><thead><tr><th>PLACE</th><th>NODE</th><th>LAT</th><th>LON</th><th>PRECISION</th></tr></thead>
+      <tbody>${gaz.map(g => `<tr><td>${g.label}</td><td>${g.node}</td>
+        <td>${g.lat.toFixed(4)}°</td><td>${g.lng.toFixed(4)}°</td>
+        <td class="${g.precision === "exact" ? "ex" : "ap"}">${g.precision.toUpperCase()}</td></tr>`).join("")}
+      </tbody></table>
+      <h3>Primary-materials register</h3>
+      <p>Photographs, speeches, writings and records that elucidate each node's feminist politics of
+        resistance and solidarity. Materials are <em>linked at their holding archives and publishers,
+        never re-hosted</em>; rights remain with their holders. Items flagged “pending verification”
+        link to the holder's real root domain until the precise URL is confirmed.</p>
+      <table><thead><tr><th>CODE</th><th>KIND</th><th>ITEM</th><th>HOLDER</th><th>USED BY</th></tr></thead>
+      <tbody>${MREG.map(m => `<tr><td>${m.code}</td><td>${(KIND[m.kind] || KIND.doc).label}</td>
+        <td>${m.title}</td><td>${m.holder}</td>
+        <td>${m.nodes.map(id => nodeOf[id].name).join(", ")}</td></tr>`).join("")}</tbody></table>
+      <h3>Evidence registry</h3>
+      <table><thead><tr><th>CODE</th><th>SOURCE</th><th>CITED BY</th></tr></thead>
+      <tbody>${REG.map(s => `<tr><td>${s.code}</td><td>${s.publisher} — ${s.title}</td>
+        <td>${s.nodes.map(id => nodeOf[id].name).join(", ")}</td></tr>`).join("")}</tbody></table>
+      <h3>Interface</h3>
+      <p>Click nodes on the map, in the constellation index, or on timeline ticks · every node has a
+        stable deep-link anchor (<code>#claudia-jones</code>, <code>#rawa</code>, …) kept in the address
+        bar · <span style="font-family:var(--mono)">←</span>/<span style="font-family:var(--mono)">→</span>
+        step through the constellation · ESC closes.</p>`;
+  })();
+
+  /* ---------------------- cite modal ---------------------- */
+  (function buildCite() {
+    const url = location.href.split("#")[0];
+    const acc = new Date().toISOString().slice(0, 10);
+    const chi = `${D.meta.org}. “${D.meta.title}: ${D.meta.theme}.” ${D.meta.code}, v${D.meta.version}. ${url}. Accessed ${acc}.`;
+    const bib = `@misc{gss_${D.meta.code.toLowerCase().replace(/-/g, "_")},
+  author       = {{${D.meta.org}}},
+  title        = {${D.meta.title}: ${D.meta.theme}},
+  howpublished = {${D.meta.code}, v${D.meta.version}},
+  year         = {${D.meta.updated.slice(0, 4)}},
+  url          = {${url}},
+  note         = {Accessed ${acc}}
+}`;
+    byId("cite-body").innerHTML = `
+      <h3>Chicago</h3><pre id="cite-chi"></pre><button class="cp" data-copy="cite-chi">COPY</button>
+      <h3>BibTeX</h3><pre id="cite-bib"></pre><button class="cp" data-copy="cite-bib">COPY</button>
+      <h3>Node-level citation</h3>
+      <p>Every figure and movement has a stable anchor — append it to the URL to cite a specific
+        dossier, e.g. <code>#claudia-jones</code> or <code>#rawa</code>. The open anchor is kept in the
+        address bar while a dossier is open.</p>`;
+    byId("cite-chi").textContent = chi;
+    byId("cite-bib").textContent = bib;
+    document.querySelectorAll("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const t = byId(btn.dataset.copy).textContent;
+        const done = () => { btn.textContent = "COPIED ✓"; setTimeout(() => btn.textContent = "COPY", 1400); };
+        if (navigator.clipboard && navigator.clipboard.writeText)
+          navigator.clipboard.writeText(t).then(done, done);
+        else {
+          const ta = document.createElement("textarea");
+          ta.value = t; document.body.appendChild(ta); ta.select();
+          try { document.execCommand("copy"); } catch (e) {}
+          ta.remove(); done();
+        }
+      });
+    });
+  })();
+
+  /* ---------------------- modals ---------------------- */
+  function wire(btnId, ovId) {
+    const ov = byId(ovId);
+    byId(btnId).addEventListener("click", () => ov.classList.add("open"));
+    ov.addEventListener("click", e => { if (e.target === ov) ov.classList.remove("open"); });
+    ov.querySelector("[data-close]").addEventListener("click", () => ov.classList.remove("open"));
+  }
+  wire("about-btn", "about-overlay");
+  wire("method-btn", "method-overlay");
+  wire("cite-btn", "cite-overlay");
+  function closeModals() { document.querySelectorAll(".overlay.open").forEach(o => o.classList.remove("open")); }
+
+  /* ---------------------- keyboard ---------------------- */
+  document.addEventListener("keydown", e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+    if (e.key === "Escape") { closeModals(); closePanel(); return; }
+    let d = 0;
+    if (e.key === "ArrowRight") d = 1; else if (e.key === "ArrowLeft") d = -1;
+    if (!d) return;
+    e.preventDefault();
+    const i = currentId ? order.indexOf(currentId) : (d > 0 ? -1 : 0);
+    openPanel(order[(i + d + order.length) % order.length]);
+  });
+
+  /* ---------------------- deep link ---------------------- */
+  (function () {
+    let h = ""; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+    if (h && nodeOf[h]) openPanel(h);
+  })();
+
+  /* diagnostic console handle — engine state for tests, reviewers and power users */
+  window.PJM = Object.freeze({
+    code: D.meta.code, version: D.meta.version, updated: D.meta.updated,
+    map, nodes: D.nodes.map(n => n.id), registry: REG,
+    open: openPanel, current: () => currentId
+  });
+})();
+</script>
+</body>
+</html>
