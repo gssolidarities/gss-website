@@ -1,0 +1,16 @@
+{
+  "id": "remembering-uncommemorated",
+  "title": "Remembering Uncommemorated Genocides & Holocausts",
+  "subtitle": "A sub-archive within The Anarchive",
+  "authors": ["GSS Anarchive"],
+  "year": 2026,
+  "type": "collection",
+  "tags": ["collection", "sub-archive", "genocide", "holocaust", "memory", "counter-record"],
+  "abstract": "A dedicated sub-archive within The GSS Anarchive: interactive data anarchives of the genocides and holocausts that mainstream memory refuses to keep. Curated from the research of Dr. Gideon Polya and other dissenting scholars. Current entries: the Muslim Holocaust / Muslim Genocide (post-9/11, 32M avoidable deaths across 20 countries) and the Aboriginal Genocide in Australia (1788 to present, ongoing). Forthcoming: the Indian Holocaust under the British Raj (1.8B excess deaths) and the projected Climate Genocide (10B this century). Every entry is a full data page with chapters, charts, timelines, voices, and sources.",
+  "language": "English",
+  "added": "2026-07-05",
+  "includes": [
+    "muslim-holocaust-muslim-genocide",
+    "aboriginal-genocide-australia"
+  ]
+}

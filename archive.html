@@ -779,6 +779,67 @@ body::after{
   z-index:3;
 }
 
+/* ── COLLECTION CARD — distinct treatment for sub-archives ── */
+.cat-card.is-collection{
+  grid-column:span 2;
+  background:linear-gradient(135deg, #f0e6cb 0%, #ede2c2 40%, #e3d5aa 100%);
+  border:1px solid var(--gold);
+  border-top:4px solid var(--gold-bright);
+  box-shadow:8px 10px 0 rgba(0,0,0,0.40), 0 4px 24px rgba(240,200,138,0.14);
+}
+.cat-card.is-collection:hover{
+  box-shadow:12px 18px 0 rgba(0,0,0,0.48), 0 16px 42px rgba(240,200,138,0.22);
+}
+.cat-card.is-collection .cat-cover{
+  height:210px;
+  background:linear-gradient(135deg,#2a1c3d 0%,#3d2a52 50%,#7c5b96 100%);
+}
+.cat-card.is-collection .cat-cover.proc .proc-title{
+  font-size:22px;
+  color:#f2eddc;
+  text-shadow:0 2px 4px rgba(0,0,0,0.30);
+}
+.cat-card.is-collection .cat-cover::before{
+  content:'▸ Sub-Archive · a room within The Archive';
+  position:absolute; top:12px; left:14px;
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(240,200,138,0.9);
+  z-index:4;
+}
+.cat-card.is-collection .cat-title{
+  font-size:26px;
+  color:#2a1c3d;
+}
+.cat-card.is-collection .cat-type-line{
+  color:#5e3a1a;
+}
+.cat-card.is-collection .cat-abstract{
+  -webkit-line-clamp:4;
+  font-size:15px;
+}
+.cat-card.is-collection .cat-cta{
+  color:#3d2a52;
+  border-bottom-color:#3d2a52;
+  font-weight:700;
+}
+.cat-card.is-collection .cat-cta:hover{
+  color:#7c5b96;
+  border-bottom-color:#7c5b96;
+}
+.collection-includes{
+  margin-top:10px;
+  padding:6px 10px;
+  background:rgba(61,42,82,0.10);
+  border:1px solid rgba(61,42,82,0.30);
+  color:#3d2a52;
+  font-family:var(--mono);
+  font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  display:inline-block;
+}
+.collection-includes b{ color:#7c5b96; font-family:var(--display); font-size:1.15em; font-weight:700; margin-right:5px; }
+@media(max-width:900px){ .cat-card.is-collection{ grid-column:span 1; } }
+
 /* BODY of card */
 .cat-body{
   padding:18px 20px 16px;
@@ -1224,6 +1285,7 @@ body::after{
 <div class="filter-bar">
   <div class="chips" id="filterChips">
     <button class="chip active" data-filter="all">All <span class="count" id="cAll">0</span></button>
+    <button class="chip" data-filter="collection">Sub-Archives <span class="count" id="cCollection">0</span></button>
     <button class="chip" data-filter="book">Books <span class="count" id="cBook">0</span></button>
     <button class="chip" data-filter="essay">Essays <span class="count" id="cEssay">0</span></button>
     <button class="chip" data-filter="research">Research <span class="count" id="cResearch">0</span></button>
@@ -1335,11 +1397,12 @@ const TYPE_COLORS = {
   zine:       { bg: 'linear-gradient(135deg,#7a3a5f 0%,#a04a78 100%)', accent: '#ffc1e8' },
   pedagogy:   { bg: 'linear-gradient(135deg,#6e5732 0%,#b89656 100%)', accent: '#f0e8d0' },
   multimedia: { bg: 'linear-gradient(135deg,#3a2f6e 0%,#5a4abc 100%)', accent: '#c8b6ff' },
+  collection: { bg: 'linear-gradient(135deg,#3d2a52 0%,#7c5b96 100%)', accent: '#f0c88a' },
   document:   { bg: 'linear-gradient(135deg,#3b2d1d 0%,#5a4630 100%)', accent: '#d6c9a8' }
 };
 const TYPE_LABEL = {
   book:'Book', essay:'Essay', research:'Research', zine:'Zine',
-  pedagogy:'Pedagogy', multimedia:'Multimedia', document:'Document'
+  pedagogy:'Pedagogy', multimedia:'Multimedia', collection:'Sub-Archive', document:'Document'
 };
 
 function escapeHtml(s){
@@ -1383,6 +1446,8 @@ function renderCard(item, idx){
   const rel = relTime(item.added);
   const authorsArr = Array.isArray(item.authors) ? item.authors : (item.authors ? [item.authors] : []);
   const tagsArr = Array.isArray(item.tags) ? item.tags : [];
+  const isCollection = type === 'collection';
+  const includes = Array.isArray(item.includes) ? item.includes : [];
 
   const coverHtml = item.cover ? `
     <div class="cat-cover has-image">
@@ -1398,8 +1463,12 @@ function renderCard(item, idx){
       <span class="stamp">${TYPE_LABEL[type] || 'Document'}</span>
     </div>`;
 
+  const includesBadge = isCollection && includes.length
+    ? `<div class="collection-includes"><b>${includes.length}</b> archives inside — open to browse</div>` : '';
+  const ctaLabel = isCollection ? 'Enter Sub-Archive →' : 'Open →';
+
   return `
-  <article class="cat-card rv" data-id="${escapeHtml(item.id || '')}" data-type="${escapeHtml(type)}">
+  <article class="cat-card rv${isCollection ? ' is-collection' : ''}" data-id="${escapeHtml(item.id || '')}" data-type="${escapeHtml(type)}">
     ${coverHtml}
     <div class="cat-body">
       <div class="cat-type-line">
@@ -1412,9 +1481,10 @@ function renderCard(item, idx){
       ${item.subtitle ? `<p class="cat-subtitle">${escapeHtml(item.subtitle)}</p>` : ''}
       ${authorsArr.length ? `<p class="cat-authors"><span class="by">By</span>${escapeHtml(authorsArr.join(' · '))}</p>` : ''}
       ${item.abstract ? `<p class="cat-abstract">${escapeHtml(item.abstract)}</p>` : ''}
+      ${includesBadge}
       ${tagsArr.length ? `<div class="cat-tags">${tagsArr.map(t => `<span class="t">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
       <div class="cat-foot">
-        <span class="cat-cta">Open →</span>
+        <span class="cat-cta">${ctaLabel}</span>
         <span class="cat-size">${fmtSize(item.size)}</span>
       </div>
     </div>
@@ -1514,12 +1584,13 @@ function applyFilters(){
 }
 
 function updateChipCounts(){
-  const counts = { all: ALL_ITEMS.length, book:0, essay:0, research:0, zine:0, pedagogy:0, multimedia:0 };
+  const counts = { all: ALL_ITEMS.length, collection:0, book:0, essay:0, research:0, zine:0, pedagogy:0, multimedia:0 };
   ALL_ITEMS.forEach(i => {
     const t = (i.type||'document').toLowerCase();
     if (counts[t] != null) counts[t]++;
   });
   document.getElementById('cAll').textContent = counts.all;
+  document.getElementById('cCollection').textContent = counts.collection;
   document.getElementById('cBook').textContent = counts.book;
   document.getElementById('cEssay').textContent = counts.essay;
   document.getElementById('cResearch').textContent = counts.research;

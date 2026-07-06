@@ -149,8 +149,16 @@ def gather() -> dict:
         entry = {k: v for k, v in entry.items() if v not in (None, "", [], {})}
         items.append(entry)
 
-    # Sort newest first by "added" date
+    # Sort: collections first (they're gateways), then newest-first by "added"
+    def sort_key(e):
+        type_priority = 0 if e.get("type") == "collection" else 1
+        return (type_priority, "" if e.get("added") is None else -1)
+    items.sort(key=lambda e: (0 if e.get("type") == "collection" else 1, ), reverse=False)
+    # Within each group, newest first
+    items.sort(key=lambda e: (0 if e.get("type") == "collection" else 1, ))
+    # secondary sort by date desc within groups
     items.sort(key=lambda e: e.get("added", ""), reverse=True)
+    items.sort(key=lambda e: 0 if e.get("type") == "collection" else 1)
 
     return {
         "items": items,

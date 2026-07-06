@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aboriginal Genocide in Australia — A Data Anarchive · GSS</title>
+<meta name="description" content="An interactive data visualization of the ongoing Aboriginal Genocide in Australia — from Frontier Wars to Stolen Generations to present-day avoidable mortality. Global South Solidarities Anarchive.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+<style>
+:root{
+  --black:        #0b0806;
+  --void:         #050302;
+  --panel:        #14100a;
+  --panel-2:      #1a140d;
+  --ochre:        #d18b3c;
+  --ochre-bright: #f0b062;
+  --ochre-deep:   #7c4d1a;
+  --earth:        #a04a1e;
+  --earth-deep:   #5e2a0f;
+  --gold:         #d9b44a;
+  --gold-bright:  #f0cf6b;
+  --crimson:      #b8402d;
+  --crimson-br:   #e05a3f;
+  --crimson-deep: #6e1b10;
+  --bone:         #f2ead8;
+  --bone-dim:     #cabf9e;
+  --ash:          #8d8267;
+  --ash-dim:      #5b5240;
+  --hair:         rgba(209,139,60,0.15);
+  --hair-earth:   rgba(160,74,30,0.20);
+  --display:      "Cormorant Garamond", Georgia, serif;
+  --body:         "Inter", system-ui, sans-serif;
+  --mono:         "Space Mono", ui-monospace, monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--black);
+  color:var(--bone);
+  font-family:var(--body);
+  font-size:19px;
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background:var(--ochre); color:var(--void); }
+
+/* subtle grain */
+body::after{
+  content:''; position:fixed; inset:0; z-index:9000; pointer-events:none;
+  opacity:.30; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+
+/* ── TOP NAV ── */
+#topbar{
+  position:fixed; top:0; left:0; right:0; z-index:8000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 26px; height:46px;
+  background:rgba(11,8,6,0.86);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--hair);
+  font-family:var(--mono);
+}
+#topbar a{
+  font-size:12px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--bone-dim); text-decoration:none; transition:color .22s;
+}
+#topbar a:hover{ color:var(--ochre-bright); }
+#topbar .brand{ color:var(--ochre); letter-spacing:3px; }
+
+/* scroll progress */
+#scrollbar{
+  position:fixed; top:46px; left:0; height:2px; width:0%;
+  background:linear-gradient(90deg, var(--ochre), var(--gold), var(--crimson));
+  z-index:8001; transition:width .1s linear;
+}
+
+/* ── SECTION SCAFFOLD ── */
+section{ position:relative; }
+.wrap{ max-width:1180px; margin:0 auto; padding:0 6vw; }
+.eyebrow{
+  font-family:var(--mono);
+  font-size:13px; letter-spacing:.4em; text-transform:uppercase;
+  color:var(--ochre-bright);
+  display:inline-flex; align-items:center; gap:12px;
+  margin-bottom:24px;
+}
+.eyebrow::before{ content:''; width:30px; height:1px; background:var(--ochre); }
+.sec-title{
+  font-family:var(--display);
+  font-weight:600;
+  font-size:clamp(36px, 5.4vw, 66px);
+  line-height:1.05;
+  letter-spacing:-0.5px;
+  color:var(--bone);
+  margin-bottom:24px;
+}
+.sec-title .gold{ color:var(--gold-bright); font-style:italic; font-weight:500; }
+.sec-title .crimson{ color:var(--crimson-br); }
+.sec-title .ochre{ color:var(--ochre-bright); font-style:italic; font-weight:500; }
+.lede{
+  font-family:var(--display);
+  font-size:clamp(22px, 2.5vw, 30px);
+  line-height:1.55;
+  color:var(--bone-dim);
+  max-width:800px;
+  font-style:italic;
+}
+.body-p{
+  font-size:18.5px;
+  line-height:1.85;
+  color:var(--bone-dim);
+  max-width:760px;
+  margin-bottom:18px;
+}
+.body-p strong{ color:var(--bone); font-weight:600; }
+.body-p .hl{ color:var(--ochre-bright); }
+
+.rv{ opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.9,.3,1); }
+.rv.vis{ opacity:1; transform:translateY(0); }
+
+/* ═══════════════════════════════════════════════ */
+/* ════════════════════ HERO ═════════════════════ */
+/* ═══════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:120px 6vw 80px;
+  position:relative; overflow:hidden;
+  border-bottom:1px solid var(--hair);
+}
+.hero::before{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(209,139,60,0.10), transparent 45%),
+    radial-gradient(circle at 75% 65%, rgba(184,64,45,0.10), transparent 45%);
+  pointer-events:none;
+}
+.hero-inner{ position:relative; z-index:2; max-width:1100px; }
+.hero .acknowledgement{
+  font-family:var(--display); font-style:italic;
+  font-size:clamp(17px, 2.0vw, 22px);
+  color:var(--ochre-bright);
+  max-width:760px;
+  margin-bottom:32px;
+  line-height:1.6;
+  padding:16px 0 16px 20px;
+  border-left:2px solid var(--ochre);
+  opacity:.9;
+}
+.hero h1{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(44px, 8.5vw, 132px);
+  line-height:0.92;
+  letter-spacing:-2px;
+  color:var(--bone);
+  margin-bottom:14px;
+}
+.hero h1 .ln2{ color:var(--crimson-br); display:block; }
+.hero h1 .ln3{ color:var(--ochre-bright); display:block; font-style:italic; font-weight:500; }
+.hero-sub{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:clamp(20px, 2.5vw, 30px);
+  color:var(--bone-dim);
+  max-width:720px;
+  margin-top:26px;
+  line-height:1.55;
+}
+
+.stat-row{
+  margin-top:54px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:0;
+  border:1px solid var(--hair);
+}
+.stat-cell{
+  padding:24px 26px;
+  border-right:1px solid var(--hair);
+  font-family:var(--mono);
+  background:rgba(20,16,10,0.5);
+}
+.stat-cell:last-child{ border-right:none; }
+.stat-key{ font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--ash); margin-bottom:8px; }
+.stat-val{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(28px, 4vw, 44px); color:var(--ochre-bright);
+  line-height:1; letter-spacing:-1px;
+}
+.stat-val .sub{ font-family:var(--mono); font-size:12px; color:var(--ash); letter-spacing:.1em; margin-left:6px; }
+@media(max-width:720px){
+  .stat-cell{ border-right:none; border-bottom:1px solid var(--hair); }
+  .stat-cell:last-child{ border-bottom:none; }
+}
+
+/* ── ATTRIBUTION STRIP ── */
+.attribution{
+  background:var(--panel);
+  border-top:1px solid var(--hair);
+  border-bottom:1px solid var(--hair);
+  padding:30px 6vw;
+}
+.attribution .wrap-flex{
+  max-width:1180px; margin:0 auto;
+  display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:14.5px; letter-spacing:.04em;
+  color:var(--ash);
+  line-height:1.75;
+}
+.attribution .seal{
+  flex-shrink:0;
+  width:54px; height:54px; border:1px solid var(--ochre);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ochre); font-family:var(--display); font-size:24px;
+}
+.attribution b{ color:var(--ochre-bright); }
+.attribution a{ color:var(--gold-bright); text-decoration:none; border-bottom:1px solid var(--ochre-deep); }
+.attribution a:hover{ border-color:var(--ochre-bright); }
+
+/* ── STANDARD SECTION ── */
+.block{ padding:clamp(70px, 11vh, 130px) 0; border-bottom:1px solid var(--hair); }
+
+/* ── POPULATION COLLAPSE VISUAL ── */
+.pop-bars{
+  margin-top:56px;
+  display:flex; align-items:flex-end; gap:40px;
+  padding:40px 30px; border:1px solid var(--hair);
+  background:linear-gradient(180deg, rgba(209,139,60,0.05), transparent);
+  min-height:340px;
+}
+.pop-bar{
+  flex:1;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  position:relative;
+}
+.pop-bar .fill{
+  width:56px;
+  background:linear-gradient(180deg, var(--ochre), var(--earth));
+  border-top:2px solid var(--ochre-bright);
+  transition:height 1.6s cubic-bezier(.2,.9,.3,1);
+  height:0;
+  min-height:6px;
+}
+.pop-bar.crimson .fill{ background:linear-gradient(180deg, var(--crimson-br), var(--crimson-deep)); border-top-color:var(--crimson-br); }
+.pop-bar.gold .fill{ background:linear-gradient(180deg, var(--gold-bright), var(--gold)); border-top-color:var(--gold-bright); }
+.pop-bar .num{
+  font-family:var(--display); font-weight:700; font-size:clamp(22px, 3vw, 32px);
+  color:var(--bone); line-height:1;
+}
+.pop-bar .yr{
+  font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--ash);
+  text-align:center; line-height:1.5;
+}
+.pop-bar .lbl{
+  font-family:var(--display); font-style:italic; font-size:14px; color:var(--bone-dim);
+  text-align:center; max-width:130px;
+}
+@media(max-width:640px){ .pop-bars{ gap:16px; padding:24px 12px; } .pop-bar .fill{ width:36px; } }
+
+/* ── BIG COUNT SECTION ── */
+.mega-count{
+  margin-top:36px;
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(72px, 14vw, 180px);
+  line-height:0.85; color:var(--crimson-br);
+  letter-spacing:-3px;
+  text-shadow:0 0 60px rgba(184,64,45,0.35);
+}
+.mega-count .unit{ font-size:0.4em; color:var(--bone-dim); font-weight:400; margin-left:12px; }
+.mega-lbl{
+  margin-top:14px; font-family:var(--mono);
+  font-size:14px; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--bone-dim);
+  max-width:520px;
+}
+
+/* ── TIMELINE ── */
+.timeline{ margin-top:50px; position:relative; padding-left:28px; }
+.timeline::before{ content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:linear-gradient(var(--ochre), var(--crimson)); }
+.tl-item{ position:relative; padding:0 0 34px 26px; }
+.tl-item::before{
+  content:''; position:absolute; left:-22px; top:6px;
+  width:11px; height:11px; border-radius:50%;
+  background:var(--void); border:2px solid var(--gold);
+}
+.tl-item .tl-year{ font-family:var(--mono); font-size:13px; letter-spacing:.2em; color:var(--gold-bright); }
+.tl-item .tl-event{ font-family:var(--display); font-size:clamp(20px, 2.4vw, 27px); color:var(--bone); font-weight:600; margin:4px 0 8px; }
+.tl-item .tl-desc{ font-size:16.5px; color:var(--ash); max-width:660px; line-height:1.75; }
+
+/* ── STOLEN GENERATIONS ── */
+.stolen{
+  margin-top:44px;
+  display:grid; grid-template-columns:auto 1fr;
+  gap:38px; align-items:center;
+  padding:44px 40px;
+  border:1px solid var(--crimson-deep);
+  background:linear-gradient(135deg, rgba(184,64,45,0.10), rgba(20,16,10,0.55));
+}
+.stolen .num{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(72px, 12vw, 140px);
+  line-height:0.85; color:var(--crimson-br);
+  letter-spacing:-3px;
+  text-shadow:0 0 60px rgba(184,64,45,0.30);
+  min-width:180px;
+}
+.stolen .txt{
+  font-family:var(--display); font-size:22px; line-height:1.55; color:var(--bone);
+}
+.stolen .txt .lbl{
+  display:block; font-family:var(--mono); font-size:12.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--crimson-br); margin-bottom:10px;
+}
+.stolen .txt strong{ color:var(--gold-bright); }
+@media(max-width:700px){ .stolen{ grid-template-columns:1fr; padding:30px 24px; } }
+
+/* ── LIFE EXPECTANCY GAP ── */
+.gap-grid{
+  margin-top:44px; display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border:1px solid var(--hair);
+}
+.gap-cell{ padding:36px 32px; border-right:1px solid var(--hair); }
+.gap-cell:last-child{ border-right:none; }
+.gap-cell.dim{ background:linear-gradient(180deg, rgba(209,139,60,0.04), transparent); }
+.gap-key{ font-family:var(--mono); font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ash); margin-bottom:12px; }
+.gap-val{ font-family:var(--display); font-weight:700; font-size:clamp(48px, 6vw, 76px); color:var(--crimson-br); line-height:0.9; letter-spacing:-1px; }
+.gap-val .unit{ font-size:0.38em; color:var(--bone-dim); font-weight:400; margin-left:4px; }
+.gap-desc{ margin-top:14px; font-family:var(--display); font-style:italic; font-size:16.5px; color:var(--bone-dim); line-height:1.6; }
+@media(max-width:720px){ .gap-grid{ grid-template-columns:1fr; } .gap-cell{ border-right:none; border-bottom:1px solid var(--hair); } .gap-cell:last-child{ border-bottom:none; } }
+
+/* ── COMPARISON: ABORIGINAL vs PALESTINIAN ── */
+.comp-table{
+  margin-top:44px;
+  border:1px solid var(--hair);
+  overflow:hidden;
+}
+.comp-row{
+  display:grid; grid-template-columns:2fr 1fr 1fr;
+  padding:16px 24px;
+  border-bottom:1px solid var(--hair);
+  font-family:var(--mono);
+  align-items:center;
+}
+.comp-row:last-child{ border-bottom:none; }
+.comp-row.head{
+  background:rgba(209,139,60,0.08);
+  font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--ochre-bright);
+}
+.comp-row .comp-lbl{ color:var(--bone-dim); font-size:14.5px; letter-spacing:.04em; }
+.comp-row .comp-a, .comp-row .comp-b{
+  font-family:var(--display); font-weight:600; font-size:19px; color:var(--bone); text-align:right;
+}
+.comp-row .comp-a{ color:var(--ochre-bright); }
+.comp-row .comp-b{ color:var(--gold-bright); }
+
+/* ── DEFINITION BLOCK ── */
+.def-block{
+  background:linear-gradient(180deg, rgba(209,139,60,0.06), var(--void));
+  border-top:1px solid var(--hair);
+  border-bottom:1px solid var(--hair);
+}
+.def-card{
+  margin-top:40px;
+  border:1px solid var(--ochre-deep);
+  background:rgba(11,8,6,0.5);
+  padding:44px 46px;
+  position:relative;
+}
+.def-card .src{ font-family:var(--mono); font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ochre-bright); margin-bottom:18px; }
+.def-card .quote{ font-family:var(--display); font-style:italic; font-size:clamp(22px, 2.8vw, 32px); line-height:1.5; color:var(--bone); }
+.def-card .acts{ margin-top:26px; display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:14px; }
+.def-card .act{
+  border-left:2px solid var(--ochre); padding:10px 16px;
+  font-size:16px; color:var(--bone-dim); line-height:1.65;
+  background:rgba(209,139,60,0.05);
+}
+.def-card .act.applies{ background:rgba(184,64,45,0.10); border-left-color:var(--crimson-br); }
+.def-card .act.applies b{ color:var(--crimson-br); font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; display:block; margin-top:6px; }
+
+/* ── VOICES / QUOTES ── */
+.quote-list{ margin-top:44px; }
+.q-item{
+  padding:24px 28px 24px 40px;
+  border-left:3px solid var(--ochre);
+  background:linear-gradient(90deg, rgba(209,139,60,0.06), transparent);
+  margin-bottom:20px;
+  position:relative;
+}
+.q-item::before{
+  content:'"'; position:absolute; left:12px; top:-8px;
+  font-family:var(--display); font-size:56px; color:var(--ochre-deep); line-height:1;
+}
+.q-item .q-text{ font-family:var(--display); font-style:italic; font-size:20px; line-height:1.55; color:var(--bone); }
+.q-item .q-src{ margin-top:10px; font-family:var(--mono); font-size:12.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--ochre-bright); }
+
+/* ── SYSTEMIC ISSUES GRID ── */
+.sys-grid{
+  margin-top:44px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:16px;
+}
+.sys-cell{
+  border:1px solid var(--hair);
+  padding:22px 22px;
+  background:var(--panel);
+  transition:border-color .25s, transform .25s;
+}
+.sys-cell:hover{ border-color:var(--ochre-deep); transform:translateY(-3px); }
+.sys-cell .n{
+  font-family:var(--display); font-weight:700; font-size:36px;
+  color:var(--crimson-br); line-height:0.95;
+}
+.sys-cell .n .u{ font-size:0.55em; color:var(--bone-dim); }
+.sys-cell .k{ font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--ochre-bright); margin-top:12px; }
+.sys-cell .d{ font-size:15px; color:var(--bone-dim); margin-top:8px; line-height:1.55; }
+
+/* ── SOURCES BLOCK ── */
+.sources-block{ background:var(--void); }
+.primary-source{
+  margin-top:40px;
+  border:1px solid var(--ochre);
+  background:linear-gradient(135deg, rgba(209,139,60,0.10), transparent);
+  padding:34px 36px;
+  display:flex; gap:26px; align-items:center; flex-wrap:wrap;
+}
+.primary-source .ps-body{ flex:1; min-width:260px; }
+.primary-source .ps-label{ font-family:var(--mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--ochre-bright); margin-bottom:10px; }
+.primary-source .ps-title{ font-family:var(--display); font-size:clamp(22px,3vw,32px); font-weight:600; color:var(--bone); line-height:1.2; margin-bottom:8px; }
+.primary-source .ps-meta{ font-size:15px; color:var(--ash); }
+.primary-source a.ps-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:13px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--void); background:var(--ochre); padding:14px 22px; text-decoration:none;
+  border:1px solid var(--ochre); transition:all .25s; white-space:nowrap;
+}
+.primary-source a.ps-btn:hover{ background:var(--ochre-bright); transform:translateY(-2px); box-shadow:0 8px 22px rgba(209,139,60,0.25); }
+
+.disclaimer{
+  margin-top:36px;
+  font-family:var(--mono); font-size:14px; line-height:1.9; color:var(--ash);
+  border-left:2px solid var(--crimson-deep); padding:4px 0 4px 18px;
+  max-width:860px;
+}
+.disclaimer b{ color:var(--bone-dim); }
+
+.collection-back{
+  margin-top:36px; text-align:center;
+}
+.collection-back a{
+  display:inline-flex; align-items:center; gap:12px;
+  font-family:var(--mono); font-size:13px; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--ochre-bright); text-decoration:none;
+  padding:12px 24px; border:1px solid var(--ochre-deep);
+  transition:all .25s;
+}
+.collection-back a:hover{ background:rgba(209,139,60,0.08); border-color:var(--ochre); }
+
+/* ── FOOTER ── */
+footer{
+  background:var(--black);
+  padding:60px 6vw 50px;
+  border-top:1px solid var(--hair);
+  text-align:center;
+}
+footer .f-line{ font-family:var(--mono); font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ash); line-height:2; }
+footer a{ color:var(--ochre-bright); text-decoration:none; border-bottom:1px solid var(--ochre); }
+footer a:hover{ color:var(--gold-bright); border-color:var(--gold-bright); }
+
+@media(max-width:700px){
+  .wrap{ padding:0 7vw; }
+  .stolen{ padding:30px 22px; }
+  .comp-row{ grid-template-columns:1fr; gap:6px; }
+  .comp-row.head{ display:none; }
+  .comp-row .comp-a, .comp-row .comp-b{ text-align:left; }
+  .comp-row .comp-a::before{ content:'Aboriginal · '; color:var(--ash); font-size:11px; letter-spacing:.15em; text-transform:uppercase; margin-right:8px; }
+  .comp-row .comp-b::before{ content:'Palestinian · '; color:var(--ash); font-size:11px; letter-spacing:.15em; text-transform:uppercase; margin-right:8px; }
+}
+</style>
+</head>
+<body>
+
+<nav id="topbar">
+  <a href="/archive-items/remembering-uncommemorated.html" class="brand">◂ Remembering Uncommemorated</a>
+  <a href="https://sites.google.com/site/aboriginalgenocide/" target="_blank" rel="noopener">Primary Source ↗</a>
+</nav>
+<div id="scrollbar"></div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="acknowledgement rv">
+      In respect and mourning: we acknowledge the Traditional Custodians of the lands now called Australia, and the sovereignty that was never ceded. <em>Always was, always will be.</em>
+    </div>
+    <h1 class="rv" style="transition-delay:.1s;">
+      The Aboriginal<span class="ln2">Genocide</span><span class="ln3">that has not ended.</span>
+    </h1>
+    <p class="hero-sub rv" style="transition-delay:.25s;">
+      A data anarchive of the ongoing genocide of Indigenous peoples in Australia — from the 1788 invasion to the Frontier Wars, from the Stolen Generations to today's <em>4,000 avoidable deaths a year</em>. Presenting the research of Dr. Gideon Polya.
+    </p>
+
+    <div class="stat-row rv" style="transition-delay:.4s;">
+      <div class="stat-cell">
+        <div class="stat-key">Pre-Colonization (1788)</div>
+        <div class="stat-val">350k – 1M</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-key">Survivors, 1888</div>
+        <div class="stat-val">~100k</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-key">Population Today</div>
+        <div class="stat-val">~670k</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-key">Annual Avoidable Deaths</div>
+        <div class="stat-val" style="color:var(--crimson-br)">~4,000<span class="sub">/yr</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ATTRIBUTION -->
+<div class="attribution">
+  <div class="wrap-flex">
+    <div class="seal">∎</div>
+    <div>
+      Compiled from the research of <b>Dr. Gideon Polya</b> at
+      <a href="https://sites.google.com/site/aboriginalgenocide/" target="_blank" rel="noopener">sites.google.com/site/aboriginalgenocide</a> — an archive of Australia's largely uncommemorated history of Indigenous dispossession, massacre, and ongoing systemic mortality. Figures are Polya's documented estimates.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ THE ARGUMENT ═══════════════ -->
+<section class="block" id="ch-argument">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 01 · The Argument</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">The genocide is not over. It is <span class="crimson">ongoing.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">
+      Polya argues that the genocide that began with the 1788 invasion continues today — not only in memory of what was, but in the concrete arithmetic of <span style="color:var(--ochre-bright);font-style:normal;">avoidable death</span> in Indigenous communities right now.
+    </p>
+    <div style="margin-top:40px; max-width:760px;">
+      <p class="body-p rv">The UN Genocide Convention names five categories of acts. Australia's history and present carry evidence of <strong>all five</strong>: killing, causing serious bodily and mental harm, deliberately inflicting conditions of life calculated to bring about physical destruction, imposing measures to prevent births, and — most infamously — <span class="hl">forcibly transferring children of the group</span>.</p>
+      <p class="body-p rv">This page presents the record as Polya compiles it. The figures are contested, and honestly named as his estimates. The larger truth they point to is not.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ POPULATION COLLAPSE ═══════════════ -->
+<section class="block" id="ch-collapse">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 02 · The Population Collapse</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">A civilization <span class="ochre">unmade,</span> and slowly re-made.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">Between the 1788 invasion and the century that followed, the Aboriginal population fell by at least 70% — likely more. Introduced disease, deprivation, and killing.</p>
+
+    <div class="pop-bars rv" style="transition-delay:.15s;" id="popBars">
+      <div class="pop-bar"><div class="num">~700k</div><div class="fill" data-height="100%"></div><div class="yr">1788</div><div class="lbl">pre-invasion estimate (mid-range)</div></div>
+      <div class="pop-bar crimson"><div class="num">~100k</div><div class="fill" data-height="14%"></div><div class="yr">1888</div><div class="lbl">after 1st century of dispossession</div></div>
+      <div class="pop-bar gold"><div class="num">~670k</div><div class="fill" data-height="95%"></div><div class="yr">Today</div><div class="lbl">present-day Indigenous population</div></div>
+    </div>
+
+    <p class="body-p rv" style="margin-top:36px;">Polya cites the pre-invasion population at somewhere between <strong>350,000 and 1,000,000</strong>. Bars above use the mid-range figure. The recovery to today's ~670,000 masks the languages, kinship structures, ceremonies, and lands lost in the century between.</p>
+
+    <div class="rv" style="margin-top:34px; padding:22px 26px; border:1px solid var(--hair); background:rgba(209,139,60,0.05);">
+      <div style="font-family:var(--mono); font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--ochre-bright); margin-bottom:10px;">▸ Languages</div>
+      <div style="font-family:var(--display); font-size:22px; color:var(--bone); line-height:1.4;">Of <strong style="color:var(--ochre-bright);">250 to 750</strong> distinct Aboriginal languages and dialects spoken in 1788, roughly <strong style="color:var(--crimson-br);">150</strong> survive — of which all but around <strong style="color:var(--crimson-br);">20</strong> are critically endangered.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ AVOIDABLE DEATHS NOW ═══════════════ -->
+<section class="block" id="ch-now">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 03 · The Ongoing Toll</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Four thousand avoidable deaths <span class="crimson">every year.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">The genocide is not a chapter that closed. It is present-tense arithmetic.</p>
+
+    <div class="mega-count rv" data-count="4000">0</div>
+    <p class="mega-lbl rv">avoidable Indigenous deaths per year — the difference between observed and expected mortality.</p>
+
+    <p class="body-p rv" style="margin-top:36px;">Polya breaks the figure down: an <strong>observed mortality rate of ~1.0%</strong> in the Indigenous population, against a non-Indigenous <strong>expected mortality of ~0.4%</strong>. The gap — <span class="hl">0.6%</span> per year, applied to ~670,000 people — is the annual avoidable-death count.</p>
+    <p class="body-p rv">Put another way: Indigenous Australians die at <strong style="color:var(--crimson-br);">1.9 times the rate</strong> of non-Indigenous Australians. Where wealthy-nation demographics predict a life, Australia counts a death.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ LIFE EXPECTANCY GAP ═══════════════ -->
+<section class="block" id="ch-gap">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 04 · Life Expectancy Gap</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">A decade of life, <span class="ochre">taken.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">In one of the wealthiest countries on earth, an Indigenous man born today can expect to live <em>eleven and a half years less</em> than a non-Indigenous man born on the same day.</p>
+
+    <div class="gap-grid rv" style="transition-delay:.15s;">
+      <div class="gap-cell dim">
+        <div class="gap-key">▸ Life Expectancy — Men</div>
+        <div class="gap-val">−11.5<span class="unit">yrs</span></div>
+        <div class="gap-desc">Indigenous male life expectancy is 11.5 years lower than the non-Indigenous male average.</div>
+      </div>
+      <div class="gap-cell">
+        <div class="gap-key">▸ Life Expectancy — Women</div>
+        <div class="gap-val">−10.0<span class="unit">yrs</span></div>
+        <div class="gap-desc">Indigenous female life expectancy is a decade lower than the non-Indigenous female average.</div>
+      </div>
+      <div class="gap-cell">
+        <div class="gap-key">▸ Infant Mortality</div>
+        <div class="gap-val">3×</div>
+        <div class="gap-desc">Indigenous infants die at three times the rate of non-Indigenous infants.</div>
+      </div>
+      <div class="gap-cell dim">
+        <div class="gap-key">▸ Diabetes Prevalence</div>
+        <div class="gap-val">1 in 5</div>
+        <div class="gap-desc">One in five Indigenous Australians lives with diabetes — a marker of imposed conditions of life.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<section class="block" id="ch-timeline">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 05 · The Long Killing</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Frontier Wars, killing times, and after.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">A chronology of the genocidal century-and-a-half — and of the settler policies that continued the work in a different key.</p>
+
+    <div class="timeline rv" style="transition-delay:.15s;">
+      <div class="tl-item">
+        <div class="tl-year">1788</div>
+        <div class="tl-event">Invasion. The Aboriginal Genocide begins.</div>
+        <div class="tl-desc">The First Fleet arrives at Gadigal Country. A population Polya estimates at <strong>350,000 to 1,000,000</strong> lives across the continent, speaking 250 to 750 distinct languages.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1790</div>
+        <div class="tl-event">The Aboriginal Genocide commences in earnest.</div>
+        <div class="tl-desc">Killing, poisoning, deliberate infection, and the destruction of Country begin the collapse. Polya calls this the formal start of the genocide.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1803 — 1876</div>
+        <div class="tl-event">Tasmanian Aboriginal Genocide.</div>
+        <div class="tl-desc">The near-complete destruction of the Palawa/Pakana people, described in the historiography as <em>“planned and intended by settlers”</em>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1800s — 1920s</div>
+        <div class="tl-event">The Frontier Wars — the “killing times.”</div>
+        <div class="tl-desc">Named by Aboriginal oral history as the killing times. Massacres continued into the 1920s. Queensland's frontier is specifically documented as a genocide period.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">early 1900s — 1970s</div>
+        <div class="tl-event">The Stolen Generations.</div>
+        <div class="tl-desc">Roughly <strong>100,000 Aboriginal children</strong> forcibly removed from their mothers under successive government policies. UN Convention Article II(e): forcibly transferring children of the group.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1967</div>
+        <div class="tl-event">Aboriginal Rights Referendum.</div>
+        <div class="tl-desc">Indigenous Australians are counted in the census for the first time. It takes 179 years after invasion for the state to concede that Aboriginal people exist.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1975</div>
+        <div class="tl-event">Racial Discrimination Act passes.</div>
+        <div class="tl-desc">Formal legal protections. Later, exemptions for the Northern Territory Intervention will suspend those protections for Indigenous communities.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2007</div>
+        <div class="tl-event">Australia refuses the UN Declaration on the Rights of Indigenous Peoples.</div>
+        <div class="tl-desc">Joining the US, Canada, and New Zealand. Reversed under the Rudd Labor Government in April 2009.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2000s — present</div>
+        <div class="tl-event">Northern Territory Intervention · community closures.</div>
+        <div class="tl-desc">Race-based legislation exempts NT Aboriginal communities from the 1975 Act's protections. Policy plans to close up to <strong>150 remote Aboriginal communities</strong>. Bilingual education is closed. A 90% English-language instruction mandate follows.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STOLEN GENERATIONS ═══════════════ -->
+<section class="block" id="ch-stolen">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 06 · The Stolen Generations</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">A hundred thousand <span class="crimson">children.</span></h2>
+
+    <div class="stolen rv" style="transition-delay:.1s;">
+      <div class="num" data-count="100">0</div>
+      <div class="txt">
+        <span class="lbl">▸ Forcibly Removed</span>
+        <strong>Approximately 100,000 Aboriginal children</strong> forcibly taken from their mothers between the early 1900s and the 1970s. Renamed. Reassigned. Placed with white families or in institutions. The policy is a textbook case of UN Genocide Convention <em>Article II(e)</em>: forcibly transferring children of the group.
+        <div style="margin-top:16px; font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; color:var(--ash); text-transform:uppercase;">Policy ended · 1970s</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ UN CONVENTION ═══════════════ -->
+<section class="block def-block" id="ch-legal">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 07 · The Legal Standard</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Every one of the five acts.</h2>
+    <div class="def-card rv" style="transition-delay:.1s;">
+      <div class="src">UN Convention on Genocide · Article II · The five acts</div>
+      <div class="quote">“…any of the following acts committed with intent to destroy, in whole or in part, a national, ethnical, racial or religious group…”</div>
+      <div class="acts">
+        <div class="act applies">Killing members of the group.<b>Frontier Wars, massacres, deaths in custody</b></div>
+        <div class="act applies">Causing serious bodily or mental harm.<b>Ongoing systemic violence, family separation trauma</b></div>
+        <div class="act applies">Deliberately inflicting conditions of life calculated to bring about physical destruction.<b>Under-funded health, housing, education — the 4,000/yr avoidable-death arithmetic</b></div>
+        <div class="act applies">Imposing measures intended to prevent births.<b>Documented removals, sterilizations, and reproductive coercion</b></div>
+        <div class="act applies">Forcibly transferring children of the group.<b>The Stolen Generations · 100,000 children</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COMPARISON ═══════════════ -->
+<section class="block" id="ch-comparison">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 08 · A Comparison Polya Draws</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Aboriginal &amp; Palestinian genocides <span class="ochre">side by side.</span></h2>
+    <p class="lede rv" style="transition-delay:.1s;">In the source archive, Polya sets the Aboriginal Genocide against the Palestinian Genocide (1916–present). The numbers do a curious thing: they align.</p>
+
+    <div class="comp-table rv" style="transition-delay:.15s;">
+      <div class="comp-row head">
+        <div class="comp-lbl">Metric</div>
+        <div class="comp-a">Aboriginal</div>
+        <div class="comp-b">Palestinian</div>
+      </div>
+      <div class="comp-row"><div class="comp-lbl">Deaths from direct violence</div><div class="comp-a">~100,000</div><div class="comp-b">~100,000</div></div>
+      <div class="comp-row"><div class="comp-lbl">Deaths from imposed deprivation</div><div class="comp-a">~2,000,000</div><div class="comp-b">~2,000,000</div></div>
+      <div class="comp-row"><div class="comp-lbl">Annual avoidable deaths</div><div class="comp-a">~4,200</div><div class="comp-b">~4,200</div></div>
+      <div class="comp-row"><div class="comp-lbl">Annual avoidable rate (% of population)</div><div class="comp-a">0.60%</div><div class="comp-b">0.08%</div></div>
+      <div class="comp-row"><div class="comp-lbl">Annual violent deaths (average)</div><div class="comp-a">~15 <span style="font-size:0.7em; color:var(--ash); font-weight:400;">in custody</span></div><div class="comp-b">~550 <span style="font-size:0.7em; color:var(--ash); font-weight:400;">by Israeli forces</span></div></div>
+    </div>
+
+    <p class="body-p rv" style="margin-top:34px;">The mirror is deliberate. Polya's argument: an Anglosphere settler-colonial pattern maps onto a European-Zionist settler-colonial pattern, and the numeric outcomes rhyme because the structures do.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ VOICES / QUOTES ═══════════════ -->
+<section class="block" id="ch-voices">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 09 · What Was Said</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">The record, in the perpetrators' own words.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">Polya archives period statements from settlers, officials, and press. The intent was neither hidden nor accidental.</p>
+
+    <div class="quote-list rv" style="transition-delay:.15s;">
+      <div class="q-item">
+        <div class="q-text">“There are no aboriginals in my district.”</div>
+        <div class="q-src">Settler statement · 1846</div>
+      </div>
+      <div class="q-item">
+        <div class="q-text">“He has to go… without unnecessary suffering.”</div>
+        <div class="q-src">Attributed statement on Aboriginal displacement · 1873</div>
+      </div>
+      <div class="q-item">
+        <div class="q-text">“A doomed race… completely wiped out.”</div>
+        <div class="q-src">Period characterization · 1885</div>
+      </div>
+    </div>
+
+    <p class="body-p rv" style="margin-top:26px;">The Convention requires intent to be established, in whole or in part. Polya's contention is that this record, together with the sustained pattern of settler and state action across two centuries, meets the standard many times over.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ SYSTEMIC ISSUES ═══════════════ -->
+<section class="block" id="ch-systemic">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 10 · The Systemic Machinery Today</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">The Convention's <span class="ochre">third act,</span> in the present tense.</h2>
+    <p class="lede rv" style="transition-delay:.1s;">“Conditions of life calculated to bring about physical destruction,” read into the fabric of contemporary Australia.</p>
+
+    <div class="sys-grid rv" style="transition-delay:.15s;">
+      <div class="sys-cell">
+        <div class="n">50<span class="u">%</span></div>
+        <div class="k">Healthcare Funding</div>
+        <div class="d">Aboriginal healthcare provisioned at approximately half the level required for parity.</div>
+      </div>
+      <div class="sys-cell">
+        <div class="n">1 in 5</div>
+        <div class="k">Diabetes Prevalence</div>
+        <div class="d">A marker of imposed diet, housing, and health-system conditions.</div>
+      </div>
+      <div class="sys-cell">
+        <div class="n">~15<span class="u">/yr</span></div>
+        <div class="k">Deaths in Custody</div>
+        <div class="d">Thirty-year average of Aboriginal deaths in police, prison, or juvenile-detention custody.</div>
+      </div>
+      <div class="sys-cell">
+        <div class="n">Third<span class="u">World</span></div>
+        <div class="k">Living Conditions</div>
+        <div class="d">Housing and sanitation in many remote and urban Aboriginal communities fall below UN developing-nation thresholds.</div>
+      </div>
+      <div class="sys-cell">
+        <div class="n">150</div>
+        <div class="k">Communities Planned to Close</div>
+        <div class="d">Remote Aboriginal communities targeted under state policy for closure.</div>
+      </div>
+      <div class="sys-cell">
+        <div class="n">85</div>
+        <div class="k">Foreign Invasions</div>
+        <div class="d">Countries Australia has taken part in invading. ~30 of these overlapped with genocide.</div>
+      </div>
+    </div>
+
+    <p class="body-p rv" style="margin-top:36px;">Polya names this the <em>machinery of PC racism</em>: politically correct language over the same imposed conditions, and a national conversation that manages to avoid the word <strong>genocide</strong> even as its five criteria are met.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ SOURCES / RETURN ═══════════════ -->
+<section class="block sources-block" id="ch-sources">
+  <div class="wrap">
+    <div class="eyebrow rv">§ 11 · The Source</div>
+    <h2 class="sec-title rv" style="transition-delay:.05s;">Read the archive Polya keeps.</h2>
+
+    <div class="primary-source rv" style="transition-delay:.1s;">
+      <div class="ps-body">
+        <div class="ps-label">▸ Primary Source</div>
+        <div class="ps-title">Aboriginal Genocide — the ongoing genocide of Indigenous Australians</div>
+        <div class="ps-meta">Dr. Gideon Polya · sites.google.com/site/aboriginalgenocide</div>
+      </div>
+      <a class="ps-btn" href="https://sites.google.com/site/aboriginalgenocide/" target="_blank" rel="noopener">Read the source ↗</a>
+    </div>
+
+    <div class="disclaimer">
+      <b>On these figures.</b> Numbers on this page are the documented <b>estimates</b> of Dr. Gideon Polya, drawn from his avoidable-mortality methodology (observed vs expected deaths) applied to Australian Indigenous demographic data. They are contested and larger than several other published counts. GSS presents them here as a faithful visualization of one rigorous, dissenting body of work. Aboriginal and Torres Strait Islander sovereignty was never ceded. This page is not a substitute for Indigenous voices; it is an attempt to make one archive's arithmetic legible.
+    </div>
+
+    <div class="disclaimer" style="border-left-color:var(--ochre-deep); margin-top:18px;">
+      <b>Note.</b> Dr. Polya does not necessarily endorse the media outlets that republish his articles.
+    </div>
+
+    <div class="collection-back rv" style="transition-delay:.15s;">
+      <a href="/archive-items/remembering-uncommemorated.html">◂ Back to “Remembering Uncommemorated Genocides &amp; Holocausts”</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-line">
+    Always was, always will be.<br><br>
+    Global South Solidarities · The Anarchive · <span id="footYear">2026</span><br>
+    <a href="/archive.html">◂ Return to The Archive</a>
+  </div>
+</footer>
+
+<script>
+// scroll progress
+const scrollbar = document.getElementById('scrollbar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  scrollbar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+}, { passive:true });
+
+// reveal + count-up
+function animateCount(el){
+  if (el.dataset.done) return;
+  el.dataset.done = '1';
+  const target = parseFloat(el.dataset.count || el.textContent);
+  const dur = 1600;
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min((now - start)/dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = target * eased;
+    if (target >= 1000)      el.textContent = Math.round(val).toLocaleString();
+    else if (target % 1 === 0) el.textContent = Math.round(val);
+    else                      el.textContent = val.toFixed(1);
+    if (p < 1) requestAnimationFrame(tick);
+    else       el.textContent = (target >= 1000) ? target.toLocaleString() : (target % 1 === 0 ? target : target.toFixed(1));
+  }
+  requestAnimationFrame(tick);
+}
+
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      e.target.querySelectorAll?.('[data-count]').forEach(animateCount);
+      if (e.target.matches?.('[data-count]')) animateCount(e.target);
+      // trigger population bars
+      e.target.querySelectorAll?.('.pop-bar .fill').forEach(f => { f.style.height = f.dataset.height; });
+      revObs.unobserve(e.target);
+    }
+  });
+}, { threshold: .12 });
+document.querySelectorAll('.rv').forEach(el => revObs.observe(el));
+
+document.getElementById('footYear').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
