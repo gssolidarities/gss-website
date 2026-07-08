@@ -1,8 +1,8 @@
 /*
- * GSS ANARCHIVE — Planetary Justice Map · Inquiry II
- * "Left of Marx, South of Empire" — scene data for the scroll-driven inquiry.
+ * GSS ANARCHIVE — Planetary Justice Map · Story Map II
+ * "Left of Marx, South of Empire" — scene data for the interactive story map.
  *
- * This inquiry answers the project's second research question:
+ * This story map answers the project's second research question:
  *   How did figures like Claudia Jones, whose work bridged feminism, Black
  *   liberation, and communism, theorize the intersections of oppression to
  *   build bridges between movements in the US, Caribbean, and UK?
@@ -15,11 +15,11 @@
 window.GSS_INQUIRY = {
 
   meta: {
-    code: "PJM-INQ-02",
+    code: "PJM-ISM-02",
     n: "II",
-    version: "1.0.0",
+    version: "1.1.0",
     updated: "2026-07-06",
-    label: "Inquiry II · Gendered Networks of Revolutionary Solidarity",
+    label: "Story Map II · Gendered Networks of Revolutionary Solidarity",
     title: "Left of Marx, South of Empire",
     standfirst: "Claudia Jones theorised the interlocking oppression of Black working women decades before the word for it existed — then turned her own deportation into diaspora infrastructure across three continents.",
     location: "Port of Spain · Harlem · London",
@@ -43,7 +43,7 @@ window.GSS_INQUIRY = {
       date: "1915 – 1964",
       iso: "1915-02-21",
       title: "How does one life bridge three movements on three continents?",
-      body: "Claudia Jones is buried to the left of Karl Marx in London's Highgate Cemetery — a Trinidadian woman, raised in Harlem, deported by the United States, remade in Britain. Her life connects Caribbean anti-colonialism, Black liberation and communist feminism into a single political arc. This inquiry follows that arc and asks the project's second research question: how did Jones <em>theorise the intersections of oppression</em>, and how did that theory become practical bridge-building between movements in the US, the Caribbean and the UK?",
+      body: "Claudia Jones is buried to the left of Karl Marx in London's Highgate Cemetery — a Trinidadian woman, raised in Harlem, deported by the United States, remade in Britain. Her life connects Caribbean anti-colonialism, Black liberation and communist feminism into a single political arc. This story map follows that arc and asks the project's second research question: how did Jones <em>theorise the intersections of oppression</em>, and how did that theory become practical bridge-building between movements in the US, the Caribbean and the UK?",
       camera: { center: [-40, 30], zoom: 2.2, pitch: 0, bearing: 0 },
       basemap: "dark",
       markers: [
@@ -95,7 +95,7 @@ window.GSS_INQUIRY = {
       date: "June 1949",
       iso: "1949-06-01",
       title: "“An End to the Neglect of the Problems of the Negro Woman!”",
-      body: "In June 1949, in the party journal <em>Political Affairs</em>, Jones published the essay this inquiry pivots on. Its argument: Black working women stand where race, class and sex <em>interlock</em> — subject to what she called the “superexploitation” of doing the lowest-paid work of an economy that is at once capitalist, racist and patriarchal — and therefore their leadership is not a courtesy but a strategic necessity for every liberation movement at once. Four decades before “intersectionality” entered the lexicon, Jones had built the analytical machine and pointed it at her own party's neglect.",
+      body: "In June 1949, in the party journal <em>Political Affairs</em>, Jones published the essay this story map pivots on. Its argument: Black working women stand where race, class and sex <em>interlock</em> — subject to what she called the “superexploitation” of doing the lowest-paid work of an economy that is at once capitalist, racist and patriarchal — and therefore their leadership is not a courtesy but a strategic necessity for every liberation movement at once. Four decades before “intersectionality” entered the lexicon, Jones had built the analytical machine and pointed it at her own party's neglect.",
       camera: { center: [-73.99, 40.73], zoom: 10.8, pitch: 35, bearing: 8 },
       basemap: "dark",
       markers: [{ lng: -73.9465, lat: 40.8116, label: "Harlem — Political Affairs essay, 1949", kind: "voice", precision: "exact" }],
@@ -201,7 +201,7 @@ window.GSS_INQUIRY = {
       iso: null,
       reading: true,
       title: "What Jones teaches about theorising intersections",
-      body: "The inquiry's question has a two-part answer. <strong>The theory:</strong> Jones located the point where race, class and sex interlock — the superexploited Black working woman — and argued that whoever stands at that point must lead, because winning there wins everywhere. <strong>The bridge:</strong> every institution she built put the theory to work across borders — a party position bridging Black liberation and communism in the US; a newspaper bridging the Caribbean, Africa and Asia in Britain; a carnival bridging culture and defence in a rioted neighbourhood. For WGSS, Jones shows intersectional analysis as it was first built: not a classroom vocabulary but a <em>travelling practice</em> — theorised in Harlem, punished by Washington, and rebuilt as diaspora infrastructure in London.",
+      body: "The question has a two-part answer. <strong>The theory:</strong> Jones located the point where race, class and sex interlock — the superexploited Black working woman — and argued that whoever stands at that point must lead, because winning there wins everywhere. <strong>The bridge:</strong> every institution she built put the theory to work across borders — a party position bridging Black liberation and communism in the US; a newspaper bridging the Caribbean, Africa and Asia in Britain; a carnival bridging culture and defence in a rioted neighbourhood. For WGSS, Jones shows intersectional analysis as it was first built: not a classroom vocabulary but a <em>travelling practice</em> — theorised in Harlem, punished by Washington, and rebuilt as diaspora infrastructure in London.",
       camera: { center: [-40, 30], zoom: 2.2, pitch: 0, bearing: 0 },
       basemap: "dark",
       markers: [

@@ -30,18 +30,18 @@ Research design: **Bibhushana Poudyal**. Engine and cartography: GSS.
 The roster is scoped to the project's research design. Nodes are added only through a
 research/review pass — never casually.
 
-## The Inquiries
+## Interactive Storytelling Maps
 
-Three scroll-driven investigations — one for each of the project's research questions — argued in
-space and time over the real geography, with verbatim primary voices, coded evidence, and a
-clearly-labelled interpretive reading at the end (served from `inquiries/?q=…`):
+Three interactive, scroll-driven story maps — one for each of the project's research questions —
+argued in space and time over the real geography, with verbatim primary voices, coded evidence,
+and a clearly-labelled interpretive reading at the end (served from `story-maps/?q=…`):
 
-1. **Solidarity Under Occupation** (`PJM-INQ-01`) — RAWA's clandestine feminist model, 1977–2001.
-2. **Left of Marx, South of Empire** (`PJM-INQ-02`) — Claudia Jones's three-continent bridge, 1915–1964.
-3. **The Forest Speaks in Women's Voices** (`PJM-INQ-03`) — Indigenous feminisms and climate
+1. **Solidarity Under Occupation** (`PJM-ISM-01`) — RAWA's clandestine feminist model, 1977–2001.
+2. **Left of Marx, South of Empire** (`PJM-ISM-02`) — Claudia Jones's three-continent bridge, 1915–1964.
+3. **The Forest Speaks in Women's Voices** (`PJM-ISM-03`) — Indigenous feminisms and climate
    justice from Pastaza, 1996–today.
 
-Quotations in the inquiries are verbatim from the cited primary pages (verified against rawa.org
+Quotations in the story maps are verbatim from the cited primary pages (verified against rawa.org
 and the Marxists Internet Archive); interpretive scenes are flagged `reading:true` and rendered
 under an explicit label.
 
@@ -49,7 +49,7 @@ under an explicit label.
 
 The **TEACH** panel is a course-ready kit: a first-session walkthrough, six discussion prompts,
 three assignment frameworks built on the map's own evidentiary standards, and citing guidance
-(stable anchors per node, inquiry, and scene).
+(stable anchors per node, story map, and scene).
 
 ## What the map does
 
@@ -92,9 +92,9 @@ planetary-justice-map/
 ├── index.html               # the map (MapLibre + UI + interactions), no build step
 ├── data/
 │   └── solidarities.js      # canonical dataset — the single source of truth
-├── inquiries/
-│   ├── index.html           # scroll-driven inquiry engine (?q=<id>; TOC without ?q=)
-│   └── data/                # one scene file per inquiry (PJM-INQ-01…03)
+├── story-maps/
+│   ├── index.html           # interactive story-map engine (?q=<id>; TOC without ?q=)
+│   └── data/                # one scene file per story map (PJM-ISM-01…03)
 └── _archive/                # earlier prototypes, kept for provenance
 ```
 

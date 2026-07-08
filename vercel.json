@@ -59,6 +59,18 @@
     {
       "source": "/map",
       "destination": "/planetary-justice-map/index.html"
+    },
+    {
+      "source": "/planetary-justice-map/inquiries",
+      "destination": "/planetary-justice-map/story-maps/index.html"
+    },
+    {
+      "source": "/planetary-justice-map/inquiries/",
+      "destination": "/planetary-justice-map/story-maps/index.html"
+    },
+    {
+      "source": "/planetary-justice-map/inquiries/:path*",
+      "destination": "/planetary-justice-map/story-maps/:path*"
     }
   ],
   "headers": [

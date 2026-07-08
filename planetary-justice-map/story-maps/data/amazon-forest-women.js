@@ -1,8 +1,8 @@
 /*
- * GSS ANARCHIVE — Planetary Justice Map · Inquiry III
- * "The Forest Speaks in Women's Voices" — scene data for the scroll-driven inquiry.
+ * GSS ANARCHIVE — Planetary Justice Map · Story Map III
+ * "The Forest Speaks in Women's Voices" — scene data for the interactive story map.
  *
- * This inquiry answers the project's third research question:
+ * This story map answers the project's third research question:
  *   How do contemporary figures like Nemonte Nenquimo and Helena Gualinga
  *   foreground Indigenous feminisms in their global climate justice advocacy,
  *   creating new models of cross-border solidarity?
@@ -17,11 +17,11 @@
 window.GSS_INQUIRY = {
 
   meta: {
-    code: "PJM-INQ-03",
+    code: "PJM-ISM-03",
     n: "III",
-    version: "1.0.0",
+    version: "1.1.0",
     updated: "2026-07-06",
-    label: "Inquiry III · Gendered Networks of Revolutionary Solidarity",
+    label: "Story Map III · Gendered Networks of Revolutionary Solidarity",
     title: "The Forest Speaks in Women's Voices",
     standfirst: "From Sarayaku's courtroom victory to the Waorani ruling to the world's climate summits: two generations of Amazonian Indigenous women building new models of cross-border solidarity.",
     location: "Pastaza, Ecuadorian Amazon · San José · Madrid",
@@ -45,7 +45,7 @@ window.GSS_INQUIRY = {
       date: "1996 – today",
       iso: "1996-06-01",
       title: "What new models of solidarity are being built from the forest?",
-      body: "In the Ecuadorian Amazon's Pastaza province, two Indigenous nations a river apart have produced two generations of women who changed how the world argues about climate: the Kichwa of <strong>Sarayaku</strong> and the <strong>Waorani</strong> of Pastaza. This inquiry follows their instruments — a human-rights court, a cosmological declaration, a provincial lawsuit, an open letter, the world's climate summits — and asks the project's third research question: how do Nemonte Nenquimo and Helena Gualinga <em>foreground Indigenous feminisms</em> in global climate-justice advocacy, and what new models of cross-border solidarity result?",
+      body: "In the Ecuadorian Amazon's Pastaza province, two Indigenous nations a river apart have produced two generations of women who changed how the world argues about climate: the Kichwa of <strong>Sarayaku</strong> and the <strong>Waorani</strong> of Pastaza. This story map follows their instruments — a human-rights court, a cosmological declaration, a provincial lawsuit, an open letter, the world's climate summits — and asks the project's third research question: how do Nemonte Nenquimo and Helena Gualinga <em>foreground Indigenous feminisms</em> in global climate-justice advocacy, and what new models of cross-border solidarity result?",
       camera: { center: [-77.7, -1.55], zoom: 8.2, pitch: 30, bearing: 0 },
       basemap: "satellite",
       markers: [
@@ -188,7 +188,7 @@ window.GSS_INQUIRY = {
       iso: null,
       reading: true,
       title: "What Pastaza teaches about new models of solidarity",
-      body: "The inquiry's question resolves into four instruments, each a genuine innovation in cross-border solidarity. <strong>Litigation as territory-defence</strong>: San José and Puyo prove courts can be Indigenous terrain. <strong>Cosmology as legal export</strong>: Kawsak Sacha does not translate the forest into Western categories — it demands the categories grow. <strong>Direct address</strong>: the Guardian letter and the memoir reverse the direction of explanation between the forest and the West. <strong>Lineage and alliance</strong>: transmission through generations of women, and organisation across nations, replace the lone-hero model of environmentalism. For WGSS this is Indigenous feminism <em>foregrounded</em>, exactly as the project's question proposes: the defence of territory and of life practised as one politics, led by women, networked across every border that matters.",
+      body: "The question resolves into four instruments, each a genuine innovation in cross-border solidarity. <strong>Litigation as territory-defence</strong>: San José and Puyo prove courts can be Indigenous terrain. <strong>Cosmology as legal export</strong>: Kawsak Sacha does not translate the forest into Western categories — it demands the categories grow. <strong>Direct address</strong>: the Guardian letter and the memoir reverse the direction of explanation between the forest and the West. <strong>Lineage and alliance</strong>: transmission through generations of women, and organisation across nations, replace the lone-hero model of environmentalism. For WGSS this is Indigenous feminism <em>foregrounded</em>, exactly as the project's question proposes: the defence of territory and of life practised as one politics, led by women, networked across every border that matters.",
       camera: { center: [-77.7, -1.55], zoom: 8.2, pitch: 30, bearing: 0 },
       basemap: "satellite",
       markers: [

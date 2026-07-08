@@ -1,8 +1,8 @@
 /*
- * GSS ANARCHIVE — Planetary Justice Map · Inquiry I
- * "Solidarity Under Occupation" — scene data for the scroll-driven inquiry.
+ * GSS ANARCHIVE — Planetary Justice Map · Story Map I
+ * "Solidarity Under Occupation" — scene data for the interactive story map.
  *
- * This inquiry answers the project's first research question:
+ * This story map answers the project's first research question:
  *   How did the clandestine feminist organizing of RAWA in Afghanistan inform
  *   its model of transnational feminist solidarity under occupation?
  *
@@ -15,11 +15,11 @@
 window.GSS_INQUIRY = {
 
   meta: {
-    code: "PJM-INQ-01",
+    code: "PJM-ISM-01",
     n: "I",
-    version: "1.0.0",
+    version: "1.1.0",
     updated: "2026-07-06",
-    label: "Inquiry I · Gendered Networks of Revolutionary Solidarity",
+    label: "Story Map I · Gendered Networks of Revolutionary Solidarity",
     title: "Solidarity Under Occupation",
     standfirst: "How RAWA's clandestine feminist organising became a model of transnational solidarity — schooling, publishing and witness-bearing sustained through invasion, exile and the Taliban.",
     location: "Kabul · Quetta · Peshawar · Valence",
@@ -43,7 +43,7 @@ window.GSS_INQUIRY = {
       date: "1977 – 2001",
       iso: "1977-01-01",
       title: "What does feminist solidarity look like when politics is forbidden?",
-      body: "Between 1977 and 2001 Afghanistan passed through coup, Soviet invasion, civil war and Taliban rule — and through all of it one organisation of women kept working: the Revolutionary Association of the Women of Afghanistan. This inquiry follows RAWA's method — clandestine schooling, cross-border publishing, testimony carried into foreign assemblies, atrocity filmed at mortal risk — and asks what it teaches about <em>transnational feminist solidarity under occupation</em>: the first research question of the Gendered Networks project.",
+      body: "Between 1977 and 2001 Afghanistan passed through coup, Soviet invasion, civil war and Taliban rule — and through all of it one organisation of women kept working: the Revolutionary Association of the Women of Afghanistan. This story map follows RAWA's method — clandestine schooling, cross-border publishing, testimony carried into foreign assemblies, atrocity filmed at mortal risk — and asks what it teaches about <em>transnational feminist solidarity under occupation</em>: the first research question of the Gendered Networks project.",
       camera: { center: [67.5, 33.6], zoom: 5.2, pitch: 0, bearing: 0 },
       basemap: "dark",
       markers: [{ lng: 69.2075, lat: 34.5553, label: "Kabul", kind: "focus", precision: "exact" }],
@@ -197,7 +197,7 @@ window.GSS_INQUIRY = {
       iso: null,
       reading: true,
       title: "What RAWA teaches about solidarity under occupation",
-      body: "Read as one arc, RAWA's history answers the inquiry's question with a model in four parts. <strong>Independence</strong>: answering to no party or patron is what lets a women's organisation outlive every regime. <strong>Infrastructure</strong>: schools, clinics and a magazine — emancipation as daily institution, not declaration. <strong>Circulation</strong>: a clandestine press and a founder physically carrying testimony into foreign assemblies — solidarity built outward, on the movement's own terms. <strong>Witness</strong>: documentation at mortal risk, so that occupation cannot also own the record. For WGSS, RAWA relocates feminist politics: not after liberation, not sheltered from war, but <em>as</em> the durable web that survives both.",
+      body: "Read as one arc, RAWA's history answers the question this story map asks with a model in four parts. <strong>Independence</strong>: answering to no party or patron is what lets a women's organisation outlive every regime. <strong>Infrastructure</strong>: schools, clinics and a magazine — emancipation as daily institution, not declaration. <strong>Circulation</strong>: a clandestine press and a founder physically carrying testimony into foreign assemblies — solidarity built outward, on the movement's own terms. <strong>Witness</strong>: documentation at mortal risk, so that occupation cannot also own the record. For WGSS, RAWA relocates feminist politics: not after liberation, not sheltered from war, but <em>as</em> the durable web that survives both.",
       camera: { center: [67.5, 33.6], zoom: 5.2, pitch: 0, bearing: 0 },
       basemap: "dark",
       markers: [

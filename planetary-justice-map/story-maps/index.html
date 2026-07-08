@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Inquiries — Planetary Justice Map</title>
-<meta name="description" content="Scroll-driven inquiries into the Gendered Networks of Revolutionary Solidarity — the Planetary Justice Map's three research questions, argued in space and time. A Global South Solidarities Anarchive project." />
+<title>Interactive Storytelling Maps — Planetary Justice Map</title>
+<meta name="description" content="Interactive storytelling maps for the Gendered Networks of Revolutionary Solidarity — the Planetary Justice Map's three research questions, argued in space and time. A Global South Solidarities Anarchive project." />
 
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
@@ -238,7 +238,7 @@
 
 <div class="topbar" id="topbar" hidden>
   <a class="back" href="../index.html">← Map</a>
-  <span class="crumb" id="crumb">GSS / <span class="sub">INQUIRIES</span></span>
+  <span class="crumb" id="crumb">GSS / <span class="sub">STORY MAPS</span></span>
   <span class="sind" id="sind"></span>
   <button class="tbtn first" id="btn-cite" type="button">CITE</button>
   <div class="prog-wrap"><div class="prog" id="prog"></div></div>
@@ -274,7 +274,7 @@
     <div class="facts">
       <div><b>Geography</b><span id="m-loc"></span></div>
       <div><b>Period</b><span id="m-period"></span></div>
-      <div><b>Inquiry</b><span id="m-code"></span></div>
+      <div><b>Story map</b><span id="m-code"></span></div>
     </div>
     <div class="scrollcue"><span class="ln"></span> SCROLL TO BEGIN</div>
   </section>
@@ -303,8 +303,8 @@
 <div class="toc" id="toc" hidden>
   <div class="wrap">
     <div class="kicker">GSS · ANARCHIVE — PLANETARY JUSTICE MAP</div>
-    <h1>The Inquiries</h1>
-    <p class="lede">Three scroll-driven investigations — one for each research question of
+    <h1>Interactive Storytelling Maps</h1>
+    <p class="lede">Three interactive storytelling maps — one for each research question of
       <em>Gendered Networks of Revolutionary Solidarity</em>. Each argues in space and time:
       camera flights over the real geography, verbatim primary voices, coded evidence, and a
       clearly-labelled interpretive reading at the end.</p>
@@ -314,9 +314,9 @@
 </div>
 
 <!-- cite modal -->
-<div class="mbk" id="modal-cite" role="dialog" aria-modal="true" aria-label="Cite this inquiry">
+<div class="mbk" id="modal-cite" role="dialog" aria-modal="true" aria-label="Cite this story map">
   <div class="mwin">
-    <div class="mh"><h4>Cite this inquiry</h4><button class="x" type="button" data-close>ESC</button></div>
+    <div class="mh"><h4>Cite this story map</h4><button class="x" type="button" data-close>ESC</button></div>
     <div id="cite-body"></div>
   </div>
 </div>
@@ -330,13 +330,13 @@
   /* registry of published inquiries (whitelist for ?q= loading) */
   const REGISTRY = {
     "rawa-under-occupation": {
-      n: "I", code: "PJM-INQ-01", title: "Solidarity Under Occupation", period: "1977 – 2001",
+      n: "I", code: "PJM-ISM-01", title: "Solidarity Under Occupation", period: "1977 – 2001",
       q: "How did RAWA's clandestine feminist organising inform its model of transnational feminist solidarity under occupation?" },
     "claudia-jones-bridge": {
-      n: "II", code: "PJM-INQ-02", title: "Left of Marx, South of Empire", period: "1915 – 1964",
+      n: "II", code: "PJM-ISM-02", title: "Left of Marx, South of Empire", period: "1915 – 1964",
       q: "How did Claudia Jones theorise the intersections of oppression to build bridges between movements in the US, the Caribbean and the UK?" },
     "amazon-forest-women": {
-      n: "III", code: "PJM-INQ-03", title: "The Forest Speaks in Women's Voices", period: "1996 – today",
+      n: "III", code: "PJM-ISM-03", title: "The Forest Speaks in Women's Voices", period: "1996 – today",
       q: "How do Nemonte Nenquimo and Helena Gualinga foreground Indigenous feminisms in global climate justice, creating new models of cross-border solidarity?" }
   };
 
@@ -351,13 +351,13 @@
     byId("toc-cards").innerHTML = Object.keys(REGISTRY).map(k => {
       const r = REGISTRY[k];
       return `<a class="inq" href="?q=${k}">
-        <div class="n">INQUIRY ${r.n} · ${r.code}</div>
+        <div class="n">STORY MAP ${r.n} · ${r.code}</div>
         <div class="t">${r.title}</div>
         <div class="q">${r.q}</div>
         <div class="m">${r.period} · scroll-driven · sourced</div></a>`;
     }).join("");
-    document.title = "Inquiries — Planetary Justice Map";
-    window.PJM_INQ = Object.freeze({ mode: "toc", inquiries: Object.keys(REGISTRY) });
+    document.title = "Interactive Storytelling Maps — Planetary Justice Map";
+    window.PJM_INQ = Object.freeze({ mode: "toc", storyMaps: Object.keys(REGISTRY) });
     return;
   }
 
@@ -370,7 +370,7 @@
 
   function boot(D) {
     const KINDS = D.kinds;
-    document.title = D.meta.title + " — Inquiry " + D.meta.n + " · Planetary Justice Map";
+    document.title = D.meta.title + " — Story Map " + D.meta.n + " · Planetary Justice Map";
     ["topbar","axis","hud","story","outro"].forEach(id => byId(id).hidden = false);
 
     byId("m-label").textContent = D.meta.label;
@@ -381,7 +381,7 @@
     byId("m-period").textContent = D.meta.period;
     byId("m-code").textContent = D.meta.code + " · v" + D.meta.version;
     byId("hud-ver").textContent = D.meta.code + " · ENGINE v" + D.meta.version;
-    byId("crumb").innerHTML = `GSS / <span class="sub">INQUIRY ${D.meta.n}</span>`;
+    byId("crumb").innerHTML = `GSS / <span class="sub">STORY MAP ${D.meta.n}</span>`;
 
     /* evidence registry */
     const REG = [], regIdx = {};
@@ -568,7 +568,7 @@
     byId("nexts").innerHTML = Object.keys(REGISTRY).filter(k => k !== qid).map(k => {
       const r = REGISTRY[k];
       return `<a class="next-inq" href="?q=${k}">
-        <div class="k">CONTINUE · INQUIRY ${r.n}</div>
+        <div class="k">CONTINUE · STORY MAP ${r.n}</div>
         <div class="t">${r.title}</div></a>`;
     }).join("");
 
@@ -579,11 +579,11 @@
         : location.origin + location.pathname + "?q=" + qid;
       const acc = new Date().toISOString().slice(0, 10);
       const sub = D.meta.standfirst.replace(/\.$/, "");
-      const chi = `Global South Solidarities Anarchive. “${D.meta.title}: ${sub}.” Planetary Justice Map, Inquiry ${D.meta.n} (${D.meta.code}), v${D.meta.version}. ${url}. Accessed ${acc}.`;
+      const chi = `Global South Solidarities Anarchive. “${D.meta.title}: ${sub}.” Planetary Justice Map, Story Map ${D.meta.n} (${D.meta.code}), v${D.meta.version}. ${url}. Accessed ${acc}.`;
       const bib = `@misc{gss_${D.meta.code.toLowerCase().replace(/-/g, "_")},
   author       = {{Global South Solidarities Anarchive}},
   title        = {${D.meta.title}},
-  howpublished = {Planetary Justice Map, Inquiry ${D.meta.n} (${D.meta.code}), v${D.meta.version}},
+  howpublished = {Planetary Justice Map, Story Map ${D.meta.n} (${D.meta.code}), v${D.meta.version}},
   year         = {${D.meta.updated.slice(0, 4)}},
   url          = {${url}},
   note         = {Accessed ${acc}. Scene anchors: #${D.scenes[0].id} … #${D.scenes[D.scenes.length-1].id}}
@@ -676,7 +676,7 @@
 
     /* diagnostic handle */
     window.PJM_INQ = Object.freeze({
-      mode: "inquiry", id: qid, code: D.meta.code, version: D.meta.version,
+      mode: "story-map", id: qid, code: D.meta.code, version: D.meta.version,
       map, scenes: D.scenes.map(sc => sc.id), registry: REG,
       scene: () => current, go: i => scrollToScene(i)
     });

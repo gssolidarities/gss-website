@@ -42,7 +42,7 @@ window.GSS_SOLIDARITIES = {
 
   meta: {
     code: "PJM-GNRS",
-    version: "0.5.0",
+    version: "0.5.1",
     updated: "2026-07-06",
     title: "Planetary Justice Map",
     theme: "Gendered Networks of Revolutionary Solidarity",
@@ -50,17 +50,17 @@ window.GSS_SOLIDARITIES = {
     orgUrl: "https://gssolidarities.org",
     question: "How do struggles and solidarities that center women, queer folx, gender, and sexuality extend our understanding of WGSS?",
     timeline: { min: 1910, max: 2026 },
-    // scroll-driven inquiries — one per research question (served from inquiries/)
+    // interactive storytelling maps — one per research question (served from story-maps/)
     inquiries: [
-      { id: "rawa-under-occupation", n: "I", code: "PJM-INQ-01",
+      { id: "rawa-under-occupation", n: "I", code: "PJM-ISM-01",
         title: "Solidarity Under Occupation",
         q: "How did RAWA's clandestine feminist organising inform its model of transnational feminist solidarity under occupation?",
         nodes: ["meena-keshwar-kamal", "rawa"] },
-      { id: "claudia-jones-bridge", n: "II", code: "PJM-INQ-02",
+      { id: "claudia-jones-bridge", n: "II", code: "PJM-ISM-02",
         title: "Left of Marx, South of Empire",
         q: "How did Claudia Jones theorise the intersections of oppression to build bridges between movements in the US, the Caribbean and the UK?",
         nodes: ["claudia-jones"] },
-      { id: "amazon-forest-women", n: "III", code: "PJM-INQ-03",
+      { id: "amazon-forest-women", n: "III", code: "PJM-ISM-03",
         title: "The Forest Speaks in Women's Voices",
         q: "How do Nemonte Nenquimo and Helena Gualinga foreground Indigenous feminisms in global climate justice, creating new models of cross-border solidarity?",
         nodes: ["nemonte-nenquimo", "helena-gualinga"] }
