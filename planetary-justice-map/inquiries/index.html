@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inquiries — Planetary Justice Map</title>
+<meta name="description" content="Scroll-driven inquiries into the Gendered Networks of Revolutionary Solidarity — the Planetary Justice Map's three research questions, argued in space and time. A Global South Solidarities Anarchive project." />
+
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+<style>
+  :root {
+    --bg:#0b0a12; --panel:#141020; --panel-2:#1b1526; --line:#2b2340; --line-soft:#221b33;
+    --text:#f2ecf4; --muted:#a99bbd; --faint:#71638a; --rose:#e0637f; --gold:#d9b36b;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    --serif: Palatino,"Palatino Linotype","Book Antiqua","Iowan Old Style",Georgia,"Times New Roman",serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; }
+  a { color:var(--gold); }
+
+  #map { position:fixed; inset:0; z-index:0; background:var(--bg); }
+  .maplibregl-ctrl-attrib { background:rgba(11,10,18,.72)!important; color:var(--faint)!important; font-size:10px!important; }
+  .maplibregl-ctrl-attrib a { color:var(--muted)!important; }
+  .scrim { position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(90deg, rgba(8,6,13,.93) 0%, rgba(8,6,13,.66) 30%, rgba(8,6,13,0) 56%); }
+  @media (max-width:720px){ .scrim { background:linear-gradient(0deg, rgba(8,6,13,.94) 30%, rgba(8,6,13,.2) 100%); } }
+
+  /* top bar */
+  .topbar { position:fixed; top:0; left:0; right:0; z-index:12; display:flex; align-items:center;
+    gap:14px; padding:13px 18px; pointer-events:none; }
+  .topbar > * { pointer-events:auto; }
+  .back { font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--muted);
+    text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:7px 11px;
+    background:rgba(20,16,32,.72); backdrop-filter:blur(8px); }
+  .back:hover { color:var(--text); border-color:#3d3158; }
+  .crumb { font-family:var(--mono); font-size:11px; letter-spacing:.22em; color:var(--gold); }
+  .crumb .sub { color:var(--faint); letter-spacing:.12em; }
+  .sind { font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--faint);
+    border-left:1px solid var(--line); padding-left:12px; }
+  .tbtn { font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--muted);
+    border:1px solid var(--line); border-radius:7px; padding:7px 10px; cursor:pointer;
+    background:rgba(20,16,32,.72); backdrop-filter:blur(8px); }
+  .tbtn:hover { color:var(--text); border-color:#3d3158; }
+  .tbtn.first { margin-left:auto; }
+  .prog-wrap { width:150px; height:3px; background:var(--line-soft); border-radius:3px; overflow:hidden; }
+  .prog { height:100%; width:0; background:var(--rose); transition:width .2s; }
+  @media (max-width:900px){ .sind, .prog-wrap { display:none; } }
+
+  /* temporal axis */
+  .axis { position:fixed; top:52px; right:18px; z-index:11; width:min(50vw,620px); height:46px;
+    display:flex; align-items:stretch; gap:10px; pointer-events:none; font-family:var(--mono); }
+  .ax-yr { font-size:10px; letter-spacing:.12em; color:var(--faint); align-self:flex-start; padding-top:14px; }
+  .ax-track { position:relative; flex:1; }
+  .ax-line { position:absolute; left:0; right:0; top:19px; height:1px; background:var(--line); }
+  .ax-t { position:absolute; bottom:0; transform:translateX(-50%); font-size:8.5px;
+    letter-spacing:.1em; color:var(--faint); opacity:.75; }
+  .ax-t i { display:block; width:1px; height:5px; background:var(--line); margin:0 auto 2px; }
+  .ax-n { position:absolute; top:19px; transform:translate(-50%,-50%); width:9px; height:9px;
+    border-radius:50%; border:1px solid #120d1c; background:var(--c,#71638a); padding:0;
+    cursor:pointer; pointer-events:auto; opacity:.85; transition:.18s; }
+  .ax-n:hover { transform:translate(-50%,-50%) scale(1.5); opacity:1; }
+  .ax-n.active { opacity:1; transform:translate(-50%,-50%) scale(1.45);
+    box-shadow:0 0 0 3px rgba(224,99,127,.25), 0 0 12px var(--c,#e0637f); }
+  .ax-n.end { border-radius:2px; transform:translate(-50%,-50%) rotate(45deg); }
+  .ax-n.end.active { transform:translate(-50%,-50%) rotate(45deg) scale(1.4); }
+  .ax-cursor { position:absolute; top:8px; width:1px; height:22px; background:var(--rose);
+    box-shadow:0 0 8px var(--rose); transform:translateX(-50%);
+    transition:left .5s cubic-bezier(.4,0,.2,1); opacity:0; }
+  .ax-cursor.on { opacity:1; }
+  @media (max-width:1000px){ .axis { display:none; } }
+
+  /* telemetry HUD */
+  .hud { position:fixed; right:18px; bottom:44px; z-index:6; pointer-events:none; text-align:right;
+    font-family:var(--mono); font-size:10px; letter-spacing:.06em; color:var(--muted);
+    text-shadow:0 1px 4px rgba(0,0,0,.9); display:flex; flex-direction:column; gap:4px; }
+  .hud .row { display:flex; justify-content:flex-end; align-items:center; gap:12px; }
+  .hud .dim { color:var(--faint); }
+  .hud .compass i { display:inline-block; font-style:normal; color:var(--gold);
+    transition:transform .3s; font-size:9px; }
+  .hud .scale { gap:6px; align-items:baseline; }
+  .hud .bar { display:inline-block; height:3px; background:var(--muted); position:relative; transition:width .25s; }
+  .hud .bar::before, .hud .bar::after { content:""; position:absolute; bottom:0; width:1px; height:7px; background:var(--muted); }
+  .hud .bar::before { left:0; } .hud .bar::after { right:0; }
+  .hud .ver { color:#4e4165; font-size:9px; letter-spacing:.14em; }
+  @media (max-width:720px){ .hud { display:none; } }
+
+  /* chapter rail */
+  .rail { position:fixed; right:16px; top:50%; transform:translateY(-50%); z-index:7;
+    display:flex; flex-direction:column; gap:11px; align-items:flex-end; }
+  .rail .r { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:10px;
+    letter-spacing:.06em; color:var(--faint); cursor:pointer; opacity:.6; transition:.2s; }
+  .rail .r .label { opacity:0; transform:translateX(6px); transition:.2s; white-space:nowrap; }
+  .rail .r .pip { width:7px; height:7px; border-radius:50%; background:var(--faint); transition:.2s; }
+  .rail .r:hover { opacity:1; } .rail .r:hover .label { opacity:1; transform:none; }
+  .rail .r.active { opacity:1; color:var(--rose); }
+  .rail .r.active .pip { background:var(--rose); box-shadow:0 0 9px var(--rose); transform:scale(1.25); }
+  @media (max-width:720px){ .rail { display:none; } }
+
+  /* narrative column */
+  .story { position:relative; z-index:5; width:min(460px,92vw); }
+  .intro { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:0 34px; }
+  .intro .kicker { font-family:var(--mono); font-size:10px; letter-spacing:.26em; color:var(--gold);
+    text-transform:uppercase; }
+  .intro h1 { font-family:var(--serif); font-size:clamp(34px,5.6vw,54px); line-height:1.05; margin:16px 0 0;
+    font-weight:600; letter-spacing:.2px; text-shadow:0 2px 30px rgba(0,0,0,.8); }
+  .intro .q { margin:18px 0 0; font-family:var(--serif); font-style:italic; font-size:17.5px;
+    line-height:1.55; color:#e9dcea; border-left:2px solid var(--rose); padding-left:15px; max-width:30em; }
+  .intro .stand { font-size:14.5px; line-height:1.55; color:var(--muted); margin:16px 0 0; max-width:32em; }
+  .intro .facts { display:flex; gap:26px; margin-top:24px; flex-wrap:wrap; }
+  .intro .facts div { font-size:12.5px; color:var(--muted); }
+  .intro .facts b { display:block; font-family:var(--mono); font-size:10px; letter-spacing:.08em;
+    color:var(--faint); text-transform:uppercase; margin-bottom:3px; }
+  .scrollcue { margin-top:38px; font-family:var(--mono); font-size:11px; letter-spacing:.18em;
+    color:var(--faint); display:flex; align-items:center; gap:9px; }
+  .scrollcue .ln { width:30px; height:1px; background:var(--faint); animation:cue 1.8s ease-in-out infinite; }
+  @keyframes cue { 0%,100%{opacity:.3;width:18px} 50%{opacity:1;width:34px} }
+  @media (prefers-reduced-motion: reduce){ .scrollcue .ln { animation:none; } }
+
+  .step { min-height:96vh; display:flex; align-items:center; padding:0 34px; }
+  .card { background:rgba(15,11,23,.85); border:1px solid var(--line); border-left:3px solid var(--gold);
+    border-radius:10px; padding:20px 22px 22px; backdrop-filter:blur(10px);
+    box-shadow:0 24px 60px -32px #000; }
+  .card.reading { border-left-color:var(--rose);
+    background:linear-gradient(90deg, rgba(224,99,127,.06), rgba(15,11,23,.85) 40%); }
+  .card .chap { font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold); display:flex; justify-content:space-between; gap:10px; }
+  .card.reading .chap { color:var(--rose); }
+  .card .chap .date { color:var(--faint); }
+  .card h2 { margin:11px 0 0; font-family:var(--serif); font-size:24px; line-height:1.16; font-weight:600; }
+  .card .body { margin-top:12px; font-size:14.5px; line-height:1.64; color:#e2d7e6; }
+  .card .body blockquote { margin:14px 0 6px; padding:4px 0 4px 15px; border-left:2px solid var(--rose);
+    font-family:var(--serif); font-size:16px; line-height:1.6; font-style:italic; color:#f3e7f0; }
+  .card .body blockquote cite { display:block; margin-top:9px; font-family:var(--mono); font-size:9px;
+    letter-spacing:.12em; color:var(--faint); font-style:normal; text-transform:uppercase; }
+  .card .src { margin-top:15px; border-top:1px solid var(--line-soft); padding-top:11px; }
+  .card .src .h { font-family:var(--mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--faint); margin-bottom:6px; }
+  .card .src a { display:flex; gap:8px; align-items:baseline; font-size:12px; color:var(--muted);
+    text-decoration:none; padding:2.5px 0; }
+  .card .src a:hover { color:var(--text); }
+  .card .src a .pub { color:var(--text); font-weight:600; }
+  .card .src a .ti { flex:1; }
+  .evc { font-family:var(--mono); font-size:9px; letter-spacing:.06em; color:var(--gold);
+    border:1px solid rgba(217,179,107,.4); border-radius:4px; padding:1px 4px; flex:none;
+    transform:translateY(-1px); }
+  .flagnote { color:#c08a4a; font-family:var(--mono); font-size:8.5px; letter-spacing:.06em; }
+
+  /* outro */
+  .outro { position:relative; z-index:5; background:linear-gradient(0deg,#080611,rgba(8,6,17,.4));
+    border-top:1px solid var(--line); margin-top:30vh; padding:64px 34px 80px; }
+  .outro .wrap { max-width:760px; margin:0 auto; }
+  .outro h3 { font-family:var(--mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--rose); margin:0 0 14px; }
+  .outro h2 { font-family:var(--serif); font-size:26px; margin:0 0 10px; font-weight:600; }
+  .outro p { font-size:14px; line-height:1.65; color:#e2d7e6; max-width:62ch; }
+  .src-grid { margin-top:22px; display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .src-card { border:1px solid var(--line-soft); border-radius:9px; padding:12px 13px; text-decoration:none;
+    color:inherit; transition:.15s; }
+  .src-card:hover { border-color:#3d3158; background:var(--panel-2); }
+  .src-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .src-card .pub { font-size:12.5px; font-weight:600; color:var(--text); }
+  .src-card .ti { font-size:12px; color:var(--muted); margin-top:3px; line-height:1.4; }
+  .src-card .mt { font-family:var(--mono); font-size:10px; color:var(--faint); margin-top:6px; }
+  .cta { display:inline-flex; gap:8px; align-items:center; margin-top:30px; font-family:var(--mono);
+    font-size:12px; letter-spacing:.06em; color:#140d18; background:var(--gold); border-radius:8px;
+    padding:11px 16px; text-decoration:none; font-weight:700; }
+  .nexts { margin-top:26px; display:grid; gap:10px; }
+  .next-inq { display:block; border:1px solid var(--line-soft); border-left:3px solid var(--rose);
+    border-radius:9px; padding:12px 14px; text-decoration:none; color:inherit; transition:.15s; }
+  .next-inq:hover { border-color:#3d3158; background:var(--panel-2); }
+  .next-inq .k { font-family:var(--mono); font-size:9px; letter-spacing:.16em; color:var(--rose); }
+  .next-inq .t { font-family:var(--serif); font-size:16.5px; margin-top:3px; }
+  .method { margin-top:30px; font-size:12px; color:var(--faint); line-height:1.6;
+    border-left:2px solid var(--line); padding-left:13px; }
+
+  /* map annotation markers */
+  .anno { display:flex; align-items:center; gap:7px; transform:translate(-7px,0); pointer-events:none;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,.8)); }
+  .anno .dot { width:13px; height:13px; border-radius:50%; border:2px solid #120d1c; flex:none; position:relative; }
+  .anno .dot::after { content:""; position:absolute; inset:-5px; border-radius:50%;
+    border:1px solid currentColor; opacity:.5; animation:ping 2.4s ease-out infinite; }
+  @keyframes ping { 0%{transform:scale(.6);opacity:.7} 100%{transform:scale(1.5);opacity:0} }
+  @media (prefers-reduced-motion: reduce){ .anno .dot::after { animation:none; opacity:.3; } }
+  .anno .lbl { display:flex; flex-direction:column; gap:1px; background:rgba(14,10,22,.8);
+    border:1px solid var(--line); border-radius:5px; padding:3px 7px 4px; white-space:nowrap; }
+  .anno .lbl .nm { font-family:var(--serif); font-size:12px; letter-spacing:.02em; color:#fff; }
+  .anno .lbl .co { font-family:var(--mono); font-size:8.5px; letter-spacing:.05em; color:var(--muted); }
+  .anno .lbl .co b { font-weight:600; color:var(--gold); }
+  .anno .lbl .co i { font-style:normal; color:#4e4165; }
+
+  /* modals */
+  .mbk { position:fixed; inset:0; z-index:30; display:none; align-items:center; justify-content:center;
+    padding:22px; background:rgba(8,6,13,.74); backdrop-filter:blur(7px); }
+  .mbk.on { display:flex; }
+  .mwin { background:var(--panel); border:1px solid var(--line); border-radius:12px; width:100%;
+    max-width:680px; max-height:84vh; overflow:auto; padding:22px 24px 26px; box-shadow:0 40px 120px -40px #000; }
+  .mwin .mh { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .mwin h4 { margin:0; font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--rose); }
+  .mwin .x { background:none; border:1px solid var(--line); border-radius:6px; color:var(--muted);
+    font-family:var(--mono); font-size:11px; padding:4px 9px; cursor:pointer; }
+  .mwin h5 { margin:20px 0 7px; font-family:var(--mono); font-size:9.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--faint); }
+  .mwin p { font-size:12.5px; line-height:1.65; color:#dccfe0; margin:6px 0; }
+  .mwin pre { background:#0e0a17; border:1px solid var(--line-soft); border-radius:8px; padding:12px 13px;
+    font-family:var(--mono); font-size:11px; line-height:1.6; color:#dccfe0; white-space:pre-wrap;
+    word-break:break-word; margin:8px 0 0; }
+  .mwin .cp { margin-top:8px; font-family:var(--mono); font-size:9.5px; letter-spacing:.14em;
+    color:#140d18; background:var(--gold); border:none; border-radius:6px; padding:7px 12px;
+    cursor:pointer; font-weight:700; }
+
+  /* ---- TOC mode (no ?q=) ---- */
+  .toc { position:relative; z-index:5; min-height:100vh; display:flex; align-items:center;
+    justify-content:center; padding:60px 24px; }
+  .toc .wrap { max-width:680px; }
+  .toc .kicker { font-family:var(--mono); font-size:10px; letter-spacing:.3em; color:var(--gold); }
+  .toc h1 { font-family:var(--serif); font-size:clamp(32px,5vw,46px); margin:12px 0 8px; font-weight:600; }
+  .toc .lede { color:var(--muted); font-size:14.5px; line-height:1.6; max-width:56ch; }
+  .toc .cards { margin-top:28px; display:grid; gap:12px; }
+  .toc a.inq { display:block; text-decoration:none; color:inherit; background:rgba(20,16,32,.7);
+    border:1px solid var(--line); border-left:3px solid var(--rose); border-radius:11px;
+    padding:16px 18px; transition:.15s; }
+  .toc a.inq:hover { border-color:#3d3158; transform:translateX(3px); }
+  .toc a.inq .n { font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; color:var(--rose); }
+  .toc a.inq .t { font-family:var(--serif); font-size:21px; margin-top:4px; }
+  .toc a.inq .q { font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; font-style:italic; }
+  .toc a.inq .m { font-family:var(--mono); font-size:9.5px; color:var(--faint); margin-top:8px; letter-spacing:.08em; }
+  .toc .backrow { margin-top:24px; }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="scrim" id="scrim"></div>
+
+<div class="topbar" id="topbar" hidden>
+  <a class="back" href="../index.html">← Map</a>
+  <span class="crumb" id="crumb">GSS / <span class="sub">INQUIRIES</span></span>
+  <span class="sind" id="sind"></span>
+  <button class="tbtn first" id="btn-cite" type="button">CITE</button>
+  <div class="prog-wrap"><div class="prog" id="prog"></div></div>
+</div>
+
+<div class="axis" id="axis" hidden aria-hidden="true">
+  <span class="ax-yr" id="ax-y0"></span>
+  <div class="ax-track" id="ax-track">
+    <div class="ax-line"></div>
+    <div class="ax-cursor" id="ax-cursor"></div>
+  </div>
+  <span class="ax-yr" id="ax-y1"></span>
+</div>
+
+<div class="rail" id="rail"></div>
+
+<div class="hud" id="hud" hidden aria-hidden="true">
+  <div class="row"><span id="hud-ll">—</span></div>
+  <div class="row dim">
+    <span id="hud-z">Z —</span><span id="hud-p">PITCH —</span><span id="hud-b">BRG —</span>
+    <span class="compass"><i id="needle">▲</i> N</span>
+  </div>
+  <div class="row scale"><span class="bar" id="scale-bar" style="width:80px"></span><span id="scale-lb">—</span></div>
+  <div class="row"><span class="ver" id="hud-ver"></span></div>
+</div>
+
+<div class="story" id="story" hidden>
+  <section class="intro" id="intro">
+    <div class="kicker" id="m-label"></div>
+    <h1 id="m-title"></h1>
+    <div class="q" id="m-q"></div>
+    <p class="stand" id="m-stand"></p>
+    <div class="facts">
+      <div><b>Geography</b><span id="m-loc"></span></div>
+      <div><b>Period</b><span id="m-period"></span></div>
+      <div><b>Inquiry</b><span id="m-code"></span></div>
+    </div>
+    <div class="scrollcue"><span class="ln"></span> SCROLL TO BEGIN</div>
+  </section>
+  <div id="steps"></div>
+</div>
+
+<section class="outro" id="outro" hidden>
+  <div class="wrap">
+    <h3>The record</h3>
+    <h2>Sourced, argued, and open to revision</h2>
+    <p>Factual scenes above are attributed to the sources below; the closing scene is an explicitly
+      labelled interpretive reading — this project's argument, kept apart from the record it reads.
+      Quotations are verbatim from the cited primary pages.</p>
+    <div class="src-grid" id="src-grid"></div>
+    <div class="nexts" id="nexts"></div>
+    <p class="method" id="method">Method: camera choreography and pins are generated from a versioned
+      scene file; sub-landmark coordinates are tagged APPROX on the map and must not be read as
+      precise. Citations flagged “pending verification” link to the holder's real root domain until
+      the exact URL is confirmed. Full standards: the map's METHOD panel. Built on MapLibre GL JS —
+      open source, no API keys.</p>
+    <a class="cta" href="../index.html">↩ Return to the Planetary Justice Map</a>
+  </div>
+</section>
+
+<!-- TOC (no ?q=) -->
+<div class="toc" id="toc" hidden>
+  <div class="wrap">
+    <div class="kicker">GSS · ANARCHIVE — PLANETARY JUSTICE MAP</div>
+    <h1>The Inquiries</h1>
+    <p class="lede">Three scroll-driven investigations — one for each research question of
+      <em>Gendered Networks of Revolutionary Solidarity</em>. Each argues in space and time:
+      camera flights over the real geography, verbatim primary voices, coded evidence, and a
+      clearly-labelled interpretive reading at the end.</p>
+    <div class="cards" id="toc-cards"></div>
+    <div class="backrow"><a class="back" href="../index.html">← Back to the map</a></div>
+  </div>
+</div>
+
+<!-- cite modal -->
+<div class="mbk" id="modal-cite" role="dialog" aria-modal="true" aria-label="Cite this inquiry">
+  <div class="mwin">
+    <div class="mh"><h4>Cite this inquiry</h4><button class="x" type="button" data-close>ESC</button></div>
+    <div id="cite-body"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const byId = id => document.getElementById(id);
+  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* registry of published inquiries (whitelist for ?q= loading) */
+  const REGISTRY = {
+    "rawa-under-occupation": {
+      n: "I", code: "PJM-INQ-01", title: "Solidarity Under Occupation", period: "1977 – 2001",
+      q: "How did RAWA's clandestine feminist organising inform its model of transnational feminist solidarity under occupation?" },
+    "claudia-jones-bridge": {
+      n: "II", code: "PJM-INQ-02", title: "Left of Marx, South of Empire", period: "1915 – 1964",
+      q: "How did Claudia Jones theorise the intersections of oppression to build bridges between movements in the US, the Caribbean and the UK?" },
+    "amazon-forest-women": {
+      n: "III", code: "PJM-INQ-03", title: "The Forest Speaks in Women's Voices", period: "1996 – today",
+      q: "How do Nemonte Nenquimo and Helena Gualinga foreground Indigenous feminisms in global climate justice, creating new models of cross-border solidarity?" }
+  };
+
+  let qid = "";
+  try { qid = new URLSearchParams(location.search).get("q") || ""; } catch (e) {}
+
+  /* ---------- TOC mode ---------- */
+  if (!qid || !REGISTRY[qid]) {
+    byId("toc").hidden = false;
+    byId("map").style.display = "none";
+    byId("scrim").style.display = "none";
+    byId("toc-cards").innerHTML = Object.keys(REGISTRY).map(k => {
+      const r = REGISTRY[k];
+      return `<a class="inq" href="?q=${k}">
+        <div class="n">INQUIRY ${r.n} · ${r.code}</div>
+        <div class="t">${r.title}</div>
+        <div class="q">${r.q}</div>
+        <div class="m">${r.period} · scroll-driven · sourced</div></a>`;
+    }).join("");
+    document.title = "Inquiries — Planetary Justice Map";
+    window.PJM_INQ = Object.freeze({ mode: "toc", inquiries: Object.keys(REGISTRY) });
+    return;
+  }
+
+  /* ---------- load the inquiry's scene data, then boot ---------- */
+  const s = document.createElement("script");
+  s.src = "data/" + qid + ".js";
+  s.onload = () => boot(window.GSS_INQUIRY);
+  s.onerror = () => { location.replace(location.pathname); };
+  document.head.appendChild(s);
+
+  function boot(D) {
+    const KINDS = D.kinds;
+    document.title = D.meta.title + " — Inquiry " + D.meta.n + " · Planetary Justice Map";
+    ["topbar","axis","hud","story","outro"].forEach(id => byId(id).hidden = false);
+
+    byId("m-label").textContent = D.meta.label;
+    byId("m-title").textContent = D.meta.title;
+    byId("m-q").textContent = "“" + REGISTRY[qid].q + "”";
+    byId("m-stand").textContent = D.meta.standfirst;
+    byId("m-loc").textContent = D.meta.location;
+    byId("m-period").textContent = D.meta.period;
+    byId("m-code").textContent = D.meta.code + " · v" + D.meta.version;
+    byId("hud-ver").textContent = D.meta.code + " · ENGINE v" + D.meta.version;
+    byId("crumb").innerHTML = `GSS / <span class="sub">INQUIRY ${D.meta.n}</span>`;
+
+    /* evidence registry */
+    const REG = [], regIdx = {};
+    D.scenes.forEach(sc => (sc.sources || []).forEach(x => {
+      const k = x.publisher + "|" + x.title;
+      if (!(k in regIdx)) { regIdx[k] = REG.length;
+        REG.push({ ...x, code: "E" + String(REG.length + 1).padStart(2, "0"), scenes: [] }); }
+      if (!REG[regIdx[k]].scenes.includes(sc.id)) REG[regIdx[k]].scenes.push(sc.id);
+    }));
+    const evOf = x => REG[regIdx[x.publisher + "|" + x.title]];
+
+    const fx = (n, p) => n.toFixed(p);
+    const fmtLL = (lat, lng, p) =>
+      `${fx(Math.abs(lat), p==null?4:p)}°${lat>=0?"N":"S"} ${fx(Math.abs(lng), p==null?4:p)}°${lng>=0?"E":"W"}`;
+
+    /* basemap style (key-free) */
+    const carto = sd => `https://${sd}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`;
+    const cartoLab = sd => `https://${sd}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png`;
+    const style = {
+      version: 8,
+      sources: {
+        "dark": { type:"raster", tileSize:256, tiles:["a","b","c","d"].map(carto),
+          attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>' },
+        "sat": { type:"raster", tileSize:256,
+          tiles:["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+          attribution:'Imagery © Esri, Maxar, Earthstar Geographics' },
+        "lab": { type:"raster", tileSize:256, tiles:["a","b","c","d"].map(cartoLab) }
+      },
+      layers: [
+        { id:"bg", type:"background", paint:{ "background-color":"#0b0a12" } },
+        { id:"dark", type:"raster", source:"dark", paint:{ "raster-opacity":.85 } },
+        { id:"sat", type:"raster", source:"sat", layout:{ visibility:"none" } },
+        { id:"lab", type:"raster", source:"lab", layout:{ visibility:"none" } }
+      ]
+    };
+    const map = new maplibregl.Map({
+      container:"map", style,
+      center:D.scenes[0].camera.center, zoom:D.scenes[0].camera.zoom,
+      pitch:D.scenes[0].camera.pitch||0, bearing:D.scenes[0].camera.bearing||0,
+      attributionControl:false, interactive:false
+    });
+    map.addControl(new maplibregl.AttributionControl({ compact:true }), "bottom-right");
+    function setBasemap(kind){
+      const sat = kind === "satellite";
+      map.setLayoutProperty("dark","visibility", sat?"none":"visible");
+      map.setLayoutProperty("sat","visibility", sat?"visible":"none");
+      map.setLayoutProperty("lab","visibility", sat?"visible":"none");
+    }
+
+    /* markers + route */
+    let markers = [];
+    function setMarkers(list){
+      markers.forEach(m => m.remove()); markers = [];
+      (list||[]).forEach(m => {
+        const color = (KINDS[m.kind]||KINDS.focus).color;
+        const approx = m.precision !== "exact";
+        const el = document.createElement("div");
+        el.className = "anno"; el.style.color = color;
+        el.innerHTML = `<span class="dot" style="background:${color}"></span>
+          <span class="lbl"><span class="nm">${m.label}</span>
+          <span class="co">${fmtLL(m.lat, m.lng, 3)} ${approx?"<b>· APPROX</b>":"<i>· EXACT</i>"}</span></span>`;
+        markers.push(new maplibregl.Marker({ element:el, anchor:"left" })
+          .setLngLat([m.lng, m.lat]).addTo(map));
+      });
+    }
+    function setRoute(coords){
+      const data = { type:"Feature", geometry:{ type:"LineString", coordinates:coords||[] } };
+      if (map.getSource("route")) map.getSource("route").setData(data);
+    }
+
+    /* steps + rail */
+    const stepsEl = byId("steps"), railEl = byId("rail");
+    function scrollToScene(i, instant){
+      const el = document.querySelector(`.step[data-index="${i}"]`);
+      if (el) el.scrollIntoView({ behavior:(instant||RM)?"auto":"smooth", block:"center" });
+    }
+    D.scenes.forEach((sc, i) => {
+      const step = document.createElement("section");
+      step.className = "step"; step.dataset.index = i; step.id = "s-" + sc.id;
+      const srcHtml = (sc.sources && sc.sources.length)
+        ? `<div class="src"><div class="h">Evidence · ${sc.sources.length} item${sc.sources.length>1?"s":""}</div>${sc.sources.map(x =>
+            `<a href="${x.url}" target="_blank" rel="noopener"><span class="evc">${evOf(x).code}</span><span class="ti"><span class="pub">${x.publisher}</span> — ${x.title}${x.deepLink===false?' <span class="flagnote">· LINK PENDING</span>':""}</span></a>`).join("")}</div>`
+        : "";
+      step.innerHTML = `<div class="card${sc.reading?" reading":""}">
+          <div class="chap"><span>${sc.reading?"READING — ":""}${sc.chapter}</span><span class="date">${sc.date}</span></div>
+          <h2>${sc.title}</h2>
+          <div class="body">${sc.body}</div>
+          ${srcHtml}
+        </div>`;
+      stepsEl.appendChild(step);
+      const r = document.createElement("div");
+      r.className = "r"; r.dataset.index = i;
+      r.innerHTML = `<span class="label">${sc.chapter}</span><span class="pip"></span>`;
+      r.onclick = () => scrollToScene(i);
+      railEl.appendChild(r);
+    });
+
+    /* temporal axis */
+    const axTrack = byId("ax-track"), axCursor = byId("ax-cursor");
+    const t0 = Date.parse(D.meta.axis.start), t1 = Date.parse(D.meta.axis.end);
+    byId("ax-y0").textContent = D.meta.axis.start.slice(0, 4);
+    byId("ax-y1").textContent = D.meta.axis.tail || "";
+    const posOf = sc => sc.iso ? Math.min(1, Math.max(0, (Date.parse(sc.iso)-t0)/(t1-t0))) : 1;
+    const spanYears = (t1 - t0) / 31557600000;
+    const stepY = spanYears > 30 ? 10 : spanYears > 12 ? 5 : 2;
+    for (let y = Math.ceil(new Date(t0).getUTCFullYear()/stepY)*stepY; y <= new Date(t1).getUTCFullYear(); y += stepY) {
+      const f = (Date.UTC(y,0,1)-t0)/(t1-t0);
+      if (f < 0 || f > 1) continue;
+      const el = document.createElement("span");
+      el.className = "ax-t"; el.style.left = (f*100)+"%";
+      el.innerHTML = "<i></i>" + y;
+      axTrack.appendChild(el);
+    }
+    const axNodes = D.scenes.map((sc, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "ax-n" + (sc.iso ? "" : " end");
+      b.style.left = (posOf(sc)*100)+"%";
+      const c = (sc.markers && sc.markers[0]) ? (KINDS[sc.markers[0].kind]||KINDS.focus).color : "#a99bbd";
+      b.style.setProperty("--c", c);
+      b.setAttribute("title", `${sc.date} — ${sc.title}`);
+      b.onclick = () => scrollToScene(i);
+      axTrack.appendChild(b);
+      return b;
+    });
+
+    /* scene transitions (chrome decoupled from style load) */
+    function applyScene(sc){
+      setBasemap(sc.basemap || "dark");
+      const cam = { center:sc.camera.center, zoom:sc.camera.zoom,
+        pitch:sc.camera.pitch||0, bearing:sc.camera.bearing||0 };
+      if (RM) map.jumpTo(cam);
+      else map.flyTo(Object.assign(cam, { speed:0.6, curve:1.4, essential:true }));
+      setRoute(sc.route);
+      setMarkers(sc.markers);
+    }
+    let current = -1;
+    function goScene(i){
+      if (i === current) return; current = i;
+      const sc = D.scenes[i];
+      byId("sind").textContent =
+        `SCENE ${String(i+1).padStart(2,"0")}/${String(D.scenes.length).padStart(2,"0")} · ${sc.date.toUpperCase()}`;
+      railEl.querySelectorAll(".r").forEach(r =>
+        r.classList.toggle("active", +r.dataset.index === i));
+      axNodes.forEach((n, j) => n.classList.toggle("active", j === i));
+      axCursor.classList.add("on");
+      axCursor.style.left = (posOf(sc)*100)+"%";
+      try { history.replaceState(null, "", "?q=" + qid + "#" + sc.id); } catch (e) {}
+      if (map.isStyleLoaded()) applyScene(sc);
+    }
+
+    /* HUD */
+    const mapEl = byId("map"), needle = byId("needle");
+    const NICE = [2000000,1000000,500000,200000,100000,50000,20000,10000,5000,2000,1000,500,200,100,50];
+    let hover = null;
+    function updHud(){
+      const c = map.getCenter(), z = map.getZoom(), b = map.getBearing(), p = map.getPitch();
+      byId("hud-ll").textContent = hover ? "CUR " + fmtLL(hover.lat, hover.lng) : "CTR " + fmtLL(c.lat, c.lng);
+      byId("hud-z").textContent = "Z " + fx(z, 2);
+      byId("hud-p").textContent = "PITCH " + Math.round(p) + "°";
+      byId("hud-b").textContent = "BRG " + fx(b, 1) + "°";
+      needle.style.transform = `rotate(${-b}deg)`;
+      const mpp = 156543.03392 * Math.cos(c.lat*Math.PI/180) / Math.pow(2, z);
+      const nice = NICE.find(v => v/mpp <= 120) || 50;
+      byId("scale-bar").style.width = (nice/mpp) + "px";
+      byId("scale-lb").textContent = nice >= 1000 ? (nice/1000)+" km" : nice+" m";
+    }
+    map.on("move", updHud); map.on("pitch", updHud); map.on("rotate", updHud);
+    mapEl.addEventListener("mousemove", e => {
+      const r = mapEl.getBoundingClientRect();
+      hover = map.unproject([e.clientX - r.left, e.clientY - r.top]); updHud();
+    }, { passive:true });
+    mapEl.addEventListener("mouseleave", () => { hover = null; updHud(); });
+    updHud();
+
+    /* outro registry + next-inquiry links */
+    byId("src-grid").innerHTML = REG.map(x => {
+      let host = ""; try { host = new URL(x.url).hostname.replace(/^www\./, ""); } catch (e) {}
+      return `<a class="src-card" href="${x.url}" target="_blank" rel="noopener">
+        <div class="head"><span class="pub">${x.publisher}</span><span class="evc">${x.code}</span></div>
+        <div class="ti">${x.title}</div>
+        <div class="mt">↗ ${host} · cited in ${x.scenes.length} scene${x.scenes.length>1?"s":""}</div></a>`;
+    }).join("");
+    byId("nexts").innerHTML = Object.keys(REGISTRY).filter(k => k !== qid).map(k => {
+      const r = REGISTRY[k];
+      return `<a class="next-inq" href="?q=${k}">
+        <div class="k">CONTINUE · INQUIRY ${r.n}</div>
+        <div class="t">${r.title}</div></a>`;
+    }).join("");
+
+    /* cite modal */
+    (function buildCite(){
+      const url = location.origin === "null"
+        ? location.href.split("#")[0]
+        : location.origin + location.pathname + "?q=" + qid;
+      const acc = new Date().toISOString().slice(0, 10);
+      const sub = D.meta.standfirst.replace(/\.$/, "");
+      const chi = `Global South Solidarities Anarchive. “${D.meta.title}: ${sub}.” Planetary Justice Map, Inquiry ${D.meta.n} (${D.meta.code}), v${D.meta.version}. ${url}. Accessed ${acc}.`;
+      const bib = `@misc{gss_${D.meta.code.toLowerCase().replace(/-/g, "_")},
+  author       = {{Global South Solidarities Anarchive}},
+  title        = {${D.meta.title}},
+  howpublished = {Planetary Justice Map, Inquiry ${D.meta.n} (${D.meta.code}), v${D.meta.version}},
+  year         = {${D.meta.updated.slice(0, 4)}},
+  url          = {${url}},
+  note         = {Accessed ${acc}. Scene anchors: #${D.scenes[0].id} … #${D.scenes[D.scenes.length-1].id}}
+}`;
+      byId("cite-body").innerHTML = `
+        <h5>Chicago</h5><pre id="cite-chi"></pre><button class="cp" type="button" data-copy="cite-chi">COPY</button>
+        <h5>BibTeX</h5><pre id="cite-bib"></pre><button class="cp" type="button" data-copy="cite-bib">COPY</button>
+        <h5>Scene-level citation</h5>
+        <p>Each scene has a stable anchor kept in the address bar as you read — e.g.
+          <code>#${D.scenes[1] ? D.scenes[1].id : D.scenes[0].id}</code>.</p>`;
+      byId("cite-chi").textContent = chi;
+      byId("cite-bib").textContent = bib;
+      document.querySelectorAll("[data-copy]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const t = byId(btn.dataset.copy).textContent;
+          const done = () => { btn.textContent = "COPIED ✓"; setTimeout(() => btn.textContent = "COPY", 1400); };
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, done);
+          else { const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta);
+            ta.select(); try { document.execCommand("copy"); } catch (e) {} ta.remove(); done(); }
+        });
+      });
+    })();
+    const citeM = byId("modal-cite");
+    byId("btn-cite").addEventListener("click", () => citeM.classList.add("on"));
+    citeM.addEventListener("click", e => { if (e.target === citeM) citeM.classList.remove("on"); });
+    citeM.querySelector("[data-close]").addEventListener("click", () => citeM.classList.remove("on"));
+
+    /* keyboard */
+    window.addEventListener("keydown", e => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const tag = (e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      if (e.key === "Escape") { citeM.classList.remove("on"); return; }
+      let d = 0;
+      if (e.key === "j" || e.key === "ArrowRight") d = 1;
+      else if (e.key === "k" || e.key === "ArrowLeft") d = -1;
+      if (!d) return;
+      e.preventDefault();
+      if (current < 0 && d < 0) return;
+      const base = current < 0 ? -1 : current;
+      scrollToScene(Math.min(D.scenes.length - 1, Math.max(0, base + d)));
+    });
+
+    /* map load → route layers + replay current scene */
+    map.on("load", () => {
+      map.addSource("route", { type:"geojson", data:{ type:"Feature", geometry:{ type:"LineString", coordinates:[] } } });
+      map.addLayer({ id:"route-glow", type:"line", source:"route",
+        layout:{ "line-cap":"round","line-join":"round" },
+        paint:{ "line-color":"#e0637f","line-width":7,"line-opacity":0.16,"line-blur":3 } });
+      map.addLayer({ id:"route-line", type:"line", source:"route",
+        layout:{ "line-cap":"round","line-join":"round" },
+        paint:{ "line-color":"#e0637f","line-width":2,"line-dasharray":[2,1.6] } });
+      if (current >= 0) applyScene(D.scenes[current]);
+      updHud();
+    });
+
+    /* scroll-driven scene switching */
+    let lastTick = 0;
+    function onScroll(){
+      const now = Date.now(); if (now - lastTick < 40) return; lastTick = now;
+      const line = window.innerHeight * 0.55;
+      let best = -1, bestDist = Infinity;
+      document.querySelectorAll(".step").forEach(st => {
+        const r = st.getBoundingClientRect();
+        if (r.top <= line && r.bottom >= line) {
+          const d = Math.abs((r.top + r.bottom)/2 - line);
+          if (d < bestDist) { bestDist = d; best = +st.dataset.index; }
+        }
+      });
+      if (best >= 0) goScene(best);
+    }
+    window.addEventListener("scroll", onScroll, { passive:true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+
+    /* deep link #scene */
+    (function(){
+      let h = ""; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+      if (!h) return;
+      const i = D.scenes.findIndex(sc => sc.id === h);
+      if (i >= 0) { scrollToScene(i, true); onScroll(); }
+    })();
+
+    /* progress bar */
+    const prog = byId("prog");
+    window.addEventListener("scroll", () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      prog.style.width = Math.min(100, Math.max(0, (window.scrollY/h)*100)) + "%";
+    }, { passive:true });
+
+    /* diagnostic handle */
+    window.PJM_INQ = Object.freeze({
+      mode: "inquiry", id: qid, code: D.meta.code, version: D.meta.version,
+      map, scenes: D.scenes.map(sc => sc.id), registry: REG,
+      scene: () => current, go: i => scrollToScene(i)
+    });
+  }
+})();
+</script>
+</body>
+</html>

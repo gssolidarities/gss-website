@@ -42,14 +42,29 @@ window.GSS_SOLIDARITIES = {
 
   meta: {
     code: "PJM-GNRS",
-    version: "0.4.1",
+    version: "0.5.0",
     updated: "2026-07-06",
     title: "Planetary Justice Map",
     theme: "Gendered Networks of Revolutionary Solidarity",
     org: "Global South Solidarities Anarchive",
     orgUrl: "https://gssolidarities.org",
     question: "How do struggles and solidarities that center women, queer folx, gender, and sexuality extend our understanding of WGSS?",
-    timeline: { min: 1910, max: 2026 }
+    timeline: { min: 1910, max: 2026 },
+    // scroll-driven inquiries — one per research question (served from inquiries/)
+    inquiries: [
+      { id: "rawa-under-occupation", n: "I", code: "PJM-INQ-01",
+        title: "Solidarity Under Occupation",
+        q: "How did RAWA's clandestine feminist organising inform its model of transnational feminist solidarity under occupation?",
+        nodes: ["meena-keshwar-kamal", "rawa"] },
+      { id: "claudia-jones-bridge", n: "II", code: "PJM-INQ-02",
+        title: "Left of Marx, South of Empire",
+        q: "How did Claudia Jones theorise the intersections of oppression to build bridges between movements in the US, the Caribbean and the UK?",
+        nodes: ["claudia-jones"] },
+      { id: "amazon-forest-women", n: "III", code: "PJM-INQ-03",
+        title: "The Forest Speaks in Women's Voices",
+        q: "How do Nemonte Nenquimo and Helena Gualinga foreground Indigenous feminisms in global climate justice, creating new models of cross-border solidarity?",
+        nodes: ["nemonte-nenquimo", "helena-gualinga"] }
+    ]
   },
 
   themes: {
@@ -73,6 +88,7 @@ window.GSS_SOLIDARITIES = {
       origin: 1956,
       theme: "femrev",
       role: "Founder of RAWA · Kabul & Quetta",
+      inquiry: "rawa-under-occupation",
       anchor: "right",
       places: [
         { label: "Kabul", lat: 34.5553, lng: 69.2075, precision: "exact",
@@ -217,6 +233,7 @@ window.GSS_SOLIDARITIES = {
       origin: 1915,
       theme: "blackint",
       role: "Black communist feminist · Trinidad → Harlem → London",
+      inquiry: "claudia-jones-bridge",
       anchor: "left",
       places: [
         { label: "Belmont, Port of Spain", lat: 10.6600, lng: -61.5167, precision: "exact",
@@ -258,6 +275,7 @@ window.GSS_SOLIDARITIES = {
       origin: 1985,
       theme: "indig",
       role: "Waorani leader · Ceibo Alliance · Pastaza",
+      inquiry: "amazon-forest-women",
       anchor: "right",
       places: [
         { label: "Waorani territory, Pastaza", lat: -1.30, lng: -77.55, precision: "approx",
@@ -297,6 +315,7 @@ window.GSS_SOLIDARITIES = {
       origin: 2002,
       theme: "indig",
       role: "Kichwa Sarayaku advocate · climate justice",
+      inquiry: "amazon-forest-women",
       anchor: "left",
       places: [
         { label: "Sarayaku", lat: -1.7400, lng: -77.4870, precision: "approx",
@@ -332,6 +351,7 @@ window.GSS_SOLIDARITIES = {
       origin: 1977,
       theme: "femrev",
       role: "Revolutionary Association of the Women of Afghanistan",
+      inquiry: "rawa-under-occupation",
       anchor: "left",
       places: [
         { label: "Kabul", lat: 34.5553, lng: 69.2075, precision: "exact",
@@ -418,8 +438,8 @@ window.GSS_SOLIDARITIES = {
       status: "documented",
       materials: [
         { kind: "text", title: "“Tell no lies, claim no easy victories” — party directive", date: "1965",
-          holder: "Marxists Internet Archive (archival text)", url: "https://www.marxists.org", deepLink: false,
-          note: "Cabral's watchword to the militants — method as ethics." },
+          holder: "Marxists Internet Archive (archival text)", url: "https://www.marxists.org/subject/africa/cabral/1965/tnlcnev.htm",
+          note: "Verbatim: “Tell no lies. Expose lies whenever they are told. Mask no difficulties, mistakes, failures. Claim no easy victories.” Method as ethics." },
         { kind: "doc", title: "Amílcar Cabral archive — papers, photographs, party documents", date: "1956 – 1973",
           holder: "Fundação Mário Soares · Casa Comum", url: "https://casacomum.org", deepLink: false,
           note: "Digitised PAIGC records, including images of women militants in the liberated zones." }

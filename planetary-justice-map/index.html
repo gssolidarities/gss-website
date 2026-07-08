@@ -90,6 +90,8 @@
     background: rgba(17,13,27,.82); border: 1px solid var(--line); border-radius: 7px;
     padding: 8px 11px; cursor: pointer; backdrop-filter: blur(8px); transition: .15s; }
   .tbtn:hover { color: var(--text); border-color: #3d3158; }
+  .tbtn.hot { color: var(--rose); border-color: rgba(224,99,127,.45); }
+  .tbtn.hot:hover { color: #fff; background: var(--rose); border-color: var(--rose); }
   .seg { display: inline-flex; background: rgba(17,13,27,.82); border: 1px solid var(--line);
     border-radius: 7px; overflow: hidden; backdrop-filter: blur(8px); }
   .seg button { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--muted);
@@ -175,6 +177,12 @@
   .p-role { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
   .p-dates { margin: 10px 0 0; font-family: var(--mono); font-size: 11px; color: var(--gold);
     letter-spacing: .08em; }
+  .p-inq { display: block; margin-top: 13px; text-decoration: none; color: inherit;
+    border: 1px solid rgba(224,99,127,.35); border-left: 3px solid var(--rose); border-radius: 9px;
+    padding: 10px 12px; transition: .15s; background: linear-gradient(90deg, rgba(224,99,127,.08), transparent 70%); }
+  .p-inq:hover { border-color: var(--rose); transform: translateX(2px); }
+  .p-inq .k { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; color: var(--rose); }
+  .p-inq .t { display: block; font-family: var(--serif); font-size: 15.5px; margin-top: 3px; }
   .p-divider { height: 1px; background: var(--line-soft); margin: 16px 0; }
   .p-summary { font-size: 13.5px; line-height: 1.62; color: #ded4e4; }
   .p-summary em { color: var(--text); }
@@ -336,6 +344,8 @@
     <button data-base="dark" class="active">MAP</button>
     <button data-base="satellite">SATELLITE</button>
   </div>
+  <button class="tbtn hot" id="inq-btn">INQUIRIES</button>
+  <button class="tbtn" id="teach-btn">TEACH</button>
   <button class="tbtn" id="about-btn">ABOUT</button>
   <button class="tbtn" id="method-btn">METHOD</button>
   <button class="tbtn" id="cite-btn">CITE</button>
@@ -402,6 +412,10 @@
         annotation, an explicitly-labelled interpretive <em>reading</em>, every place with its
         coordinates and precision class, and named sources with stable evidence codes.</li>
       <li>Scrub or play the <b>timeline</b> to watch the network assemble across a century.</li>
+      <li>Open the <b>INQUIRIES</b> — three scroll-driven investigations, one for each of the
+        project's research questions, argued over the real geography with verbatim primary voices.</li>
+      <li><b>TEACH</b> holds a course-ready kit: a first-session walkthrough, discussion prompts,
+        and assignment frameworks built on the map's own standards.</li>
     </ul>
     <h3>Standards</h3>
     <p>No node without named institutional or scholarly sources. Factual annotation and interpretive
@@ -431,6 +445,69 @@
     <button class="close-x" data-close>×</button>
     <h2>Cite this map</h2>
     <div id="cite-body"></div>
+  </div>
+</div>
+
+<!-- Inquiries modal -->
+<div class="overlay" id="inq-overlay">
+  <div class="modal">
+    <button class="close-x" data-close>×</button>
+    <h2>The Inquiries</h2>
+    <p class="lede">three research questions, argued in space and time</p>
+    <p>Each inquiry is a scroll-driven investigation of one of the project's research questions:
+      camera flights over the real geography, verbatim primary voices, coded evidence, and a
+      clearly-labelled interpretive reading at the end. Around ten minutes each.</p>
+    <div id="inq-cards" style="display:grid;gap:11px;margin-top:18px;"></div>
+  </div>
+</div>
+
+<!-- Teach modal -->
+<div class="overlay" id="teach-overlay">
+  <div class="modal">
+    <button class="close-x" data-close>×</button>
+    <h2>Teach with the map</h2>
+    <p class="lede">course-ready · open access · citable</p>
+    <p>The map is built for classrooms: every claim is sourced, every pin carries a precision class,
+      factual annotation is kept apart from labelled interpretation, and every node, inquiry and
+      scene has a stable link that fits on a syllabus.</p>
+    <h3>A first session (15–20 min)</h3>
+    <p>Press <b>play</b> on the timeline and watch the century assemble. Open one node dossier and
+      read its annotation against its <em>reading</em> — ask what changed between the two. Then walk
+      one <b>inquiry</b> together, stopping at the primary voices.</p>
+    <h3>Discussion prompts</h3>
+    <ul>
+      <li>Claudia Jones theorised “superexploitation” in 1949 — four decades before
+        <em>intersectionality</em> entered the lexicon. What is gained, and what is lost, when a
+        movement concept becomes a classroom vocabulary?</li>
+      <li>RAWA's politics survived by going clandestine — schools, a magazine, hidden cameras.
+        Where does politics happen when public politics is forbidden, and who does that work?</li>
+      <li>The PAIGC wrote women into liberated-zone governance by quota; Guinea-Bissau's National
+        Women's Day commemorates a fallen woman commander. Is this feminism inside revolution,
+        or revolution inside feminism (Urdang's “two colonialisms”)?</li>
+      <li>What does the word <em>mother</em> do politically in Lorena Borjas's story — and what
+        does it hide about the labour of community defence?</li>
+      <li>Nenquimo and Gualinga are two generations from neighbouring nations. How does their
+        pairing change the picture of “leadership” that climate politics usually rewards?</li>
+      <li>The TWLF was a coalition of coalitions. What made that form durable enough to win an
+        institution — and what tensions does the map's tie-drawing rule (documented ties only)
+        make visible by leaving lines out?</li>
+    </ul>
+    <h3>Assignment frameworks</h3>
+    <ul>
+      <li><b>Deepen a node.</b> Choose one figure or movement; verify one “pending verification”
+        citation to its precise URL; draft a 150-word annotation upgrade with sources, following
+        the METHOD panel's standards. (Research methods · archives)</li>
+      <li><b>Argue a new node.</b> Propose one figure or movement the map should add. The proposal
+        must satisfy the roster-integrity rule: named institutional/scholarly sources, places with
+        honest precision classes, an annotation kept apart from a reading. (Historiography · WGSS theory)</li>
+      <li><b>Test an inquiry.</b> Take one inquiry's closing reading and test its model against a
+        node it was not written about — where does the model hold, where does it break?
+        (Comparative analysis · theory-building)</li>
+    </ul>
+    <h3>Citing</h3>
+    <p>Use <b>CITE</b> for Chicago/BibTeX records of the map; each inquiry has its own CITE button.
+      Node anchors (<code>#claudia-jones</code>) and scene anchors cite specific views. The dataset
+      is a versioned file — quote it by version (see METHOD).</p>
   </div>
 </div>
 
@@ -481,7 +558,7 @@
   const nMov = D.nodes.filter(n => n.type === "movement").length;
   const nPl = D.nodes.reduce((a, n) => a + n.places.length, 0);
   byId("counts").innerHTML =
-    `<b>${nFig}</b> FIGURES · <b>${nMov}</b> MOVEMENTS · <b>${nPl}</b> PLACES · <b>${MREG.length}</b> PRIMARY MATERIALS · <b>${REG.length}</b> SOURCES`;
+    `<b>${nFig}</b> FIGURES · <b>${nMov}</b> MOVEMENTS · <b>${nPl}</b> PLACES · <b>${MREG.length}</b> PRIMARY MATERIALS · <b>${REG.length}</b> SOURCES · <b>${(D.meta.inquiries || []).length}</b> INQUIRIES`;
   byId("cindex-h").textContent = `CONSTELLATION — ${nFig} FIGURES · ${nMov} MOVEMENTS`;
   byId("mhud-ver").textContent = D.meta.code + " · v" + D.meta.version;
   byId("about-q").textContent = "“" + D.meta.question + "”";
@@ -849,6 +926,10 @@
       <h2 class="p-title">${n.name}</h2>
       <div class="p-role">${n.role}</div>
       <div class="p-dates">${n.dates.toUpperCase()} · STATUS: ${(n.status || "documented").toUpperCase()}</div>
+      ${(function(){ const inq = n.inquiry && (D.meta.inquiries || []).find(x => x.id === n.inquiry);
+        return inq ? `<a class="p-inq" href="inquiries/?q=${inq.id}">
+          <span class="k">INQUIRY ${inq.n} · SCROLL-DRIVEN INVESTIGATION</span>
+          <span class="t">${inq.title} →</span></a>` : ""; })()}
       <div class="p-divider"></div>
       <div class="p-summary">${n.annotation}</div>
       <div class="p-lens"><div class="h">READING — GENDER &amp; SOLIDARITY</div><div class="b">${n.lens}</div></div>
@@ -997,6 +1078,21 @@
   wire("about-btn", "about-overlay");
   wire("method-btn", "method-overlay");
   wire("cite-btn", "cite-overlay");
+  wire("inq-btn", "inq-overlay");
+  wire("teach-btn", "teach-overlay");
+
+  /* inquiries modal cards */
+  byId("inq-cards").innerHTML = (D.meta.inquiries || []).map(x => `
+    <a href="inquiries/?q=${x.id}" style="display:block;text-decoration:none;color:inherit;
+        border:1px solid var(--line);border-left:3px solid var(--rose);border-radius:10px;
+        padding:14px 16px;transition:.15s;background:linear-gradient(90deg,rgba(224,99,127,.07),transparent 70%);"
+        onmouseover="this.style.borderColor='var(--rose)'" onmouseout="this.style.borderColor='var(--line)';this.style.borderLeftColor='var(--rose)'">
+      <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--rose);">INQUIRY ${x.n} · ${x.code}</div>
+      <div style="font-family:var(--serif);font-size:19px;margin-top:4px;">${x.title}</div>
+      <div style="font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.5;font-style:italic;">${x.q}</div>
+      <div style="font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:8px;letter-spacing:.08em;">
+        NODES: ${x.nodes.map(id => nodeOf[id] ? nodeOf[id].name : id).join(" · ")}</div>
+    </a>`).join("");
   function closeModals() { document.querySelectorAll(".overlay.open").forEach(o => o.classList.remove("open")); }
 
   /* ---------------------- keyboard ---------------------- */
