@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>COLLECTION 04 — THE UNWRITTEN LEDGER | Caste, Atrocity &amp; the Record | GSS ANARCHIVE</title>
+<meta name="description" content="A counter-archive of caste, atrocity, and refusal in the Indian subcontinent. Global South Solidarities Anarchive, Collection 04.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Tiro+Devanagari+Marathi:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   GSS ANARCHIVE — COLLECTION 04: THE UNWRITTEN LEDGER
+   Design conceit: DOUBLE-ENTRY. Every page is two columns —
+   what the state enters in the register, and what the register
+   cannot hold. The ruled ledger line is the page's spine.
+   ══════════════════════════════════════════════════════════════ */
+
+:root{
+  --ink:#08090c;
+  --ink-2:#0e1015;
+  --ink-3:#14171e;
+  --rule:#1e232d;
+  --paper:#e8e2d2;         /* ledger stock */
+  --paper-dim:#a8a294;
+  --blue:#2d6fd6;          /* Ambedkarite blue — the recorded claim */
+  --blue-deep:#1a4fa0;
+  --blue-ghost:rgba(45,111,214,.12);
+  --gold:#d4a843;          /* the unrecorded — testimony, memory */
+  --gold-ghost:rgba(212,168,67,.10);
+  --blood:#c8102e;         /* atrocity marker */
+  --disp:'Bebas Neue',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --body:'Trebuchet MS','Lucida Grande',sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:var(--blue);color:#fff}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);color:var(--paper);
+  font-family:var(--body);font-size:15.5px;line-height:1.75;
+  overflow-x:hidden;
+}
+@media(hover:hover) and (pointer:fine){body{cursor:none}}
+
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid transparent;transition:.25s}
+a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* ── film grain ── */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+}
+/* ── ruled ledger field ── */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+  background:repeating-linear-gradient(0deg,transparent 0 27px,rgba(232,226,210,.022) 27px 28px);
+}
+
+/* ── cursor ── */
+.cur-dot,.cur-ring{position:fixed;pointer-events:none;z-index:10001;border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cur-dot{width:6px;height:6px;background:var(--paper)}
+.cur-ring{width:30px;height:30px;border:1px solid rgba(232,226,210,.55);transition:width .2s,height .2s,border-color .2s}
+.cur-ring.hot{width:52px;height:52px;border-color:var(--gold)}
+@media(hover:none),(pointer:coarse){.cur-dot,.cur-ring{display:none}}
+
+/* ── progress ── */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:10002;background:linear-gradient(90deg,var(--blue),var(--gold))}
+
+/* ── boot ── */
+#boot{position:fixed;inset:0;z-index:10005;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .7s .3s,visibility .7s .3s}
+#boot.done{opacity:0;visibility:hidden}
+#boot .bl{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--paper-dim)}
+#boot .bbar{width:min(260px,60vw);height:1px;background:var(--rule);position:relative;overflow:hidden}
+#boot .bbar i{position:absolute;inset:0;background:var(--blue);transform:scaleX(0);transform-origin:left;animation:fillbar 1.5s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes fillbar{to{transform:scaleX(1)}}
+
+/* ── shell ── */
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
+@media(max-width:640px){.wrap{padding:0 20px}}
+
+/* ── masthead ── */
+header.mast{position:fixed;top:0;left:0;right:0;z-index:9000;background:rgba(8,9,12,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.mast-in{max-width:1240px;margin:0 auto;padding:13px 32px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.lock{display:flex;align-items:baseline;gap:10px}
+.lock b{font-family:var(--disp);font-size:22px;letter-spacing:.10em;color:var(--paper);font-weight:400}
+.lock span{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--paper-dim)}
+.mast-nav{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.mast-nav a{color:var(--paper-dim);border:0}
+.mast-nav a:hover{color:var(--gold)}
+@media(max-width:820px){.mast-nav{display:none}.mast-in{padding:12px 20px}}
+
+/* ── hero ── */
+.hero{padding:170px 0 70px;border-bottom:1px solid var(--rule)}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.28em;color:var(--blue);text-transform:uppercase;margin-bottom:26px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.kick s{text-decoration:none;color:var(--paper-dim)}
+.kick i{width:26px;height:1px;background:var(--rule);display:inline-block}
+h1.title{font-family:var(--disp);font-weight:400;font-size:clamp(58px,11.5vw,152px);line-height:.86;letter-spacing:.005em;color:var(--paper);margin-bottom:8px}
+h1.title em{font-style:normal;color:var(--blue);display:block}
+.dek{max-width:640px;font-size:17px;color:#c4bdad;margin-top:26px;line-height:1.7}
+.dek b{color:var(--paper);font-weight:400;border-bottom:1px solid var(--gold)}
+.devan{font-family:'Tiro Devanagari Marathi',serif;font-style:italic;color:var(--gold);font-size:15px;margin-top:20px;display:block;letter-spacing:.02em}
+
+/* ── the ledger rule: signature device ── */
+.ledger{display:grid;grid-template-columns:1fr 1px 1fr;gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:56px 0}
+.ledger .spine{background:linear-gradient(180deg,transparent,var(--rule) 12%,var(--rule) 88%,transparent)}
+.led-col{padding:34px 30px}
+.led-col.left{background:linear-gradient(90deg,var(--blue-ghost),transparent 70%)}
+.led-col.right{background:linear-gradient(270deg,var(--gold-ghost),transparent 70%)}
+.led-head{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:16px}
+.led-col.left .led-head{color:var(--blue)}
+.led-col.right .led-head{color:var(--gold)}
+.led-body{font-size:14.5px;color:#bfb8a8;line-height:1.72}
+.led-body strong{color:var(--paper);font-weight:400}
+@media(max-width:820px){.ledger{grid-template-columns:1fr}.ledger .spine{height:1px;background:var(--rule)}.led-col{padding:26px 20px}}
+
+/* ── stat strip ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));border-top:1px solid var(--rule)}
+.stat{padding:26px 22px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat b{display:block;font-family:var(--disp);font-size:44px;line-height:1;color:var(--paper);font-weight:400}
+.stat b.b{color:var(--blue)} .stat b.r{color:var(--blood)}
+.stat span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);margin-top:9px;line-height:1.6}
+
+/* ── section frame ── */
+section{padding:86px 0;border-bottom:1px solid var(--rule);position:relative}
+.slab{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.slab::before{content:'';width:20px;height:1px;background:var(--blue)}
+h2.sec{font-family:var(--disp);font-weight:400;font-size:clamp(34px,5.2vw,60px);line-height:.95;color:var(--paper);letter-spacing:.01em;margin-bottom:18px}
+.sub{max-width:660px;color:#b3ac9d;font-size:15.5px;margin-bottom:44px}
+
+/* ── register (timeline) ── */
+.reg{border-top:1px solid var(--rule)}
+.entry{display:grid;grid-template-columns:88px 1fr 1fr;gap:0;border-bottom:1px solid var(--rule);transition:background .25s}
+.entry:hover{background:var(--ink-2)}
+.entry .yr{padding:24px 14px 24px 0;font-family:var(--disp);font-size:30px;color:var(--blue);line-height:1;letter-spacing:.02em}
+.entry.mark .yr{color:var(--blood)}
+.entry .rec,.entry .unrec{padding:24px 26px 24px 22px;border-left:1px solid var(--rule)}
+.entry .rec h4{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--paper);font-weight:600;margin-bottom:8px;text-transform:uppercase}
+.entry .rec p,.entry .unrec p{font-size:14px;color:#a9a394;line-height:1.68}
+.entry .unrec{background:linear-gradient(270deg,rgba(212,168,67,.045),transparent 60%)}
+.entry .unrec p{color:#c8bfa4;font-style:italic}
+.entry .tagline{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--paper-dim);text-transform:uppercase;margin-top:10px}
+@media(max-width:820px){.entry{grid-template-columns:64px 1fr}.entry .unrec{grid-column:1/-1;border-left:0;border-top:1px dashed var(--rule)}.entry .yr{font-size:24px;padding:18px 10px 18px 0}.entry .rec,.entry .unrec{padding:18px 0 18px 16px}}
+
+/* ── dossiers ── */
+.filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px}
+.fbtn{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;padding:8px 15px;border:1px solid var(--rule);background:transparent;color:var(--paper-dim);cursor:pointer;transition:.2s}
+.fbtn:hover{border-color:var(--paper-dim);color:var(--paper)}
+.fbtn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(316px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.card{background:var(--ink);padding:26px 24px;cursor:pointer;transition:background .25s;position:relative}
+.card:hover{background:var(--ink-3)}
+.card .cno{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--paper-dim)}
+.card .ctag{position:absolute;top:24px;right:24px;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;padding:3px 8px;text-transform:uppercase}
+.ctag.massacre{background:rgba(200,16,46,.14);color:var(--blood);border:1px solid rgba(200,16,46,.4)}
+.ctag.refusal{background:var(--blue-ghost);color:var(--blue);border:1px solid rgba(45,111,214,.4)}
+.ctag.labour{background:var(--gold-ghost);color:var(--gold);border:1px solid rgba(212,168,67,.4)}
+.ctag.text{background:rgba(232,226,210,.07);color:var(--paper-dim);border:1px solid var(--rule)}
+.card h3{font-family:var(--disp);font-size:27px;font-weight:400;letter-spacing:.02em;color:var(--paper);line-height:1.02;margin:14px 0 6px;padding-right:74px}
+.card .place{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--gold);margin-bottom:13px}
+.card p{font-size:13.8px;color:#a9a394;line-height:1.65}
+.card .more{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--blue);margin-top:16px;text-transform:uppercase}
+.card.hide{display:none}
+
+/* ── modal ── */
+#modal{position:fixed;inset:0;z-index:10000;background:rgba(4,5,7,.94);backdrop-filter:blur(6px);display:none;overflow-y:auto;padding:60px 20px}
+#modal.open{display:block}
+.mbox{max-width:760px;margin:0 auto;background:var(--ink-2);border:1px solid var(--rule);padding:44px 42px;position:relative}
+.mclose{position:absolute;top:16px;right:18px;background:none;border:1px solid var(--rule);color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;padding:7px 12px;cursor:pointer}
+.mclose:hover{border-color:var(--blood);color:var(--blood)}
+.mbox .mno{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--blue)}
+.mbox h3{font-family:var(--disp);font-size:clamp(32px,6vw,50px);font-weight:400;color:var(--paper);line-height:.98;margin:12px 0 6px}
+.mbox .mplace{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--gold);margin-bottom:26px}
+.mbox .mrow{display:grid;grid-template-columns:118px 1fr;gap:16px;padding:13px 0;border-top:1px solid var(--rule);font-size:14px}
+.mbox .mrow dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);padding-top:3px}
+.mbox .mrow dd{color:#c0b9a9;line-height:1.68}
+.mbox .mnote{margin-top:26px;padding:20px 22px;border-left:2px solid var(--gold);background:var(--gold-ghost);font-size:14px;color:#cdc4ab;font-style:italic}
+@media(max-width:640px){.mbox{padding:34px 22px}.mbox .mrow{grid-template-columns:1fr;gap:5px}}
+
+/* ── data module ── */
+.bars{border-top:1px solid var(--rule)}
+.bar{display:grid;grid-template-columns:190px 1fr 96px;align-items:center;gap:18px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.bar .bn{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:#bfb8a8}
+.bar .btrk{height:9px;background:var(--ink-3);position:relative;overflow:hidden}
+.bar .btrk i{position:absolute;inset:0 auto 0 0;background:var(--blue);width:0;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
+.bar:nth-child(1) .btrk i{background:var(--blood)}
+.bar .bv{font-family:var(--disp);font-size:22px;color:var(--paper);text-align:right;letter-spacing:.03em}
+@media(max-width:640px){.bar{grid-template-columns:1fr 62px;gap:8px}.bar .btrk{grid-column:1/-1}}
+
+/* ── testimony ── */
+.testimony{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.tcell{background:var(--ink);padding:32px 28px}
+.tcell blockquote{font-size:17px;line-height:1.6;color:var(--paper);border-left:2px solid var(--gold);padding-left:20px;margin-bottom:16px}
+.tcell cite{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);font-style:normal;display:block;line-height:1.7}
+
+/* ── registry table ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--paper-dim);text-align:left;padding:12px 14px 12px 0;border-bottom:1px solid var(--rule);font-weight:500}
+.tbl td{padding:14px 14px 14px 0;border-bottom:1px solid var(--rule);color:#b3ac9d;vertical-align:top;line-height:1.6}
+.tbl td.t{color:var(--paper)}
+.tbl td.y{font-family:var(--mono);font-size:11px;color:var(--gold);white-space:nowrap}
+.tbl tr:hover td{background:var(--ink-2)}
+.tbl-scroll{overflow-x:auto}
+@media(max-width:640px){.tbl{min-width:600px}}
+
+/* ── ethics note ── */
+.ethic{border:1px solid var(--rule);border-left:2px solid var(--blood);padding:34px 32px;background:var(--ink-2);max-width:820px}
+.ethic h4{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--blood);margin-bottom:16px}
+.ethic p{color:#b8b1a2;font-size:14.5px;margin-bottom:14px}
+.ethic p:last-child{margin-bottom:0}
+
+/* ── footer ── */
+footer{padding:64px 0 44px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;margin-bottom:44px}
+footer h5{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--paper-dim);margin-bottom:14px}
+footer p,footer li{font-size:13.5px;color:#948e81;line-height:1.75;list-style:none}
+.fbot{border-top:1px solid var(--rule);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#6b665c;text-transform:uppercase}
+@media(max-width:820px){.fgrid{grid-template-columns:1fr;gap:28px}}
+
+/* ── reveal ── */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="bl">GSS ANARCHIVE · COLLECTION 04</div>
+  <div class="bbar"><i></i></div>
+  <div class="bl">OPENING THE LEDGER</div>
+</div>
+
+<div id="prog"></div>
+<div class="cur-dot"></div><div class="cur-ring"></div>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="lock"><b>GSS</b><span>ANARCHIVE / 04</span></div>
+    <nav class="mast-nav">
+      <a href="#register">Register</a>
+      <a href="#files">Case Files</a>
+      <a href="#count">The Count</a>
+      <a href="#voice">Testimony</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="wrap">
+  <div class="hero">
+    <div class="kick">
+      <span>Collection 04</span><i></i>
+      <s>Caste · Atrocity · The Record</s><i></i>
+      <s>Opened MMXXVI · Delhi</s>
+    </div>
+    <h1 class="title">THE UNWRITTEN<em>LEDGER</em></h1>
+    <p class="dek">
+      Caste in India has always been an accounting system. It counts births, counts marriages,
+      counts who may draw water and who may not. It keeps immaculate books. This collection
+      opens a <b>second ledger</b> beside the first — not to correct the state's arithmetic,
+      but to record what its arithmetic was designed to lose.
+      <span class="devan">जे नोंदवले गेले नाही, ते घडले नाही असे नाही.</span>
+    </p>
+
+    <!-- SIGNATURE DEVICE: the double entry -->
+    <div class="ledger">
+      <div class="led-col left">
+        <div class="led-head">Debit — entered in the register</div>
+        <p class="led-body">
+          <strong>57,789</strong> cases of crime against Scheduled Castes registered in India in 2023.
+          <strong>3,07,355</strong> cases pending trial under the SC/ST (Prevention of Atrocities) Act, 1989.
+          <strong>24</strong> cases of untouchability registered nationwide under the Protection of Civil
+          Rights Act, 1955 — in a country where untouchability was abolished in 1950 and has not stopped.
+        </p>
+      </div>
+      <div class="spine"></div>
+      <div class="led-col right">
+        <div class="led-head">Credit — refused by the register</div>
+        <p class="led-body">
+          The FIR that was never filed because the station house officer belonged to the dominant caste.
+          The well a family stopped walking to. The teacher's hand that did not touch the copybook.
+          The classroom seat at the back. <strong>Twenty-four</strong> is not a measurement of untouchability.
+          It is a measurement of how untouchability is recorded.
+        </p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b class="r">57,789</b><span>SC atrocity cases registered · NCRB 2023</span></div>
+      <div class="stat"><b>15,130</b><span>Highest state total · Uttar Pradesh 2023</span></div>
+      <div class="stat"><b class="b">3.07L</b><span>PoA Act cases pending in court</span></div>
+      <div class="stat"><b>24</b><span>Untouchability cases under PCR Act 1955</span></div>
+      <div class="stat"><b class="b">1848</b><span>Phule school for Shudra &amp; Ati-Shudra girls</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CURATORIAL NOTE ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="slab rv">Curatorial statement</div>
+    <h2 class="sec rv">WE ARE NOT<br>FILLING A GAP.</h2>
+    <div class="sub rv" style="max-width:760px">
+      <p style="margin-bottom:16px">
+        The standard justification for a Dalit archive is that the record is <em>incomplete</em> — that
+        colonial and Brahminical archives simply left things out, and the historian's job is to supply
+        the missing pages. We reject that framing. The archive is not incomplete. It is <strong style="color:var(--paper);font-weight:400">working exactly as designed.</strong>
+      </p>
+      <p style="margin-bottom:16px">
+        A caste census that records who is untouchable is not neutral data collection; it is the
+        administrative act that stabilises untouchability as a governable category. A crime statistic
+        that logs only the cases police agree to register measures police discretion, not violence.
+        To "fill the gap" is to accept the shape of the container.
+      </p>
+      <p>
+        So this collection is built as a double-entry ledger. On the left, we reproduce the state's
+        arithmetic faithfully — case numbers, statutes, commission findings, the language of the FIR.
+        On the right, we enter what that arithmetic was structured to discard. The two columns do not
+        reconcile. That failure to reconcile <em>is the finding.</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ REGISTER / TIMELINE ═══════════ -->
+<section id="register">
+  <div class="wrap">
+    <div class="slab rv">The register · 1848 — present</div>
+    <h2 class="sec rv">ENTRIES,<br>DOUBLE-KEPT</h2>
+    <p class="sub rv">
+      Read left to right. The middle column is the entry as the record holds it. The right column is
+      the entry as it is held elsewhere — in memory, in song, in a family's refusal to walk a certain road.
+    </p>
+
+    <div class="reg rv">
+
+      <div class="entry">
+        <div class="yr">1848</div>
+        <div class="rec">
+          <h4>Bhide Wada School, Pune</h4>
+          <p>Savitribai and Jyotirao Phule open a school for Shudra and Ati-Shudra girls. Colonial
+          education reports later fold it into general "native female education" statistics.</p>
+          <div class="tagline">Education · Maharashtra</div>
+        </div>
+        <div class="unrec"><p>Savitribai carried a second sari to work. Dung and stones were thrown at
+        her on the walk; she changed before class so the children would not see.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1924</div>
+        <div class="rec">
+          <h4>Vaikom Satyagraha, Travancore</h4>
+          <p>Twenty months of agitation over the right of avarna castes to use roads around the Vaikom
+          Mahadeva temple. Recorded as a road-access dispute resolved by administrative order.</p>
+          <div class="tagline">Mobility · Kerala</div>
+        </div>
+        <div class="unrec"><p>The dispute was never about a road. It was about whether a body could
+        occupy space that a god had been made to own.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1927</div>
+        <div class="rec">
+          <h4>Mahad Satyagraha · Chavdar Tank</h4>
+          <p>20 March: Ambedkar leads thousands to drink from the public Chavdar tank. Caste Hindus
+          "purify" the tank with cow dung, urine, milk and curd. On 25 December the Manusmriti is
+          publicly burned.</p>
+          <div class="tagline">Water · Maharashtra</div>
+        </div>
+        <div class="unrec"><p>The purification ritual is the confession. You do not cleanse water that
+        was never made unclean. The tank testified against its own owners.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1932</div>
+        <div class="rec">
+          <h4>The Poona Pact</h4>
+          <p>24 September. Under Gandhi's fast-unto-death at Yerwada, Ambedkar surrenders the separate
+          electorate granted to the Depressed Classes by the Communal Award, accepting reserved seats
+          within a joint electorate.</p>
+          <div class="tagline">Franchise · Constitutional</div>
+        </div>
+        <div class="unrec"><p>Filed in Indian textbooks as reconciliation. Ambedkar named it what it was:
+        a signature obtained by holding a life hostage. Reserved seats gave Dalits representatives that
+        caste-Hindu majorities could elect.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1936</div>
+        <div class="rec">
+          <h4>Annihilation of Caste</h4>
+          <p>Written as the presidential address to the Jat-Pat Todak Mandal, Lahore. The conference is
+          cancelled rather than hear it. Ambedkar publishes it himself at his own cost.</p>
+          <div class="tagline">Text · Undelivered</div>
+        </div>
+        <div class="unrec"><p>The most important speech in modern Indian political thought exists because
+        the people who commissioned it refused to let it be spoken.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1950</div>
+        <div class="rec">
+          <h4>Article 17, Constitution of India</h4>
+          <p>"Untouchability" is abolished and its practice in any form forbidden; enforcement of any
+          resulting disability is made a punishable offence.</p>
+          <div class="tagline">Statute · Union</div>
+        </div>
+        <div class="unrec"><p>Seventy-six years later, the NCRB records twenty-four prosecutions in a
+        year under the untouchability statute. The law abolished the word, not the arrangement.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1956</div>
+        <div class="rec">
+          <h4>Deekshabhoomi, Nagpur</h4>
+          <p>14 October. Ambedkar and an estimated 3–5 lakh followers convert to Buddhism, taking the
+          twenty-two vows. He dies on 6 December, seven weeks later.</p>
+          <div class="tagline">Conversion · Maharashtra</div>
+        </div>
+        <div class="unrec"><p>Conversion is filed by the state as a change of religious column. It was
+        an act of exit — the refusal to be reformed inside a system whose terms were the problem.</p></div>
+      </div>
+
+      <div class="entry mark">
+        <div class="yr">1968</div>
+        <div class="rec">
+          <h4>Kilvenmani, Thanjavur</h4>
+          <p>25 December. Forty-four Dalit agricultural labourers — mostly women and children — are
+          locked in a hut and burned alive during a wage dispute. The Madras High Court acquits all
+          twenty-five convicted landlords in 1973.</p>
+          <div class="tagline">Massacre · Tamil Nadu</div>
+        </div>
+        <div class="unrec"><p>The acquittal reasoning held that men of property were unlikely to have
+        walked to the scene. Class standing was accepted as an alibi.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1972</div>
+        <div class="rec">
+          <h4>Dalit Panthers, Bombay</h4>
+          <p>Founded by Namdeo Dhasal, J.V. Pawar and Raja Dhale. A manifesto that refuses the term
+          "Harijan" and defines Dalit to include workers, landless peasants, and women.</p>
+          <div class="tagline">Movement · Maharashtra</div>
+        </div>
+        <div class="unrec"><p>Dhasal's <em>Golpitha</em> put the language of the brothel and the slum into
+        Marathi literature. The literary establishment called it obscene. It was simply not translated
+        into their vocabulary.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">1989</div>
+        <div class="rec">
+          <h4>SC/ST (Prevention of Atrocities) Act</h4>
+          <p>Creates a specific category of "atrocity", special courts, and mandatory registration.
+          Conviction rates under it remain persistently low; over three lakh cases sit pending.</p>
+          <div class="tagline">Statute · Union</div>
+        </div>
+        <div class="unrec"><p>The Act's most common public appearance is as an allegation of misuse. A law
+        written to be under-enforced is easiest to attack for over-enforcement.</p></div>
+      </div>
+
+      <div class="entry mark">
+        <div class="yr">1997</div>
+        <div class="rec">
+          <h4>Laxmanpur-Bathe, Bihar</h4>
+          <p>1 December. Fifty-eight Dalits killed by the Ranvir Sena. In 2013 the Patna High Court
+          acquits all twenty-six accused convicted by the lower court.</p>
+          <div class="tagline">Massacre · Bihar</div>
+        </div>
+        <div class="unrec"><p>Bathani Tola, 1996: twenty-one killed, all acquitted on appeal in 2012.
+        The pattern is not failure of evidence. It is a judiciary that keeps arriving at the same answer.</p></div>
+      </div>
+
+      <div class="entry mark">
+        <div class="yr">2006</div>
+        <div class="rec">
+          <h4>Khairlanji, Bhandara</h4>
+          <p>29 September. Four members of the Bhotmange family — Surekha, Priyanka, Roshan, Sudhir —
+          killed by a mob. Courts explicitly hold that caste was not a motive; PoA Act charges fail.</p>
+          <div class="tagline">Massacre · Maharashtra</div>
+        </div>
+        <div class="unrec"><p>Surekha Bhotmange had refused to sell her land and had testified against
+        neighbours. The court found no caste motive in the killing of a Dalit woman who would not yield land.</p></div>
+      </div>
+
+      <div class="entry mark">
+        <div class="yr">2016</div>
+        <div class="rec">
+          <h4>Rohith Vemula · Una</h4>
+          <p>17 January: Rohith Vemula, PhD scholar, dies by suicide at the University of Hyderabad after
+          suspension and stipend withholding. 11 July: four Dalit men are stripped and flogged in Una,
+          Gujarat, for skinning a dead cow — filmed by the attackers.</p>
+          <div class="tagline">Institution · Cow politics</div>
+        </div>
+        <div class="unrec"><p>An official inquiry questioned whether Vemula was Dalit at all. The state's
+        response to a caste death was to audit the caste of the dead.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">2018</div>
+        <div class="rec">
+          <h4>Bhima Koregaon</h4>
+          <p>1 January. The bicentenary gathering at the Koregaon obelisk is attacked. The subsequent
+          investigation pivots away from the attack and toward the arrest of academics, lawyers,
+          poets and activists under anti-terror law.</p>
+          <div class="tagline">Commemoration · Maharashtra</div>
+        </div>
+        <div class="unrec"><p>A Dalit victory over a Peshwa army, commemorated annually since Ambedkar's
+        1927 visit. The investigation converted the assaulted into the accused.</p></div>
+      </div>
+
+      <div class="entry">
+        <div class="yr">2023</div>
+        <div class="rec">
+          <h4>Crime in India, NCRB</h4>
+          <p>57,789 cases registered under crimes against Scheduled Castes. Uttar Pradesh 15,130;
+          Rajasthan 8,449; Madhya Pradesh 8,232.</p>
+          <div class="tagline">Data · National</div>
+        </div>
+        <div class="unrec"><p>A registered case requires a police station willing to register it. The
+        map above is, in part, a map of where refusal to register is hardest to sustain.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CASE FILES ═══════════ -->
+<section id="files">
+  <div class="wrap">
+    <div class="slab rv">Case files</div>
+    <h2 class="sec rv">TWELVE FILES</h2>
+    <p class="sub rv">Filter by category. Open any file for the full entry, the state's record, and the
+    counter-entry.</p>
+
+    <div class="filters rv">
+      <button class="fbtn on" data-f="all">All</button>
+      <button class="fbtn" data-f="massacre">Massacre</button>
+      <button class="fbtn" data-f="refusal">Refusal</button>
+      <button class="fbtn" data-f="labour">Labour</button>
+      <button class="fbtn" data-f="text">Text</button>
+    </div>
+
+    <div class="grid rv" id="grid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ THE COUNT ═══════════ -->
+<section id="count">
+  <div class="wrap">
+    <div class="slab rv">The count</div>
+    <h2 class="sec rv">WHERE THE<br>REGISTER FILLS</h2>
+    <p class="sub rv">Cases registered under crimes against Scheduled Castes, by state, 2023. Source:
+    National Crime Records Bureau, <em>Crime in India 2023</em>. Read this as a map of registration,
+    not a map of violence.</p>
+
+    <div class="bars rv" id="bars"></div>
+
+    <div style="margin-top:44px;max-width:700px">
+      <p style="color:#a9a394;font-size:14.5px">
+        A caution the NCRB itself cannot print: the denominator is missing. These are cases the police
+        agreed to register, in a system where the officer, the complainant and the accused all carry caste.
+        Where atrocity is most normalised, registration is lowest. The states at the top of this chart are
+        not necessarily the most violent — they are, among other things, the states where Dalit political
+        organisation has made refusal to file an FIR most expensive.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONY ═══════════ -->
+<section id="voice">
+  <div class="wrap">
+    <div class="slab rv">Testimony &amp; standpoint</div>
+    <h2 class="sec rv">THE RIGHT<br>COLUMN, SPOKEN</h2>
+    <p class="sub rv">
+      Dalit feminist scholarship named the double erasure first: caste analysis that assumed a male
+      subject, feminism that assumed a savarna one. The counter-entry has an author.
+    </p>
+
+    <div class="testimony rv">
+      <div class="tcell">
+        <blockquote>Caste is not a division of labour. It is a division of labourers.</blockquote>
+        <cite>B.R. Ambedkar<br>Annihilation of Caste, 1936 — written for a conference that cancelled itself rather than hear it</cite>
+      </div>
+      <div class="tcell">
+        <blockquote>We are not asking to be included in your history. We are asking why yours needed us absent.</blockquote>
+        <cite>Curatorial paraphrase of the Dalit feminist standpoint position<br>after Sharmila Rege, <em>Writing Caste / Writing Gender</em>, 2006</cite>
+      </div>
+      <div class="tcell">
+        <blockquote>Testimonio refuses the ethnographic bargain: the informant speaks, the scholar interprets, the credit travels upward.</blockquote>
+        <cite>GSS method note<br>on Bama's <em>Karukku</em> (1992), Baby Kamble's <em>Jina Amucha</em> (1986), Urmila Pawar's <em>Aaydan</em> (2003)</cite>
+      </div>
+      <div class="tcell">
+        <blockquote>The sewer is the only workplace in India where the entrance requirement is birth.</blockquote>
+        <cite>GSS entry on manual scavenging<br>Prohibition of Employment as Manual Scavengers Act, 2013 — banned in law, continuous in practice</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DOCUMENT REGISTRY ═══════════ -->
+<section id="sources">
+  <div class="wrap">
+    <div class="slab rv">Document registry</div>
+    <h2 class="sec rv">PRIMARY &amp;<br>FOUNDATIONAL</h2>
+    <p class="sub rv">Everything below is a real, locatable document. Where a source is state-produced,
+    we hold it as evidence of the state, not as neutral description.</p>
+
+    <div class="tbl-scroll rv">
+      <table class="tbl">
+        <thead>
+          <tr><th style="width:78px">Year</th><th>Document</th><th>Author / Issuing body</th><th style="width:150px">Class</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="y">1873</td><td class="t">Gulamgiri (Slavery)</td><td>Jyotirao Phule</td><td>Foundational text</td></tr>
+          <tr><td class="y">1916</td><td class="t">Castes in India: Their Mechanism, Genesis and Development</td><td>B.R. Ambedkar (Columbia University seminar paper)</td><td>Scholarship</td></tr>
+          <tr><td class="y">1936</td><td class="t">Annihilation of Caste</td><td>B.R. Ambedkar (self-published)</td><td>Undelivered address</td></tr>
+          <tr><td class="y">1945</td><td class="t">What Congress and Gandhi Have Done to the Untouchables</td><td>B.R. Ambedkar</td><td>Polemic</td></tr>
+          <tr><td class="y">1948</td><td class="t">The Untouchables: Who Were They and Why They Became Untouchables</td><td>B.R. Ambedkar</td><td>Scholarship</td></tr>
+          <tr><td class="y">1950</td><td class="t">Constitution of India, Article 17 &amp; Article 15</td><td>Constituent Assembly of India</td><td>Statute</td></tr>
+          <tr><td class="y">1955</td><td class="t">Protection of Civil Rights Act (orig. Untouchability Offences Act)</td><td>Parliament of India</td><td>Statute</td></tr>
+          <tr><td class="y">1965</td><td class="t">Report of the Committee on Untouchability, Economic and Educational Development of SCs</td><td>Elayaperumal Committee</td><td>State inquiry</td></tr>
+          <tr><td class="y">1986</td><td class="t">Jina Amucha (The Prisons We Broke)</td><td>Baby Kamble</td><td>Testimonio</td></tr>
+          <tr><td class="y">1989</td><td class="t">Scheduled Castes and Scheduled Tribes (Prevention of Atrocities) Act</td><td>Parliament of India</td><td>Statute</td></tr>
+          <tr><td class="y">1992</td><td class="t">Karukku</td><td>Bama (Faustina Mary Fatima Rani)</td><td>Testimonio</td></tr>
+          <tr><td class="y">2003</td><td class="t">Aaydan (The Weave of My Life)</td><td>Urmila Pawar</td><td>Testimonio</td></tr>
+          <tr><td class="y">2006</td><td class="t">Writing Caste / Writing Gender: Narrating Dalit Women's Testimonios</td><td>Sharmila Rege</td><td>Scholarship</td></tr>
+          <tr><td class="y">2007</td><td class="t">Hidden Apartheid: Caste Discrimination against India's "Untouchables"</td><td>Human Rights Watch &amp; CHRGJ, submitted to UN CERD</td><td>NGO shadow report</td></tr>
+          <tr><td class="y">2013</td><td class="t">Prohibition of Employment as Manual Scavengers and their Rehabilitation Act</td><td>Parliament of India</td><td>Statute</td></tr>
+          <tr><td class="y">2014</td><td class="t">Safai Karmachari Andolan v. Union of India</td><td>Supreme Court of India</td><td>Judgment</td></tr>
+          <tr><td class="y">2018</td><td class="t">Subhash Kashinath Mahajan v. State of Maharashtra (and 2018 amendment reversing it)</td><td>Supreme Court / Parliament</td><td>Judgment &amp; statute</td></tr>
+          <tr><td class="y">2023</td><td class="t">Crime in India 2023 — Chapter 7, Crime against Scheduled Castes</td><td>National Crime Records Bureau, MHA</td><td>State statistics</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ METHOD & ETHICS ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="slab rv">Method &amp; ethics</div>
+    <h2 class="sec rv">WHAT THIS<br>ARCHIVE REFUSES</h2>
+
+    <div class="ethic rv">
+      <h4>Standing rules for Collection 04</h4>
+      <p><strong style="color:var(--paper);font-weight:400">1. No atrocity photography.</strong> This collection
+      does not reproduce images of Dalit bodies in violation. The Una flogging was filmed by its
+      perpetrators for circulation; to re-circulate it is to complete their act. We cite the record and
+      describe the event. We do not supply the image.</p>
+      <p><strong style="color:var(--paper);font-weight:400">2. Named victims, named perpetrators.</strong> Where
+      courts have acquitted, we say so and we say who was acquitted. Anonymising the accused while naming
+      the dead is the archive's oldest asymmetry.</p>
+      <p><strong style="color:var(--paper);font-weight:400">3. State data is evidence, not truth.</strong> NCRB
+      figures appear here as artefacts of a registration process, always with the process named.</p>
+      <p><strong style="color:var(--paper);font-weight:400">4. No savarna ventriloquism.</strong> Where the
+      counter-entry belongs to Dalit authorship, it is attributed to Dalit authorship. Where a line is
+      the curator's own framing, it is marked as such.</p>
+      <p><strong style="color:var(--paper);font-weight:400">5. Open to correction.</strong> This is a working
+      file, not a monument. Corrections from the communities documented here take precedence over the
+      curator's draft.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h5>Global South Solidarities</h5>
+        <p>A decolonial feminist digital humanities anarchive. The GSS Anarchive is not a repository of
+        the past. It is an instrument for refusing the terms on which the past was filed.</p>
+      </div>
+      <div>
+        <h5>This collection</h5>
+        <ul>
+          <li>04 — The Unwritten Ledger</li>
+          <li>Caste, atrocity &amp; the record</li>
+          <li>Status: open · working file</li>
+          <li>Corrections welcome</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Related collections</h5>
+        <ul>
+          <li>05 — The ISN Registry</li>
+          <li>06 — The Paper Trail</li>
+          <li>Planetary Justice Map</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>GSS Anarchive · Collection 04 · Delhi</span>
+      <span>Hand-authored · zero dependencies · MMXXVI</span>
+    </div>
+  </div>
+</footer>
+
+<div id="modal"><div class="mbox">
+  <button class="mclose" id="mclose">CLOSE ✕</button>
+  <div class="mno" id="mno"></div>
+  <h3 id="mtitle"></h3>
+  <div class="mplace" id="mplace"></div>
+  <dl id="mrows"></dl>
+  <div class="mnote" id="mnote"></div>
+</div></div>
+
+<script>
+/* ── data ── */
+const FILES=[
+ {no:'F-04/01',cat:'refusal',t:'The Chavdar Tank',p:'Mahad, Kolaba district · 20 March 1927',
+  s:'Ambedkar leads roughly ten thousand people to drink from a public tank that law had opened to all castes and custom had not. The action lasts minutes. The reaction lasts years.',
+  rows:[['Recorded as','A public order disturbance following an assertion of the 1923 Bole Resolution, which had declared public water sources open to all.'],
+        ['The reaction','Caste Hindus performed a purification of the tank using 108 pots of cow dung, cow urine, milk, curd and ghee.'],
+        ['Litigation','A civil suit was filed claiming the tank was private property. It ran for a decade; Ambedkar prevailed in 1937.'],
+        ['Sequel','25 December 1927 — the Manusmriti is publicly burned at Mahad, an act Ambedkar compared to the burning of foreign cloth in the nationalist movement.']],
+  note:'The purification is the archive\'s best witness. A community that ritually cleanses water after a group drinks from it has produced, in that act, an unimpeachable record of what it believes about them — more direct than any testimony it would have given a census officer.'},
+
+ {no:'F-04/02',cat:'text',t:'The Cancelled Address',p:'Lahore · 1936',
+  s:'Commissioned as a presidential address by a caste-reform organisation, read in advance, and then refused. The conference was cancelled rather than allow the speech.',
+  rows:[['Commissioned by','Jat-Pat Todak Mandal, a Lahore-based anti-caste organisation of reformist Hindus.'],
+        ['Objection','The organisers asked Ambedkar to remove passages declaring he would not die a Hindu, and the argument that caste could not be reformed without repudiating the sanctity of the shastras.'],
+        ['Outcome','Ambedkar refused revision. The Mandal cancelled the session. Ambedkar published the text at his own expense.'],
+        ['Reply','Gandhi responded in Harijan; Ambedkar published Gandhi\'s response and his rebuttal in later editions, so the argument travels with the text.']],
+  note:'The document exists in its uncompromised form precisely because it was refused a platform. Had the Mandal accepted the edits, we would hold a lesser text and a more comfortable history. Suppression, here, preserved.'},
+
+ {no:'F-04/03',cat:'massacre',t:'Kilvenmani',p:'Nagapattinam, Tamil Nadu · 25 December 1968',
+  s:'Forty-four Dalit agricultural labourers — largely women and children — were locked inside a hut and burned during a dispute over paddy wages.',
+  rows:[['Context','Organised demand by landless Dalit labourers, many affiliated to the CPI(M), for a higher wage share in the Thanjavur delta.'],
+        ['The event','A landlords\' force surrounded the settlement. Residents took shelter in a hut. The hut was set alight and the exit blocked.'],
+        ['Dead','44, of whom the majority were women and children.'],
+        ['Trial','The Sessions Court convicted 25. In 1973 the Madras High Court acquitted all, reasoning in part that men of landed standing were unlikely to have walked to the site.'],
+        ['Afterlife','The basis for Indira Parthasarathy\'s Kuruthipunal (1976) and the film Kann Sivanthaal Mann Sivakkum.']],
+  note:'The acquittal converted class position into an alibi. This reasoning — that the propertied do not personally commit violence — recurs across the Bihar massacre appeals thirty years later. It is not an aberration in the record. It is a method within it.'},
+
+ {no:'F-04/04',cat:'massacre',t:'Bathani Tola &amp; Laxmanpur-Bathe',p:'Bhojpur &amp; Jehanabad, Bihar · 1996–1997',
+  s:'Two massacres by the Ranvir Sena, a private militia of dominant-caste landholders. Twenty-one killed at Bathani Tola in July 1996; fifty-eight at Laxmanpur-Bathe in December 1997.',
+  rows:[['Perpetrator','Ranvir Sena, formed 1994 in Bhojpur; a caste-army raised against Naxalite-organised Dalit labour.'],
+        ['Bathani Tola','11 July 1996. 21 killed, including 11 women and 6 children.'],
+        ['Laxmanpur-Bathe','1 December 1997. 58 killed. The largest single Ranvir Sena massacre.'],
+        ['Convictions','Lower courts convicted in both cases. The Patna High Court acquitted all accused — Bathani Tola in April 2012, Laxmanpur-Bathe in October 2013.'],
+        ['Commission','The Amir Das Commission, constituted to examine political patronage of the Sena, was wound up in 2006 before reporting.']],
+  note:'The Amir Das Commission is the most important document in this file, and it does not exist. It was dissolved before it could name the politicians linked to the Sena. An archive must be able to hold a deliberate absence as a positive entry.'},
+
+ {no:'F-04/05',cat:'massacre',t:'Khairlanji',p:'Bhandara, Maharashtra · 29 September 2006',
+  s:'Four members of the Bhotmange family were killed by a mob of neighbours. The courts found the killings proven and the caste motive not proven.',
+  rows:[['Killed','Surekha Bhotmange, her daughter Priyanka, and sons Roshan and Sudhir.'],
+        ['Precipitant','A land dispute; Surekha Bhotmange had refused to cede a strip of land for a road and had given evidence in a related assault case against neighbours.'],
+        ['Charge outcome','The trial court convicted for murder and initially imposed death sentences; the Bombay High Court commuted these to life imprisonment in 2010.'],
+        ['PoA Act','Charges under the SC/ST (Prevention of Atrocities) Act were not sustained. Courts held that the killings arose from revenge over the earlier case rather than caste.'],
+        ['Response','A CBI inquiry followed sustained Dalit mobilisation across Maharashtra, including the shutdown of large parts of the state.']],
+  note:'Splitting "revenge" from "caste" requires a court to believe that a landowning Dalit woman who testified against dominant-caste neighbours was attacked as an individual, not as a member of a category. The judgment is a document about how Indian law is structured to be unable to see caste.'},
+
+ {no:'F-04/06',cat:'refusal',t:'Rohith Vemula',p:'University of Hyderabad · 17 January 2016',
+  s:'A PhD scholar in science, technology and society studies died by suicide after suspension from the hostel and the withholding of his research fellowship.',
+  rows:[['Sequence','Vemula and four other Ambedkar Students\' Association members were suspended following a complaint by an ABVP office-bearer; they were expelled from the hostel and slept outdoors on campus in protest.'],
+        ['Financial','His monthly research fellowship had been withheld for several months prior to his death.'],
+        ['The letter','His final letter asks that his birth be treated as a fatal accident and describes the reduction of a person to an immediate identity and a vote.'],
+        ['Inquiry','The Allahabad-Roopanwal Commission concluded the death was not attributable to caste discrimination and raised doubt over whether Vemula was Scheduled Caste.'],
+        ['Legacy','Draft "Rohith Act" legislation against caste discrimination in higher education has been demanded since 2016; no central statute has been enacted.']],
+  note:'The commission investigated the caste of the deceased. Whatever else it produced, it produced a precise demonstration of the mechanism: when a Dalit death indicts an institution, the institution audits the Dalitness of the dead.'},
+
+ {no:'F-04/07',cat:'labour',t:'The Sewer',p:'Nationwide · continuous',
+  s:'Manual scavenging — the hand-removal of human excreta from dry latrines, septic tanks and sewer lines — is prohibited by statute and continues as an occupation assigned by birth.',
+  rows:[['Statute','Employment of Manual Scavengers and Construction of Dry Latrines (Prohibition) Act, 1993; superseded by the Prohibition of Employment as Manual Scavengers and their Rehabilitation Act, 2013.'],
+        ['Scope of 2013 Act','Extends the prohibition to hazardous cleaning of sewers and septic tanks, and mandates rehabilitation, not merely penalty.'],
+        ['Enforcement','Prosecutions under both Acts are negligible relative to documented practice. Deaths in sewers and septic tanks continue to be reported annually across states.'],
+        ['Litigation','Safai Karamchari Andolan v. Union of India (2014) directed identification and compensation for families of those who died in sewers and septic tanks.'],
+        ['Composition','The workforce is overwhelmingly drawn from specific Scheduled Caste communities; the occupation is hereditary in practice regardless of its legal status.']],
+  note:'The state\'s own euphemism carries the argument. "Hazardous cleaning" describes the risk without naming who is assigned to it. A law that bans an occupation while the occupation persists is not a failed law; it is a functioning arrangement in which prohibition and practice coexist without friction.'},
+
+ {no:'F-04/08',cat:'refusal',t:'Bhima Koregaon',p:'Pune district, Maharashtra · 1 January 2018 onward',
+  s:'The two-hundredth anniversary gathering at the Koregaon victory pillar was attacked. The state investigation subsequently redirected toward those who had organised the preceding conference.',
+  rows:[['The site','An obelisk commemorating the 1818 battle in which a Company force including Mahar soldiers defeated a numerically superior Peshwa army. Ambedkar visited in 1927, establishing it as an anti-caste commemorative site.'],
+        ['1 January 2018','Violence against the bicentenary gathering; one death and widespread injury. Two Hindutva-affiliated local figures were initially named in FIRs.'],
+        ['Redirection','The investigation shifted to the Elgar Parishad conference of 31 December 2017, alleging Maoist links.'],
+        ['Arrests','From June 2018, academics, lawyers, poets, a priest and activists were arrested under the Unlawful Activities (Prevention) Act. Several were held for years without trial.'],
+        ['Forensics','Independent digital forensic analysis by Arsenal Consulting reported that incriminating files had been planted on devices belonging to at least two of the accused.']],
+  note:'The forensic finding is the hinge. If documents were planted, the state\'s archive of the case is not merely partial — it is authored. This is why an anarchive cannot treat state evidence as a baseline against which counter-memory is measured.'},
+
+ {no:'F-04/09',cat:'text',t:'Testimonio as Method',p:'Marathi &amp; Tamil · 1986 —',
+  s:'Dalit women\'s life-writing did not enter the archive as data awaiting interpretation. It arrived as theory, and it arrived first.',
+  rows:[['Baby Kamble','Jina Amucha (1986), serialised in the magazine Stree before book publication; her husband did not know she was writing.'],
+        ['Bama','Karukku (1992), written in Tamil, in a form that refuses linear autobiography and moves by episode and address.'],
+        ['Urmila Pawar','Aaydan (2003), organised around the labour of weaving cane baskets — the form of the book borrowed from the form of the work.'],
+        ['Theorisation','Sharmila Rege, Writing Caste / Writing Gender (2006), argues these texts constitute a Dalit feminist standpoint rather than raw material for savarna feminist analysis.'],
+        ['Consequence','The "Dalit patriarchy / savarna feminism" double bind is named from inside the texts, not applied to them from outside.']],
+  note:'The standard research pipeline extracts narrative from the marginalised and returns analysis authored by the centre. These texts pre-empt it. They are not sources for a theory; they are the theory, and citing them as mere testimony is itself an act of appropriation.'},
+
+ {no:'F-04/10',cat:'labour',t:'Reservation and Its Enemies',p:'Constitutional · 1950 —',
+  s:'Compensatory representation in education, employment and legislatures, and the seven-decade campaign to represent it as the injustice.',
+  rows:[['Basis','Articles 15(4), 16(4) and 46 of the Constitution; reserved constituencies under Articles 330 and 332.'],
+        ['Mandal','The Mandal Commission report (1980), implemented for Other Backward Classes in 1990, triggered mass upper-caste agitation including self-immolations.'],
+        ['Indra Sawhney','Supreme Court, 1992 — upheld OBC reservation, imposed a 50% ceiling, and introduced the "creamy layer" exclusion.'],
+        ['Private sector','Reservation does not extend to private employment, which absorbs the overwhelming majority of Indian jobs.'],
+        ['Rhetoric','The dominant public framing treats reservation as a deviation from merit, where "merit" is measured by outcomes of an educational system already stratified by caste.']],
+  note:'Ambedkar\'s framing was not welfare but representation: a share in governance for those governed. The re-description of representation as charity, and then of charity as theft, is the single most successful discursive operation in post-independence Indian politics.'},
+
+ {no:'F-04/11',cat:'refusal',t:'Twenty-Two Vows',p:'Deekshabhoomi, Nagpur · 14 October 1956',
+  s:'At his conversion to Buddhism, Ambedkar administered twenty-two vows of his own composition to the assembly — a formal renunciation of Hindu cosmology, not merely a change of faith.',
+  rows:[['Scale','Estimates of those converting alongside him range from three to five lakh people in a single day.'],
+        ['The vows','Explicit repudiation of Brahma, Vishnu and Mahesh as gods; rejection of the doctrine that the Buddha was an avatar of Vishnu; renunciation of shraddha rites and of belief in caste-ordained rebirth.'],
+        ['Timing','Ambedkar died on 6 December 1956, seven weeks after the conversion.'],
+        ['Subsequent law','Several states have since enacted "freedom of religion" statutes requiring prior notification or approval for conversion, with enhanced penalties where the convert is Scheduled Caste.'],
+        ['Status effect','Conversion out of Hinduism has been held to affect entitlement to Scheduled Caste status under the 1950 Presidential Order, a constraint applying to Christian and Muslim converts.']],
+  note:'The state\'s later machinery of anti-conversion law confirms the reading: exit was correctly understood as the more dangerous act. Reform can be absorbed. Departure cannot.'},
+
+ {no:'F-04/12',cat:'text',t:'The Category Itself',p:'Colonial &amp; postcolonial administration',
+  s:'"Scheduled Caste" is an administrative artefact, produced by a schedule appended to a colonial statute. The archive must hold its own vocabulary as evidence.',
+  rows:[['Origin','The Government of India Act 1935 and the Government of India (Scheduled Castes) Order 1936 produced the schedule from which the category takes its name.'],
+        ['Predecessors','"Depressed Classes" in colonial usage; "Harijan" from Gandhi, rejected by Dalit organisations as paternalist; "Dalit" — Marathi for broken or ground down — adopted as self-naming, popularised by the Dalit Panthers from 1972.'],
+        ['Census','Caste enumeration in the decennial census was discontinued after 1931 for castes other than SC and ST; a full caste census has remained politically contested since.'],
+        ['Effect','Categories built for administration structure the data available for critique. Analysis conducted only in the state\'s categories can only reproduce the state\'s questions.'],
+        ['GSS position','We use "Dalit" as self-naming, "Scheduled Caste" only when citing state instruments, and mark the switch each time.']],
+  note:'This file is the collection\'s own footnote. Every other file in this archive uses words that were manufactured by the institutions the archive is indicting. Naming that dependency is not a disclaimer — it is the first entry in the right-hand column.'}
+];
+
+const BARS=[['Uttar Pradesh',15130],['Rajasthan',8449],['Madhya Pradesh',8232],['Bihar',6517],['Maharashtra',2762],['Odisha',2159],['Karnataka',1977],['Andhra Pradesh',1847]];
+
+/* ── render cards ── */
+const grid=document.getElementById('grid');
+grid.innerHTML=FILES.map((f,i)=>`
+ <article class="card" data-i="${i}" data-cat="${f.cat}" tabindex="0">
+   <div class="cno">${f.no}</div>
+   <span class="ctag ${f.cat}">${f.cat}</span>
+   <h3>${f.t}</h3>
+   <div class="place">${f.p}</div>
+   <p>${f.s}</p>
+   <div class="more">Open file →</div>
+ </article>`).join('');
+
+/* ── modal ── */
+const modal=document.getElementById('modal');
+function openFile(i){
+  const f=FILES[i];
+  document.getElementById('mno').textContent=f.no+' · '+f.cat.toUpperCase();
+  document.getElementById('mtitle').innerHTML=f.t;
+  document.getElementById('mplace').textContent=f.p;
+  document.getElementById('mrows').innerHTML=f.rows.map(r=>
+    `<div class="mrow"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
+  document.getElementById('mnote').innerHTML='<strong style="font-style:normal;color:var(--gold);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;display:block;margin-bottom:9px">COUNTER-ENTRY</strong>'+f.note;
+  modal.classList.add('open');document.body.style.overflow='hidden';
+}
+function closeFile(){modal.classList.remove('open');document.body.style.overflow=''}
+grid.addEventListener('click',e=>{const c=e.target.closest('.card');if(c)openFile(+c.dataset.i)});
+grid.addEventListener('keydown',e=>{if(e.key==='Enter'){const c=e.target.closest('.card');if(c)openFile(+c.dataset.i)}});
+document.getElementById('mclose').addEventListener('click',closeFile);
+modal.addEventListener('click',e=>{if(e.target===modal)closeFile()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFile()});
+
+/* ── filters ── */
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');const f=b.dataset.f;
+  document.querySelectorAll('.card').forEach(c=>
+    c.classList.toggle('hide',f!=='all'&&c.dataset.cat!==f));
+}));
+
+/* ── bars ── */
+const max=Math.max(...BARS.map(b=>b[1]));
+document.getElementById('bars').innerHTML=BARS.map(b=>`
+ <div class="bar"><div class="bn">${b[0]}</div>
+ <div class="btrk"><i data-w="${(b[1]/max*100).toFixed(1)}"></i></div>
+ <div class="bv">${b[1].toLocaleString('en-IN')}</div></div>`).join('');
+
+/* ── reveal + bar fill ── */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    e.target.classList.add('in');
+    e.target.querySelectorAll('.btrk i').forEach(i=>i.style.width=i.dataset.w+'%');
+    io.unobserve(e.target);
+  }
+}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ── progress ── */
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+},{passive:true});
+
+/* ── cursor ── */
+const dot=document.querySelector('.cur-dot'),ring=document.querySelector('.cur-ring');
+let rx=0,ry=0,tx=0,ty=0;
+addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;dot.style.left=tx+'px';dot.style.top=ty+'px'});
+(function loop(){rx+=(tx-rx)*.16;ry+=(ty-ry)*.16;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.addEventListener('mouseover',e=>{
+  ring.classList.toggle('hot',!!e.target.closest('a,button,.card,.entry'));
+});
+
+/* ── boot ── */
+addEventListener('load',()=>setTimeout(()=>document.getElementById('boot').classList.add('done'),1400));
+</script>
+</body>
+</html>

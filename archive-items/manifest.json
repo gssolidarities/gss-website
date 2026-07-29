@@ -17,11 +17,62 @@
         "memory",
         "counter-record"
       ],
-      "abstract": "A dedicated sub-archive within The GSS Anarchive: interactive data anarchives of the genocides and holocausts that mainstream memory refuses to keep. Curated from the research of Dr. Gideon Polya and other dissenting scholars. Current entries: the Muslim Holocaust / Muslim Genocide (post-9/11, 32M avoidable deaths across 20 countries) and the Aboriginal Genocide in Australia (1788 to present, ongoing). Forthcoming: the Indian Holocaust under the British Raj (1.8B excess deaths) and the projected Climate Genocide (10B this century). Every entry is a full data page with chapters, charts, timelines, voices, and sources.",
+      "abstract": "A dedicated sub-archive within The GSS Anarchive: interactive data anarchives of the genocides, holocausts, and structural atrocities that mainstream memory refuses to keep. Curated from the research of Dr. Gideon Polya and other dissenting scholars, and hand-authored GSS counter-archives. Five entries now open: the Muslim Holocaust / Muslim Genocide (post-9/11, 32M avoidable deaths across 20 countries); the Aboriginal Genocide in Australia (1788 to present, ongoing); The Unwritten Ledger (caste, atrocity and the record in the Indian subcontinent); The ISN Registry (Guantánamo Bay, 780 numbers, 24 years); and The Paper Trail (Abu Ghraib and the chain of authorisation). Every entry is a full data page with chapters, charts, timelines, voices, and sources.",
       "language": "English",
       "file": "remembering-uncommemorated.html",
-      "size": 26134,
+      "size": 31306,
       "added": "2026-07-05"
+    },
+    {
+      "id": "isn-registry-guantanamo",
+      "title": "The ISN Registry",
+      "subtitle": "Guantánamo & the Manufacture of Lawlessness",
+      "authors": [
+        "GSS Anarchive"
+      ],
+      "year": 2026,
+      "type": "research",
+      "tags": [
+        "Guantánamo",
+        "torture",
+        "indefinite detention",
+        "ISN",
+        "US",
+        "Cuba",
+        "military commissions",
+        "counter-archive"
+      ],
+      "abstract": "GSS Anarchive · Collection 05. On arrival at Guantánamo Bay a man stopped being a name and became an Internment Serial Number. This counter-archive adopts that unit and turns it against itself: 780 marks, one per person ever held, arranged as a wall; ten registry files indexed by ISN; a twenty-four year chronology; a five-part legal-architecture diagram (the Lease, the Category, the Number, the Commission, the Ban on Exit). Names are put back beside numbers. Design conceit: the number is the archival unit — adopted in order to be broken. Refuses trophy imagery and torture-derived statements. Fifteen men remain inside as the page is served.",
+      "language": "English",
+      "file": "isn-registry-guantanamo.html",
+      "size": 58716,
+      "added": "2026-07-06"
+    },
+    {
+      "id": "paper-trail-abu-ghraib",
+      "title": "The Paper Trail",
+      "subtitle": "Abu Ghraib & the Chain of Authorisation",
+      "authors": [
+        "GSS Anarchive"
+      ],
+      "year": 2026,
+      "type": "research",
+      "tags": [
+        "Abu Ghraib",
+        "torture",
+        "chain of command",
+        "US",
+        "Iraq",
+        "War on Terror",
+        "counter-archive",
+        "contractors",
+        "Al Shimari v. CACI"
+      ],
+      "abstract": "GSS Anarchive · Collection 06. Abu Ghraib is filed in public memory as a photography scandal. It was a paperwork scandal. This counter-archive contains no photographs and follows the memoranda instead — twelve documents in a chain of authorisation from the 2002 Bybee memo through Rumsfeld's December 2002 signature and the 'GTMOization' of Iraq in August 2003, into the hard site at Tier 1A, out through the Taguba report and the 2004 broadcast, and ending in the 2026 Fourth Circuit affirmance of Al Shimari v. CACI. Design conceit: the memo, not the photograph — the signature device is a redaction bar the reader must lift by hand. Includes an accountability-by-rank ladder (Cabinet: no charges → enlisted: prison), nine case files, and standing ethical rules.",
+      "language": "English",
+      "file": "paper-trail-abu-ghraib.html",
+      "size": 60494,
+      "added": "2026-07-06"
     },
     {
       "id": "planetary-justice-map",
@@ -47,6 +98,31 @@
       "url": "https://gssolidarities.org/planetary-justice-map/",
       "file": "planetary-justice-map.html",
       "size": 552,
+      "added": "2026-07-06"
+    },
+    {
+      "id": "unwritten-ledger-caste",
+      "title": "The Unwritten Ledger",
+      "subtitle": "Caste, Atrocity & the Record — a counter-archive of the Indian subcontinent",
+      "authors": [
+        "GSS Anarchive"
+      ],
+      "year": 2026,
+      "type": "research",
+      "tags": [
+        "caste",
+        "Dalit",
+        "Ambedkar",
+        "atrocity",
+        "India",
+        "PoA Act",
+        "counter-archive",
+        "double-entry"
+      ],
+      "abstract": "GSS Anarchive · Collection 04. A counter-archive of caste, atrocity and refusal in the Indian subcontinent — organized as a double-entry ledger between what the state enters in the register and what the register cannot hold. Follows the FIR that was never filed, the atrocity where the court found 'no caste motive,' the assembly ballot Ambedkar named for what it was, and the Buddhist conversion of October 1956 — twelve files, keyed to the ruled line of a state ledger. Design conceit: two columns — Ambedkarite blue for the recorded claim, gold for the unrecorded testimony.",
+      "language": "English",
+      "file": "unwritten-ledger-caste.html",
+      "size": 61066,
       "added": "2026-07-06"
     },
     {
@@ -104,7 +180,7 @@
       "added": "2026-05-26"
     }
   ],
-  "generated_at": "2026-07-06T16:43:30Z",
-  "count": 4,
+  "generated_at": "2026-07-29T13:53:38Z",
+  "count": 7,
   "note": "Auto-generated by scripts/build_archive_manifest.py — do not edit by hand."
 }
