@@ -79,6 +79,7 @@
   .cindex .n .g { width: 9px; height: 9px; border-radius: 50%; flex: none; align-self: center;
     box-shadow: 0 0 8px -1px currentColor; }
   .cindex .n.mv .g { background: transparent !important; border: 2px solid currentColor; }
+  .cindex .n.cn .g { border-radius: 2px; transform: rotate(45deg); }
   .cindex .n .nm { font-family: var(--serif); font-size: 14px; letter-spacing: .2px; color: var(--text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cindex .n .yr { margin-left: auto; font-family: var(--mono); font-size: 9.5px; color: var(--faint);
@@ -92,6 +93,37 @@
   .tbtn:hover { color: var(--text); border-color: #3d3158; }
   .tbtn.hot { color: var(--rose); border-color: rgba(224,99,127,.45); }
   .tbtn.hot:hover { color: #fff; background: var(--rose); border-color: var(--rose); }
+  .tbtn.hotg { color: var(--gold); border-color: rgba(217,179,107,.45); text-decoration: none; display: inline-block; }
+  .tbtn.hotg:hover { color: #140d18; background: var(--gold); border-color: var(--gold); }
+
+  /* lenses */
+  .legend .lens-h { margin: 10px 0 6px; padding-top: 9px; border-top: 1px solid var(--line-soft);
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--faint); font-weight: 600; }
+  .legend .lrow { display: flex; align-items: center; gap: 8px; padding: 3.5px 5px; margin: 0 -5px;
+    border-radius: 6px; cursor: pointer; user-select: none; transition: .12s; }
+  .legend .lrow:hover { background: rgba(255,255,255,.04); }
+  .legend .lrow .sw2 { width: 24px; height: 12px; border-radius: 7px; border: 1px solid var(--line);
+    position: relative; flex: none; transition: .15s; }
+  .legend .lrow .sw2::after { content: ""; position: absolute; top: 1.5px; left: 2px; width: 7px;
+    height: 7px; border-radius: 50%; background: var(--faint); transition: .15s; }
+  .legend .lrow.on .sw2 { border-color: var(--gold); background: rgba(217,179,107,.15); }
+  .legend .lrow.on .sw2::after { left: 13px; background: var(--gold); }
+  .legend .lrow .lab { font-size: 11px; }
+  .legend .lens-note { margin-top: 7px; font-size: 10px; color: var(--faint); line-height: 1.5; }
+  .legend .lens-note b { color: var(--muted); }
+  .legend .lcat { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: var(--muted);
+    padding: 2px 0; }
+  .legend .lcat .sw { width: 9px; height: 9px; }
+
+  /* dossier: genealogy + care */
+  .p-gen { border-left: 2px solid #c9a1e8; padding: 2px 0 2px 13px; margin-bottom: 6px; }
+  .p-gen .y { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: #c9a1e8; }
+  .p-gen .t { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 1px; }
+  .p-care { display: flex; gap: 9px; align-items: baseline; border: 1px solid var(--line-soft);
+    border-left: 2px solid #6fbf8f; border-radius: 8px; padding: 9px 11px; margin-bottom: 8px; }
+  .p-care .cl { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  .p-care .cn { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
   .seg { display: inline-flex; background: rgba(17,13,27,.82); border: 1px solid var(--line);
     border-radius: 7px; overflow: hidden; backdrop-filter: blur(8px); }
   .seg button { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--muted);
@@ -345,7 +377,9 @@
     <button data-base="satellite">SATELLITE</button>
   </div>
   <button class="tbtn hot" id="inq-btn">STORY MAPS</button>
+  <a class="tbtn hotg" href="pathways/">PATHWAYS</a>
   <button class="tbtn" id="teach-btn">TEACH</button>
+  <button class="tbtn" id="copy-view">COPY VIEW</button>
   <button class="tbtn" id="about-btn">ABOUT</button>
   <button class="tbtn" id="method-btn">METHOD</button>
   <button class="tbtn" id="cite-btn">CITE</button>
@@ -359,6 +393,10 @@
     <div class="k"><span class="traj"></span> trajectory — a life or movement moving through the world</div>
     <div class="k"><span class="tie"></span> solidarity tie — a documented connection between nodes</div>
   </div>
+  <div class="lens-h">Lenses — re-render the map as argument</div>
+  <div class="lrow" id="lens-sg"><span class="sw2"></span><span class="lab">Source geography — colour by where the record is <b>held</b></span></div>
+  <div class="lrow" id="lens-care"><span class="sw2"></span><span class="lab">Care infrastructure — dim nodes without documented care work</span></div>
+  <div id="lens-legend"></div>
 </div>
 
 <!-- Timeline -->
@@ -414,8 +452,15 @@
       <li>Scrub or play the <b>timeline</b> to watch the network assemble across a century.</li>
       <li>Open the <b>STORY MAPS</b> — three interactive storytelling maps, one for each of the
         project's research questions, argued over the real geography with verbatim primary voices.</li>
-      <li><b>TEACH</b> holds a course-ready kit: a first-session walkthrough, discussion prompts,
-        and assignment frameworks built on the map's own standards.</li>
+      <li><b>Concepts</b> are nodes too (diamond glyphs): theory with a coinage site, a date and a
+        genealogy — superexploitation, two colonialisms, jineolojî, Kawsak Sacha, the Third World,
+        clandestinity — tied to the figures and movements that made them.</li>
+      <li><b>Lenses</b> re-render the same data as argument: <em>source geography</em> colours each
+        node by where its record is held (watch the archive's centre of gravity), and <em>care
+        infrastructure</em> foregrounds the schools, clinics, presses and apartments — a map of
+        infrastructure, not heroes.</li>
+      <li><b>PATHWAYS</b> are guided teaching routes with UG/GRAD prompts; <b>TEACH</b> holds the
+        course kit, syllabus shapes and the node-proposal assignment.</li>
     </ul>
     <h3>Standards</h3>
     <p>No node without named institutional or scholarly sources. Factual annotation and interpretive
@@ -504,9 +549,24 @@
         node it was not written about — where does the model hold, where does it break?
         (Comparative analysis · theory-building)</li>
     </ul>
+    <h3>Pathways — guided routes with prompts</h3>
+    <p><a href="pathways/">Four authored pathways</a> walk the map stop by stop, each stop a live view
+      plus a framing paragraph and a prompt — with an <b>UG / GRAD register toggle</b>: same stops,
+      different questions. Orientation (how to read a claim) · Conceptual (superexploitation before
+      intersectionality) · Comparative (motherhood as political grammar) · Adversarial (read the map
+      against itself). Progress saves in your browser; every pathway has a syllabus-safe URL.</p>
+    <h3>Syllabus shapes</h3>
+    <p>Three ready-to-adapt course skeletons, print-friendly:
+      <a href="teach/syllabus-3week.html">3-week unit</a> ·
+      <a href="teach/syllabus-8week.html">8-week half-semester</a> ·
+      <a href="teach/syllabus-15week.html">15-week standalone</a>.</p>
+    <h3>Propose a node (assignment)</h3>
+    <p>The node-proposal schema and its rubric live in <b>METHOD</b> — grading criteria and the map's
+      epistemic standards are deliberately the same document.</p>
     <h3>Citing</h3>
     <p>Use <b>CITE</b> for Chicago/BibTeX records of the map; each story map has its own CITE button.
-      Node anchors (<code>#claudia-jones</code>) and scene anchors cite specific views. The dataset
+      Node anchors (<code>#claudia-jones</code>) and scene anchors cite specific views, and
+      <b>COPY VIEW</b> captures filters, timeline year and lenses as one URL. The dataset
       is a versioned file — quote it by version (see METHOD).</p>
   </div>
 </div>
@@ -556,10 +616,45 @@
   /* ---------------------- masthead counts ---------------------- */
   const nFig = D.nodes.filter(n => n.type === "figure").length;
   const nMov = D.nodes.filter(n => n.type === "movement").length;
+  const nCon = D.nodes.filter(n => n.type === "concept").length;
   const nPl = D.nodes.reduce((a, n) => a + n.places.length, 0);
   byId("counts").innerHTML =
-    `<b>${nFig}</b> FIGURES · <b>${nMov}</b> MOVEMENTS · <b>${nPl}</b> PLACES · <b>${MREG.length}</b> PRIMARY MATERIALS · <b>${REG.length}</b> SOURCES · <b>${(D.meta.inquiries || []).length}</b> STORY MAPS`;
-  byId("cindex-h").textContent = `CONSTELLATION — ${nFig} FIGURES · ${nMov} MOVEMENTS`;
+    `<b>${nFig}</b> FIGURES · <b>${nMov}</b> MOVEMENTS · <b>${nCon}</b> CONCEPTS · <b>${nPl}</b> PLACES · <b>${MREG.length}</b> MATERIALS · <b>${REG.length}</b> SOURCES · <b>${(D.meta.inquiries || []).length}</b> STORY MAPS`;
+  byId("cindex-h").textContent = `CONSTELLATION — ${nFig} FIGURES · ${nMov} MOVEMENTS · ${nCon} CONCEPTS`;
+
+  /* ---------------------- archive-geography classifier (host-based) ---------------------- */
+  // Where is each node's record HELD? Classified by the citation's host domain —
+  // the rule is documented in METHOD. Categories: movement/community archive,
+  // volunteer commons, Global South institution, international body, Global North institution.
+  const HC_BY_HOST = {
+    "rawa.org": "movement", "sarayaku.org": "movement", "amazonfrontlines.org": "movement",
+    "marxists.org": "commons", "archive.org": "commons",
+    "corteidh.or.cr": "intl",
+    "aljazeera.com": "south"
+  };
+  const HC = {
+    movement: { label: "Movement / community archive", color: "#e0637f" },
+    commons:  { label: "Volunteer commons",            color: "#d9b36b" },
+    south:    { label: "Global South institution",     color: "#6fbf8f" },
+    intl:     { label: "International body",           color: "#9d7bd8" },
+    north:    { label: "Global North institution",     color: "#8fa3c8" }
+  };
+  function hostCat(url) {
+    try { const h = new URL(url).hostname.replace(/^www\./, "");
+      return HC_BY_HOST[h] || "north"; } catch (e) { return "north"; }
+  }
+  function hcOf(n) {
+    const counts = {};
+    (n.sources || []).concat(n.materials || []).forEach(x => {
+      const c = hostCat(x.url); counts[c] = (counts[c] || 0) + 1;
+    });
+    let best = "north", bestN = -1;
+    ["movement", "commons", "south", "intl", "north"].forEach(c => {
+      if ((counts[c] || 0) > bestN) { best = c; bestN = counts[c] || 0; }
+    });
+    return best;
+  }
+  D.nodes.forEach(n => { n._hc = hcOf(n); n._hcounts = null; });
   byId("mhud-ver").textContent = D.meta.code + " · v" + D.meta.version;
   byId("about-q").textContent = "“" + D.meta.question + "”";
   byId("about-proj").innerHTML =
@@ -661,7 +756,8 @@
     wpFC.features.push({ type: "Feature",
       geometry: { type: "Point", coordinates: [p.lng, p.lat] },
       properties: { theme: n.theme, t0: p.year, node: n.id, name: n.name,
-        label: p.label, period: p.period, precision: p.precision } });
+        label: p.label, period: p.period, precision: p.precision,
+        hc: n._hc, hasCare: (n.care && n.care.length) ? 1 : 0 } });
   }));
 
   const themeColorExpr = ["match", ["get", "theme"]];
@@ -694,6 +790,7 @@
       const on = activeThemes.has(n.theme) && (!timeMode || n.origin <= cursorY);
       if (n._el) n._el.style.display = on ? "" : "none";
     });
+    syncURL();
   }
 
   /* ---------------------- map layers ---------------------- */
@@ -731,7 +828,7 @@
       let ph = 0;
       setInterval(() => {
         ph += 0.28;
-        if (map.getLayer("wp-glow"))
+        if (map.getLayer("wp-glow") && !LENS.care)
           map.setPaintProperty("wp-glow", "circle-opacity", .16 + .10 * (0.5 + 0.5 * Math.sin(ph)));
       }, 120);
     }
@@ -749,11 +846,13 @@
       openPanel(p.a);
     });
 
+    applyLenses();
     fitWorld(true);
   });
 
-  /* ---------------------- DOM node markers ---------------------- */
+  /* ---------------------- DOM node markers (concepts render as waypoints only) ---------------------- */
   D.nodes.forEach(n => {
+    if (n.type === "concept") { n._el = null; return; }
     const p = n.places[0];
     const el = document.createElement("div");
     el.className = "node" + (n.type === "movement" ? " mv" : "") + (n.anchor === "right" ? " flip" : "");
@@ -770,7 +869,7 @@
   const rowsEl = byId("cindex-rows");
   D.nodes.slice().sort((a, b) => a.origin - b.origin).forEach(n => {
     const r = document.createElement("div");
-    r.className = "n" + (n.type === "movement" ? " mv" : "");
+    r.className = "n" + (n.type === "movement" ? " mv" : n.type === "concept" ? " cn" : "");
     r.style.color = THEMES[n.theme].color;
     r.innerHTML = `<span class="g" style="background:${THEMES[n.theme].color}"></span>
       <span class="nm">${n.name}</span><span class="yr">${n.dates}</span>`;
@@ -795,7 +894,7 @@
     Object.keys(THEMES).forEach(k => {
       const t = THEMES[k];
       const row = document.createElement("div");
-      row.className = "row";
+      row.className = "row"; row.dataset.k = k;
       row.innerHTML = `<span class="sw" style="background:${t.color};color:${t.color}"></span>
         <span class="lab">${t.label}</span><span class="ct">${counts[k] || 0}</span>`;
       row.onclick = () => {
@@ -866,6 +965,94 @@
     playT = null; playBtn.textContent = "▶";
   }
 
+  /* ---------------------- lenses: the same data, re-rendered as argument ---------------------- */
+  const LENS = { sg: false, care: false };
+  const hcExpr = (function () { const e = ["match", ["get", "hc"]];
+    Object.keys(HC).forEach(k => e.push(k, HC[k].color)); e.push("#999"); return e; })();
+  function applyLenses() {
+    byId("lens-sg").classList.toggle("on", LENS.sg);
+    byId("lens-care").classList.toggle("on", LENS.care);
+    D.nodes.forEach(n => {
+      if (!n._el) return;
+      const col = LENS.sg ? HC[n._hc].color : THEMES[n.theme].color;
+      n._el.style.color = col;
+      const dot = n._el.querySelector(".dot");
+      if (dot) dot.style.background = (n.type === "movement") ? "transparent" : col;
+      n._el.style.opacity = (LENS.care && !(n.care && n.care.length)) ? .18 : "";
+    });
+    if (map.getLayer("wp-core")) {
+      const colExpr = LENS.sg ? hcExpr : themeColorExpr;
+      map.setPaintProperty("wp-core", "circle-color", colExpr);
+      map.setPaintProperty("wp-glow", "circle-color", colExpr);
+      map.setPaintProperty("wp-core", "circle-opacity",
+        LENS.care ? ["case", ["==", ["get", "hasCare"], 1], 1, 0.12] : 1);
+      if (LENS.care) map.setPaintProperty("wp-glow", "circle-opacity",
+        ["case", ["==", ["get", "hasCare"], 1], 0.22, 0.03]);
+    }
+    const ll = byId("lens-legend");
+    let html = "";
+    if (LENS.sg) {
+      const counts = {};
+      D.nodes.forEach(n => counts[n._hc] = (counts[n._hc] || 0) + 1);
+      html += `<div class="lens-note"><b>Where the record is held</b> — nodes recoloured by the
+        archive's location, not the life's. Watch the centre of gravity. (Classification rule: METHOD.)</div>` +
+        Object.keys(HC).filter(k => counts[k]).map(k =>
+          `<div class="lcat"><span class="sw" style="background:${HC[k].color};color:${HC[k].color}"></span>
+           ${HC[k].label}<span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--faint)">${counts[k]}</span></div>`).join("");
+    }
+    if (LENS.care) {
+      const nc = D.nodes.filter(n => n.care && n.care.length).length;
+      html += `<div class="lens-note"><b>Care infrastructure</b> — ${nc} of ${D.nodes.length} nodes carry
+        documented care work: schools, clinics, presses, halls, apartments, water. The rest are dimmed.
+        Infrastructure over heroes.</div>`;
+    }
+    ll.innerHTML = html;
+    syncURL();
+  }
+  byId("lens-sg").addEventListener("click", () => { LENS.sg = !LENS.sg; applyLenses(); });
+  byId("lens-care").addEventListener("click", () => { LENS.care = !LENS.care; applyLenses(); });
+
+  /* ---------------------- shareable view state (syllabus-safe URLs) ---------------------- */
+  function syncURL() {
+    try {
+      const q = new URLSearchParams();
+      if (activeThemes.size !== Object.keys(THEMES).length)
+        q.set("themes", Array.from(activeThemes).join("."));
+      if (timeMode) q.set("year", String(Math.round(cursorY)));
+      const l = [LENS.sg ? "sg" : "", LENS.care ? "care" : ""].filter(Boolean).join(".");
+      if (l) q.set("lens", l);
+      const qs = q.toString();
+      history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + (currentId ? "#" + currentId : ""));
+    } catch (e) {}
+  }
+  (function readURL() {
+    try {
+      const q = new URLSearchParams(location.search);
+      if (q.get("themes")) {
+        const ks = q.get("themes").split(".").filter(k => THEMES[k]);
+        if (ks.length) {
+          activeThemes.clear(); ks.forEach(k => activeThemes.add(k));
+          byId("legend-rows").querySelectorAll(".row").forEach(r =>
+            r.classList.toggle("off", !activeThemes.has(r.dataset.k)));
+        }
+      }
+      if (q.get("year")) {
+        const y = +q.get("year");
+        if (y >= Y0 && y <= Y1) { timeMode = true; setCursor(y); }
+      }
+      (q.get("lens") || "").split(".").forEach(k => { if (k in LENS) LENS[k] = true; });
+    } catch (e) {}
+  })();
+  applyLenses();   // DOM immediately; GL layers re-assert on map load
+  applyFilters();  // same for theme/timeline state read from the URL
+  byId("copy-view").addEventListener("click", () => {
+    const done = () => { const b = byId("copy-view"); b.textContent = "COPIED ✓";
+      setTimeout(() => b.textContent = "COPY VIEW", 1400); };
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      navigator.clipboard.writeText(location.href).then(done, done);
+    else done();
+  });
+
   /* ---------------------- node dossier panel ---------------------- */
   const panel = byId("panel");
   let currentId = null;
@@ -922,7 +1109,7 @@
 
     byId("panel-body").innerHTML = `
       <div class="p-kind ${n.type === "movement" ? "mv" : ""}" style="color:${c.color}">
-        <span class="sw" style="background:${c.color}"></span>${n.type === "movement" ? "Movement" : "Figure"} — ${c.label}</div>
+        <span class="sw" style="background:${c.color}${n.type === "concept" ? ";border-radius:2px;transform:rotate(45deg)" : ""}"></span>${n.type === "movement" ? "Movement" : n.type === "concept" ? "Concept" : "Figure"} — ${c.label}</div>
       <h2 class="p-title">${n.name}</h2>
       <div class="p-role">${n.role}</div>
       <div class="p-dates">${n.dates.toUpperCase()} · STATUS: ${(n.status || "documented").toUpperCase()}</div>
@@ -933,8 +1120,12 @@
       <div class="p-divider"></div>
       <div class="p-summary">${n.annotation}</div>
       <div class="p-lens"><div class="h">READING — GENDER &amp; SOLIDARITY</div><div class="b">${n.lens}</div></div>
+      ${n.genealogy ? `<div class="p-sec-h">Genealogy — how the concept travelled</div>${n.genealogy.map(g =>
+        `<div class="p-gen"><div class="y">${g.y}</div><div class="t">${g.t}</div></div>`).join("")}` : ""}
+      ${(n.care && n.care.length) ? `<div class="p-sec-h">Care &amp; reproduction · ${n.care.length} item${n.care.length > 1 ? "s" : ""}</div>${n.care.map(cx =>
+        `<div class="p-care"><span class="w"><div class="cl">${cx.label}</div><div class="cn">${cx.note}</div></span></div>`).join("")}` : ""}
       ${matHtml ? `<div class="p-sec-h">Primary materials · ${(n.materials || []).length} item${(n.materials || []).length > 1 ? "s" : ""}</div>${matHtml}` : ""}
-      <div class="p-sec-h">Trajectory · ${n.places.length} place${n.places.length > 1 ? "s" : ""}</div>
+      <div class="p-sec-h">${n.type === "concept" ? "Geography of the concept" : "Trajectory"} · ${n.places.length} place${n.places.length > 1 ? "s" : ""}</div>
       ${placesHtml}
       <div class="p-sec-h">Solidarity ties</div>
       ${tiesHtml}
@@ -948,7 +1139,7 @@
       el.addEventListener("click", () => openPanel(el.dataset.go)));
 
     panel.classList.add("open");
-    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+    syncURL();
 
     const b = new maplibregl.LngLatBounds();
     n.places.forEach(p => b.extend([p.lng, p.lat]));
@@ -957,7 +1148,7 @@
   }
   function closePanel() {
     panel.classList.remove("open"); currentId = null;
-    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    syncURL();
   }
   byId("panel-close").addEventListener("click", closePanel);
   function hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } }
@@ -1026,8 +1217,53 @@
       <h3>Interface</h3>
       <p>Click nodes on the map, in the constellation index, or on timeline ticks · every node has a
         stable deep-link anchor (<code>#claudia-jones</code>, <code>#rawa</code>, …) kept in the address
-        bar · <span style="font-family:var(--mono)">←</span>/<span style="font-family:var(--mono)">→</span>
-        step through the constellation · ESC closes.</p>`;
+        bar · <b>COPY VIEW</b> captures the whole state — theme filters, timeline year, active lenses,
+        open node — as one syllabus-safe URL · <span style="font-family:var(--mono)">←</span>/<span
+        style="font-family:var(--mono)">→</span> step through the constellation · ESC closes.</p>
+      <h3>Archive-geography rule (the source-geography lens)</h3>
+      <p>The lens classifies every citation by its <em>host domain</em>: rawa.org, sarayaku.org and
+        amazonfrontlines.org count as <b>movement/community archives</b>; marxists.org and archive.org
+        as the <b>volunteer commons</b>; corteidh.or.cr as an <b>international body</b>; aljazeera.com
+        as a <b>Global South institution</b>; every other host — publishers, papers, universities and
+        state records of the US, UK and EU — as a <b>Global North institution</b>. A node takes the
+        colour of its majority category (ties break toward the rarer, more telling categories). The
+        rule is deliberately blunt and fully auditable: challenging it is a legitimate assignment.</p>
+      <h3>Ethics — protective imprecision &amp; living figures</h3>
+      <p>Alongside <code>EXACT</code> and <code>APPROX</code>, the schema admits
+        <code>PROTECTED</code>: coordinates deliberately vagued for clandestine organising or
+        Indigenous territory, where vagueness is a political choice rather than an evidentiary limit —
+        and the dossier says so. <em>No pin currently uses it</em>; territory pins are area-level by
+        evidence and by respect. For living figures, the research workflow includes seeking
+        relationship and notification before deepening their records; and the project treats
+        Traditional Knowledge (TK) Labels as a governance step that belongs to the communities
+        concerned — to be pursued through relationship, never self-applied.</p>
+      <h3>Propose a node (the assignment schema)</h3>
+      <p>The roster-integrity rule is also the rubric. A proposal is a JSON object meeting every
+        criterion below; grading criteria and epistemic standards are the same document.</p>
+      <pre id="schema-pre">{
+  "id": "kebab-case-slug",
+  "type": "figure | movement | concept",
+  "name": "", "dates": "", "origin": 1900,
+  "theme": "femrev | antico | blackint | transq | indig | coalition | concept",
+  "places": [{ "label": "", "lat": 0, "lng": 0,
+    "precision": "exact | approx | protected",
+    "year": 1900, "period": "the citable statement" }],
+  "annotation": "factual, sourceable prose — no interpretation",
+  "lens": "the interpretive reading — clearly separable from the annotation",
+  "care": [{ "label": "", "note": "reproduction infrastructure, sourced" }],
+  "materials": [{ "kind": "text|photo|film|doc|press", "title": "", "date": "",
+    "holder": "", "url": "", "deepLink": false, "note": "" }],
+  "sources": [{ "publisher": "", "title": "", "date": "", "url": "" }]
+}</pre>
+      <button class="cp" type="button" data-copy="schema-pre">COPY SCHEMA</button>
+      <table style="margin-top:12px"><thead><tr><th>RUBRIC CRITERION</th><th>STANDARD</th></tr></thead><tbody>
+        <tr><td>Sources</td><td>≥ 2 named institutional or scholarly sources; real URLs; deepLink:false where unverified</td></tr>
+        <tr><td>Annotation / reading line</td><td>annotation contains no interpretation; the reading is labelled and separable</td></tr>
+        <tr><td>Precision honesty</td><td>every place carries exact / approx / protected, correctly and defensibly</td></tr>
+        <tr><td>Tie discipline</td><td>ties only where documented — absence of a line is a finding, not an omission</td></tr>
+        <tr><td>Materials</td><td>primary sources link out to their holders; nothing re-hosted; rights respected</td></tr>
+        <tr><td>Care test</td><td>where the record allows: what infrastructure of reproduction did this node build?</td></tr>
+      </tbody></table>`;
   })();
 
   /* ---------------------- cite modal ---------------------- */

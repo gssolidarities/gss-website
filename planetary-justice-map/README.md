@@ -45,11 +45,42 @@ Quotations in the story maps are verbatim from the cited primary pages (verified
 and the Marxists Internet Archive); interpretive scenes are flagged `reading:true` and rendered
 under an explicit label.
 
-## Teaching
+## Concepts, care, lenses (v0.6)
 
-The **TEACH** panel is a course-ready kit: a first-session walkthrough, six discussion prompts,
-three assignment frameworks built on the map's own evidentiary standards, and citing guidance
-(stable anchors per node, story map, and scene).
+- **Concept nodes** — theory with a geography and a date: *superexploitation* (Harlem, 1949),
+  *the Third World* (Paris → Bandung → San Francisco), *two colonialisms* (the liberated zones),
+  *clandestinity* (Kabul, 1977 –), *jineolojî* (the Kurdish women's movement), *Kawsak Sacha*
+  (Sarayaku, 2018). Each carries a **genealogy** — who coined it, where published, how it
+  travelled — and is tied to the figures and movements that made it.
+- **Care & reproduction layer** — schools, clinics, presses, halls, apartments, water systems on
+  eight nodes: the material answer to the project's core question. Infrastructure over heroes.
+- **Lenses** — the same data re-rendered as argument. *Source geography* recolours every node by
+  where its record is **held** (host-domain rule documented in METHOD): watch the archive's centre
+  of gravity snap to the metropole. *Care infrastructure* dims nodes without documented care work.
+- **Shareable view state** — **COPY VIEW** captures theme filters, timeline year, active lenses and
+  the open node as one syllabus-safe URL (`?themes=…&year=…&lens=sg.care#node`).
+
+## Pathways & teaching
+
+- **[Pathways](pathways/)** — four authored, guided routes with a stop-by-stop structure (live view
+  + framing + prompt), an **UG/GRAD register toggle** (same stops, different questions), resumable
+  progress, and a deliverable: *Orientation* (how to read a claim) · *Conceptual*
+  (superexploitation before intersectionality) · *Comparative* (motherhood as political grammar) ·
+  *Adversarial* (read the map against itself).
+- **Syllabus shapes** — print-friendly skeletons: [3-week unit](teach/syllabus-3week.html) ·
+  [8-week half-semester](teach/syllabus-8week.html) · [15-week standalone](teach/syllabus-15week.html).
+- **Node-proposal schema & rubric** — published inside METHOD: grading criteria and the map's
+  epistemic standards are the same document. Student work re-enters the map through it.
+- The **TEACH** panel holds the kit: first-session walkthrough, discussion prompts, assignment
+  frameworks, citing guidance.
+
+### Ethics
+
+METHOD documents the map's ethics: a **protective-imprecision** precision class (deliberate
+vagueness as a political choice, stated in the dossier — currently unused, defined so it can be
+used honestly); a relationship/notification stance for **living figures**; and Traditional
+Knowledge (TK) Labels treated as community governance to be pursued through relationship, never
+self-applied.
 
 ## What the map does
 
@@ -95,6 +126,10 @@ planetary-justice-map/
 ├── story-maps/
 │   ├── index.html           # interactive story-map engine (?q=<id>; TOC without ?q=)
 │   └── data/                # one scene file per story map (PJM-ISM-01…03)
+├── pathways/
+│   ├── index.html           # pathway engine (?p=<id>; TOC without ?p=; UG/GRAD registers)
+│   └── data/                # registry + one file per pathway (PJM-PW-01…04)
+├── teach/                   # print-friendly syllabus shapes (3-week, 8-week, 15-week)
 └── _archive/                # earlier prototypes, kept for provenance
 ```
 

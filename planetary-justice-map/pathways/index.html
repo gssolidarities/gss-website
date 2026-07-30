@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pathways — Planetary Justice Map</title>
+<meta name="description" content="Guided teaching routes through the Planetary Justice Map — ordered stops with framing, prompts in undergraduate and graduate registers, and a deliverable. A Global South Solidarities Anarchive project." />
+<style>
+  :root {
+    --bg:#0b0a12; --panel:#141020; --panel-2:#1b1526; --line:#2b2340; --line-soft:#221b33;
+    --text:#f2ecf4; --muted:#a99bbd; --faint:#71638a; --rose:#e0637f; --gold:#d9b36b;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    --serif: Palatino,"Palatino Linotype","Book Antiqua","Iowan Old Style",Georgia,"Times New Roman",serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; }
+  a { color:var(--gold); }
+  .wrap { max-width:760px; margin:0 auto; padding:34px 22px 90px; }
+
+  .topline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back { font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--muted);
+    text-decoration:none; border:1px solid var(--line); border-radius:7px; padding:7px 11px; }
+  .back:hover { color:var(--text); border-color:#3d3158; }
+  .kicker { font-family:var(--mono); font-size:10px; letter-spacing:.3em; color:var(--gold); }
+
+  h1 { font-family:var(--serif); font-size:clamp(30px,5vw,42px); margin:16px 0 6px; font-weight:600; }
+  .q { font-family:var(--serif); font-style:italic; font-size:17px; line-height:1.55; color:#e9dcea;
+    border-left:2px solid var(--rose); padding-left:15px; margin:12px 0 0; }
+  .metaline { margin-top:12px; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
+    color:var(--faint); display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+  .metaline b { color:var(--gold); }
+
+  /* register toggle */
+  .reg { display:inline-flex; background:var(--panel); border:1px solid var(--line); border-radius:7px;
+    overflow:hidden; }
+  .reg button { font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--muted);
+    background:transparent; border:0; padding:7px 12px; cursor:pointer; }
+  .reg button.active { color:#140d18; background:var(--gold); font-weight:700; }
+
+  /* progress */
+  .prog-wrap { margin-top:18px; height:4px; background:var(--line-soft); border-radius:4px; overflow:hidden; }
+  .prog { height:100%; width:0; background:linear-gradient(90deg,var(--rose),var(--gold)); transition:width .3s; }
+  .prog-lb { margin-top:6px; font-family:var(--mono); font-size:10px; letter-spacing:.1em; color:var(--faint); }
+
+  /* stops */
+  .stop { margin-top:26px; border:1px solid var(--line); border-left:3px solid var(--gold);
+    border-radius:11px; padding:18px 20px; background:rgba(20,16,32,.5); transition:.2s; }
+  .stop.done { opacity:.55; border-left-color:#6fbf8f; }
+  .stop .head { display:flex; align-items:baseline; gap:12px; }
+  .stop .num { font-family:var(--mono); font-size:10px; letter-spacing:.16em; color:var(--gold); flex:none; }
+  .stop h2 { font-family:var(--serif); font-size:20px; margin:0; font-weight:600; flex:1; }
+  .stop .chk { flex:none; display:flex; align-items:center; gap:7px; cursor:pointer; user-select:none;
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; color:var(--faint); }
+  .stop .chk .box { width:15px; height:15px; border:1px solid var(--line); border-radius:4px;
+    display:grid; place-items:center; color:transparent; transition:.15s; font-size:11px; }
+  .stop.done .chk .box { background:#6fbf8f; border-color:#6fbf8f; color:#0b0a12; }
+  .stop .framing { margin-top:11px; font-size:14px; line-height:1.62; color:#ddd2e2; }
+  .stop .open { display:inline-block; margin-top:12px; font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.12em; color:#140d18; background:var(--gold); border-radius:7px; padding:9px 14px;
+    text-decoration:none; font-weight:700; }
+  .stop .open:hover { background:var(--rose); color:#fff; }
+  .stop .prompt { margin-top:13px; border-left:2px solid var(--rose); padding:8px 0 8px 13px;
+    background:linear-gradient(90deg, rgba(224,99,127,.07), transparent 70%); border-radius:0 8px 8px 0; }
+  .stop .prompt .h { font-family:var(--mono); font-size:9px; letter-spacing:.2em; color:var(--rose); }
+  .stop .prompt .b { font-size:13px; line-height:1.6; color:#d8c9d9; margin-top:5px; }
+
+  .deliv { margin-top:30px; border:1px solid rgba(224,99,127,.4); border-left:3px solid var(--rose);
+    border-radius:11px; padding:18px 20px; background:linear-gradient(90deg, rgba(224,99,127,.08), transparent 60%); }
+  .deliv .h { font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--rose); }
+  .deliv .b { margin-top:8px; font-size:14px; line-height:1.62; color:#e6dae8; }
+
+  .foot { margin-top:34px; font-size:12px; color:var(--faint); line-height:1.6;
+    border-left:2px solid var(--line); padding-left:13px; }
+
+  /* TOC */
+  .toc-cards { margin-top:26px; display:grid; gap:12px; }
+  a.pw { display:block; text-decoration:none; color:inherit; background:rgba(20,16,32,.7);
+    border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:11px;
+    padding:16px 18px; transition:.15s; }
+  a.pw:hover { border-color:#3d3158; transform:translateX(3px); }
+  a.pw .n { font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; color:var(--gold); }
+  a.pw .t { font-family:var(--serif); font-size:21px; margin-top:4px; }
+  a.pw .q2 { font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; font-style:italic; }
+  a.pw .m { font-family:var(--mono); font-size:9.5px; color:var(--faint); margin-top:8px; letter-spacing:.08em; }
+  .lede { color:var(--muted); font-size:14.5px; line-height:1.6; max-width:58ch; margin-top:10px; }
+
+  @media print {
+    :root { --bg:#fff; --text:#111; --muted:#333; --faint:#555; --panel:#fff; --line:#bbb; --line-soft:#ddd; }
+    body { background:#fff; color:#111; }
+    .back, .reg, .chk, .open, .prog-wrap, .prog-lb { display:none !important; }
+    .stop, .deliv, a.pw { break-inside:avoid; background:#fff; }
+    a { color:#111; text-decoration:underline; }
+    .stop .prompt, .deliv, .q { background:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap"></div>
+
+<script src="data/registry.js"></script>
+<script>
+(function () {
+  "use strict";
+  const byId = id => document.getElementById(id);
+  const REG = window.GSS_PATHWAYS;   // registry: id -> meta
+  let pid = "";
+  try { pid = new URLSearchParams(location.search).get("p") || ""; } catch (e) {}
+
+  const wrap = byId("wrap");
+
+  /* ---------- TOC ---------- */
+  if (!pid || !REG[pid]) {
+    document.title = "Pathways — Planetary Justice Map";
+    wrap.innerHTML = `
+      <div class="topline"><a class="back" href="../index.html">← Map</a>
+        <span class="kicker">GSS · ANARCHIVE — PLANETARY JUSTICE MAP</span></div>
+      <h1>Pathways</h1>
+      <p class="lede">Guided routes through the map for teaching and self-study. Each pathway is an
+        ordered list of live views — nodes, story-map scenes, lenses, timeline states — with a framing
+        paragraph and a prompt at every stop, in <b>undergraduate</b> and <b>graduate</b> registers.
+        Progress saves in your browser. Every pathway has a syllabus-safe URL.</p>
+      <div class="toc-cards">` +
+      Object.keys(REG).map(k => { const r = REG[k];
+        return `<a class="pw" href="?p=${k}">
+          <div class="n">${r.kind.toUpperCase()} · ${r.code} · ${r.duration}</div>
+          <div class="t">${r.title}</div>
+          <div class="q2">${r.question}</div>
+          <div class="m">${r.stops} STOPS · UG / GRAD · DELIVERABLE INCLUDED</div></a>`; }).join("") +
+      `</div>
+      <p class="foot">Pathways are authored against the map's METHOD standards: framing is editorial,
+        prompts are pedagogy, and every factual claim lives in the views they open — not here.
+        Print this page for a low-bandwidth, text-first version.</p>`;
+    window.PJM_PATH = Object.freeze({ mode: "toc", pathways: Object.keys(REG) });
+    return;
+  }
+
+  /* ---------- load pathway data ---------- */
+  const s = document.createElement("script");
+  s.src = "data/" + pid + ".js";
+  s.onload = () => boot(window.GSS_PATHWAY);
+  s.onerror = () => location.replace(location.pathname);
+  document.head.appendChild(s);
+
+  function boot(P) {
+    document.title = P.meta.title + " — Pathway · Planetary Justice Map";
+    const KEY_DONE = "pjm-pw-" + P.meta.id + "-done";
+    const KEY_REG = "pjm-pw-register";
+    let done = [];
+    try { done = JSON.parse(localStorage.getItem(KEY_DONE) || "[]"); } catch (e) {}
+    let reg = "ug";
+    try { reg = localStorage.getItem(KEY_REG) === "grad" ? "grad" : "ug"; } catch (e) {}
+
+    function save() { try { localStorage.setItem(KEY_DONE, JSON.stringify(done)); } catch (e) {} }
+    function saveReg() { try { localStorage.setItem(KEY_REG, reg); } catch (e) {} }
+
+    function render() {
+      const total = P.stops.length;
+      const nd = done.filter(i => i < total).length;
+      wrap.innerHTML = `
+        <div class="topline">
+          <a class="back" href="./">← Pathways</a>
+          <a class="back" href="../index.html">Map</a>
+          <span class="kicker">${P.meta.kind.toUpperCase()} PATHWAY · ${P.meta.code}</span>
+        </div>
+        <h1>${P.meta.title}</h1>
+        <div class="q">${P.meta.question}</div>
+        <div class="metaline">
+          <span><b>${P.meta.duration}</b></span>
+          <span>${total} STOPS</span>
+          <span class="reg" id="reg">
+            <button data-r="ug" class="${reg === "ug" ? "active" : ""}">UG</button>
+            <button data-r="grad" class="${reg === "grad" ? "active" : ""}">GRAD</button>
+          </span>
+          <span>register: same stops, different questions</span>
+        </div>
+        <div class="prog-wrap"><div class="prog" style="width:${(nd / total) * 100}%"></div></div>
+        <div class="prog-lb">${nd}/${total} STOPS DONE · progress saves in this browser</div>
+        ` + P.stops.map((st, i) => {
+          const isDone = done.includes(i);
+          const prompt = (reg === "grad" && st.promptGrad) ? st.promptGrad : st.prompt;
+          return `<div class="stop ${isDone ? "done" : ""}" data-i="${i}">
+            <div class="head">
+              <span class="num">STOP ${String(i + 1).padStart(2, "0")}</span>
+              <h2>${st.title}</h2>
+              <span class="chk" data-i="${i}"><span class="box">✓</span>DONE</span>
+            </div>
+            <div class="framing">${st.framing}</div>
+            ${st.link ? `<a class="open" href="${st.link.href}" target="_blank" rel="noopener">${st.link.label} →</a>` : ""}
+            <div class="prompt"><div class="h">${reg === "grad" ? "GRAD PROMPT" : "PROMPT"}</div>
+              <div class="b">${prompt}</div></div>
+          </div>`;
+        }).join("") + `
+        <div class="deliv"><div class="h">DELIVERABLE</div>
+          <div class="b">${(reg === "grad" && P.meta.deliverableGrad) ? P.meta.deliverableGrad : P.meta.deliverable}</div></div>
+        <p class="foot">Framing is editorial and prompts are pedagogy; the factual record lives in the
+          views each stop opens, under the map's METHOD standards. Cite this pathway:
+          ${P.meta.code}, Planetary Justice Map, Global South Solidarities Anarchive —
+          this page's URL is stable. Print for a text-first, low-bandwidth version.</p>`;
+
+      byId("reg").addEventListener("click", e => {
+        const b = e.target.closest("button"); if (!b) return;
+        reg = b.dataset.r === "grad" ? "grad" : "ug"; saveReg(); render();
+      });
+      wrap.querySelectorAll(".chk").forEach(c => c.addEventListener("click", () => {
+        const i = +c.dataset.i;
+        done = done.includes(i) ? done.filter(x => x !== i) : done.concat(i);
+        save(); render();
+      }));
+    }
+    render();
+
+    window.PJM_PATH = Object.freeze({
+      mode: "pathway", id: P.meta.id, code: P.meta.code,
+      stops: P.stops.length, register: () => reg,
+      done: () => done.slice()
+    });
+  }
+})();
+</script>
+</body>
+</html>

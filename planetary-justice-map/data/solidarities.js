@@ -35,14 +35,25 @@
  *     convention. No invented figures, quotes, dates or coordinates anywhere.
  *   - TIES: inter-node connections appear ONLY where documented (e.g. founder)
  *     or where the project's research design itself pairs nodes — in which case
- *     the tie note says so explicitly.
+ *     the tie note says so explicitly. Concept ties (coinage, a movement's own
+ *     lineage claim) follow the same rule.
+ *   - CONCEPT NODES (type:"concept") place theory in geography: coinage site,
+ *     date, and a `genealogy` (who coined it, where published, how it travelled,
+ *     who contested it), linked to figures/movements by ties.
+ *   - CARE entries (`care:[]`) record reproduction infrastructure — schools,
+ *     clinics, presses, halls, apartments, water systems. Entries marked
+ *     (interpretive) are readings, not records.
+ *   - PRECISION also admits "protected": coordinates deliberately vagued for
+ *     clandestine organising or Indigenous territory — vagueness as a political
+ *     choice, not an evidentiary limit. No pin currently uses it; the class
+ *     exists so that, when needed, the map can say so honestly.
  */
 
 window.GSS_SOLIDARITIES = {
 
   meta: {
     code: "PJM-GNRS",
-    version: "0.5.1",
+    version: "0.6.0",
     updated: "2026-07-06",
     title: "Planetary Justice Map",
     theme: "Gendered Networks of Revolutionary Solidarity",
@@ -73,7 +84,8 @@ window.GSS_SOLIDARITIES = {
     blackint:  { label: "Black internationalism",             color: "#9d7bd8" },
     transq:    { label: "Trans & queer community defence",    color: "#5db8e8" },
     indig:     { label: "Indigenous & climate justice",       color: "#6fbf8f" },
-    coalition: { label: "Student & coalition politics",       color: "#d9b36b" }
+    coalition: { label: "Student & coalition politics",       color: "#d9b36b" },
+    concept:   { label: "Concepts — theory with a geography", color: "#c9a1e8" }
   },
 
   nodes: [
@@ -99,6 +111,9 @@ window.GSS_SOLIDARITIES = {
       annotation: "Born in Kabul in 1956, Meena Keshwar Kamal founded the Revolutionary Association of the Women of Afghanistan (RAWA) in 1977, while still a student — an independent political organisation of Afghan women committed to equality and social justice. After the Soviet invasion she organised among refugees in Pakistan, launched the bilingual magazine <em>Payam-e-Zan</em> (“Women's Message”, 1981), and helped establish the Watan schools for refugee children in Quetta. In 1981 she represented the Afghan women's resistance at the French Socialist Party congress. She was assassinated in Quetta on 4 February 1987; RAWA attributes the killing to agents of the KHAD secret police and their fundamentalist allies.",
       lens: "Meena's praxis binds feminism to anti-imperialism: women's emancipation pursued not <em>after</em> national liberation but as its engine — schooling, publishing and clandestine organising as revolutionary infrastructure.",
       status: "documented",
+      care: [
+        { label: "Watan schools & clinics, Quetta", note: "Schools, a hospital and income projects for refugees — emancipation practised as daily institution (Brodsky; RAWA)." }
+      ],
       materials: [
         { kind: "text", title: "“I'll Never Return” — Meena's poem", date: "c. 1981",
           holder: "RAWA", url: "http://www.rawa.org/ill.htm",
@@ -176,6 +191,9 @@ window.GSS_SOLIDARITIES = {
       annotation: "Born in Dersim (Tunceli) in 1958, Sakine Cansız — <em>Sara</em> — was a co-founder of the Kurdistan Workers' Party (PKK) at its 1978 founding meeting in the village of Fis, one of the few women present, and built its earliest women's organising. Arrested in 1979, she spent more than a decade in the Diyarbakır military prison, where her defiance under torture became legendary in the Kurdish movement. After her release she organised in the Kurdish diaspora in Europe. On 9 January 2013 she was assassinated with Fidan Doğan and Leyla Şaylemez at the Kurdish Information Centre in Paris — killings still not fully accounted for. Her memoir, <em>Sara: My Whole Life Was a Struggle</em>, was published posthumously.",
       lens: "Cansız's arc — party founding, prison resistance, diaspora organising — is the lineage claimed by today's Kurdish women's movement and its theory of women's autonomy (jineolojî), which holds women's liberation to be the measure of a free society.",
       status: "documented",
+      care: [
+        { label: "The prison ward as commune — Diyarbakır", note: "Collective survival, education and resistance inside the military prison, as recounted in Sara (Pluto Press)." }
+      ],
       materials: [
         { kind: "text", title: "Sara: My Whole Life Was a Struggle — memoir, 3 volumes", date: "Eng. trans. 2018–19",
           holder: "Pluto Press", url: "https://www.plutobooks.com", deepLink: false,
@@ -208,6 +226,9 @@ window.GSS_SOLIDARITIES = {
       annotation: "Born in Veracruz, Mexico, around 1960, Lorena Borjas migrated to New York in 1981 and survived trafficking and criminalisation. From her apartment in Jackson Heights, Queens, she spent three decades building street-level infrastructure for transgender Latinas: HIV-testing nights, syringe exchange, court accompaniment, bail. In 2012 she co-founded the Lorena Borjas Community Fund to free trans women from criminal and immigration detention; in 2017 New York's governor pardoned her own trafficking-era conviction. She died of COVID-19 on 30 March 2020, mourned across the city as the mother of the trans Latinx community of Queens.",
       lens: "Borjas maps solidarity at the scale of the block: mutual aid as politics, chosen kinship as organisation — a trans, migrant, working-class praxis that widens WGSS beyond movement icons to the daily labour of keeping one another alive.",
       status: "documented",
+      care: [
+        { label: "The Jackson Heights apartment", note: "HIV-testing nights, syringe exchange, court accompaniment, a couch to sleep on — the clinic that had no signboard (NYT; them)." }
+      ],
       materials: [
         { kind: "doc", title: "Executive clemency granted to Lorena Borjas", date: "2017",
           holder: "Office of the Governor of New York", url: "https://www.governor.ny.gov", deepLink: false,
@@ -246,6 +267,10 @@ window.GSS_SOLIDARITIES = {
       annotation: "Born in Belmont, Port of Spain, in 1915, Claudia Jones migrated to Harlem as a child and rose to national leadership in the Communist Party USA. Her 1949 essay “An End to the Neglect of the Problems of the Negro Woman!” theorised the “superexploitation” of Black working women — race, class and gender as one interlocking system — decades before the vocabulary of intersectionality. Imprisoned under the McCarthy-era Smith Act and deported in 1955, she rebuilt in London: founding the <em>West Indian Gazette</em> (1958), Britain's first major Black newspaper, and the January 1959 Caribbean Carnival at St Pancras Town Hall — a defiant answer to the Notting Hill racist riots, in the lineage of today's Notting Hill Carnival. She died in December 1964 and is buried to the left of Karl Marx in Highgate Cemetery.",
       lens: "Jones is precisely the bridge this project asks about — US, Caribbean, UK: a Black feminist communism that theorised interlocking oppressions, turned deportation into diaspora infrastructure, and made a carnival an act of political defence.",
       status: "documented",
+      care: [
+        { label: "West Indian Gazette office, Brixton", note: "A newspaper as a community's public sphere: news, argument, and one another (British Library holdings)." },
+        { label: "Caribbean Carnival, St Pancras Town Hall (1959)", note: "Organised Caribbean joy in a defended indoor space, answering the Notting Hill riots (Boyce Davies)." }
+      ],
       materials: [
         { kind: "text", title: "“An End to the Neglect of the Problems of the Negro Woman!”", date: "Political Affairs, June 1949",
           holder: "Marxists Internet Archive — Claudia Jones archive", url: "https://www.marxists.org/archive/jones-claudia/",
@@ -286,6 +311,9 @@ window.GSS_SOLIDARITIES = {
       annotation: "A Waorani leader born in Nemonpare, in the Ecuadorian Amazon (Pastaza), in 1985, Nemonte Nenquimo co-founded the Indigenous-led Ceibo Alliance with A'i Kofán, Siona and Siekopai partners and became the first woman to lead CONCONAWEP, the Waorani organisation of Pastaza. In 2019 she was lead plaintiff in the lawsuit that saw a Pastaza court protect roughly half a million acres of Waorani territory from oil auction — a precedent for Indigenous consent. She received the Goldman Environmental Prize and was named to the TIME 100 in 2020; her memoir <em>We Will Not Be Saved</em> appeared in 2024.",
       lens: "Nenquimo fronts an Indigenous feminism in which the defence of territory and the defence of life are one politics — argued in court, at climate summits and in print, and organised through women-led alliance across peoples.",
       status: "documented",
+      care: [
+        { label: "Ceibo Alliance community projects", note: "Clean-water systems and solar power across the territories of four allied peoples (Amazon Frontlines / Ceibo)." }
+      ],
       materials: [
         { kind: "text", title: "“This is my message to the western world — your civilisation is killing life on Earth”", date: "The Guardian, October 2020",
           holder: "The Guardian", url: "https://www.theguardian.com", deepLink: false,
@@ -364,6 +392,10 @@ window.GSS_SOLIDARITIES = {
       annotation: "Founded in Kabul in 1977 by Meena and fellow students, the Revolutionary Association of the Women of Afghanistan is the country's oldest women's political organisation. Driven into exile after the Soviet invasion, it built clandestine literacy classes inside Afghanistan and schools, orphanages and clinics among refugees in Quetta and Peshawar, publishing <em>Payam-e-Zan</em> continuously. Under Taliban rule its members documented atrocities at great risk — including the 1999 execution of Zarmeena in Kabul's Ghazi Stadium, filmed secretly with a camera hidden under a burqa and circulated worldwide. RAWA remains active, and clandestine, today.",
       lens: "RAWA is the project's first research question made flesh: transnational feminist solidarity under occupation — witness-bearing, education and cross-border publication as a durable web, sustained by women through every regime that tried to close politics to them.",
       status: "documented",
+      care: [
+        { label: "Watan schools, orphanage & clinics — Quetta", note: "Refugee education and health run by women, for a nation temporarily without a territory (Brodsky)." },
+        { label: "Clandestine literacy classes inside Afghanistan", note: "Teaching women to read under regimes that criminalised it — schooling as underground politics (RAWA)." }
+      ],
       materials: [
         { kind: "film", title: "Clandestine footage of the execution of Zarmeena, Ghazi Stadium, Kabul", date: "November 1999",
           holder: "RAWA", url: "http://www.rawa.org/zarmeena.htm",
@@ -399,6 +431,9 @@ window.GSS_SOLIDARITIES = {
       annotation: "A coalition of the Black Student Union, the Latin American Students Organization, the Pilipino-American Collegiate Endeavor, the Asian American Political Alliance and allied groups, the Third World Liberation Front led the November 1968 – March 1969 strike at San Francisco State — the longest student strike in U.S. history — and a companion strike at UC Berkeley in 1969. It won the first College of Ethnic Studies in the United States and reshaped whose knowledge a public university must teach. The name declared its politics: Third World solidarity, practised on campus.",
       lens: "TWLF built the coalition form — distinct communities in disciplined alliance — and its institutional victory, ethnic studies, became a home where women-of-colour feminisms could later be theorised and taught: solidarity infrastructure with a curricular afterlife.",
       status: "documented",
+      care: [
+        { label: "The College of Ethnic Studies", note: "(interpretive) An institution that reproduces knowledge and people — the strike's care-shaped victory; see this node's reading." }
+      ],
       materials: [
         { kind: "doc", title: "The strike demands (BSU & TWLF — the fifteen demands)", date: "1968",
           holder: "SF State Strike Collection, SFSU Library", url: "https://library.sfsu.edu", deepLink: false,
@@ -436,6 +471,9 @@ window.GSS_SOLIDARITIES = {
       annotation: "Founded in Bissau in 1956 by Amílcar Cabral and comrades, the African Party for the Independence of Guinea and Cabo Verde waged the armed liberation struggle (1963–74) that broke Portuguese colonial rule, declaring independence at Boé in September 1973. Women's participation was written into its revolution: village councils in the liberated zones were required to include women, and militants such as Titina Silá — killed crossing the Farim river in January 1973, commemorated each 30 January as Guinea-Bissau's National Women's Day — and Carmen Pereira held command and state responsibility. Stephanie Urdang's study of the movement took its title from the party's own claim: women were fighting two colonialisms.",
       lens: "The PAIGC embeds the gender question inside anti-colonial strategy itself — quotas in liberated-zone governance, women commanders, a national day for a fallen woman fighter: solidarity as statecraft-in-formation.",
       status: "documented",
+      care: [
+        { label: "Village schools & health posts of the liberated zones", note: "Run by councils on which women held mandated seats — welfare and governance built together (Urdang)." }
+      ],
       materials: [
         { kind: "text", title: "“Tell no lies, claim no easy victories” — party directive", date: "1965",
           holder: "Marxists Internet Archive (archival text)", url: "https://www.marxists.org/subject/africa/cabral/1965/tnlcnev.htm",
@@ -447,6 +485,176 @@ window.GSS_SOLIDARITIES = {
       sources: [
         { publisher: "Stephanie Urdang", title: "Fighting Two Colonialisms: Women in Guinea-Bissau (Monthly Review Press)", date: "1979", url: "https://monthlyreview.org", deepLink: false },
         { publisher: "Amílcar Cabral", title: "Unity and Struggle: Speeches and Writings", date: "1979 (posth.)", url: "https://www.marxists.org", deepLink: false }
+      ]
+    },
+
+    /* ------------------------------ CONCEPTS ------------------------------ */
+
+    {
+      id: "superexploitation",
+      type: "concept",
+      name: "Superexploitation",
+      dates: "coined 1949",
+      origin: 1949,
+      theme: "concept",
+      role: "Concept · coined by Claudia Jones, Harlem, June 1949",
+      anchor: "left",
+      places: [
+        { label: "Harlem — Political Affairs, June 1949", lat: 40.8116, lng: -73.9465, precision: "exact",
+          year: 1949, period: "coined in “An End to the Neglect of the Problems of the Negro Woman!”" }
+      ],
+      annotation: "Claudia Jones's name for the position of Black working women in the U.S. economy: paid least, worked hardest, exploited at once as workers, as Black people and as women — not three oppressions stacked but one interlocking system, whose deepest point marks where liberation must begin. Coined in her June 1949 <em>Political Affairs</em> essay, the concept carried her strategic claim: Black women's leadership is a necessity, not a courtesy.",
+      genealogy: [
+        { y: "1949", t: "Coined in Harlem — “An End to the Neglect of the Problems of the Negro Woman!”, Political Affairs (June 1949)." },
+        { y: "1955–64", t: "Travels with Jones into exile: the analysis re-tools inside the West Indian Gazette's diaspora politics in London." },
+        { y: "1970s–80s", t: "Retrieved by Black feminist thought as a foremother-text of interlocking-oppression analysis." },
+        { y: "1989", t: "Kimberlé Crenshaw coins “intersectionality” — the adjacent academic vocabulary; Jones's term had named the terrain from inside communist politics, forty years earlier." }
+      ],
+      lens: "Theory with an address, a date, a publisher — and a prison record and a deportation file. Concepts travel because people carry them; this one crossed the Atlantic in the hold of a deportation.",
+      status: "documented",
+      sources: [
+        { publisher: "Claudia Jones", title: "“An End to the Neglect of the Problems of the Negro Woman!” — Political Affairs, June 1949", url: "https://www.marxists.org/archive/jones-claudia/" },
+        { publisher: "Carole Boyce Davies", title: "Left of Karl Marx (Duke University Press, 2007)", url: "https://www.dukeupress.edu/left-of-karl-marx" }
+      ]
+    },
+
+    {
+      id: "third-world",
+      type: "concept",
+      name: "The Third World",
+      dates: "1952 → 1968",
+      origin: 1952,
+      theme: "concept",
+      role: "Concept · a phrase with three births",
+      anchor: "left",
+      places: [
+        { label: "Paris — “tiers monde” coined", lat: 48.8566, lng: 2.3522, precision: "exact",
+          year: 1952, period: "Alfred Sauvy coins the term: the third estate of the world, 1952" },
+        { label: "Bandung — the term becomes a project", lat: -6.9175, lng: 107.6191, precision: "exact",
+          year: 1955, period: "Asian-African Conference, 1955 — decolonising states claim it" },
+        { label: "San Francisco State — a coalition identity", lat: 37.7219, lng: -122.4784, precision: "exact",
+          year: 1968, period: "striking students name the Third World Liberation Front, 1968" }
+      ],
+      annotation: "A phrase with three births. Coined in Paris in 1952 by the demographer Alfred Sauvy — <em>tiers monde</em>, the third estate of the world — remade at the 1955 Bandung Conference into a political project of the decolonising states, and claimed in 1968 by students in San Francisco who named their coalition the Third World Liberation Front: a geopolitical category turned into a campus identity of solidarity between communities of colour.",
+      genealogy: [
+        { y: "1952", t: "Coined by Alfred Sauvy in Paris — a demographer's analogy to the third estate." },
+        { y: "1955", t: "Bandung: twenty-nine Asian and African states make the category a project." },
+        { y: "1968", t: "San Francisco State: the TWLF claims the term as a coalition identity — solidarity between communities of colour inside the imperial core." }
+      ],
+      lens: "The map's argument in miniature: a concept is a traveller, and every arrival re-makes it. Each of this phrase's three homes gave it a different politics.",
+      status: "documented",
+      sources: [
+        { publisher: "Vijay Prashad", title: "The Darker Nations: A People's History of the Third World (The New Press, 2007)", url: "https://thenewpress.com", deepLink: false },
+        { publisher: "San Francisco State University Library", title: "San Francisco State College Strike Collection", url: "https://library.sfsu.edu", deepLink: false }
+      ]
+    },
+
+    {
+      id: "two-colonialisms",
+      type: "concept",
+      name: "Two Colonialisms",
+      dates: "named 1960s–1979",
+      origin: 1966,
+      theme: "concept",
+      role: "Concept · the PAIGC's own claim about gender and revolution",
+      anchor: "left",
+      places: [
+        { label: "Liberated zones, Guinea-Bissau", lat: 11.90, lng: -15.00, precision: "approx",
+          year: 1966, period: "practised as policy in the liberated zones during the armed struggle" }
+      ],
+      annotation: "The PAIGC's formulation of its gender politics: Guinean women were fighting <em>two colonialisms</em> — Portugal's, and the domination of women by men. The claim was practised as policy in the liberated zones (village councils required women members; women held command) before it was fixed in Anglophone print when Stephanie Urdang took it as the title of her 1979 study, reported from the zones themselves.",
+      genealogy: [
+        { y: "1963–74", t: "Practised as policy during the armed struggle: mandated council seats, women commanders, Titina Silá's national commemoration." },
+        { y: "1979", t: "Fixed in print: Urdang's Fighting Two Colonialisms (Monthly Review Press) carries the party's phrase onto WGSS's bookshelf." }
+      ],
+      lens: "A concept authored by a movement rather than an academy — the liberated zone as its publishing house, a solidarity reporter as its courier.",
+      status: "documented",
+      sources: [
+        { publisher: "Stephanie Urdang", title: "Fighting Two Colonialisms: Women in Guinea-Bissau (Monthly Review Press, 1979)", url: "https://monthlyreview.org", deepLink: false },
+        { publisher: "Amílcar Cabral", title: "“Tell no lies, claim no easy victories” — party directive (1965)", url: "https://www.marxists.org/subject/africa/cabral/1965/tnlcnev.htm" }
+      ]
+    },
+
+    {
+      id: "clandestinity",
+      type: "concept",
+      name: "Clandestinity",
+      dates: "practice · 1977 –",
+      origin: 1977,
+      theme: "concept",
+      role: "Concept · how politics is done when doing it is forbidden",
+      anchor: "left",
+      places: [
+        { label: "Kabul — politics under prohibition", lat: 34.5553, lng: 69.2075, precision: "exact",
+          year: 1977, period: "RAWA founded in secrecy, 1977 — the practice this map reads the concept from" }
+      ],
+      annotation: "Not a theory first but a practice with a grammar: how politics is done when doing it is forbidden. The map treats clandestinity as a concept because movements theorised it in use — RAWA's cell structure, unsigned bylines in <em>Payam-e-Zan</em>, schools without signboards, a camera under a burqa. Its rule: visibility is a resource to be spent, not a default. The archive it leaves is deliberately incomplete, and reading it demands a method that respects the gaps.",
+      genealogy: [
+        { y: "1977", t: "RAWA founded in secrecy in Kabul — independence and concealment as twin survival conditions." },
+        { y: "1981 –", t: "The clandestine press: Payam-e-Zan's unsigned authorship as collective self-protection." },
+        { y: "1999", t: "Witness under cover: the Zarmeena footage — documentation at mortal risk." }
+      ],
+      lens: "See the map's protective-imprecision standard (METHOD): under clandestinity, some gaps in the record are evidence of danger, not absence of history — and a map must know the difference.",
+      status: "documented",
+      sources: [
+        { publisher: "Anne E. Brodsky", title: "With All Our Strength (Routledge, 2003)", url: "https://www.routledge.com", deepLink: false },
+        { publisher: "RAWA", title: "About RAWA — aims, history and publications", url: "http://www.rawa.org/rawa.html" }
+      ]
+    },
+
+    {
+      id: "jineoloji",
+      type: "concept",
+      name: "Jineolojî",
+      dates: "proposed late 2000s",
+      origin: 2008,
+      theme: "concept",
+      role: "Concept · the Kurdish women's movement's “science of women”",
+      anchor: "left",
+      places: [
+        { label: "Diyarbakır — the prison generation's lineage", lat: 37.9144, lng: 40.2306, precision: "approx",
+          year: 2008, period: "the movement's claimed lineage: the generation who founded and resisted" },
+        { label: "Rojava — movement academies", lat: 37.0522, lng: 41.2317, precision: "approx",
+          year: 2012, period: "elaborated in academies, communes and a journal, 2010s –" }
+      ],
+      annotation: "The Kurdish women's movement's <em>science of women</em>: a proposal, emerging from the movement's writings in the late 2000s, to rebuild social science from women's knowledge and history. It is taught in movement academies from Rojava to the European diaspora — a discipline with communes rather than campuses — and it claims a founding archive: the generation of women who built the movement, Sakine Cansız first among them.",
+      genealogy: [
+        { y: "late 2000s", t: "Proposed within the movement's writings as a field of its own." },
+        { y: "2011 –", t: "Academies, a journal and communes elaborate jineolojî across Kurdistan and the diaspora." },
+        { y: "lineage", t: "The movement teaches Cansız's generation — party founding, prison resistance — as the field's founding archive: a lineage claim made by the movement itself." }
+      ],
+      lens: "Theory built by a movement, not a faculty: the university relocated to the mountain and the commune. For WGSS, a live case of knowledge-production outside the institutions that usually certify it.",
+      status: "documented",
+      sources: [
+        { publisher: "Dilar Dirik", title: "The Kurdish Women's Movement: History, Theory, Practice (Pluto Press, 2022)", url: "https://www.plutobooks.com", deepLink: false },
+        { publisher: "Sakine Cansız", title: "Sara: My Whole Life Was a Struggle (Pluto Press, 2018)", url: "https://www.plutobooks.com", deepLink: false }
+      ]
+    },
+
+    {
+      id: "kawsak-sacha",
+      type: "concept",
+      name: "Kawsak Sacha",
+      dates: "declared 2018",
+      origin: 2018,
+      theme: "concept",
+      role: "Concept · the Living Forest as a legal category",
+      anchor: "right",
+      places: [
+        { label: "Sarayaku — the declaration", lat: -1.7400, lng: -77.4870, precision: "approx",
+          year: 2018, period: "formally declared by the Kichwa People of Sarayaku, 2018" }
+      ],
+      annotation: "Sarayaku's juridical-cosmological category: the <em>Living Forest</em> — territory as a living, conscious, rights-bearing being, proposed to national and international law as a new legal class. It grows from Kichwa lifeworlds adjacent to <em>sumak kawsay</em> (“living well”, written into Ecuador's 2008 constitution), and it does what concepts rarely attempt: it asks the law to expand until it can see what the forest's people already know.",
+      genealogy: [
+        { y: "2008", t: "Sumak kawsay — the adjacent vocabulary — enters Ecuador's constitution." },
+        { y: "2012", t: "Sarayaku v. Ecuador: the community wins the consultation landmark that makes law a terrain worth arguing on." },
+        { y: "2018", t: "Kawsak Sacha formally declared; carried since into climate summits by Sarayaku's younger generation." }
+      ],
+      lens: "A concept as diplomatic mission: not translating the forest into Western categories but demanding the categories grow. Exported by a community of a few hundred people to the largest arenas on earth.",
+      status: "documented",
+      sources: [
+        { publisher: "Kichwa People of Sarayaku", title: "Kawsak Sacha — the Living Forest declaration (2018)", url: "https://sarayaku.org", deepLink: false },
+        { publisher: "Inter-American Court of Human Rights", title: "Sarayaku v. Ecuador — judgment of 27 June 2012", url: "https://www.corteidh.or.cr/docs/casos/articulos/seriec_245_ing.pdf" }
       ]
     }
 
@@ -465,6 +673,42 @@ window.GSS_SOLIDARITIES = {
       kind: "Shared front",
       year: 2019,
       note: "Two generations of Amazonian Indigenous women from Pastaza carrying territorial defence into global climate politics — paired in this project's research design."
+    },
+    {
+      a: "superexploitation", b: "claudia-jones",
+      kind: "Coined by",
+      year: 1949,
+      note: "Jones coined the term in the June 1949 Political Affairs essay; Story Map II follows the argument it carries."
+    },
+    {
+      a: "third-world", b: "twlf",
+      kind: "Claimed by",
+      year: 1968,
+      note: "The striking students claimed the geopolitical category as a coalition identity — the Third World Liberation Front."
+    },
+    {
+      a: "two-colonialisms", b: "paigc",
+      kind: "Party's claim",
+      year: 1966,
+      note: "The PAIGC's own formulation of its gender politics, practised in the liberated zones and fixed in print by Urdang (1979)."
+    },
+    {
+      a: "clandestinity", b: "rawa",
+      kind: "Practised by",
+      year: 1977,
+      note: "RAWA's cell structure, unsigned press and hidden-camera witness are the practice this map reads the concept from."
+    },
+    {
+      a: "jineoloji", b: "sakine-cansiz",
+      kind: "Claimed lineage",
+      year: 2013,
+      note: "The movement's academies teach Cansız's generation as jineolojî's founding archive — a lineage claim made by the movement itself."
+    },
+    {
+      a: "kawsak-sacha", b: "helena-gualinga",
+      kind: "Carried by",
+      year: 2019,
+      note: "Gualinga carries Kawsak Sacha into climate summits and youth coalitions — the concept's younger courier."
     }
   ]
 };
