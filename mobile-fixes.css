@@ -1,0 +1,226 @@
+/* ═══════════════════════════════════════════════════════════════
+   GSS ANARCHIVE · GLOBAL MOBILE FIXES
+   ---------------------------------------------------------------
+   Loaded LAST on every page so it wins the cascade on mobile.
+   All rules are gated by @media (max-width: …); desktop/laptop
+   (> 900px) receives ZERO changes from this file.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── touch / tablet baseline (≤ 900px) ── */
+@media (max-width: 900px) {
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+  body { cursor: auto !important; }
+
+  /* Kill custom cursor overlays — they don't work on touch and
+     often become inescapable overlays on phones */
+  #cdot, #cring, .cur-dot, .cur-ring,
+  #cursor, #cursor-trail, #cur, #cur-ring,
+  .custom-cursor { display: none !important; }
+  * { cursor: inherit; }
+  a, button, [role="button"], input, textarea, select { cursor: pointer !important; }
+  input, textarea { cursor: text !important; }
+}
+
+/* ═══════════════ PHONE (≤ 700px) ═══════════════ */
+@media (max-width: 700px) {
+
+  /* ─── HORIZONTAL PADDING RELAX ─── */
+  .wrap, .hero, .hero-inner, section, .block,
+  .container, .catalog, .featured-wrap, .queue-wrap,
+  .archive-shelf, .clippings, .abstract-block,
+  .program, .cards-wrap, main > .wrap,
+  .mast-in, .fellowship-note, .threads {
+    padding-left: 5vw !important;
+    padding-right: 5vw !important;
+  }
+
+  /* ─── VERTICAL PADDING RELAX ─── */
+  section, .block {
+    padding-top: 46px !important;
+    padding-bottom: 46px !important;
+  }
+  .hero, .archive-hero, header.hero, .page-hero,
+  #hero, .mast, .masthead {
+    padding-top: 78px !important;
+    padding-bottom: 40px !important;
+    min-height: auto !important;
+  }
+
+  /* ─── GRIDS COLLAPSE TO SINGLE COLUMN ─── */
+  .grid, .cards, .archive-grid, .entry-list,
+  .stats, .split-grid, .nation-grid, .adv-grid,
+  .foot-grid, .hero-meta, .catalog .cards,
+  .contrib-grid, .cards-grid, .files-grid,
+  .comp-table, .comp-list, .gap-grid, .sys-grid,
+  .climate-grid, .src-grid, .adv-grid, .featured,
+  .people, .fellowship-body, .fgrid,
+  .clip-entry, .cat-card.is-collection {
+    grid-template-columns: 1fr !important;
+  }
+  .clip-entry-images.multi { grid-template-columns: 1fr !important; }
+
+  /* Two-cell exceptions where 2 cols still work on wide phones */
+  @media (min-width: 480px) {
+    .meta-grid, .hero-meta, .facts { grid-template-columns: 1fr 1fr !important; }
+  }
+
+  /* ─── TOP NAVIGATION ─── */
+  nav#gss-topnav, nav#topbar, #gss-topnav, #topbar,
+  header.mast, nav.gss-nav, nav.top-nav {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    height: auto !important;
+    min-height: 40px !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    overflow-x: auto !important;
+  }
+  nav#gss-topnav a, nav#topbar a, #gss-topnav a, #topbar a,
+  header.mast a, .gss-nav-link, .top-nav-link,
+  .tnav-lnk, .mast-nav a {
+    font-size: 9.5px !important;
+    padding: 4px 7px !important;
+    letter-spacing: 1.5px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hide side navs & rail overlays */
+  .chapter-rail, .cr-toggle,
+  .hud-rail, .corner-hud, .data-stream,
+  .side-nav, #sideNav, .snToggle,
+  .fixed-canvas, .canvas-bg {
+    display: none !important;
+  }
+  /* Progress bars slot below the nav */
+  #progress, #prog, #scrollbar, .progress-bar {
+    top: 40px !important;
+  }
+
+  /* ─── TYPOGRAPHY CEILINGS ─── */
+  h1, .hero h1, .hero-title, h1.title, .sec-title,
+  .masthead-title, .page-title {
+    font-size: clamp(28px, 9vw, 46px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.5px !important;
+    word-break: break-word;
+  }
+  h2, h2.sec, .sec, .sec-title {
+    font-size: clamp(24px, 7vw, 36px) !important;
+    line-height: 1.15 !important;
+  }
+  h3 { font-size: clamp(20px, 5.5vw, 26px) !important; line-height: 1.2 !important; }
+  h4 { font-size: 18px !important; }
+
+  /* Body text minimum for readability */
+  p, li, .body-p, .desc, .sub, .dek, .lede {
+    font-size: 15.5px !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Giant hero counters must not overflow */
+  .deathcount .num, .mega-count, .climate-num,
+  .hero-count, .stat-val, .num.count-up,
+  .comp-val, .stolen .num, .aus-big,
+  .refugee-total, #heroCount {
+    font-size: clamp(52px, 15vw, 96px) !important;
+    letter-spacing: -1.5px !important;
+    line-height: 0.9 !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* ─── TABLES SCROLL ─── */
+  table {
+    display: block !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .tbl-scroll { overflow-x: auto !important; }
+
+  /* ─── MEDIA CONSTRAINTS ─── */
+  img, video, iframe, embed, object {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  canvas { max-width: 100% !important; }
+  .chart-canvas-box { height: 320px !important; }
+  #earthMap { height: 55vh !important; min-height: 380px !important; }
+
+  /* Prevent long strings from horizontal-scrolling */
+  pre, code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-x: auto;
+  }
+
+  /* ─── MODALS & LIGHTBOXES ─── */
+  .modal, .lightbox, .cat-modal, #modal, #catModal, #lightbox {
+    padding: 20px 10px !important;
+  }
+  .mbox, .cat-modal-inner {
+    max-width: 96vw !important;
+    padding: 24px 20px !important;
+    margin: 0 auto !important;
+  }
+
+  /* ─── CARDS ─── */
+  .card, .cat-card, .entry-card, .cn-box,
+  .featured, .contrib-card, .queue-card,
+  .split-cell, .content-box, .voice-card,
+  .doc-card, .nation-card, .clip-entry {
+    padding: 20px 16px !important;
+    transform: none !important;
+  }
+  .card:hover, .cat-card:hover, .entry-card:hover {
+    transform: none !important;
+  }
+
+  /* ─── FOOTER ─── */
+  footer, .archive-footer, .gss-footer {
+    padding: 40px 5vw !important;
+    text-align: center !important;
+  }
+
+  /* Kill fixed cursor:none on ANY body */
+  body { cursor: auto !important; }
+}
+
+/* ═══════════════ SMALL PHONE (≤ 420px) ═══════════════ */
+@media (max-width: 420px) {
+  .wrap, .hero, .hero-inner, section, .block {
+    padding-left: 4vw !important;
+    padding-right: 4vw !important;
+  }
+  nav#gss-topnav, nav#topbar, #gss-topnav, #topbar {
+    gap: 4px !important;
+    padding: 8px !important;
+  }
+  nav#gss-topnav a, nav#topbar a, #gss-topnav a, #topbar a {
+    font-size: 8.5px !important;
+    padding: 3px 5px !important;
+    letter-spacing: 1px !important;
+  }
+  h1, .hero h1, .hero-title, h1.title, .sec-title {
+    font-size: clamp(24px, 10vw, 36px) !important;
+  }
+  h2, .sec, h2.sec {
+    font-size: clamp(20px, 8vw, 30px) !important;
+  }
+  .deathcount .num, .mega-count, .climate-num,
+  .stat-val, .aus-big, .refugee-total, #heroCount {
+    font-size: clamp(44px, 17vw, 72px) !important;
+  }
+}
+
+/* ═══════════════ ORIENTATION HELPERS ═══════════════ */
+@media (max-width: 900px) and (orientation: landscape) {
+  .hero, header.hero, #hero {
+    min-height: auto !important;
+    padding-top: 60px !important;
+  }
+}
