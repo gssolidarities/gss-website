@@ -6,7 +6,7 @@
   "year": 2026,
   "type": "collection",
   "tags": ["collection", "sub-archive", "genocide", "holocaust", "memory", "counter-record"],
-  "abstract": "A dedicated sub-archive within The GSS Anarchive: interactive data anarchives of the genocides, holocausts, and structural atrocities that mainstream memory refuses to keep. Curated from the research of Dr. Gideon Polya and other dissenting scholars, and hand-authored GSS counter-archives. Five entries now open: the Muslim Holocaust / Muslim Genocide (post-9/11, 32M avoidable deaths across 20 countries); the Aboriginal Genocide in Australia (1788 to present, ongoing); The Unwritten Ledger (caste, atrocity and the record in the Indian subcontinent); The ISN Registry (Guantánamo Bay, 780 numbers, 24 years); and The Paper Trail (Abu Ghraib and the chain of authorisation). Every entry is a full data page with chapters, charts, timelines, voices, and sources.",
+  "abstract": "A dedicated sub-archive within The GSS Anarchive: interactive data anarchives of the genocides, holocausts, and structural atrocities that mainstream memory refuses to keep. Curated from the research of Dr. Gideon Polya and other dissenting scholars, and hand-authored GSS counter-archives. Six entries now open: the Muslim Holocaust / Muslim Genocide (post-9/11, 32M avoidable deaths across 20 countries); the Aboriginal Genocide in Australia (1788 to present, ongoing); The Unwritten Ledger (caste, atrocity and the record in the Indian subcontinent); The ISN Registry (Guantánamo Bay, 780 numbers, 24 years); The Paper Trail (Abu Ghraib and the chain of authorisation); and The Manifest (Balochistan, extraction and the disappeared). Every entry is a full data page with chapters, charts, timelines, voices, and sources.",
   "language": "English",
   "added": "2026-07-05",
   "includes": [
@@ -14,6 +14,7 @@
     "aboriginal-genocide-australia",
     "unwritten-ledger-caste",
     "isn-registry-guantanamo",
-    "paper-trail-abu-ghraib"
+    "paper-trail-abu-ghraib",
+    "balochistan-the-manifest"
   ]
 }

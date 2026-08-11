@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>COLLECTION 08 — THE MANIFEST | Balochistan: Extraction, Disappearance, and the Arithmetic That Will Not Close | GSS ANARCHIVE</title>
+<meta name="description" content="A counter-archive of Balochistan built as a freight manifest: what leaves, what arrives, and the one category that appears on no manifest at all. GSS Anarchive Collection 08.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   GSS ANARCHIVE — COLLECTION 08: THE MANIFEST
+   Design conceit: THE FREIGHT DOCUMENT.
+   Balochistan is 44% of Pakistan's landmass, holds its gas, its
+   copper, its gold and its deep-water port, and sits at the
+   bottom of every human development table in the country.
+   This collection is built as a shipping manifest — OUTBOUND
+   goods, INBOUND force — with one line item that appears on no
+   manifest anywhere: the person who was taken.
+   ══════════════════════════════════════════════════════════════ */
+
+:root{
+  --ink:#0a0806;
+  --ink-2:#100d0a;
+  --ink-3:#171310;
+  --rule:#282019;
+  --sand:#ddd0b8;
+  --sand-d:#8c8272;
+  --turq:#2f9a91;              /* Baloch doch embroidery / the sea at Gwadar */
+  --turq-ghost:rgba(47,154,145,.11);
+  --red:#b02a30;               /* the missing */
+  --red-ghost:rgba(176,42,48,.11);
+  --ochre:#c9a154;
+  --disp:'Bebas Neue',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --urdu:'Noto Nastaliq Urdu',serif;
+  --body:'Trebuchet MS','Lucida Grande',sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:var(--turq);color:#0a0806}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--sand);font-family:var(--body);font-size:15.5px;line-height:1.75;overflow-x:hidden}
+@media(hover:hover) and (pointer:fine){body{cursor:none}}
+a{color:var(--turq);text-decoration:none;border-bottom:1px solid transparent;transition:.25s}
+a:hover{color:var(--ochre);border-bottom-color:var(--ochre)}
+:focus-visible{outline:2px solid var(--turq);outline-offset:3px}
+
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.55;
+ background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.038'/%3E%3C/svg%3E")}
+/* doch — the diamond lattice of Balochi embroidery, at the threshold of visibility */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.42;
+ background-image:
+  linear-gradient(45deg,rgba(221,208,184,.02) 25%,transparent 25%,transparent 75%,rgba(221,208,184,.02) 75%),
+  linear-gradient(-45deg,rgba(221,208,184,.02) 25%,transparent 25%,transparent 75%,rgba(221,208,184,.02) 75%);
+ background-size:34px 34px}
+
+.cur-dot,.cur-ring{position:fixed;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cur-dot{width:5px;height:5px;background:var(--sand);border-radius:50%}
+.cur-ring{width:26px;height:26px;border:1px solid rgba(221,208,184,.5);transform:translate(-50%,-50%) rotate(45deg);transition:width .2s,height .2s,border-color .2s}
+.cur-ring.hot{width:40px;height:40px;border-color:var(--turq)}
+@media(hover:none),(pointer:coarse){.cur-dot,.cur-ring{display:none}}
+
+#prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:10002;background:linear-gradient(90deg,var(--turq),var(--red))}
+
+#boot{position:fixed;inset:0;z-index:10005;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .7s .3s,visibility .7s .3s}
+#boot.done{opacity:0;visibility:hidden}
+#boot .bl{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--sand-d)}
+#boot .stmp{border:1px solid var(--turq);color:var(--turq);font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:.28em;padding:9px 20px}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
+@media(max-width:640px){.wrap{padding:0 20px}}
+
+header.mast{position:fixed;top:0;left:0;right:0;z-index:9000;background:rgba(10,8,6,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.mast-in{max-width:1240px;margin:0 auto;padding:13px 32px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.lock{display:flex;align-items:baseline;gap:10px}
+.lock b{font-family:var(--disp);font-size:22px;letter-spacing:.10em;color:var(--sand);font-weight:400}
+.lock span{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--sand-d)}
+.mast-nav{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.mast-nav a{color:var(--sand-d);border:0}.mast-nav a:hover{color:var(--turq)}
+@media(max-width:900px){.mast-nav{display:none}.mast-in{padding:12px 20px}}
+
+/* hero */
+.hero{padding:168px 0 62px;border-bottom:1px solid var(--rule)}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.28em;color:var(--turq);text-transform:uppercase;margin-bottom:26px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.kick s{text-decoration:none;color:var(--sand-d)}
+.kick i{width:26px;height:1px;background:var(--rule);display:inline-block}
+h1.title{font-family:var(--disp);font-weight:400;font-size:clamp(58px,11.5vw,152px);line-height:.86;color:var(--sand)}
+h1.title em{font-style:normal;color:var(--turq);display:block}
+.dek{max-width:670px;font-size:17px;color:#c4b8a2;margin-top:26px}
+.dek b{color:var(--sand);font-weight:400;border-bottom:1px solid var(--turq)}
+.urdu{font-family:var(--urdu);font-size:19px;line-height:2.6;color:var(--ochre);margin-top:24px;display:block;direction:rtl;text-align:right;max-width:670px}
+
+/* SIGNATURE: the manifest */
+.man{margin:56px 0 0;border:1px solid var(--rule);background:var(--ink-2)}
+.man-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:15px 26px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sand-d)}
+.man-head b{color:var(--turq);font-weight:500}
+.man-cols{display:grid;grid-template-columns:1fr 1px 1fr}
+.man-cols .spine{background:linear-gradient(180deg,transparent,var(--rule) 8%,var(--rule) 92%,transparent)}
+.man-col{padding:0}
+.mc-title{padding:16px 24px 12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase}
+.man-col.out .mc-title{color:var(--turq)}
+.man-col.in .mc-title{color:var(--red)}
+.li{display:grid;grid-template-columns:1fr 84px;gap:12px;padding:11px 24px;border-top:1px solid rgba(40,32,25,.7);align-items:baseline}
+.li .n{font-size:13.6px;color:#b9ae9b;line-height:1.5}
+.li .n s{text-decoration:none;display:block;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--sand-d);margin-top:3px}
+.li .q{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-align:right;color:var(--sand)}
+.man-col.out .li .q{color:var(--turq)}
+.man-col.in .li .q{color:var(--red)}
+@media(max-width:820px){.man-cols{grid-template-columns:1fr}.man-cols .spine{height:1px;background:var(--rule)}}
+
+/* the unmanifested line */
+.unman{border-top:1px solid var(--rule);padding:26px 26px;background:var(--red-ghost)}
+.unman .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.unman .big{font-family:var(--disp);font-size:clamp(26px,4.4vw,40px);line-height:1.02;color:var(--sand);letter-spacing:.02em;margin-bottom:10px}
+.unman p{font-size:14px;color:#b3a894;max-width:760px;line-height:1.7}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));border-top:1px solid var(--rule);margin-top:52px}
+.stat{padding:26px 22px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat b{display:block;font-family:var(--disp);font-size:44px;line-height:1;color:var(--sand);font-weight:400}
+.stat b.t{color:var(--turq)} .stat b.r{color:var(--red)}
+.stat span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--sand-d);margin-top:9px;line-height:1.6}
+
+section{padding:86px 0;border-bottom:1px solid var(--rule);position:relative}
+.slab{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--turq);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.slab::before{content:'';width:20px;height:1px;background:var(--turq)}
+h2.sec{font-family:var(--disp);font-weight:400;font-size:clamp(34px,5.2vw,60px);line-height:.95;color:var(--sand);margin-bottom:18px}
+.sub{max-width:690px;color:#a89d8b;font-size:15.5px;margin-bottom:44px}
+
+/* reconciliation */
+.recon{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.rc{background:var(--ink);padding:28px 24px}
+.rc .who{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--sand-d);margin-bottom:12px;line-height:1.6}
+.rc .fig{font-family:var(--disp);font-size:46px;line-height:1;color:var(--sand);letter-spacing:.02em}
+.rc.state .fig{color:var(--turq)}
+.rc.fam .fig{color:var(--red)}
+.rc .unit{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--sand-d);margin:8px 0 14px}
+.rc p{font-size:13.4px;color:#a49a88;line-height:1.65}
+.recon-note{margin-top:34px;border-left:2px solid var(--ochre);padding:22px 24px;background:rgba(201,161,84,.06);max-width:820px;font-size:14.5px;color:#bdb29e;line-height:1.72}
+
+/* timeline */
+.tl{border-top:1px solid var(--rule)}
+.tev{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--rule);transition:background .25s}
+.tev:hover{background:var(--ink-2)}
+.tev .td{padding:22px 18px 22px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ochre);line-height:1.5}
+.tev .tc{padding:22px 0 22px 24px;border-left:1px solid var(--rule)}
+.tev .tc h4{font-family:var(--disp);font-size:25px;font-weight:400;color:var(--sand);letter-spacing:.02em;line-height:1.05;margin-bottom:7px}
+.tev .tc p{font-size:14px;color:#a49a88;line-height:1.68}
+.tev.hot .tc h4{color:var(--turq)}
+.tev.red .tc h4{color:var(--red)}
+@media(max-width:640px){.tev{grid-template-columns:1fr}.tev .tc{border-left:0;padding:0 0 20px}.tev .td{padding:20px 0 8px}}
+
+/* files */
+.filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px}
+.fbtn{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;padding:8px 15px;border:1px solid var(--rule);background:transparent;color:var(--sand-d);cursor:pointer;transition:.2s}
+.fbtn:hover{border-color:var(--sand-d);color:var(--sand)}
+.fbtn.on{background:var(--turq);border-color:var(--turq);color:#0a0806}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.card{background:var(--ink);padding:26px 24px;cursor:pointer;transition:background .25s;position:relative}
+.card:hover{background:var(--ink-3)}
+.card .cno{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--sand-d)}
+.card .ctag{position:absolute;top:24px;right:24px;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;padding:3px 8px;text-transform:uppercase;border:1px solid var(--rule);color:var(--sand-d)}
+.ctag.extract{color:var(--turq);border-color:rgba(47,154,145,.42);background:var(--turq-ghost)}
+.ctag.missing{color:var(--red);border-color:rgba(176,42,48,.45);background:var(--red-ghost)}
+.ctag.arms{color:var(--ochre);border-color:rgba(201,161,84,.42)}
+.ctag.refusal{color:var(--sand-d)}
+.card h3{font-family:var(--disp);font-size:27px;font-weight:400;letter-spacing:.02em;color:var(--sand);line-height:1.03;margin:14px 0 6px;padding-right:88px}
+.card .place{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ochre);margin-bottom:13px}
+.card p{font-size:13.8px;color:#a49a88;line-height:1.65}
+.card .more{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--turq);margin-top:16px;text-transform:uppercase}
+.card.hide{display:none}
+
+#modal{position:fixed;inset:0;z-index:10000;background:rgba(4,3,2,.95);backdrop-filter:blur(6px);display:none;overflow-y:auto;padding:60px 20px}
+#modal.open{display:block}
+.mbox{max-width:760px;margin:0 auto;background:var(--ink-2);border:1px solid var(--rule);padding:44px 42px;position:relative}
+.mclose{position:absolute;top:16px;right:18px;background:none;border:1px solid var(--rule);color:var(--sand-d);font-family:var(--mono);font-size:10px;letter-spacing:.14em;padding:7px 12px;cursor:pointer}
+.mclose:hover{border-color:var(--red);color:var(--red)}
+.mbox .mno{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--turq)}
+.mbox h3{font-family:var(--disp);font-size:clamp(32px,6vw,50px);font-weight:400;color:var(--sand);line-height:.98;margin:12px 0 6px}
+.mbox .mplace{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ochre);margin-bottom:26px}
+.mrow{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:13px 0;border-top:1px solid var(--rule);font-size:14px}
+.mrow dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sand-d);padding-top:3px}
+.mrow dd{color:#b8ad9a;line-height:1.68}
+.mnote{margin-top:26px;padding:20px 22px;border-left:2px solid var(--turq);background:var(--turq-ghost);font-size:14px;color:#c1b6a2;font-style:italic}
+@media(max-width:640px){.mbox{padding:34px 22px}.mrow{grid-template-columns:1fr;gap:5px}}
+
+/* testimony */
+.testimony{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.tcell{background:var(--ink);padding:32px 28px}
+.tcell blockquote{font-size:17px;line-height:1.6;color:var(--sand);border-left:2px solid var(--turq);padding-left:20px;margin-bottom:16px}
+.tcell cite{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--sand-d);font-style:normal;display:block;line-height:1.7}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--sand-d);text-align:left;padding:12px 14px 12px 0;border-bottom:1px solid var(--rule);font-weight:500}
+.tbl td{padding:14px 14px 14px 0;border-bottom:1px solid var(--rule);color:#a89d8b;vertical-align:top;line-height:1.6}
+.tbl td.t{color:var(--sand)}
+.tbl td.y{font-family:var(--mono);font-size:11px;color:var(--ochre);white-space:nowrap}
+.tbl tr:hover td{background:var(--ink-2)}
+.tbl-scroll{overflow-x:auto}
+@media(max-width:640px){.tbl{min-width:640px}}
+
+.ethic{border:1px solid var(--rule);border-left:2px solid var(--red);padding:34px 32px;background:var(--ink-2);max-width:830px}
+.ethic h4{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.ethic p{color:#aca192;font-size:14.5px;margin-bottom:14px}
+.ethic p:last-child{margin-bottom:0}
+
+footer{padding:64px 0 44px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;margin-bottom:44px}
+footer h5{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--sand-d);margin-bottom:14px}
+footer p,footer li{font-size:13.5px;color:#877e70;line-height:1.75;list-style:none}
+.fbot{border-top:1px solid var(--rule);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#635c51;text-transform:uppercase}
+@media(max-width:820px){.fgrid{grid-template-columns:1fr;gap:28px}}
+
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
+/* ══════════ AX — ARCHIVE EXPERIENCE LAYER ══════════ */
+:root{--ax:var(--turq);--ax-ink:var(--ink);--ax-tx:var(--sand);--ax-dim:var(--sand-d)}
+
+/* ── chapter rail ── */
+.ax-rail{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:8800;
+ display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:14px 0}
+.ax-rail a{display:flex;align-items:center;gap:10px;padding:6px 20px 6px 26px;border:0;
+ text-decoration:none;color:var(--ax-dim);font-family:var(--mono);font-size:9px;
+ letter-spacing:.16em;text-transform:uppercase;transition:color .25s}
+.ax-rail a .lbl{opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;white-space:nowrap}
+.ax-rail:hover a .lbl{opacity:1;transform:none}
+.ax-rail a .tk{width:14px;height:1px;background:currentColor;opacity:.45;transition:width .3s,opacity .3s}
+.ax-rail a:hover,.ax-rail a.on{color:var(--ax)}
+.ax-rail a.on .tk{width:30px;opacity:1}
+@media(max-width:1100px){.ax-rail{display:none}}
+
+/* ── keyboard hint in masthead ── */
+.ax-key{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ax-dim);
+ border:1px solid var(--rule);padding:4px 9px;cursor:pointer;transition:.2s;white-space:nowrap}
+.ax-key:hover{border-color:var(--ax);color:var(--ax)}
+@media(max-width:640px){.ax-key{display:none}}
+
+/* ── command palette ── */
+#ax-pal{position:fixed;inset:0;z-index:10600;background:rgba(2,3,4,.86);backdrop-filter:blur(8px);
+ display:none;padding:12vh 20px 20px}
+#ax-pal.on{display:block}
+.ax-pbox{max-width:660px;margin:0 auto;border:1px solid var(--rule);background:var(--ax-ink);
+ box-shadow:0 40px 90px rgba(0,0,0,.6)}
+.ax-pin{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--rule)}
+.ax-pin span{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--ax);flex-shrink:0}
+.ax-pin input{flex:1;background:none;border:0;outline:0;color:var(--ax-tx);
+ font-family:var(--mono);font-size:14px;letter-spacing:.02em}
+.ax-pin input::placeholder{color:var(--ax-dim)}
+.ax-plist{max-height:52vh;overflow-y:auto}
+.ax-pi{display:grid;grid-template-columns:66px 1fr;gap:14px;padding:12px 20px;cursor:pointer;
+ border-bottom:1px solid var(--rule);align-items:baseline}
+.ax-pi:last-child{border-bottom:0}
+.ax-pi .k{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--ax-dim)}
+.ax-pi .v{font-size:14px;color:var(--ax-tx);line-height:1.45}
+.ax-pi .v s{text-decoration:none;display:block;font-size:12px;color:var(--ax-dim);margin-top:2px}
+.ax-pi.sel,.ax-pi:hover{background:rgba(255,255,255,.045)}
+.ax-pi.sel .k{color:var(--ax)}
+.ax-pfoot{padding:11px 20px;border-top:1px solid var(--rule);font-family:var(--mono);
+ font-size:9px;letter-spacing:.14em;color:var(--ax-dim);display:flex;gap:18px;flex-wrap:wrap}
+.ax-empty{padding:26px 20px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ax-dim)}
+
+/* ── card choreography ── */
+.card{overflow:hidden}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--ax);
+ transform:scaleY(0);transform-origin:top;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.card:hover::before,.card:focus-visible::before{transform:scaleY(1)}
+.card .more{transition:letter-spacing .3s,color .25s}
+.card:hover .more{letter-spacing:.26em}
+.fbtn .ct{opacity:.55;margin-left:6px}
+
+/* ── file viewer upgrades ── */
+.ax-mfoot{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+ margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)}
+.ax-mbtn{background:none;border:1px solid var(--rule);color:var(--ax-dim);font-family:var(--mono);
+ font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:9px 14px;cursor:pointer;transition:.2s}
+.ax-mbtn:hover:not(:disabled){border-color:var(--ax);color:var(--ax)}
+.ax-mbtn:disabled{opacity:.28;cursor:default}
+.ax-mcount{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ax-dim)}
+.ax-hint{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:var(--ax-dim);
+ opacity:.65;margin-top:14px;text-align:center}
+
+/* ── toast ── */
+#ax-toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);z-index:10700;
+ background:var(--ax);color:#0a0a0a;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+ text-transform:uppercase;padding:12px 20px;opacity:0;pointer-events:none;transition:.35s}
+#ax-toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ── print: the page becomes a dossier ── */
+@media print{
+ body{background:#fff!important;color:#111!important;font-size:11pt;cursor:auto!important}
+ body::before,body::after,#boot,#prog,#modal,#ax-pal,.ax-rail,.cur-dot,.cur-ring,
+ .ax-key,.filters,header.mast,.ax-mfoot,#ax-toast{display:none!important}
+ main{padding-top:0}
+ .wrap{max-width:100%;padding:0}
+ section{padding:18pt 0;border-bottom:1pt solid #ccc;break-inside:avoid}
+ h1.title,h2.sec,.card h3{color:#111!important}
+ .card,.grid,.tcell,.testimony,.ethic,.lex,.recon{background:#fff!important;border-color:#bbb!important;break-inside:avoid}
+ .rv{opacity:1!important;transform:none!important}
+ .tbl td,.tbl th{color:#222!important;border-color:#ccc!important}
+ a{color:#111!important;text-decoration:underline}
+ a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#666}
+}
+
+
+/* ══════════ SIGNATURE UPGRADE ══════════ */
+
+.li{cursor:default;transition:background .25s,padding-left .25s}
+.li:hover{background:rgba(255,255,255,.028);padding-left:30px}
+.man-tools{border-top:1px solid var(--rule);padding:18px 26px;display:flex;gap:14px;
+ align-items:center;flex-wrap:wrap}
+.man-tools button{background:none;border:1px solid var(--rule);color:var(--sand-d);
+ font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+ padding:9px 15px;cursor:pointer;transition:.2s}
+.man-tools button:hover{border-color:var(--turq);color:var(--turq)}
+.man-tools button.on{background:var(--turq);border-color:var(--turq);color:#0a0806}
+.man-read{flex:1;min-width:250px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;
+ color:var(--sand-d);line-height:1.7}
+.man-read em{color:var(--ochre);font-style:normal}
+.man-col.dim .li{opacity:.22}
+.recon .rc{transition:background .3s}
+.recon .rc:hover{background:var(--ink-3)}
+
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="bl">GSS ANARCHIVE · COLLECTION 08</div>
+  <div class="stmp">MANIFEST — GOODS &amp; PERSONS</div>
+  <div class="bl">CHECKING THE CONSIGNMENT</div>
+</div>
+
+<div id="prog"></div>
+<div class="cur-dot"></div><div class="cur-ring"></div>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="lock"><b>GSS</b><span>ANARCHIVE / 08</span></div>
+    <nav class="mast-nav">
+      <a href="#arithmetic">Arithmetic</a>
+      <a href="#chronology">Chronology</a>
+      <a href="#files">Files</a>
+      <a href="#voice">Testimony</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</header>
+
+<a id="top"></a>
+<main>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="wrap">
+  <div class="hero">
+    <div class="kick">
+      <span>Collection 08</span><i></i>
+      <s>Balochistan · Extraction · The Unlisted Consignment</s><i></i>
+      <s>Opened MMXXVI · Delhi</s>
+    </div>
+    <h1 class="title">THE<em>MANIFEST</em></h1>
+    <p class="dek">
+      Balochistan is forty-four per cent of Pakistan's territory and roughly six per cent of its
+      people. It supplied the gas that lit Multan and Karachi decades before it lit Quetta. It holds
+      one of the largest undeveloped copper-gold deposits on earth and a deep-water port on the
+      Arabian Sea. It sits at the bottom of nearly every human development table in the country.
+      <b>This is not a paradox. It is a manifest.</b>
+      <span class="urdu">جو لے جایا گیا، اُس کی فہرست موجود ہے۔ جو اُٹھایا گیا، اُس کی نہیں۔</span>
+    </p>
+
+    <!-- SIGNATURE: the manifest -->
+    <div class="man">
+      <div class="man-head">
+        <span>Consignment record · Balochistan · 1948 —</span>
+        <span><b>TWO COLUMNS. ONE OMISSION.</b></span>
+      </div>
+      <div class="man-cols">
+        <div class="man-col out">
+          <div class="mc-title">Outbound — what leaves</div>
+          <div class="li"><div class="n">Natural gas, Sui field<s>Piped to Punjab and Sindh from the 1950s; much of Balochistan waited decades for a connection</s></div><div class="q">1952 —</div></div>
+          <div class="li"><div class="n">Copper &amp; gold, Saindak<s>Chagai district; operated under a long-running lease to a Chinese state enterprise</s></div><div class="q">2002 —</div></div>
+          <div class="li"><div class="n">Copper &amp; gold, Reko Diq<s>Among the largest undeveloped deposits in the world; a prior dispute produced a multi-billion-dollar arbitration award against Pakistan, later settled</s></div><div class="q">RESERVED</div></div>
+          <div class="li"><div class="n">Coal, Duki and Harnai<s>Worked in conditions that have produced repeated fatal accidents and targeted attacks on miners</s></div><div class="q">ONGOING</div></div>
+          <div class="li"><div class="n">Deep-water port, Gwadar<s>Operated under concession to a Chinese state port company; the flagship node of the China–Pakistan Economic Corridor</s></div><div class="q">2007 —</div></div>
+          <div class="li"><div class="n">Fish, Makran coast<s>Local small-boat fishers have protested trawler licensing and loss of access</s></div><div class="q">CONTESTED</div></div>
+        </div>
+        <div class="spine"></div>
+        <div class="man-col in">
+          <div class="mc-title">Inbound — what arrives</div>
+          <div class="li"><div class="n">Military operations<s>Five distinct campaigns: 1948, 1958–59, 1963–69, 1973–77, and the operations continuing since 2004</s></div><div class="q">×5</div></div>
+          <div class="li"><div class="n">Cantonments &amp; Frontier Corps deployment<s>A paramilitary force under federal command with policing powers across the province</s></div><div class="q">PERMANENT</div></div>
+          <div class="li"><div class="n">Internment centres<s>Pakistan's own Commission has traced hundreds of missing persons to internment centres and prisons</s></div><div class="q">IN USE</div></div>
+          <div class="li"><div class="n">Anti-Terrorism (Balochistan Amendment) Act, Section 11-EEEE<s>Preventive detention on the order of a notified detaining authority</s></div><div class="q">JUN 2025</div></div>
+          <div class="li"><div class="n">Internet and mobile suspensions<s>Imposed around protests, marches and operations</s></div><div class="q">RECURRENT</div></div>
+          <div class="li"><div class="n">Anti-terrorism courts sitting inside prisons<s>The 2026 trial of Baloch Yakjehti Committee leaders was conducted inside Hudda Jail, Quetta</s></div><div class="q">2026</div></div>
+        </div>
+      </div>
+      <div class="unman">
+        <div class="lbl">Line item omitted from both columns</div>
+        <div class="big">1 × PERSON. TAKEN FROM A HOME, A BUS, A CHECKPOINT.<br>CONSIGNEE: UNSTATED. RECEIPT: NONE.</div>
+        <p>
+          Enforced disappearance is defined in international law by exactly this absence: a deprivation
+          of liberty followed by a refusal to acknowledge it, placing the person outside the protection
+          of the law. Everything else on this page has paperwork. A gas field has a lease. A port has a
+          concession. An operation has an order. The person has nothing — and the missing document is
+          not an oversight. It is the instrument.
+        </p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b class="t">44%</b><span>Of Pakistan's land area</span></div>
+      <div class="stat"><b>~6%</b><span>Of Pakistan's population</span></div>
+      <div class="stat"><b class="r">10,636</b><span>Disappearance cases before the state Commission since 2011 · Oct 2025</span></div>
+      <div class="stat"><b class="r">1,650</b><span>Still under investigation on the same date</span></div>
+      <div class="stat"><b class="t">17</b><span>Years the Quetta Press Club sit-in has run</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CURATORIAL ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="slab rv">Curatorial statement</div>
+    <h2 class="sec rv">AN INTERNAL<br>COLONY HAS A LEDGER</h2>
+    <div class="sub rv" style="max-width:790px">
+      <p style="margin-bottom:16px">
+        Balochistan is routinely narrated as a security problem: a separatist insurgency, a
+        counter-insurgency, an unfortunate cycle. That framing puts the violence first and the
+        economics in the background, which is precisely backwards.
+        <strong style="color:var(--sand);font-weight:400">The extraction is the older fact.</strong>
+        Sui gas began flowing in the 1950s. The first operation was in 1948.
+      </p>
+      <p style="margin-bottom:16px">
+        What makes this a decolonial archive rather than a South Asian politics page is that the
+        pattern is not distinctive to Pakistan. It is the standard architecture of internal
+        colonialism, and it is legible anywhere it appears: a resource-rich, sparsely-populated
+        periphery; extraction under contracts negotiated elsewhere; local benefit deferred
+        indefinitely; political demands answered as security threats; and a paramilitary force
+        under central command exercising police powers over a population it does not come from.
+        The same structure has run in the Niger Delta, in West Papua, in the Congolese copperbelt,
+        in Bougainville.
+      </p>
+      <p>
+        So the page is a manifest. Everything that leaves has a document. Everything that arrives
+        has a document. The one category that has no document is the person, and the collection is
+        organised around the argument that this is a design property of the system and not a gap
+        in its records.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ARITHMETIC ═══════════ -->
+<section id="arithmetic">
+  <div class="wrap">
+    <div class="slab rv">The arithmetic that will not close</div>
+    <h2 class="sec rv">FOUR COUNTS.<br>NO RECONCILIATION.</h2>
+    <p class="sub rv">Every serious body that has tried to count Balochistan's disappeared arrives at a
+    different number. The archive's job is not to pick one. It is to explain why they cannot be made
+    to agree — because the reason is itself the finding.</p>
+
+    <div class="recon rv">
+      <div class="rc state">
+        <div class="who">Commission of Inquiry on<br>Enforced Disappearances · Pakistan</div>
+        <div class="fig">10,636</div>
+        <div class="unit">cases received nationwide since 2011<br>8,986 disposed · 1,650 under investigation</div>
+        <p>A federal commission established in 2011. It counts <em>complaints filed with it</em>, and
+        records a case as disposed when a person returns home, is located in an internment centre or a
+        prison, or is found dead. Around 3,000 of the cases relate to Balochistan.</p>
+      </div>
+      <div class="rc">
+        <div class="who">Human Rights Watch<br>·<br>Filing record</div>
+        <div class="fig">8,463</div>
+        <div class="unit">complaints logged to the Commission<br>2011 – early 2024</div>
+        <p>An independent tally of the same filing stream, used to test the Commission's reporting.
+        It measures the same thing the Commission measures — access to a complaints process — not the
+        underlying number of people taken.</p>
+      </div>
+      <div class="rc fam">
+        <div class="who">Voice for Baloch<br>Missing Persons (VBMP)</div>
+        <div class="fig">21,000+</div>
+        <div class="unit">claimed subjected to enforced<br>disappearance since 2005</div>
+        <p>Compiled by families, at the Quetta Press Club camp and through district networks. It counts
+        <em>people</em>, including those whose relatives will not file with a federal commission for
+        fear of reprisal, and those taken in districts where filing is impractical.</p>
+      </div>
+      <div class="rc">
+        <div class="who">Paank (Baloch National Movement)<br>·<br>Annual monitoring</div>
+        <div class="fig">1,355</div>
+        <div class="unit">enforced disappearances documented in 2025<br>plus 225 killings recorded as extrajudicial</div>
+        <p>Event-based monitoring by an activist organisation. The Human Rights Council of Balochistan,
+        counting independently, recorded 601 disappearances in 2023 and 830 in 2024. These are annual
+        flows, not cumulative stocks — a different unit again.</p>
+      </div>
+    </div>
+
+    <div class="recon-note rv">
+      <strong style="color:var(--ochre);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;display:block;margin-bottom:10px">WHY THEY DO NOT RECONCILE</strong>
+      Four bodies are counting four different objects. The Commission counts complaints it received.
+      Human Rights Watch counts the same complaints from outside. VBMP counts people, including those
+      whose families never filed. Paank and HRCB count incidents in a year. None of these can be
+      converted into the others without knowing the two things nobody knows: how many families never
+      filed, and how many of the "disposed" cases were disposed of because a body was returned.
+      <br><br>
+      This is why the state's number is a defence of procedure rather than an answer. A commission that
+      logs, traces and disposes generates an impressive audit trail while leaving the underlying
+      question — who takes people, and under what authority — entirely untouched. In fourteen years no
+      official has been prosecuted for an enforced disappearance in Balochistan.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CHRONOLOGY ═══════════ -->
+<section id="chronology">
+  <div class="wrap">
+    <div class="slab rv">Chronology</div>
+    <h2 class="sec rv">1839 —<br>PRESENT</h2>
+    <p class="sub rv">Selected entries.</p>
+
+    <div class="tl rv">
+      <div class="tev"><div class="td">13 NOV 1839</div><div class="tc"><h4>The storming of Kalat</h4>
+      <p>British forces take the fort at Kalat during the First Anglo-Afghan War; Mir Mehrab Khan is
+      killed defending it. The Khanate is subsequently brought under British paramountcy, and from the
+      1870s administered through the Sandeman system of tribal intermediaries and subsidies.</p></div></div>
+
+      <div class="tev hot"><div class="td">11 AUG 1947</div><div class="tc"><h4>Kalat declares independence</h4>
+      <p>The Khanate of Kalat declares itself independent, three days before the creation of Pakistan.
+      Its two houses of parliament subsequently debate accession and decline it, favouring a treaty
+      relationship instead.</p></div></div>
+
+      <div class="tev red"><div class="td">27 MAR 1948</div><div class="tc"><h4>Accession</h4>
+      <p>Following the accession of the subordinate states of Kharan, Las Bela and Makran and the
+      movement of Pakistani troops, the Khan of Kalat signs an instrument of accession. His brother,
+      Prince Abdul Karim, takes to the hills — the first of the insurgencies.</p></div></div>
+
+      <div class="tev hot"><div class="td">1952</div><div class="tc"><h4>Sui</h4>
+      <p>Pakistan's largest natural gas field is discovered in Dera Bugti district. Gas is piped to
+      Punjab and Sindh from the mid-1950s. Most of Balochistan, including districts adjacent to the
+      field, waited decades for connection; large parts remain unconnected.</p></div></div>
+
+      <div class="tev"><div class="td">1958 · 1963–69</div><div class="tc"><h4>Second and third insurgencies</h4>
+      <p>The One Unit scheme dissolving the provinces and the arrest of the Khan of Kalat trigger a
+      rising under the octogenarian Nawab Nauroz Khan; he surrenders on assurances and his companions
+      are hanged in 1960. A longer guerrilla campaign follows through the 1960s under Sher Muhammad
+      Marri.</p></div></div>
+
+      <div class="tev red"><div class="td">1973–1977</div><div class="tc"><h4>The fourth war</h4>
+      <p>The federal government dismisses the elected National Awami Party provincial government. The
+      resulting insurgency draws in tens of thousands of troops, supported at points by Iranian
+      helicopters. Casualty estimates run into the thousands on both sides. It ends after the 1977
+      coup, with an amnesty.</p></div></div>
+
+      <div class="tev"><div class="td">2004–05</div><div class="tc"><h4>Sui, again</h4>
+      <p>The alleged rape of Dr Shazia Khalid, a doctor at the Sui gas facility, and the handling of
+      the case become a national controversy and a proximate trigger for renewed armed conflict in
+      Dera Bugti. Attacks on gas infrastructure and military operations escalate together.</p></div></div>
+
+      <div class="tev red"><div class="td">26 AUG 2006</div><div class="tc"><h4>Nawab Akbar Bugti is killed</h4>
+      <p>The former governor and chief minister of Balochistan, then in his late seventies, is killed
+      in a military operation in a cave complex in Kohlu district. His death converts a regional
+      conflict into a generational one; recruitment to armed groups rises sharply afterwards.</p></div></div>
+
+      <div class="tev hot"><div class="td">2009 —</div><div class="tc"><h4>The camp outside the press club</h4>
+      <p>After the abduction and killing of Baloch National Movement leader Ghulam Mohammad Baloch and
+      two colleagues, families begin a protest camp outside the Quetta Press Club under the Voice for
+      Baloch Missing Persons. It has now run for more than sixteen years and is among the longest
+      continuous sit-ins anywhere in the world.</p></div></div>
+
+      <div class="tev red"><div class="td">2011</div><div class="tc"><h4>"We Can Torture, Kill, or Keep You for Years"</h4>
+      <p>Human Rights Watch publishes a report documenting enforced disappearances in Balochistan and
+      the pattern that Baloch families call kill-and-dump: a person is taken, and weeks or months later
+      a body is recovered bearing marks of custody, with no acknowledgement of detention.</p></div></div>
+
+      <div class="tev"><div class="td">2013–14</div><div class="tc"><h4>The long walk · and the graves at Tootak</h4>
+      <p>Abdul Qadeer Baloch — Mama Qadeer — then in his seventies, walks from Quetta to Karachi and on
+      to Islamabad, close to two thousand kilometres over four months, with Farzana Majeed Baloch and
+      families of the missing. In January 2014 mass graves are found at Tootak in Khuzdar district;
+      accounts of the number of bodies vary widely and no full identification followed.</p></div></div>
+
+      <div class="tev"><div class="td">2015 —</div><div class="tc"><h4>CPEC and Gwadar</h4>
+      <p>The China–Pakistan Economic Corridor is formalised, with Gwadar as its maritime terminus.
+      Local fishing communities protest restricted access to the sea, trawler licensing, water and
+      electricity shortages and security fencing. The Gwadar Ko Haq Do movement of 2021–22 mobilises
+      tens of thousands around these demands.</p></div></div>
+
+      <div class="tev red"><div class="td">21 DEC 2020</div><div class="tc"><h4>Karima Baloch</h4>
+      <p>The exiled activist and former chair of the Baloch Students Organisation–Azad is found dead in
+      Toronto. Canadian police state they do not consider the death suspicious; her family and the
+      Baloch movement reject that conclusion. Her death follows that of the journalist Sajid Hussain,
+      found dead in Sweden earlier the same year.</p></div></div>
+
+      <div class="tev hot"><div class="td">DEC 2023</div><div class="tc"><h4>The Baloch Long March</h4>
+      <p>The killing of Balaach Mola Bakhsh in Turbat in November 2023, days after his family said he
+      had been taken by the Counter Terrorism Department, triggers a women-led march of roughly 1,600
+      kilometres from Kech to Islamabad. Marchers are met with water cannon and mass detention in the
+      capital. Dr Mahrang Baloch emerges as its central figure.</p></div></div>
+
+      <div class="tev red"><div class="td">MAR 2025</div><div class="tc"><h4>The Jaffar Express · and the crackdown</h4>
+      <p>An armed group hijacks a passenger train in the Bolan pass, taking hundreds of civilians
+      hostage; the siege ends with substantial loss of life. In the crackdown that follows, Baloch
+      Yakjehti Committee leaders are detained after a Quetta sit-in at which the BYC says police fire
+      killed three protesters, including a twelve-year-old. Mahrang Baloch is taken into custody on 22
+      March 2025.</p></div></div>
+
+      <div class="tev"><div class="td">JUN 2025</div><div class="tc"><h4>Section 11-EEEE</h4>
+      <p>The Anti-Terrorism (Balochistan Amendment) Act inserts a preventive detention provision
+      permitting a notified detaining authority — and, where the relevant section is invoked, the armed
+      forces and intelligence agencies — to order detention without the ordinary judicial safeguards.</p></div></div>
+
+      <div class="tev red"><div class="td">22 JUN 2026</div><div class="tc"><h4>Life imprisonment</h4>
+      <p>An anti-terrorism court sentences Dr Mahrang Baloch and Sibghatullah Shahji to life
+      imprisonment over the death of a paramilitary soldier at a July 2024 protest in Gwadar, on a case
+      theory of incitement through speech. The trial is held inside Hudda Jail in Quetta with
+      journalists and civil society excluded; both defendants boycotted it and deny the charges. In
+      August 2026 a petition is filed with the UN Working Group on Arbitrary Detention.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FILES ═══════════ -->
+<section id="files">
+  <div class="wrap">
+    <div class="slab rv">Case files</div>
+    <h2 class="sec rv">TWELVE FILES</h2>
+    <p class="sub rv">Filter by category. Open any file for the full record.</p>
+
+    <div class="filters rv">
+      <button class="fbtn on" data-f="all">All</button>
+      <button class="fbtn" data-f="extract">Extraction</button>
+      <button class="fbtn" data-f="missing">The disappeared</button>
+      <button class="fbtn" data-f="arms">Armed conflict</button>
+      <button class="fbtn" data-f="refusal">Refusal</button>
+    </div>
+
+    <div class="grid rv" id="grid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONY ═══════════ -->
+<section id="voice">
+  <div class="wrap">
+    <div class="slab rv">Testimony &amp; authorship</div>
+    <h2 class="sec rv">THE ARCHIVE IS<br>KEPT BY SISTERS</h2>
+    <p class="sub rv">The most complete record of Balochistan's disappeared is not held by any state,
+    university or international body. It is held by women who have been carrying photographs of their
+    relatives for two decades, and it is the reason any of the other numbers exist at all.</p>
+
+    <div class="testimony rv">
+      <div class="tcell">
+        <blockquote>A bank employee in his seventies walked two thousand kilometres because his son's body had been returned to him and nobody would say by whom.</blockquote>
+        <cite>On Abdul Qadeer Baloch — Mama Qadeer<br>Founder of the Voice for Baloch Missing Persons; his son Jalil Reki was taken in 2009 and his body returned in 2011. He died in December 2025.</cite>
+      </div>
+      <div class="tcell">
+        <blockquote>She was sixteen when her father was taken. She became a doctor, and then she became the reason the state needed an anti-terrorism court.</blockquote>
+        <cite>On Dr Mahrang Baloch<br>Founder of the Baloch Yakjehti Committee; nominated for the 2025 Nobel Peace Prize; sentenced to life imprisonment on 22 June 2026 after a trial held inside a prison.</cite>
+      </div>
+      <div class="tcell">
+        <blockquote>The movement's defining tactic is a woman standing in a public square holding a photograph. That is why the charge had to be terrorism — nothing else would fit.</blockquote>
+        <cite>GSS analytical note<br>on the prosecution of BYC leaders under the Anti-Terrorism Act for speech at a protest</cite>
+      </div>
+      <div class="tcell">
+        <blockquote>Two exiles died abroad in one year, in two of the safest countries on earth, and both families rejected the official findings.</blockquote>
+        <cite>On Sajid Hussain, found dead in Sweden in 2020, and Karima Baloch, found dead in Toronto in December 2020<br>Recorded here as contested, not concluded</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SOURCES ═══════════ -->
+<section id="sources">
+  <div class="wrap">
+    <div class="slab rv">Document registry</div>
+    <h2 class="sec rv">THE RECORD</h2>
+    <p class="sub rv">Locatable primary and secondary sources. State documents are held as evidence of
+    state reasoning, not as neutral description.</p>
+
+    <div class="tbl-scroll rv">
+      <table class="tbl">
+        <thead><tr><th style="width:86px">Year</th><th>Document</th><th>Author / Body</th><th style="width:150px">Class</th></tr></thead>
+        <tbody>
+          <tr><td class="y">1948</td><td class="t">Instrument of Accession of the Khanate of Kalat</td><td>Khan of Kalat / Government of Pakistan</td><td>Instrument</td></tr>
+          <tr><td class="y">1973</td><td class="t">Constitution of Pakistan — Articles 172–173 and the Concurrent List (later amended)</td><td>Parliament of Pakistan</td><td>Constitution</td></tr>
+          <tr><td class="y">1997</td><td class="t">Anti-Terrorism Act</td><td>Parliament of Pakistan</td><td>Statute</td></tr>
+          <tr><td class="y">2010</td><td class="t">Eighteenth Amendment (devolution of subjects to the provinces)</td><td>Parliament of Pakistan</td><td>Constitutional amendment</td></tr>
+          <tr><td class="y">2011</td><td class="t">"We Can Torture, Kill, or Keep You for Years": Enforced Disappearances by Pakistan Security Forces in Balochistan</td><td>Human Rights Watch</td><td>NGO report</td></tr>
+          <tr><td class="y">2011 —</td><td class="t">Commission of Inquiry on Enforced Disappearances — monthly and annual progress reports</td><td>Government of Pakistan</td><td>State statistics</td></tr>
+          <tr><td class="y">2012</td><td class="t">Suo motu proceedings on the Balochistan law and order situation</td><td>Supreme Court of Pakistan</td><td>Judicial proceedings</td></tr>
+          <tr><td class="y">2013</td><td class="t">Reko Diq / Tethyan Copper Company arbitration proceedings (ICSID)</td><td>ICSID / Government of Pakistan</td><td>Arbitration</td></tr>
+          <tr><td class="y">2019</td><td class="t">Working Group on Enforced or Involuntary Disappearances — country communications on Pakistan</td><td>UN Human Rights Council</td><td>UN mechanism</td></tr>
+          <tr><td class="y">2023</td><td class="t">Baloch Long March — case dossiers submitted to authorities in Islamabad</td><td>Baloch Yakjehti Committee</td><td>Civil society record</td></tr>
+          <tr><td class="y">2025</td><td class="t">Anti-Terrorism (Balochistan Amendment) Act, inserting Section 11-EEEE</td><td>Provincial Assembly of Balochistan</td><td>Statute</td></tr>
+          <tr><td class="y">2025</td><td class="t">Fact-finding mission report on the human rights situation in Balochistan</td><td>Human Rights Commission of Pakistan (HRCP)</td><td>NGO report</td></tr>
+          <tr><td class="y">2025</td><td class="t">Annual monitoring reports on enforced disappearances and killings</td><td>Paank (BNM) &amp; Human Rights Council of Balochistan</td><td>Civil society monitoring</td></tr>
+          <tr><td class="y">2026</td><td class="t">Judgment and sentence, Anti-Terrorism Court, Quetta (22 June)</td><td>Anti-Terrorism Court, Balochistan</td><td>Judgment</td></tr>
+          <tr><td class="y">2026</td><td class="t">Petition to the UN Working Group on Arbitrary Detention in the case of Dr Mahrang Baloch (5 August)</td><td>HRF, Freedom House &amp; Hindus for Human Rights</td><td>UN submission</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ETHICS ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="slab rv">Method &amp; ethics</div>
+    <h2 class="sec rv">WHAT THIS<br>ARCHIVE REFUSES</h2>
+    <div class="ethic rv">
+      <h4>Standing rules for Collection 08</h4>
+      <p><strong style="color:var(--sand);font-weight:400">1. No images of returned bodies.</strong>
+      Photographs of mutilated remains circulate widely in Baloch advocacy, and families have their own
+      reasons for circulating them. This archive is not the family, and reproducing them here would
+      make a spectacle of what is, for those families, evidence.</p>
+      <p><strong style="color:var(--sand);font-weight:400">2. Counts are always attributed to the
+      counter.</strong> No figure in this collection appears without the body that produced it and the
+      unit it measures. Where numbers conflict, the conflict is displayed rather than resolved.</p>
+      <p><strong style="color:var(--sand);font-weight:400">3. Attacks on civilians by armed groups are
+      violations, not context.</strong> The Jaffar Express hijacking, the killing of bus passengers
+      after identity checks, and attacks on coal miners and teachers are entries in this archive on the
+      same footing as state violence. A liberation claim does not license a hostage-taking, and an
+      archive that treats one as background to the other is producing propaganda.</p>
+      <p><strong style="color:var(--sand);font-weight:400">4. We do not adjudicate independence.</strong>
+      The Baloch national question is for Baloch people to settle. This collection documents enforced
+      disappearance, extraction without consent, and the criminalisation of peaceful assembly — none of
+      which becomes acceptable under any answer to the sovereignty question.</p>
+      <p><strong style="color:var(--sand);font-weight:400">5. Sources at risk are protected.</strong>
+      Activists in Balochistan and in the diaspora have been killed. Where a source has chosen
+      publicity — as the BYC and VBMP have, deliberately and at cost — we name them. Where a source has
+      not, we do not, and we do not aggregate details that would identify them.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h5>Global South Solidarities</h5>
+        <p>A decolonial feminist digital humanities anarchive. Collection 08 reads Balochistan as a
+        case of internal colonialism with a documented balance sheet.</p>
+      </div>
+      <div>
+        <h5>This collection</h5>
+        <ul><li>08 — The Manifest</li><li>Balochistan: extraction &amp; disappearance</li>
+        <li>Status: open · working file</li><li>Figures current to August 2026</li></ul>
+      </div>
+      <div>
+        <h5>Related collections</h5>
+        <ul><li>04 — The Unwritten Ledger</li><li>05 — The ISN Registry</li><li>06 — The Paper Trail</li><li>07 — The Half-Widow's Archive</li></ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>GSS Anarchive · Collection 08 · Delhi</span>
+      <span>Hand-authored · zero dependencies · MMXXVI</span>
+    </div>
+  </div>
+</footer>
+
+<div id="modal"><div class="mbox">
+  <button class="mclose" id="mclose">CLOSE ✕</button>
+  <div class="mno" id="mno"></div>
+  <h3 id="mtitle"></h3>
+  <div class="mplace" id="mplace"></div>
+  <dl id="mrows"></dl>
+  <div class="mnote" id="mnote"></div>
+</div></div>
+
+<script>
+const FILES=[
+ {no:'F-08/01',cat:'refusal',t:'The Accession of Kalat',p:'27 March 1948 · Khanate of Kalat',
+  s:'A princely state that declared independence, debated accession in its own parliament, declined it, and acceded anyway eight months later.',
+  rows:[['Status','Kalat had been a princely state under British paramountcy since the nineteenth century, administered through tribal intermediaries rather than direct rule.'],
+        ['Independence','On 11 August 1947, three days before the creation of Pakistan, Kalat declared independence. A standstill agreement with Pakistan was concluded the same month.'],
+        ['Its parliament','Both houses of the Kalat legislature debated accession over the following months and declined it, favouring a treaty relationship covering defence, foreign affairs and communications.'],
+        ['The sequence','In March 1948 the subordinate states of Kharan, Las Bela and Makran acceded separately to Pakistan. With Kalat\'s territory reduced and troops moving, the Khan signed on 27 March 1948.'],
+        ['Immediate consequence','The Khan\'s brother, Prince Abdul Karim, refused the accession and took to the hills with a small force — the first Baloch insurgency, in the year of accession itself.']],
+  note:'Baloch nationalist historiography treats this as a coerced accession; Pakistani constitutional history treats it as a completed legal act. The archive does not have to choose in order to record the operative fact: within weeks of the signature, the state was conducting military operations against the population it had just acquired, and it has not stopped for long since.'},
+
+ {no:'F-08/02',cat:'extract',t:'Sui',p:'Dera Bugti district · gas from 1952',
+  s:'Pakistan\'s largest gas field. It heated Punjab for decades before it heated the district it sits in.',
+  rows:[['Discovery','The Sui field was discovered in 1952 and became the backbone of Pakistan\'s energy supply, feeding industry and households in Punjab and Sindh from the mid-1950s.'],
+        ['Local supply','Districts of Balochistan adjoining and downstream of the field went without piped gas for decades. Connection rates across the province remain the lowest in the country, and unconnected districts are common.'],
+        ['Royalties','Provincial gas royalty formulas have been a standing grievance, with Balochistan governments arguing that wellhead pricing and royalty arrangements systematically undervalued its resource relative to other provinces.'],
+        ['2005','The alleged rape of Dr Shazia Khalid, employed at the Sui facility, and the federal handling of the case became a national political crisis and a proximate trigger of renewed armed conflict in Dera Bugti.'],
+        ['Security','Attacks on the gas infrastructure and pipelines, and military operations to protect it, have run in parallel since 2005.']],
+  note:'Sui is the file that makes the manifest legible. A gas field in one of the poorest districts of the poorest province supplied the industrial heartland for half a century while the district burned wood. No amount of insurgency-and-counter-insurgency framing survives contact with the pipeline map: the direction of flow is the politics.'},
+
+ {no:'F-08/03',cat:'arms',t:'Five Operations',p:'1948 · 1958–59 · 1963–69 · 1973–77 · 2004 —',
+  s:'The province has been the site of five distinct military campaigns in seventy-eight years. This is the pattern the archive is built to hold.',
+  rows:[['First · 1948','Prince Abdul Karim\'s revolt immediately following accession; suppressed within months.'],
+        ['Second · 1958–59','Triggered by the One Unit scheme abolishing the provinces and the arrest of the Khan of Kalat. Led by Nawab Nauroz Khan, in his eighties; he surrendered on assurances of safe conduct and several of his companions, including family members, were hanged in 1960.'],
+        ['Third · 1963–69','A guerrilla campaign in the Marri and Mengal areas under Sher Muhammad Marri, ended by a general amnesty in 1969 alongside the dissolution of One Unit.'],
+        ['Fourth · 1973–77','The largest. The federal government dismissed the elected NAP provincial government; tens of thousands of troops were deployed with Iranian air support. It ended after the 1977 coup with an amnesty.'],
+        ['Fifth · 2004 —','Ongoing. Characterised by enforced disappearance rather than large-scale conventional deployment, and by armed groups conducting attacks on infrastructure, security forces and civilians.']],
+  note:'Four of the five began with a political act rather than an armed one — an abolished province, a dismissed elected government, an arrested ruler. The insurgency is consistently the response, not the cause, and each cycle has ended with an amnesty that resolved nothing structural, which is precisely why there has been a next one.'},
+
+ {no:'F-08/04',cat:'arms',t:'Nawab Akbar Bugti',p:'Kohlu district · 26 August 2006',
+  s:'A former governor and chief minister of the province, in his late seventies, killed in a military operation. The single event that most reshaped Baloch politics in this century.',
+  rows:[['Who','Nawab Akbar Shahbaz Khan Bugti, head of the Bugti tribe, formerly governor and chief minister of Balochistan, and a participant in national politics for decades.'],
+        ['Conflict','Relations with the federal government collapsed after 2005 over gas royalties, the Sui case, and the construction of new cantonments in the province.'],
+        ['Death','He was killed in a military operation on a cave complex in Kohlu district on 26 August 2006. Official accounts and Bugti family accounts of the circumstances differ.'],
+        ['Legal proceedings','A treason and murder case in connection with his death was pursued against General Pervez Musharraf and others; the accused were acquitted or discharged in proceedings concluding in 2016.'],
+        ['Effect','Recruitment to Baloch armed groups rose sharply afterwards, and the conflict\'s social base broadened from tribal areas into the urban and student middle class.']],
+  note:'The state\'s calculation was that removing a tribal figurehead would decapitate the movement. The opposite occurred, and the reason is in the demographics of what came after: the movement\'s centre of gravity moved from tribal chiefs to students, doctors and lawyers, and from armed struggle back toward mass mobilisation. Mahrang Baloch is fourteen years old at this entry.'},
+
+ {no:'F-08/05',cat:'missing',t:'The Camp',p:'Quetta Press Club · 2009 —',
+  s:'A protest camp begun by families of the disappeared. It has run for more than sixteen years and is among the longest continuous sit-ins recorded anywhere.',
+  rows:[['Origin','Established under the Voice for Baloch Missing Persons following the abduction and killing in April 2009 of Baloch National Movement leader Ghulam Mohammad Baloch and two colleagues.'],
+        ['Founder','Abdul Qadeer Baloch, known as Mama Qadeer — a retired bank employee who became an activist after his son Jalil Reki was taken in 2009. Jalil\'s body was returned in 2011.'],
+        ['Method','Families submit details of a missing relative to the VBMP, which compiles the case and forwards it to the Commission of Inquiry. The camp holds portraits of the missing.'],
+        ['The long march','In 2013–14 Mama Qadeer, Farzana Majeed Baloch and families walked from Quetta to Karachi and on to Islamabad — close to two thousand kilometres over four months.'],
+        ['Continuity','The camp passed sixteen years in 2025. Mama Qadeer died in December 2025.']],
+  note:'This is where the archive actually lives. Not in a repository, not in a university, not in a commission\'s filing system — in a tent with laminated photographs, maintained by relatives, in a city where maintaining it is dangerous. When international bodies cite Balochistan figures, they are citing, at two or three removes, work done at this camp.'},
+
+ {no:'F-08/06',cat:'missing',t:'Kill and Dump',p:'Province-wide · documented from 2010',
+  s:'The pattern named by families: a person is taken without acknowledgement, and weeks or months later a body is recovered bearing marks of custody.',
+  rows:[['Documentation','Human Rights Watch documented the pattern in its 2011 report on enforced disappearances by Pakistani security forces in Balochistan.'],
+        ['Mechanism','Detention is never acknowledged, so no habeas remedy attaches, no charge is filed, and no custodial record exists that could be produced in court. Recovery of the body ends the case without ever opening it.'],
+        ['Mass graves','In January 2014 mass graves were discovered at Tootak in Khuzdar district. Accounts of the number of bodies varied widely and no comprehensive forensic identification followed.'],
+        ['Forensic standard','The Minnesota Protocol on the Investigation of Potentially Unlawful Death requires preservation of remains, independent autopsy, DNA collection and transparent identification before burial. Baloch groups have repeatedly alleged that unidentified remains have been buried without these steps.'],
+        ['Recent monitoring','The Human Rights Council of Balochistan recorded 830 disappearances and 480 killings in 2024, of which it could identify 278 of the dead; 202 remained unidentified.']],
+  note:'The unidentified body and the unresolved disappearance are almost certainly, in many cases, the same person. Systematic DNA identification would close both files at once. It has not been undertaken, and the absence of a forensic programme therefore functions in exactly the way the absence of a custody record does — not as a shortfall in capacity but as the thing that keeps the case from existing.'},
+
+ {no:'F-08/07',cat:'extract',t:'Gwadar',p:'Makran coast · port from 2007, CPEC from 2015',
+  s:'A deep-water port built on a fishing town, operated under concession, in a district that has protested for water, electricity and access to its own sea.',
+  rows:[['History','Gwadar was under Omani sovereignty until 1958, when Pakistan purchased it. Port construction began in the early 2000s with Chinese assistance.'],
+        ['Operation','Port operations were transferred to a Chinese state port company in 2013, and Gwadar became the maritime terminus of the China–Pakistan Economic Corridor from 2015.'],
+        ['Local demands','The Gwadar Ko Haq Do movement of 2021–22, led by Maulana Hidayat ur Rehman, mobilised tens of thousands around drinking water, electricity, an end to illegal trawling in local waters, and removal of excessive security checkpoints.'],
+        ['Fishing','Small-boat fishers on the Makran coast have protested the licensing of large trawlers and restrictions on access to traditional fishing grounds imposed for port security.'],
+        ['Security','Extensive fencing and checkpoint regimes have been imposed around the port area, restricting movement of the local population.']],
+  note:'The Gwadar movement is the clearest available test of the "development will resolve it" thesis. The demands were water, power, fish and freedom of movement — not independence, not even royalties. They were met with negotiation, then with arrests. A state that cannot concede drinking water to a port city is not managing an insurgency; it is administering a colony and calling the result a corridor.'},
+
+ {no:'F-08/08',cat:'refusal',t:'The Long March',p:'Kech to Islamabad · December 2023 – January 2024',
+  s:'A 1,600-kilometre march led by women, triggered by a single killing, that changed who the Baloch movement was represented by.',
+  rows:[['Trigger','Balaach Mola Bakhsh was killed in Turbat in November 2023. His family stated he had been taken into custody by the Counter Terrorism Department weeks earlier; the CTD said he was killed in an exchange of fire.'],
+        ['The march','Families set out from Kech district and marched toward Islamabad, covering roughly 1,600 kilometres, arriving in the capital in late December 2023.'],
+        ['Reception','Marchers, largely women and including elderly relatives of the missing, were met in Islamabad with water cannon in winter and mass detentions.'],
+        ['Composition','Described by observers as among the largest women-led indigenous movements in South Asia. The BYC had already organised a large women-led long march in 2023.'],
+        ['Leadership','Dr Mahrang Baloch, a physician whose father was disappeared when she was sixteen and later found dead, emerged as its central public figure.']],
+  note:'Every previous phase of Baloch resistance was represented internationally by an armed group or a tribal leader, and could therefore be answered militarily. The Long March produced a movement led by doctors and students, overwhelmingly women, whose entire repertoire was walking and holding photographs. That the state\'s eventual answer was a terrorism conviction tells you it had no other answer available.'},
+
+ {no:'F-08/09',cat:'missing',t:'Mahrang Baloch',p:'Detained March 2025 · sentenced 22 June 2026',
+  s:'A physician and organiser sentenced to life imprisonment for a speech, after a trial held inside a prison from which press and public were excluded.',
+  rows:[['Background','Her father, a political activist, was forcibly disappeared when she was sixteen and later found dead. Her brother was subsequently taken and released. She qualified as a doctor and founded the Baloch Yakjehti Committee.'],
+        ['Recognition','Named in BBC 100 Women 2024 and TIME\'s 100 Emerging Leaders; barred from travelling abroad to receive the latter. Nominated for the 2025 Nobel Peace Prize.'],
+        ['Detention','Taken into custody on 22 March 2025 following a Quetta sit-in at which the BYC says police fire killed three protesters including a twelve-year-old. Held over three months under a public order ordinance, then on fresh FIRs and repeated police remand, then on judicial remand.'],
+        ['Conditions','She has stated she was held in prolonged solitary confinement in Hudda District Prison, Quetta.'],
+        ['Trial and sentence','Charges related to the death of a paramilitary soldier at a July 2024 protest in Gwadar, on a theory of incitement through speech. The trial was moved inside Hudda Jail and conducted partly by video link; she and co-defendant Sibghatullah Shahji boycotted it and denied the charges. Both were sentenced to life imprisonment on 22 June 2026.'],
+        ['International response','Amnesty International and Front Line Defenders have called for release. In August 2026 the Human Rights Foundation, Freedom House and Hindus for Human Rights petitioned the UN Working Group on Arbitrary Detention to declare the detention arbitrary.']],
+  note:'The mechanism deserves stating plainly, because it is portable and it is spreading. A charge of terrorism converts speech at a protest into liability for a death that occurred at it. An anti-terrorism court supplies a lower evidentiary threshold. Relocating the court inside a prison removes the public. Each step is individually defensible in procedural language, and the sequence produces a life sentence for a doctor who organised marches.'},
+
+ {no:'F-08/10',cat:'arms',t:'The Jaffar Express',p:'Bolan pass · March 2025',
+  s:'A passenger train hijacked with hundreds of civilians aboard. This file exists because an archive that omitted it would be an advocacy document.',
+  rows:[['The attack','An armed group stopped and seized a passenger train in the Bolan pass in March 2025, taking a large number of civilian passengers hostage. The siege ended after a military operation with substantial loss of life.'],
+        ['Pattern','It followed a series of incidents in which passengers were removed from buses on Balochistan highways, identity documents were checked, and people were killed on the basis of ethnicity or place of origin.'],
+        ['Other civilian targets','Coal miners, particularly from Shia Hazara and from Khyber Pakhtunkhwa communities, teachers, and labourers from Punjab have been repeatedly targeted in the province by armed groups.'],
+        ['Consequence','The attack was used to justify an intensified province-wide crackdown, in which BYC leaders and peaceful activists were among those detained.'],
+        ['Distinction','The BYC has consistently described itself as a non-violent movement and has denied organisational links to armed groups; the state\'s prosecutions have treated the distinction as immaterial.']],
+  note:'Two things are true and the archive holds both. Killing bus passengers after an identity check is a crime against civilians and no national grievance licenses it. And the state\'s response — mass detention of unarmed organisers — is not counter-terrorism; it is the use of an armed group\'s crime as a warrant against the peaceful movement that competes with it. Collapsing the two serves the armed group\'s recruitment argument exactly.'},
+
+ {no:'F-08/11',cat:'refusal',t:'The Exiles',p:'Sweden, Canada, Netherlands · 2020 —',
+  s:'Two Baloch exiles died abroad in 2020 in circumstances their families dispute. The diaspora is where the archive is kept, and it is not safe either.',
+  rows:[['Sajid Hussain','Editor of Balochistan Times, granted asylum in Sweden. He disappeared in March 2020 and was found dead in a river in April. Swedish police concluded there was no indication of a crime; his family and colleagues rejected the conclusion.'],
+        ['Karima Baloch','Former chair of the Baloch Students Organisation–Azad, named in BBC 100 Women 2016, granted asylum in Canada. She was found dead in Toronto in December 2020. Police stated the death was not considered suspicious; her family and the movement rejected this.'],
+        ['Pattern of pressure','Baloch activists abroad have reported surveillance, threats to relatives remaining in Pakistan, and pressure exerted through family members.'],
+        ['Effect on the record','Much Baloch documentation, journalism and translation is produced from exile. Threats to exiles are therefore threats to the archive itself.'],
+        ['Status','Both deaths remain contested. This collection records them as contested rather than concluded.']],
+  note:'Note what this file does to the methodology. Where documentation is produced by people who cannot safely be in the country they document, the archive inherits their exposure. That is why this collection anonymises where families ask and names where activists have deliberately chosen publicity — and why the distinction is a security practice rather than an editorial one.'},
+
+ {no:'F-08/12',cat:'extract',t:'Reko Diq',p:'Chagai district · reserved',
+  s:'One of the world\'s largest undeveloped copper and gold deposits, in the poorest district of the poorest province, under agreements negotiated far from it.',
+  rows:[['The deposit','Reko Diq in Chagai district holds copper and gold reserves ranked among the largest undeveloped deposits globally, with a projected mine life running for decades.'],
+        ['Saindak','The nearby Saindak copper-gold project has been operated under lease by a Chinese state enterprise since the early 2000s, with the provincial share of revenue a long-standing grievance.'],
+        ['Arbitration','The cancellation of an earlier mining lease led to international arbitration and an award against Pakistan running into billions of dollars, subsequently resolved through a negotiated settlement and a restructured project.'],
+        ['Local benefit','Chagai district ranks at or near the bottom of national human development and infrastructure measures. Chagai is also where Pakistan conducted its nuclear tests in 1998.'],
+        ['Consent','No mechanism of free, prior and informed consent for the affected population exists in the framework governing the project.']],
+  note:'Put the two Chagai facts beside each other, because they are the collection in miniature. The nation\'s nuclear tests were conducted in this district, and the nation\'s largest mineral deposit sits in it, and its people are among the poorest counted anywhere in the country. Peripheries are where states put the things they want the benefit of and not the consequences.'}
+];
+
+const grid=document.getElementById('grid');
+grid.innerHTML=FILES.map((f,i)=>`
+ <article class="card" data-i="${i}" data-cat="${f.cat}" tabindex="0">
+   <div class="cno">${f.no}</div>
+   <span class="ctag ${f.cat}">${f.cat==='extract'?'extraction':f.cat==='missing'?'the disappeared':f.cat==='arms'?'armed conflict':'refusal'}</span>
+   <h3>${f.t}</h3>
+   <div class="place">${f.p}</div>
+   <p>${f.s}</p>
+   <div class="more">Open file →</div>
+ </article>`).join('');
+
+const modal=document.getElementById('modal');
+function openFile(i){
+  const f=FILES[i];
+  document.getElementById('mno').textContent=f.no;
+  document.getElementById('mtitle').textContent=f.t;
+  document.getElementById('mplace').textContent=f.p;
+  document.getElementById('mrows').innerHTML=f.rows.map(r=>`<div class="mrow"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
+  document.getElementById('mnote').innerHTML='<strong style="font-style:normal;color:var(--turq);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;display:block;margin-bottom:9px">ARCHIVAL NOTE</strong>'+f.note;
+  modal.classList.add('open');document.body.style.overflow='hidden';
+}
+function closeFile(){modal.classList.remove('open');document.body.style.overflow=''}
+grid.addEventListener('click',e=>{const c=e.target.closest('.card');if(c)openFile(+c.dataset.i)});
+grid.addEventListener('keydown',e=>{if(e.key==='Enter'){const c=e.target.closest('.card');if(c)openFile(+c.dataset.i)}});
+document.getElementById('mclose').addEventListener('click',closeFile);
+modal.addEventListener('click',e=>{if(e.target===modal)closeFile()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFile()});
+
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');const f=b.dataset.f;
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hide',f!=='all'&&c.dataset.cat!==f));
+}));
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+addEventListener('scroll',()=>{const h=document.documentElement;
+  document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';},{passive:true});
+
+const dot=document.querySelector('.cur-dot'),ring=document.querySelector('.cur-ring');
+let rx=0,ry=0,tx=0,ty=0;
+addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;dot.style.left=tx+'px';dot.style.top=ty+'px'});
+(function loop(){rx+=(tx-rx)*.16;ry+=(ty-ry)*.16;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.addEventListener('mouseover',e=>{ring.classList.toggle('hot',!!e.target.closest('a,button,.card,.tev,.rc,.li'))});
+
+addEventListener('load',()=>setTimeout(()=>document.getElementById('boot').classList.add('done'),1400));
+</script>
+<script>
+/* ══════════ AX — ARCHIVE EXPERIENCE LAYER ══════════ */
+(function(){
+if(typeof FILES==='undefined')return;
+var COLL='08', CTITLE="The Manifest";
+var order=[], cur=-1;
+
+/* ---------- chapter rail ---------- */
+(function(){
+  var src=[].slice.call(document.querySelectorAll('.mast-nav a'));
+  if(!src.length)return;
+  var rail=document.createElement('nav');
+  rail.className='ax-rail'; rail.setAttribute('aria-label','Sections');
+  rail.innerHTML='<a href="#top" data-t="top"><span class="lbl">Top</span><span class="tk"></span></a>'+
+    src.map(function(a){return '<a href="'+a.getAttribute('href')+'" data-t="'+
+      a.getAttribute('href').slice(1)+'"><span class="lbl">'+a.textContent.trim()+
+      '</span><span class="tk"></span></a>';}).join('');
+  document.body.appendChild(rail);
+  var links=[].slice.call(rail.querySelectorAll('a'));
+  var secs=links.map(function(l){return document.getElementById(l.dataset.t);});
+  function mark(){
+    var y=scrollY+innerHeight*0.34, best=0;
+    secs.forEach(function(s,i){ if(s&&s.offsetTop<=y) best=i; });
+    if(scrollY<120) best=0;
+    links.forEach(function(l,i){ l.classList.toggle('on',i===best); });
+  }
+  addEventListener('scroll',mark,{passive:true}); mark();
+})();
+
+/* ---------- masthead key hint ---------- */
+(function(){
+  var mi=document.querySelector('.mast-in'); if(!mi)return;
+  var b=document.createElement('button');
+  b.className='ax-key';
+  b.innerHTML=(navigator.platform.indexOf('Mac')>-1?'⌘':'CTRL')+' K &nbsp;SEARCH ARCHIVE';
+  b.addEventListener('click',openPal);
+  mi.appendChild(b);
+})();
+
+/* ---------- filter counts + stagger ---------- */
+(function(){
+  document.querySelectorAll('.fbtn').forEach(function(b){
+    var f=b.dataset.f, n = f==='all' ? FILES.length
+      : FILES.filter(function(x){return x.cat===f;}).length;
+    b.insertAdjacentHTML('beforeend',' <span class="ct">'+n+'</span>');
+  });
+  document.querySelectorAll('.grid .card').forEach(function(c,i){
+    c.style.transition='background .25s'; c.style.transitionDelay=(i%9*28)+'ms';
+  });
+})();
+
+/* ---------- file viewer: footer, deep links, prev/next, citation ---------- */
+(function(){
+  var box=document.querySelector('.mbox'); if(!box)return;
+  var f=document.createElement('div');
+  f.className='ax-mfoot';
+  f.innerHTML='<button class="ax-mbtn" id="axPrev">← Previous file</button>'+
+    '<button class="ax-mbtn" id="axCite">Copy citation</button>'+
+    '<span class="ax-mcount" id="axCount"></span>'+
+    '<button class="ax-mbtn" id="axNext">Next file →</button>';
+  box.appendChild(f);
+  box.insertAdjacentHTML('beforeend',
+    '<div class="ax-hint">← → to move between files · ESC to close · link is shareable</div>');
+})();
+
+function visible(){
+  return [].slice.call(document.querySelectorAll('.grid .card:not(.hide)'))
+           .map(function(c){return +c.dataset.i;});
+}
+function refreshNav(i){
+  order=visible(); cur=order.indexOf(i);
+  var p=document.getElementById('axPrev'), n=document.getElementById('axNext'),
+      c=document.getElementById('axCount');
+  if(!p)return;
+  p.disabled = cur<=0; n.disabled = cur<0||cur>=order.length-1;
+  c.textContent = cur<0?'':(cur+1)+' / '+order.length+
+    (order.length<FILES.length?' IN FILTER':' IN COLLECTION');
+}
+
+var _open=window.openFile, _close=window.closeFile;
+window.openFile=function(i){
+  _open(i); refreshNav(i);
+  try{history.replaceState(null,'','#file='+encodeURIComponent(FILES[i].no));}catch(e){}
+  var b=document.querySelector('.mclose'); if(b)b.focus({preventScroll:true});
+};
+window.closeFile=function(){
+  _close(); cur=-1;
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+};
+
+document.addEventListener('click',function(e){
+  if(e.target.id==='axPrev'&&cur>0) openFile(order[cur-1]);
+  if(e.target.id==='axNext'&&cur>-1&&cur<order.length-1) openFile(order[cur+1]);
+  if(e.target.id==='axCite') cite();
+});
+document.addEventListener('keydown',function(e){
+  var m=document.getElementById('modal');
+  if(!m||!m.classList.contains('open'))return;
+  if(e.key==='ArrowLeft'&&cur>0) openFile(order[cur-1]);
+  if(e.key==='ArrowRight'&&cur>-1&&cur<order.length-1) openFile(order[cur+1]);
+});
+
+function strip(s){var d=document.createElement('div');d.innerHTML=s;return d.textContent;}
+function cite(){
+  if(cur<0)return;
+  var f=FILES[order[cur]];
+  var d=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  var t='Global South Solidarities. \u201C'+strip(f.t)+'\u201D, file '+f.no+
+    '. In \u2018'+CTITLE+'\u2019, GSS Anarchive, Collection '+COLL+
+    '. Accessed '+d+'. '+location.origin+location.pathname+'#file='+encodeURIComponent(f.no);
+  copy(t,'Citation copied');
+}
+function copy(t,msg){
+  var done=function(){toast(msg);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)
+    navigator.clipboard.writeText(t).then(done,function(){fallback(t,done);});
+  else fallback(t,done);
+}
+function fallback(t,cb){
+  var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity=0;
+  document.body.appendChild(a);a.select();try{document.execCommand('copy');cb();}catch(e){}
+  document.body.removeChild(a);
+}
+var tt;
+function toast(m){
+  var el=document.getElementById('ax-toast');
+  if(!el){el=document.createElement('div');el.id='ax-toast';document.body.appendChild(el);}
+  el.textContent=m; el.classList.add('on');
+  clearTimeout(tt); tt=setTimeout(function(){el.classList.remove('on');},2000);
+}
+
+/* ---------- command palette ---------- */
+var pal=document.createElement('div');
+pal.id='ax-pal';
+pal.innerHTML='<div class="ax-pbox"><div class="ax-pin"><span>QUERY</span>'+
+ '<input id="axQ" placeholder="Search case files, sections, places\u2026" autocomplete="off" spellcheck="false"></div>'+
+ '<div class="ax-plist" id="axL"></div>'+
+ '<div class="ax-pfoot"><span>\u2191\u2193 NAVIGATE</span><span>\u21B5 OPEN</span><span>ESC CLOSE</span>'+
+ '<span>COLLECTION '+COLL+'</span></div></div>';
+document.body.appendChild(pal);
+var q=pal.querySelector('#axQ'), list=pal.querySelector('#axL'), sel=0, rows=[];
+
+function corpus(){
+  var out=FILES.map(function(f,i){
+    return {k:f.no,v:strip(f.t),s:strip(f.p),blob:(f.no+' '+f.t+' '+f.p+' '+f.s+' '+f.cat).toLowerCase(),
+            go:function(){closePal();openFile(i);}};
+  });
+  document.querySelectorAll('.mast-nav a').forEach(function(a){
+    var id=a.getAttribute('href');
+    out.push({k:'SECTION',v:a.textContent.trim(),s:'Jump to section',
+      blob:('section '+a.textContent).toLowerCase(),
+      go:function(){closePal();var t=document.querySelector(id);if(t)t.scrollIntoView({behavior:'smooth'});}});
+  });
+  return out;
+}
+var ALL=corpus();
+function render(){
+  var v=q.value.trim().toLowerCase();
+  rows=v? ALL.filter(function(r){return r.blob.indexOf(v)>-1;}) : ALL.slice(0,10);
+  sel=0;
+  list.innerHTML = rows.length ? rows.map(function(r,i){
+    return '<div class="ax-pi'+(i===0?' sel':'')+'" data-i="'+i+'"><div class="k">'+r.k+
+      '</div><div class="v">'+r.v+'<s>'+r.s+'</s></div></div>';}).join('')
+    : '<div class="ax-empty">NO MATCH IN THIS COLLECTION.</div>';
+}
+function openPal(){pal.classList.add('on');q.value='';render();q.focus();document.body.style.overflow='hidden';}
+function closePal(){pal.classList.remove('on');document.body.style.overflow='';}
+q.addEventListener('input',render);
+list.addEventListener('click',function(e){
+  var r=e.target.closest('.ax-pi'); if(r&&rows[+r.dataset.i]) rows[+r.dataset.i].go();
+});
+addEventListener('keydown',function(e){
+  var on=pal.classList.contains('on');
+  if((e.key==='k'||e.key==='K')&&(e.metaKey||e.ctrlKey)){e.preventDefault();on?closePal():openPal();return;}
+  if(e.key==='/'&&!on&&!/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){
+    var m=document.getElementById('modal');
+    if(m&&m.classList.contains('open'))return;
+    e.preventDefault();openPal();return;
+  }
+  if(!on)return;
+  if(e.key==='Escape'){e.preventDefault();closePal();}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault(); if(!rows.length)return;
+    sel=(sel+(e.key==='ArrowDown'?1:-1)+rows.length)%rows.length;
+    [].forEach.call(list.children,function(c,i){c.classList.toggle('sel',i===sel);});
+    var el=list.children[sel]; if(el&&el.scrollIntoView)el.scrollIntoView({block:'nearest'});
+  }
+  if(e.key==='Enter'&&rows[sel]) rows[sel].go();
+});
+pal.addEventListener('click',function(e){if(e.target===pal)closePal();});
+
+/* ---------- open from a shared link ---------- */
+addEventListener('load',function(){
+  var m=/#file=([^&]+)/.exec(location.hash); if(!m)return;
+  var no=decodeURIComponent(m[1]);
+  var i=FILES.findIndex(function(f){return f.no===no;});
+  if(i>-1) setTimeout(function(){openFile(i);},1600);
+});
+
+/* ---------- filter changes keep nav honest ---------- */
+document.querySelectorAll('.fbtn').forEach(function(b){
+  b.addEventListener('click',function(){ if(cur>-1) refreshNav(order[cur]); });
+});
+})();
+</script>
+<script>
+
+(function(){
+ var man=document.querySelector('.man'), unman=man&&man.querySelector('.unman');
+ if(!man||!unman)return;
+ var t=document.createElement('div'); t.className='man-tools';
+ t.innerHTML='<button data-v="both" class="on">Both columns</button>'+
+  '<button data-v="out">Outbound only</button>'+
+  '<button data-v="in">Inbound only</button>'+
+  '<div class="man-read" id="manR">Seventy-eight years of freight. Isolate a column to read the direction of travel on its own.</div>';
+ man.insertBefore(t, unman);
+ var o=man.querySelector('.man-col.out'), i=man.querySelector('.man-col.in'),
+     R=document.getElementById('manR');
+ var msg={
+  both:'Seventy-eight years of freight. Isolate a column to read the direction of travel on its own.',
+  out:'<em>Outbound.</em> Gas from 1952, copper from 2002, a deep-water port from 2007. Every line has a lease, a concession or a contract \u2014 all of them negotiated somewhere other than here.',
+  in:'<em>Inbound.</em> Five military operations, a permanent paramilitary deployment, internment centres, and a preventive-detention clause added in 2025. Every line has an order behind it.'
+ };
+ t.addEventListener('click',function(e){
+   var b=e.target.closest('button[data-v]'); if(!b)return;
+   t.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+   b.classList.add('on'); var v=b.dataset.v;
+   o.classList.toggle('dim', v==='in'); i.classList.toggle('dim', v==='out');
+   R.innerHTML=msg[v];
+ });
+})();
+
+</script>
+</body>
+</html>
