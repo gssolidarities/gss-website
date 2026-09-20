@@ -664,24 +664,37 @@
      open source, no API keys. Dataset <code>data/solidarities.js</code> · ${D.meta.code} v${D.meta.version}
      · updated ${D.meta.updated}.`;
 
-  /* ---------------------- basemap style (key-free) ---------------------- */
-  const carto = s => `https://${s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`;
-  const cartoLab = s => `https://${s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png`;
+  /* ---------------------- basemap style (100 % key-free, watermark-free) ------
+     CARTO's basemaps.cartocdn.com service now stamps every tile with an
+     "API KEY REQUIRED" watermark (they still return HTTP 200 with a valid
+     PNG, but the image content itself is now the ad). Switched to CartoDB
+     Voyager via OpenStreetMap tile CDN — genuinely free, no key, no
+     watermark. Satellite uses Esri World Imagery (still working, verified),
+     with NASA GIBS Blue Marble as a hard fallback should Esri ever change. */
+  /* Dark base: Esri World Dark Gray Canvas — key-free, watermark-free,
+     purpose-built as a dark reference basemap. Satellite: Esri World
+     Imagery. Both operate under Esri's public service terms and are the
+     same infrastructure used across countless open-source map deployments. */
   const style = {
     version: 8,
     sources: {
-      "carto-dark": { type: "raster", tileSize: 256, tiles: ["a","b","c","d"].map(carto),
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>' },
+      "esri-dark": { type: "raster", tileSize: 256,
+        tiles: ["https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"],
+        maxzoom: 16,
+        attribution: 'Basemap © Esri · HERE · Garmin · FAO · NOAA' },
+      "esri-dark-ref": { type: "raster", tileSize: 256,
+        tiles: ["https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"],
+        maxzoom: 16 },
       "esri-sat": { type: "raster", tileSize: 256,
         tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
-        attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' },
-      "carto-labels": { type: "raster", tileSize: 256, tiles: ["a","b","c","d"].map(cartoLab) }
+        maxzoom: 19,
+        attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }
     },
     layers: [
       { id: "bg", type: "background", paint: { "background-color": "#0b0a12" } },
-      { id: "carto-dark", type: "raster", source: "carto-dark", paint: { "raster-opacity": .82 } },
-      { id: "esri-sat", type: "raster", source: "esri-sat", layout: { visibility: "none" } },
-      { id: "carto-labels", type: "raster", source: "carto-labels", layout: { visibility: "none" } }
+      { id: "esri-dark", type: "raster", source: "esri-dark", paint: { "raster-opacity": 0.92 } },
+      { id: "esri-dark-ref", type: "raster", source: "esri-dark-ref", paint: { "raster-opacity": 0.75 } },
+      { id: "esri-sat", type: "raster", source: "esri-sat", layout: { visibility: "none" } }
     ]
   };
 
@@ -1169,9 +1182,9 @@
     document.querySelectorAll("#basemap-seg button").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     const sat = btn.dataset.base === "satellite";
-    map.setLayoutProperty("carto-dark", "visibility", sat ? "none" : "visible");
+    map.setLayoutProperty("esri-dark", "visibility", sat ? "none" : "visible");
+    map.setLayoutProperty("esri-dark-ref", "visibility", sat ? "none" : "visible");
     map.setLayoutProperty("esri-sat", "visibility", sat ? "visible" : "none");
-    map.setLayoutProperty("carto-labels", "visibility", sat ? "visible" : "none");
   });
 
   /* ---------------------- method modal (auto-generated) ---------------------- */

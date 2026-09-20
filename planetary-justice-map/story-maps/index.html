@@ -398,24 +398,28 @@
     const fmtLL = (lat, lng, p) =>
       `${fx(Math.abs(lat), p==null?4:p)}°${lat>=0?"N":"S"} ${fx(Math.abs(lng), p==null?4:p)}°${lng>=0?"E":"W"}`;
 
-    /* basemap style (key-free) */
-    const carto = sd => `https://${sd}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`;
-    const cartoLab = sd => `https://${sd}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png`;
+    /* basemap: Esri World Dark Gray Canvas + Esri World Imagery.
+       Key-free, watermark-free, and the same infrastructure Esri publishes
+       for open-source consumers. Replaces CARTO whose free tiles are now
+       stamped with an "API KEY REQUIRED" watermark. */
     const style = {
       version: 8,
       sources: {
-        "dark": { type:"raster", tileSize:256, tiles:["a","b","c","d"].map(carto),
-          attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>' },
+        "dark": { type:"raster", tileSize:256,
+          tiles:["https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"],
+          maxzoom:16, attribution:'Basemap © Esri · HERE · Garmin · FAO · NOAA' },
+        "dark-ref": { type:"raster", tileSize:256,
+          tiles:["https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"],
+          maxzoom:16 },
         "sat": { type:"raster", tileSize:256,
           tiles:["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
-          attribution:'Imagery © Esri, Maxar, Earthstar Geographics' },
-        "lab": { type:"raster", tileSize:256, tiles:["a","b","c","d"].map(cartoLab) }
+          maxzoom:19, attribution:'Imagery © Esri, Maxar, Earthstar Geographics' }
       },
       layers: [
         { id:"bg", type:"background", paint:{ "background-color":"#0b0a12" } },
-        { id:"dark", type:"raster", source:"dark", paint:{ "raster-opacity":.85 } },
-        { id:"sat", type:"raster", source:"sat", layout:{ visibility:"none" } },
-        { id:"lab", type:"raster", source:"lab", layout:{ visibility:"none" } }
+        { id:"dark", type:"raster", source:"dark", paint:{ "raster-opacity":.92 } },
+        { id:"dark-ref", type:"raster", source:"dark-ref", paint:{ "raster-opacity":.7 } },
+        { id:"sat", type:"raster", source:"sat", layout:{ visibility:"none" } }
       ]
     };
     const map = new maplibregl.Map({
@@ -428,9 +432,9 @@
     function setBasemap(kind){
       const sat = kind === "satellite";
       map.setLayoutProperty("dark","visibility", sat?"none":"visible");
+      map.setLayoutProperty("dark-ref","visibility", sat?"none":"visible");
       map.setLayoutProperty("sat","visibility", sat?"visible":"none");
-      map.setLayoutProperty("lab","visibility", sat?"visible":"none");
-    }
+          }
 
     /* markers + route */
     let markers = [];
