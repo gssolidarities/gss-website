@@ -3,282 +3,367 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frames — GSS Visual Archive</title>
-  <meta name="description" content="Panels of refusal, reels of record — justice-driven manga and documentary film curated by Global South Solidarities." />
+  <title>GSS·Frames — Vol. 01 · Takaya</title>
+  <meta name="description" content="GSS·Frames — a room for justice-driven manga and documentary film. Vol. 1 original: TAKAYA (Khartoum, 2023–2025). A short curated library is on its way." />
+  <meta property="og:title" content="GSS·Frames — Vol. 01" />
+  <meta property="og:description" content="Panels of refusal, reels of record. First original: Takaya." />
+  <meta property="og:image" content="/frames/takaya/cover.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+JP:wght@400;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bangers&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   />
   <style>
     :root {
-      --bg: #0b0a0c;
-      --bg-2: #141217;
-      --bg-3: #1a1820;
+      --bg: #0a0809;
+      --bg-2: #131014;
+      --bg-3: #1a161c;
+      --paper: #f6f0e5;
       --text: #f6f0e5;
       --dim: #c9c0b2;
       --faint: #867c6d;
-      --accent: #ed9a44;
-      --accent-2: #e58438;
-      --line: #2a2630;
-      --line-2: #3c3745;
+      --accent: #ed9a44;       /* GSS ochre */
+      --fire: #f07a1a;         /* Takaya cover orange */
       --crimson: #c0190f;
+      --line: #28242e;
+      --line-2: #3c3745;
       --display: 'Fraunces', serif;
+      --manga: 'Bangers', 'Impact', sans-serif;
       --mono: 'IBM Plex Mono', monospace;
-      --jp: 'Noto Serif JP', serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg); color: var(--text);
       font-family: var(--display);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
     img { max-width: 100%; display: block; }
+
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      opacity: 0.05; mix-blend-mode: screen;
+      background-image: radial-gradient(circle at center, rgba(255,255,255,0.4) 1px, transparent 1.5px);
+      background-size: 3px 3px;
+    }
 
     /* ── nav ── */
     nav#top {
       position: fixed; top: 0; left: 0; right: 0; z-index: 50;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 32px;
-      background: linear-gradient(to bottom, rgba(11,10,12,0.92), rgba(11,10,12,0.55));
+      padding: 16px 28px;
+      background: linear-gradient(to bottom, rgba(10,8,9,0.94), rgba(10,8,9,0.55));
       backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      transition: border-color 220ms ease, background 220ms ease;
     }
-    nav#top .mark { color: var(--text); text-decoration: none; font-weight: 600; }
+    nav#top.scrolled { border-bottom-color: var(--line); }
+    nav#top .mark { color: var(--text); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
     nav#top .mark .t { color: var(--accent); }
-    nav#top .links { display: flex; gap: 24px; align-items: center; }
-    nav#top .links a { color: var(--dim); text-decoration: none; transition: color 160ms ease; }
+    nav#top .mark .issue {
+      font-size: 9px; letter-spacing: 0.14em; padding: 3px 8px;
+      border: 1px solid var(--line-2); border-radius: 10px; color: var(--fire);
+      font-weight: 500;
+    }
+    nav#top .links { display: flex; gap: 22px; align-items: center; }
+    nav#top .links a { color: var(--dim); text-decoration: none; transition: color 140ms ease; }
     nav#top .links a:hover { color: var(--accent); }
     nav#top .links a.ghost { padding: 7px 14px; border: 1px solid var(--line-2); border-radius: 20px; color: var(--text); }
     nav#top .links a.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── hero ── */
+    /* ───────────── HERO ───────────── */
     header.hero {
       position: relative;
-      min-height: 92vh;
-      display: flex; align-items: center;
-      padding: 110px 32px 60px;
+      min-height: 100vh;
+      padding: 100px 32px 60px;
       overflow: hidden;
       border-bottom: 1px solid var(--line);
     }
-    .hero-grain {
-      position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+    .hero-rays {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse at 25% 20%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 55%),
-        radial-gradient(ellipse at 75% 85%, color-mix(in srgb, var(--crimson) 10%, transparent), transparent 50%);
+        repeating-conic-gradient(from 0deg at 70% 42%, rgba(255,255,255,0.012) 0deg, transparent 2deg 6deg),
+        radial-gradient(ellipse at 70% 42%, color-mix(in srgb, var(--fire) 10%, transparent), transparent 55%),
+        radial-gradient(ellipse at 15% 85%, color-mix(in srgb, var(--crimson) 10%, transparent), transparent 55%);
     }
-    .hero-marquee {
-      position: absolute; left: 0; right: 0; z-index: 1;
-      font-family: var(--display); font-weight: 300; font-style: italic;
-      font-size: clamp(100px, 18vw, 220px); line-height: 0.85;
-      color: color-mix(in srgb, var(--text) 4%, transparent);
-      white-space: nowrap; letter-spacing: -0.02em; pointer-events: none; user-select: none;
+    .hero-stars {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0.4;
+      background-image:
+        radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 42% 80%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 90% 90%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 75% 10%, rgba(255,255,255,0.6), transparent);
     }
-    .hero-marquee.top { top: 12%; }
-    .hero-marquee.bot { bottom: 10%; text-align: right; padding-right: 4vw; }
+    .hero-grid {
+      position: relative; z-index: 3;
+      max-width: 1280px; margin: 0 auto;
+      min-height: calc(100vh - 160px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 56px; }
+      header.hero { min-height: auto; padding-top: 90px; padding-bottom: 70px; }
+    }
 
-    .hero-inner { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; width: 100%; }
-    .eyebrow {
-      font-family: var(--mono); font-size: 11px; letter-spacing: 0.3em;
-      color: var(--accent); text-transform: uppercase;
-      margin-bottom: 32px; display: flex; align-items: center; gap: 16px;
+    .hero-l .issue-strip {
+      display: flex; align-items: center; gap: 14px;
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 28px;
     }
-    .eyebrow::before { content: ""; width: 42px; height: 1px; background: var(--accent); display: inline-block; }
+    .hero-l .issue-strip::before { content: ""; width: 42px; height: 1px; background: var(--accent); display: inline-block; }
+    .hero-l .issue-strip .pulse { width: 7px; height: 7px; background: var(--fire); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--fire); animation: pulse 2s ease infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.5 } 50% { opacity: 1 } }
 
-    h1.title {
+    .hero-l h1 {
       font-family: var(--display); font-weight: 300;
-      font-size: clamp(72px, 14vw, 220px); line-height: 0.88;
-      letter-spacing: -0.045em; margin-bottom: 32px;
+      font-size: clamp(52px, 8.5vw, 128px);
+      line-height: 0.95; letter-spacing: -0.038em;
+      margin-bottom: 28px;
     }
-    h1.title em { font-style: italic; color: var(--accent); font-weight: 300; }
+    .hero-l h1 em { font-style: italic; color: var(--accent); font-weight: 300; }
 
-    .hero-sub {
-      font-family: var(--display); font-size: clamp(17px, 1.9vw, 22px);
-      line-height: 1.55; color: var(--dim); max-width: 640px; margin-bottom: 44px;
+    .hero-l .lead {
+      font-family: var(--display); font-size: clamp(16px, 1.7vw, 20px);
+      line-height: 1.6; color: var(--dim); max-width: 560px; margin-bottom: 36px;
     }
-    .hero-sub em { font-style: italic; color: var(--accent); }
+    .hero-l .lead em { font-style: italic; color: var(--accent); }
 
-    .hero-cta { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
-
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; }
     .btn {
       font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-      padding: 15px 24px; border-radius: 30px;
+      padding: 15px 26px; border-radius: 32px;
       text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
       transition: all 180ms ease; border: 1px solid transparent; cursor: pointer;
     }
-    .btn.primary { background: var(--accent); color: var(--bg); }
-    .btn.primary:hover { background: var(--text); transform: translateY(-2px); }
+    .btn.primary { background: var(--fire); color: var(--bg); font-weight: 500; }
+    .btn.primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 30px color-mix(in srgb, var(--fire) 40%, transparent); }
     .btn.ghost { color: var(--text); border-color: var(--line-2); background: transparent; }
     .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
     .btn .ar { transition: transform 180ms ease; }
     .btn:hover .ar { transform: translateX(4px); }
 
-    /* ── intro ── */
-    section.intro { padding: clamp(80px, 12vh, 140px) 32px; }
-    .intro-wrap { max-width: 820px; margin: 0 auto; }
-    .intro h2 {
+    .cover-stage { position: relative; perspective: 1200px; }
+    .cover-stage::before {
+      content: ""; position: absolute; inset: -40px; z-index: 0;
+      background: radial-gradient(ellipse at center, color-mix(in srgb, var(--fire) 25%, transparent), transparent 65%);
+      filter: blur(40px);
+    }
+    .cover-card {
+      position: relative; z-index: 2;
+      max-width: 420px; margin: 0 auto;
+      border-radius: 6px; overflow: hidden;
+      box-shadow:
+        0 2px 0 1px rgba(0,0,0,0.25),
+        0 40px 80px -20px rgba(0,0,0,0.6),
+        0 0 0 1px color-mix(in srgb, var(--fire) 32%, transparent);
+      transform: rotate(-2.2deg);
+      transition: transform 320ms cubic-bezier(0.16,1,0.3,1);
+      cursor: pointer; display: block;
+    }
+    .cover-card:hover { transform: rotate(0deg) translateY(-6px) scale(1.02); }
+    .cover-card img { width: 100%; height: auto; display: block; }
+    .cover-tag {
+      position: absolute; left: -24px; top: 24px; z-index: 3;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 8px 14px; background: var(--fire); color: var(--bg); font-weight: 600;
+      transform: rotate(-6deg);
+      box-shadow: 4px 4px 0 color-mix(in srgb, var(--fire) 30%, transparent);
+    }
+    .cover-tag.vol {
+      left: auto; right: -18px; top: auto; bottom: 32px;
+      background: var(--bg); color: var(--fire); border: 1px solid var(--fire);
+      transform: rotate(4deg);
+      box-shadow: 4px 4px 0 rgba(255,255,255,0.08);
+    }
+
+    /* ──────── issue bar ──────── */
+    section.issue-bar {
+      position: relative; z-index: 5;
+      padding: 28px 32px; border-bottom: 1px solid var(--line);
+      background: var(--bg-2);
+    }
+    .issue-bar-wrap { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .issue-cell { background: var(--bg-2); padding: 22px 20px; }
+    .issue-cell .k { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .issue-cell .v { font-family: var(--display); font-size: clamp(20px, 2.2vw, 28px); font-weight: 400; letter-spacing: -0.01em; line-height: 1.15; }
+    .issue-cell .v em { font-style: italic; color: var(--fire); }
+    .issue-cell .s { font-family: var(--display); font-style: italic; font-size: 13px; color: var(--dim); margin-top: 4px; }
+    @media (max-width: 820px) { .issue-bar-wrap { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 460px) { .issue-bar-wrap { grid-template-columns: 1fr; } }
+
+    /* ──────── takaya feature ──────── */
+    section.feature {
+      position: relative;
+      padding: clamp(80px, 14vh, 160px) 32px;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .feature::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse at 15% 50%, color-mix(in srgb, var(--fire) 10%, transparent), transparent 55%);
+    }
+    .feature-wrap {
+      position: relative; z-index: 1;
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 72px; align-items: center;
+    }
+    @media (max-width: 900px) {
+      .feature-wrap { grid-template-columns: 1fr; gap: 48px; }
+    }
+    .feature-cover { position: relative; max-width: 460px; margin: 0 auto; }
+    .feature-cover::before {
+      content: ""; position: absolute; inset: 20px -14px -20px 14px; z-index: 0;
+      background: var(--fire); border-radius: 4px; opacity: 0.4;
+    }
+    .feature-cover img {
+      position: relative; z-index: 1; width: 100%;
+      border-radius: 4px;
+      box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .feature-cover .stamp {
+      position: absolute; z-index: 2; right: -14px; top: -14px;
+      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
+      color: var(--bg); background: var(--fire);
+      border-radius: 50%; width: 92px; height: 92px;
+      display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.1;
+      transform: rotate(10deg);
+      box-shadow: 6px 6px 0 color-mix(in srgb, var(--fire) 25%, transparent);
+    }
+
+    .feature-copy .kicker { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+    .feature-copy .kicker::before { content: ""; width: 42px; height: 1px; background: var(--accent); display: inline-block; }
+
+    .feature-copy h2.feature-ttl {
+      font-family: var(--manga); font-weight: 400;
+      font-size: clamp(60px, 10vw, 128px); line-height: 0.9; letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .feature-copy h2.feature-ttl .dot { color: var(--fire); }
+    .feature-copy .where {
+      font-family: var(--display); font-style: italic; font-size: clamp(16px, 2vw, 22px);
+      color: var(--dim); margin-bottom: 24px;
+    }
+    .feature-copy .tagline {
       font-family: var(--display); font-weight: 400;
-      font-size: clamp(28px, 4vw, 44px); line-height: 1.25; letter-spacing: -0.02em;
-      margin-bottom: 24px;
+      font-size: clamp(22px, 3vw, 32px); line-height: 1.25; letter-spacing: -0.01em;
+      color: var(--text); margin-bottom: 24px;
     }
-    .intro h2 em { font-style: italic; color: var(--accent); }
-    .intro p {
-      font-family: var(--display); font-size: clamp(16px, 1.5vw, 18px);
-      line-height: 1.7; color: var(--dim); margin-bottom: 18px;
+    .feature-copy .tagline em { font-style: italic; color: var(--fire); }
+    .feature-copy .synopsis p {
+      font-family: var(--display); font-size: clamp(15px, 1.5vw, 17px); line-height: 1.65;
+      color: var(--dim); margin-bottom: 14px;
     }
-    .intro p a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
-    .intro p a:hover { border-bottom-color: var(--accent); }
+    .feature-copy .dedication {
+      font-family: var(--display); font-style: italic;
+      font-size: clamp(14px, 1.4vw, 16px); line-height: 1.55; color: var(--dim);
+      padding-left: 16px; border-left: 2px solid var(--fire); margin: 20px 0 28px;
+    }
+    .feature-copy .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .feature-copy .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); padding: 5px 11px; border: 1px solid var(--line-2); border-radius: 20px; }
+    .feature-copy .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
 
-    /* ── toolbar ── */
-    section.toolbar {
-      position: sticky; top: 0; z-index: 20;
-      padding: 20px 32px;
-      background: color-mix(in srgb, var(--bg) 90%, transparent);
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    /* ──────── coming soon ──────── */
+    section.coming {
+      position: relative;
+      padding: clamp(90px, 14vh, 150px) 32px clamp(70px, 12vh, 130px);
+      border-top: 1px solid var(--line);
     }
-    .toolbar-wrap { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    .switcher { display: inline-flex; background: var(--bg-2); border: 1px solid var(--line); border-radius: 30px; padding: 4px; }
-    .switcher button {
-      font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-      padding: 11px 22px; border: none; background: transparent; color: var(--faint);
-      cursor: pointer; border-radius: 24px; transition: all 180ms ease;
+    .coming-wrap { max-width: 1200px; margin: 0 auto; }
+    .coming-head { max-width: 820px; margin-bottom: 56px; }
+    .coming-head .k {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent); display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
     }
-    .switcher button.on { background: var(--accent); color: var(--bg); }
-    .switcher button:not(.on):hover { color: var(--text); }
-    .filter { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
-    .filter .count { color: var(--accent); font-weight: 500; }
-    .filter select {
-      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
-      background: var(--bg-2); color: var(--text);
-      border: 1px solid var(--line); border-radius: 20px;
-      padding: 9px 14px; text-transform: uppercase; cursor: pointer;
-    }
-
-    /* ── grid ── */
-    section.grid-sec { padding: clamp(60px, 10vh, 120px) 32px 40px; }
-    .grid-wrap { max-width: 1200px; margin: 0 auto; }
-    .grid.manga { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 40px 28px; }
-    .grid.film { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 44px 32px; }
-    @media (max-width: 640px) {
-      .grid.manga, .grid.film { grid-template-columns: 1fr; gap: 32px; }
-    }
-
-    .card {
-      position: relative; cursor: pointer;
-      opacity: 0; transform: translateY(28px);
-      transition: transform 320ms cubic-bezier(0.16,1,0.3,1), opacity 320ms ease;
-    }
-    .card.in { opacity: 1; transform: translateY(0); }
-    .card:hover { transform: translateY(-6px); }
-
-    .card .cover {
-      position: relative; width: 100%; aspect-ratio: 2 / 3;
-      border-radius: 10px; overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-      display: flex; flex-direction: column; justify-content: space-between;
-      padding: 24px; transition: box-shadow 300ms ease;
-    }
-    .card:hover .cover { box-shadow: 0 30px 70px rgba(0,0,0,0.55), 0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent); }
-    .film-card .cover { aspect-ratio: 16 / 9; padding: 22px 24px; }
-    .cover::after {
-      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 -100px 70px -40px rgba(0,0,0,0.45);
-    }
-    .cover > * { position: relative; z-index: 2; }
-    .cover-mark { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; color: rgba(255,255,255,0.6); text-transform: uppercase; }
-    .cover-title {
+    .coming-head .k::before { content: ""; width: 42px; height: 1px; background: var(--accent); display: inline-block; }
+    .coming-head h2 {
       font-family: var(--display); font-weight: 400;
-      font-size: clamp(22px, 2.6vw, 32px); line-height: 1.08; letter-spacing: -0.02em;
-      color: #fff;
+      font-size: clamp(36px, 5.5vw, 68px); line-height: 1.05; letter-spacing: -0.028em;
+      margin-bottom: 20px;
     }
-    .cover-title .jp { font-family: var(--jp); font-weight: 400; font-size: 14px; letter-spacing: 0.02em; display: block; margin-top: 10px; opacity: 0.72; }
-    .film-card .cover-title { font-size: clamp(26px, 3vw, 42px); }
-    .cover-bot {
-      display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
-      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.2em;
-      color: rgba(255,255,255,0.65); text-transform: uppercase;
-    }
-    .cover-play {
-      position: absolute; right: 20px; top: 20px; z-index: 3;
-      width: 32px; height: 32px; border-radius: 50%;
-      background: rgba(255,255,255,0.12); backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; color: #fff; transition: all 180ms ease;
-    }
-    .card:hover .cover-play { background: var(--accent); color: var(--bg); transform: scale(1.08); }
+    .coming-head h2 em { font-style: italic; color: var(--fire); }
+    .coming-head p { font-family: var(--display); font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: var(--dim); }
 
-    .card-meta { padding: 18px 2px 0; }
-    .card-meta .ttl { font-family: var(--display); font-size: 17px; letter-spacing: -0.005em; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-    .card-meta .creator { font-family: var(--display); font-size: 14px; font-style: italic; color: var(--dim); margin-bottom: 12px; }
-    .card-meta .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .card-meta .tag {
-      font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--faint); padding: 3px 9px; border: 1px solid var(--line); border-radius: 20px;
+    .coming-cols {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 44px 56px;
+    }
+    @media (max-width: 820px) { .coming-cols { grid-template-columns: 1fr; gap: 48px; } }
+    .coming-col h3 {
+      font-family: var(--display); font-weight: 400;
+      font-size: clamp(24px, 3vw, 32px); line-height: 1.1; letter-spacing: -0.015em;
+      margin-bottom: 10px;
+      display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    }
+    .coming-col h3 .chip {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
+      padding: 4px 10px; border-radius: 14px;
+      background: color-mix(in srgb, var(--fire) 18%, transparent); color: var(--fire);
+      border: 1px solid color-mix(in srgb, var(--fire) 40%, transparent);
+    }
+    .coming-col .colsub {
+      font-family: var(--display); font-style: italic;
+      font-size: 15px; color: var(--dim); margin-bottom: 24px;
+    }
+    .coming-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+    .coming-list li {
+      padding: 18px 0; border-bottom: 1px solid var(--line);
+      display: grid; grid-template-columns: 32px 1fr auto; gap: 16px; align-items: baseline;
+    }
+    .coming-list .num {
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+      color: var(--faint); font-variant-numeric: tabular-nums;
+    }
+    .coming-list .ttl {
+      font-family: var(--display); font-weight: 500;
+      font-size: clamp(16px, 1.6vw, 18px); line-height: 1.3; letter-spacing: -0.005em;
+      color: var(--text);
+    }
+    .coming-list .ttl .by {
+      display: block; font-weight: 400; font-style: italic;
+      font-size: 13.5px; color: var(--dim); margin-top: 4px;
+    }
+    .coming-list .yr {
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+      color: var(--faint); font-variant-numeric: tabular-nums; text-transform: uppercase;
     }
 
-    /* ── modal ── */
-    .modal-scrim {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.78);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      display: none; align-items: center; justify-content: center;
-      z-index: 100; padding: 20px;
+    .coming-foot {
+      margin-top: 48px; padding-top: 36px; border-top: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
     }
-    .modal-scrim.open { display: flex; animation: fadeIn 220ms ease; }
-    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-    .modal {
-      position: relative; width: min(900px, 100%);
-      max-height: 90vh; overflow-y: auto;
-      background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 18px;
-      padding: 40px 40px 32px;
-      animation: rise 320ms cubic-bezier(0.16,1,0.3,1);
+    .coming-foot .note {
+      font-family: var(--display); font-style: italic; font-size: 15px; color: var(--dim); max-width: 560px;
     }
-    @keyframes rise { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
-    .modal .x {
-      position: absolute; top: 18px; right: 18px;
-      background: none; border: none; color: var(--dim);
-      font-size: 24px; cursor: pointer; line-height: 1; padding: 6px;
-    }
-    .modal .x:hover { color: var(--accent); }
-    .m-eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-    .m-title { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4.6vw, 52px); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 8px; }
-    .m-title em { font-style: italic; color: var(--accent); }
-    .m-jp { font-family: var(--jp); font-size: 18px; color: var(--dim); margin-bottom: 20px; }
-    .m-meta {
-      display: flex; flex-wrap: wrap; gap: 8px 20px;
-      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
-      margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid var(--line);
-    }
-    .m-meta .k { color: var(--accent); margin-right: 6px; }
-    .m-body { font-family: var(--display); font-size: 16px; line-height: 1.7; color: var(--dim); margin-bottom: 28px; }
-    .m-body p { margin-bottom: 14px; }
-    .m-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-    .m-tags .tag {
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--dim); padding: 5px 11px; border: 1px solid var(--line-2); border-radius: 20px;
-    }
-    .m-video { aspect-ratio: 16 / 9; margin: 0 0 28px; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-2); }
-    .m-video iframe, .m-video video { width: 100%; height: 100%; display: block; border: 0; }
-    .m-cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .coming-foot .note a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+    .coming-foot .note a:hover { border-bottom-color: var(--accent); }
 
-    /* ── submit ── */
+    /* ──────── submit ──────── */
     section.submit {
       padding: clamp(80px, 14vh, 160px) 32px;
       border-top: 1px solid var(--line);
       background: linear-gradient(to bottom, var(--bg), var(--bg-2));
+      position: relative; overflow: hidden;
     }
-    .submit-wrap { max-width: 720px; margin: 0 auto; text-align: center; }
-    .submit h2 { font-family: var(--display); font-weight: 400; font-size: clamp(32px, 5.5vw, 68px); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 22px; }
-    .submit h2 em { font-style: italic; color: var(--accent); }
-    .submit p { font-family: var(--display); font-size: clamp(16px, 1.7vw, 19px); line-height: 1.6; color: var(--dim); margin-bottom: 36px; }
+    .submit::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at center bottom, color-mix(in srgb, var(--fire) 10%, transparent), transparent 60%);
+    }
+    .submit-wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; text-align: center; }
+    .submit h2 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 6vw, 72px); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 22px; }
+    .submit h2 em { font-style: italic; color: var(--fire); }
+    .submit p { font-family: var(--display); font-size: clamp(16px, 1.7vw, 19px); line-height: 1.65; color: var(--dim); margin-bottom: 36px; }
     .submit p a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
     .submit p a:hover { border-bottom-color: var(--accent); }
 
-    /* ── footer ── */
+    /* ──────── footer ──────── */
     footer {
       border-top: 1px solid var(--line); padding: 36px 32px;
       display: flex; flex-wrap: wrap; gap: 16px;
@@ -292,16 +377,12 @@
 
     @media (max-width: 760px) {
       nav#top .links a:not(.ghost):not(.mark) { display: none; }
-      header.hero { min-height: 85vh; padding: 95px 20px 50px; }
-      section.intro, section.grid-sec, section.submit { padding-left: 20px; padding-right: 20px; }
-      section.toolbar { padding-left: 20px; padding-right: 20px; }
-      .toolbar-wrap { flex-direction: column; align-items: stretch; }
-      .filter { justify-content: space-between; }
-      .modal { padding: 30px 22px 24px; }
+      header.hero { padding: 95px 20px 50px; }
+      section.feature, section.coming, section.submit { padding-left: 20px; padding-right: 20px; }
+      .feature-cover .stamp { width: 76px; height: 76px; font-size: 9px; right: -8px; top: -8px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
-      .card { opacity: 1 !important; transform: none !important; }
     }
   </style>
   <link rel="stylesheet" href="/mobile-fixes.css">
@@ -309,7 +390,7 @@
 <body>
 
 <nav id="top">
-  <a href="/" class="mark">GSS<span class="t">·</span>Frames</a>
+  <a href="/" class="mark">GSS<span class="t">·</span>Frames <span class="issue">Vol. 01</span></a>
   <div class="links">
     <a href="/archive.html">The Archive</a>
     <a href="/pedagogy.html">Pedagogy</a>
@@ -318,399 +399,159 @@
   </div>
 </nav>
 
-<!-- ── hero ── -->
+<!-- ──────── HERO ──────── -->
 <header class="hero">
-  <div class="hero-grain"></div>
-  <div class="hero-marquee top">panels of refusal</div>
-  <div class="hero-marquee bot">reels of record</div>
-  <div class="hero-inner">
-    <div class="eyebrow">The Visual Archive</div>
-    <h1 class="title">Frames<em>.</em></h1>
-    <p class="hero-sub">
-      Justice-driven <em>manga</em> and <em>documentary film</em> — a curated room where
-      the panel and the reel keep what the archive sheds. Each title a long look at
-      empire, labour, memory and refusal.
-    </p>
-    <div class="hero-cta">
-      <a href="#grid" class="btn primary">Enter the room <span class="ar">↓</span></a>
-      <a href="#intro" class="btn ghost">What this is</a>
+  <div class="hero-rays"></div>
+  <div class="hero-stars"></div>
+  <div class="hero-grid">
+    <div class="hero-l">
+      <div class="issue-strip"><span class="pulse"></span>Vol. 01 · Out now · October 2026</div>
+      <h1>Panels of refusal, <em>reels of record.</em></h1>
+      <p class="lead">
+        GSS·Frames is a quarterly room for <em>justice-driven manga</em> and
+        <em>documentary film</em> — originals made inside the collective, with a
+        short curated library gathering beside them.
+      </p>
+      <div class="hero-cta">
+        <a href="/frames/takaya/" class="btn primary">Read Takaya · Vol. 01 <span class="ar">→</span></a>
+        <a href="#coming" class="btn ghost">What's next <span class="ar">↓</span></a>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div class="cover-stage">
+        <span class="cover-tag">Original · New</span>
+        <a href="/frames/takaya/" class="cover-card" aria-label="Open Takaya, Vol. 1">
+          <img src="/frames/takaya/cover.jpg" alt="Takaya Vol. 1 cover — four characters around a cooking pot in Khartoum, 2023–2025" />
+        </a>
+        <span class="cover-tag vol">Vol. 01 · 12 pp</span>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- ── intro ── -->
-<section class="intro" id="intro">
-  <div class="intro-wrap">
-    <h2>Two forms. One <em>archival ethic.</em></h2>
-    <p>The panel and the reel do what the register will not — they stay with a face, a street, a wound, a shift. They let the reader linger inside a frame instead of past it, and they refuse the aerial view that lets history look clean.</p>
-    <p>Every work here was chosen for that insistence. We keep manga drawn from inside survival — Hiroshima, Occupied Korea, Showa-era empire — and documentary cinema that films the long now of colonial violence: mines, prisons, borders, kitchens, amnesia. Nothing comic in the easy sense. Everything serious in the exact sense: at stake.</p>
-    <p>If you hold a title we should keep, <a href="mailto:globalsouthsolidarities@gmail.com">write to us</a>.</p>
-  </div>
-</section>
-
-<!-- ── toolbar / switcher ── -->
-<section class="toolbar">
-  <div class="toolbar-wrap">
-    <div class="switcher" id="switcher" role="tablist" aria-label="Medium">
-      <button data-view="manga" class="on" role="tab" aria-selected="true">Manga</button>
-      <button data-view="film" role="tab" aria-selected="false">Film</button>
+<!-- ──────── ISSUE BAR ──────── -->
+<section class="issue-bar">
+  <div class="issue-bar-wrap">
+    <div class="issue-cell">
+      <div class="k">In this issue</div>
+      <div class="v"><em>01</em> Original</div>
+      <div class="s">Takaya — Khartoum</div>
     </div>
-    <div class="filter">
-      <span>Showing <span class="count" id="count">0</span></span>
-      <select id="themeFilter" aria-label="Filter by theme">
-        <option value="all">All themes</option>
-      </select>
+    <div class="issue-cell">
+      <div class="k">Library · Manga</div>
+      <div class="v"><em>Soon</em></div>
+      <div class="s">Six titles in curation</div>
+    </div>
+    <div class="issue-cell">
+      <div class="k">Library · Film</div>
+      <div class="v"><em>Soon</em></div>
+      <div class="s">Six documentaries in curation</div>
+    </div>
+    <div class="issue-cell">
+      <div class="k">Submit</div>
+      <div class="v">Open <em>·</em> rolling</div>
+      <div class="s">globalsouthsolidarities@gmail.com</div>
     </div>
   </div>
 </section>
 
-<!-- ── grid ── -->
-<section class="grid-sec" id="grid">
-  <div class="grid-wrap">
-    <div class="grid manga" id="mangaGrid" role="tabpanel"></div>
-    <div class="grid film" id="filmGrid" style="display:none" role="tabpanel"></div>
+<!-- ──────── TAKAYA FEATURE ──────── -->
+<section class="feature" id="feature">
+  <div class="feature-wrap">
+    <div class="feature-cover">
+      <span class="stamp">GSS·Frames<br/>Vol. 01</span>
+      <a href="/frames/takaya/" aria-label="Open Takaya reader">
+        <img src="/frames/takaya/cover.jpg" alt="Takaya cover" />
+      </a>
+    </div>
+    <div class="feature-copy">
+      <div class="kicker">GSS·Frames Original · Vol. 01</div>
+      <h2 class="feature-ttl">TAKAYA<span class="dot">.</span></h2>
+      <p class="where">Khartoum · 2023–2025 · 12 pages</p>
+      <p class="tagline">One pot. One street. One <em>country refusing to starve.</em></p>
+      <div class="synopsis">
+        <p>On 15 April 2023 the fighting between Sudan's SAF and RSF breaks open across Khartoum. The state apparatus for feeding anybody collapses within weeks. What stands in its place are the <em>Emergency Response Rooms</em> — decentralised, youth-led neighbourhood committees — and the <em>takaya</em> they run: communal kitchens cooked out of what the street can still find.</p>
+        <p>By mid-2024 the ERRs are serving hundreds of thousands of meals a day across the country. Across 2024–2025, famine is formally declared, cholera returns to Darfur, and foreign funding to the kitchens collapses. Many <em>takaya</em> are forced to close.</p>
+        <p>This is twelve pages inside one of the kitchens that stayed open. Characters are fictional; the events are documented.</p>
+      </div>
+      <p class="dedication">For the volunteers of Sudan's Emergency Response Rooms — the neighbourhood committees who kept communal kitchens (<em>takaya</em>) open while the war closed everything else.</p>
+      <div class="tags">
+        <span class="tag">Sudan</span>
+        <span class="tag">mutual aid</span>
+        <span class="tag">famine</span>
+        <span class="tag">war</span>
+        <span class="tag">Emergency Response Rooms</span>
+        <span class="tag">GSS Original</span>
+      </div>
+      <div class="cta-row">
+        <a href="/frames/takaya/" class="btn primary">Read all 12 pages <span class="ar">→</span></a>
+        <a href="/frames/takaya/#p01" class="btn ghost">Start at page 1</a>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ── submit cta ── -->
+<!-- ──────── COMING SOON ──────── -->
+<section class="coming" id="coming">
+  <div class="coming-wrap">
+    <div class="coming-head">
+      <div class="k">What's coming to Frames</div>
+      <h2>A short library gathers beside the <em>originals.</em></h2>
+      <p>Over the next volumes we'll open a small curated library inside Frames — six justice-driven manga drawn from inside survival, and six documentary films that keep what the register will not. Each will land here with synopsis, tags, and a link to the publisher or distributor. These are the works we're preparing.</p>
+    </div>
+
+    <div class="coming-cols">
+      <div class="coming-col">
+        <h3>Manga <span class="chip">Soon</span></h3>
+        <p class="colsub">Hiroshima to Kobe to Seoul — six titles drawn from inside survival.</p>
+        <ol class="coming-list">
+          <li><span class="num">01</span><span class="ttl">Barefoot Gen<span class="by">Keiji Nakazawa · はだしのゲン</span></span><span class="yr">1973–85</span></li>
+          <li><span class="num">02</span><span class="ttl">Grass<span class="by">Keum Suk Gendry-Kim · 풀</span></span><span class="yr">2017</span></li>
+          <li><span class="num">03</span><span class="ttl">Showa: A History of Japan<span class="by">Shigeru Mizuki · 昭和史</span></span><span class="yr">1988–89</span></li>
+          <li><span class="num">04</span><span class="ttl">Message to Adolf<span class="by">Osamu Tezuka · アドルフに告ぐ</span></span><span class="yr">1983–85</span></li>
+          <li><span class="num">05</span><span class="ttl">Nausicaä of the Valley of the Wind<span class="by">Hayao Miyazaki · 風の谷のナウシカ</span></span><span class="yr">1982–94</span></li>
+          <li><span class="num">06</span><span class="ttl">Town of Evening Calm, Country of Cherry Blossoms<span class="by">Fumiyo Kouno · 夕凪の街 桜の国</span></span><span class="yr">2003–04</span></li>
+        </ol>
+      </div>
+
+      <div class="coming-col">
+        <h3>Documentary <span class="chip">Soon</span></h3>
+        <p class="colsub">Indonesia to Angola to Aleppo — six films of the long now of empire.</p>
+        <ol class="coming-list">
+          <li><span class="num">01</span><span class="ttl">The Act of Killing<span class="by">Joshua Oppenheimer · Indonesia</span></span><span class="yr">2012</span></li>
+          <li><span class="num">02</span><span class="ttl">13th<span class="by">Ava DuVernay · United States</span></span><span class="yr">2016</span></li>
+          <li><span class="num">03</span><span class="ttl">For Sama<span class="by">Waad al-Kateab &amp; Edward Watts · Syria</span></span><span class="yr">2019</span></li>
+          <li><span class="num">04</span><span class="ttl">The Earth Is Blue as an Orange<span class="by">Iryna Tsilyk · Ukraine</span></span><span class="yr">2020</span></li>
+          <li><span class="num">05</span><span class="ttl">Concerning Violence<span class="by">Göran Hugo Olsson · Fanon</span></span><span class="yr">2014</span></li>
+          <li><span class="num">06</span><span class="ttl">I Am Not Your Negro<span class="by">Raoul Peck · Baldwin</span></span><span class="yr">2016</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="coming-foot">
+      <p class="note">Hold a title we should include? Write to <a href="mailto:globalsouthsolidarities@gmail.com">globalsouthsolidarities@gmail.com</a> — one sentence on what the work keeps.</p>
+      <a href="mailto:globalsouthsolidarities@gmail.com?subject=GSS%C2%B7Frames%20%E2%80%94%20library%20suggestion" class="btn ghost">Suggest a title <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ──────── SUBMIT ──────── -->
 <section class="submit">
   <div class="submit-wrap">
-    <h2>Hold a title we <em>should keep?</em></h2>
-    <p>Frames is a slow-growing room. Send us a manga, a short film, a documentary that belongs beside what's here — write to <a href="mailto:globalsouthsolidarities@gmail.com">globalsouthsolidarities@gmail.com</a> with the work, the creator and one sentence on what it keeps.</p>
-    <a href="mailto:globalsouthsolidarities@gmail.com?subject=Frames%20%E2%80%94%20submission" class="btn primary">Submit a work <span class="ar">→</span></a>
+    <h2>Working on a <em>panel</em>, a <em>short</em>, a <em>record</em>?</h2>
+    <p>GSS·Frames is a slow-growing room. If you've drawn a manga or filmed a short that belongs beside Takaya, write to <a href="mailto:globalsouthsolidarities@gmail.com">globalsouthsolidarities@gmail.com</a> with the work, the creator, and one sentence on what it keeps.</p>
+    <a href="mailto:globalsouthsolidarities@gmail.com?subject=GSS%C2%B7Frames%20%E2%80%94%20submission" class="btn primary">Submit a work <span class="ar">→</span></a>
   </div>
 </section>
 
 <footer>
-  <span>© 2026 · Global South Solidarities</span>
+  <span>© 2026 · Global South Solidarities · GSS<span class="t">·</span>Frames</span>
   <span><a href="/">Home</a> · <a href="/archive.html">The Archive</a> · <a href="/gss-ai.html">GSS<span class="t">·</span>AI</a></span>
 </footer>
 
-<!-- ── modal ── -->
-<div class="modal-scrim" id="modalScrim" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-  <div class="modal">
-    <button class="x" id="modalX" aria-label="Close">×</button>
-    <div class="m-eyebrow" id="mEyebrow"></div>
-    <h2 class="m-title" id="mTitle"></h2>
-    <div class="m-jp" id="mJp"></div>
-    <div class="m-meta" id="mMeta"></div>
-    <div class="m-video" id="mVideo" style="display:none"></div>
-    <div class="m-body" id="mBody"></div>
-    <div class="m-tags" id="mTags"></div>
-    <div class="m-cta" id="mCta"></div>
-  </div>
-</div>
-
 <script>
-const DATA = {
-  manga: [
-    {
-      id: 'barefoot-gen',
-      title: 'Barefoot Gen',
-      jp: 'はだしのゲン',
-      creator: 'Keiji Nakazawa',
-      year: '1973–1985',
-      pages: '2,500+ pages · 10 vols',
-      theme: 'nuclear',
-      synopsis: [
-        "Nakazawa was six years old in Hiroshima on the morning of 6 August 1945. He drew Barefoot Gen out of that morning for the next thirty years — a child's testimony as serialized manga, carried first by Weekly Shōnen Jump before the magazine let it drop.",
-        "What the series keeps is the quiet second day, and the second month, and the second year — the lice, the keloids, the state that would rather you not speak of it. The authorized memorial reads smoother than this does. Which is the point."
-      ],
-      tags: ['nuclear', 'war', 'memory', 'testimony', 'Japan'],
-      cover: { bg: 'radial-gradient(circle at 65% 25%, #ff6b3a 0%, #c0190f 32%, #450905 85%)', mark: 'HIROSHIMA · 1945' },
-      link: { label: 'Open at Last Gasp', url: 'https://www.lastgasp.com/collections/barefoot-gen' }
-    },
-    {
-      id: 'grass',
-      title: 'Grass',
-      jp: '풀',
-      creator: 'Keum Suk Gendry-Kim',
-      year: '2017',
-      pages: '480 pages',
-      theme: 'colonial',
-      synopsis: [
-        "A graphic record of Lee Ok-sun, taken by the Japanese Imperial Army at fourteen and held in a 'comfort station' in Manchuria for the duration of the war. Gendry-Kim gives her the years back one brushstroke at a time — the childhood, the going, the staying, the return no one quite made room for.",
-        "The ink is left wide. Grass grows into the frame where a sentence will not."
-      ],
-      tags: ['colonial violence', 'women', 'testimony', 'Korea', 'Japan'],
-      cover: { bg: 'linear-gradient(165deg, #22361e 0%, #0e1a0d 55%, #050a05 100%)', mark: 'MANCHURIA · 1942' },
-      link: { label: 'Open at Drawn & Quarterly', url: 'https://drawnandquarterly.com/books/grass/' }
-    },
-    {
-      id: 'showa',
-      title: 'Showa: A History of Japan',
-      jp: '昭和史',
-      creator: 'Shigeru Mizuki',
-      year: '1988–1989',
-      pages: '~2,000 pages · 4 vols',
-      theme: 'war',
-      synopsis: [
-        "Mizuki lost his left arm in Rabaul in 1943, drew yōkai for a living, and spent the back half of his life writing the empire that had wasted him. Showa is that book: four volumes of Japan from 1926 to 1989, cross-cut between the historian's wide frame and the private boy who went soldier and came back shorter.",
-        "The authority is unusual because the author's grievance is specific. He names the staff officers."
-      ],
-      tags: ['war', 'imperialism', 'memory', 'Japan'],
-      cover: { bg: 'linear-gradient(145deg, #4a2d15 0%, #1a0f08 60%, #0a0604 100%)', mark: 'JAPAN · 1926–89' },
-      link: { label: 'Open at Drawn & Quarterly', url: 'https://drawnandquarterly.com/books/showa-1926-1939-a-history-of-japan/' }
-    },
-    {
-      id: 'adolf',
-      title: 'Message to Adolf',
-      jp: 'アドルフに告ぐ',
-      creator: 'Osamu Tezuka',
-      year: '1983–1985',
-      pages: '~1,200 pages',
-      theme: 'fascism',
-      synopsis: [
-        "Three Adolfs — a Jewish boy in Kobe, a German-Japanese boy in the Hitler Youth, and the one everyone knows — braided across forty years of a document that would ruin all three if it ever surfaced.",
-        "Tezuka wrote it, at the end of his life, as his most direct address to the fascism he had lived through and watched the archive quietly repack as weather."
-      ],
-      tags: ['anti-fascism', 'war', 'race', 'Japan', 'Germany'],
-      cover: { bg: 'linear-gradient(180deg, #22213a 0%, #0b0b14 100%)', mark: 'KOBE · 1936' },
-      link: { label: 'About the work', url: 'https://en.wikipedia.org/wiki/Message_to_Adolf' }
-    },
-    {
-      id: 'nausicaa',
-      title: 'Nausicaä of the Valley of the Wind',
-      jp: '風の谷のナウシカ',
-      creator: 'Hayao Miyazaki',
-      year: '1982–1994',
-      pages: '~1,100 pages · 7 vols',
-      theme: 'ecology',
-      synopsis: [
-        "The manga is the one Miyazaki kept writing after the film ended — twelve years longer, and far darker. The pastoral valley from the film gives way to a drawn-out meditation on toxic forests, the states that burn each other across them, and the quiet reader who refuses the available sides.",
-        "A long argument that the opposite of empire is not another empire. A long argument that ecocide is a political act."
-      ],
-      tags: ['ecology', 'pacifism', 'war', 'allegory'],
-      cover: { bg: 'linear-gradient(145deg, #0f4a3a 0%, #0a1f1a 60%, #040c0a 100%)', mark: 'TORMEKIA · YR 1,000' },
-      link: { label: 'Open at Viz Media', url: 'https://www.viz.com/nausicaa' }
-    },
-    {
-      id: 'town-of-evening-calm',
-      title: 'Town of Evening Calm, Country of Cherry Blossoms',
-      jp: '夕凪の街 桜の国',
-      creator: 'Fumiyo Kouno',
-      year: '2003–2004',
-      pages: '104 pages',
-      theme: 'nuclear',
-      synopsis: [
-        "Two linked stories, one in Hiroshima ten years after the bombing, one in Tokyo fifty years after. Kouno writes the ones who survived into the slow radiation of the ordinary — the marriage that cannot be arranged, the sister who still coughs, the family archive that holds its breath across a generation.",
-        "Compact, exact, devastating."
-      ],
-      tags: ['nuclear', 'inheritance', 'women', 'Japan'],
-      cover: { bg: 'linear-gradient(165deg, #efc0c8 0%, #a86872 42%, #3a1a20 100%)', mark: 'HIROSHIMA · 1955' },
-      link: { label: 'Open at Last Gasp', url: 'https://www.lastgasp.com/products/town-of-evening-calm-country-of-cherry-blossoms' }
-    }
-  ],
-  film: [
-    {
-      id: 'act-of-killing',
-      title: 'The Act of Killing',
-      creator: 'Joshua Oppenheimer',
-      year: '2012',
-      duration: '2h 39m',
-      theme: 'impunity',
-      synopsis: [
-        "Oppenheimer asks the surviving death-squad leaders of the 1965–66 Indonesian anti-communist purges to re-enact their killings, in the genres of their favourite Hollywood films. They do.",
-        "What the camera catches is not a confession but the civic furniture of impunity — the men are still senators, their killings still taught as patriotism. The film is the archive the Indonesian state did not make."
-      ],
-      tags: ['Indonesia', '1965', 'impunity', 'memory', 'genocide'],
-      cover: { bg: 'linear-gradient(145deg, #d9372c 0%, #7a1309 60%, #2d0603 100%)', mark: 'INDONESIA · 1965' },
-      video: { type: 'youtube', id: '3DWJoyPNfyA' },
-      link: { label: 'Visit the official site', url: 'https://theactofkilling.com/' }
-    },
-    {
-      id: 'thirteenth',
-      title: '13th',
-      creator: 'Ava DuVernay',
-      year: '2016',
-      duration: '1h 40m',
-      theme: 'carceral',
-      synopsis: [
-        "The 13th Amendment to the U.S. Constitution abolished slavery, 'except as a punishment for crime.' DuVernay follows that exception from 1865 to Angola to the current prison population — the longest unbroken line in American political history.",
-        "Includes the receipts: ALEC meeting minutes, campaign speeches, the names of the companies that still cash the sentences."
-      ],
-      tags: ['US', 'prisons', 'race', 'policy'],
-      cover: { bg: 'linear-gradient(145deg, #262626 0%, #0a0a0a 60%, #000 100%)', mark: 'UNITED STATES' },
-      video: { type: 'youtube', id: 'K6IXQbXPO3I' },
-      link: { label: 'Watch on Netflix', url: 'https://www.netflix.com/title/80091741' }
-    },
-    {
-      id: 'for-sama',
-      title: 'For Sama',
-      creator: 'Waad al-Kateab · Edward Watts',
-      year: '2019',
-      duration: '1h 40m',
-      theme: 'war',
-      synopsis: [
-        "A mother in besieged Aleppo films five years for the daughter she is not sure will survive. The uprising, the siege, the hospital her husband runs, the day the bombs come close enough to shake the lens.",
-        "An intimate camera as the only remaining form of the record — one woman, one apartment, one archive the state meant to erase."
-      ],
-      tags: ['Syria', 'war', 'women', 'testimony', 'siege'],
-      cover: { bg: 'linear-gradient(165deg, #c89a2d 0%, #6a4810 60%, #2a1a05 100%)', mark: 'ALEPPO · 2016' },
-      video: { type: 'youtube', id: '55Esd2cZXFw' },
-      link: { label: 'Watch at Channel 4', url: 'https://www.channel4.com/programmes/for-sama' }
-    },
-    {
-      id: 'earth-blue-orange',
-      title: 'The Earth Is Blue as an Orange',
-      creator: 'Iryna Tsilyk',
-      year: '2020',
-      duration: '1h 14m',
-      theme: 'war',
-      synopsis: [
-        "A single mother and her four children in Krasnohorivka, 500 meters from the front line of the Donbas war, make a film about their own life. Tsilyk films them filming.",
-        "The result is quiet, domestic and extraordinary — a family practicing cinema as a way to keep themselves legible to themselves under conditions designed to dissolve them."
-      ],
-      tags: ['Ukraine', 'war', 'children', 'cinema'],
-      cover: { bg: 'linear-gradient(165deg, #4b78c8 0%, #1a2d58 55%, #080e22 100%)', mark: 'DONBAS · 2020' },
-      video: { type: 'youtube', id: 'JmJ7CFvxX7I' },
-      link: { label: 'Open at Grasshopper Film', url: 'https://grasshopperfilm.com/film/the-earth-is-blue-as-an-orange/' }
-    },
-    {
-      id: 'concerning-violence',
-      title: 'Concerning Violence',
-      creator: 'Göran Hugo Olsson',
-      year: '2014',
-      duration: '1h 25m',
-      theme: 'anti-colonial',
-      synopsis: [
-        "Nine scenes from the archive of African decolonization — Angola, Mozambique, Rhodesia, Burkina Faso, Liberia — narrated by Lauryn Hill reading Frantz Fanon's The Wretched of the Earth.",
-        "The images are the archive the European powers chose to film. The text is the one they chose to ignore. The friction between them is the whole film."
-      ],
-      tags: ['Africa', 'Fanon', 'anti-colonial', 'archive'],
-      cover: { bg: 'linear-gradient(145deg, #c25a1a 0%, #6a2a08 60%, #2a1004 100%)', mark: 'FANON · 1961' },
-      video: { type: 'youtube', id: 'OQxh8gBYsBw' },
-      link: { label: 'Open at Louverture Films', url: 'https://louverturefilms.com/films/concerning-violence/' }
-    },
-    {
-      id: 'i-am-not-your-negro',
-      title: 'I Am Not Your Negro',
-      creator: 'Raoul Peck',
-      year: '2016',
-      duration: '1h 33m',
-      theme: 'race',
-      synopsis: [
-        "Peck builds a feature-length film out of the 30 pages James Baldwin wrote toward Remember This House, the unfinished book on Medgar Evers, Malcolm X and Martin Luther King Jr.",
-        "Baldwin's prose, read by Samuel L. Jackson, against the archive of U.S. race in the long twentieth century. The film insists on Baldwin's hardest claim: that the problem is not the negro, it is the country."
-      ],
-      tags: ['US', 'race', 'Baldwin', 'archive'],
-      cover: { bg: 'linear-gradient(165deg, #332924 0%, #130d08 55%, #050302 100%)', mark: 'BALDWIN · USA' },
-      video: { type: 'youtube', id: 'rNUYdgIyaPM' },
-      link: { label: 'Open at Magnolia Pictures', url: 'https://www.magpictures.com/iamnotyournegro/' }
-    }
-  ]
-};
-
-/* ── render ── */
-function buildCards(view) {
-  const grid = document.getElementById(view === 'manga' ? 'mangaGrid' : 'filmGrid');
-  grid.innerHTML = '';
-  const items = DATA[view];
-  items.forEach((it, i) => {
-    const card = document.createElement('div');
-    card.className = 'card' + (view === 'film' ? ' film-card' : '');
-    const playBadge = view === 'film' ? `<div class="cover-play" aria-hidden="true">▶</div>` : '';
-    card.innerHTML = `
-      <div class="cover" style="background:${it.cover.bg}">
-        ${playBadge}
-        <div class="cover-mark">${it.cover.mark}</div>
-        <div>
-          <div class="cover-title">${it.title}${it.jp ? `<span class="jp">${it.jp}</span>` : ''}</div>
-        </div>
-        <div class="cover-bot">
-          <span>${it.creator}</span>
-          <span>${it.year}</span>
-        </div>
-      </div>
-      <div class="card-meta">
-        <div class="ttl">${it.title}</div>
-        <div class="creator">${it.creator} · ${it.year}</div>
-        <div class="tags">${it.tags.slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}</div>
-      </div>
-    `;
-    card.addEventListener('click', () => openModal(view, it));
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `${it.title} by ${it.creator}`);
-    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(view, it); } });
-    grid.appendChild(card);
-    setTimeout(() => card.classList.add('in'), 40 + i * 70);
-  });
-  document.getElementById('count').textContent = items.length;
-  buildThemeFilter(view);
-}
-
-function buildThemeFilter(view) {
-  const sel = document.getElementById('themeFilter');
-  const themes = Array.from(new Set(DATA[view].flatMap(it => it.tags))).sort();
-  sel.innerHTML = '<option value="all">All themes</option>' + themes.map(t => `<option value="${t}">${t}</option>`).join('');
-  sel.value = 'all';
-}
-
-document.getElementById('themeFilter').addEventListener('change', e => {
-  const view = document.querySelector('#switcher button.on').dataset.view;
-  const theme = e.target.value;
-  const grid = document.getElementById(view === 'manga' ? 'mangaGrid' : 'filmGrid');
-  let shown = 0;
-  grid.querySelectorAll('.card').forEach((card, i) => {
-    const it = DATA[view][i];
-    const match = theme === 'all' || it.tags.includes(theme);
-    card.style.display = match ? '' : 'none';
-    if (match) shown++;
-  });
-  document.getElementById('count').textContent = shown;
-});
-
-/* ── switcher ── */
-document.querySelectorAll('#switcher button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#switcher button').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
-    btn.classList.add('on');
-    btn.setAttribute('aria-selected', 'true');
-    const view = btn.dataset.view;
-    document.getElementById('mangaGrid').style.display = view === 'manga' ? 'grid' : 'none';
-    document.getElementById('filmGrid').style.display = view === 'film' ? 'grid' : 'none';
-    buildCards(view);
-  });
-});
-
-/* ── modal ── */
-function openModal(view, it) {
-  document.getElementById('mEyebrow').textContent = `${view === 'manga' ? 'Manga' : 'Film'} · ${it.theme}`;
-  document.getElementById('mTitle').textContent = it.title;
-  const jp = document.getElementById('mJp');
-  jp.textContent = it.jp || '';
-  jp.style.display = it.jp ? 'block' : 'none';
-  const meta = [];
-  meta.push(`<span><span class="k">Creator</span>${it.creator}</span>`);
-  meta.push(`<span><span class="k">Year</span>${it.year}</span>`);
-  if (it.pages) meta.push(`<span><span class="k">Length</span>${it.pages}</span>`);
-  if (it.duration) meta.push(`<span><span class="k">Run</span>${it.duration}</span>`);
-  document.getElementById('mMeta').innerHTML = meta.join('');
-  const videoEl = document.getElementById('mVideo');
-  if (it.video && it.video.type === 'youtube') {
-    videoEl.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.video.id}" title="${it.title} — trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
-    videoEl.style.display = 'block';
-  } else {
-    videoEl.innerHTML = '';
-    videoEl.style.display = 'none';
-  }
-  document.getElementById('mBody').innerHTML = it.synopsis.map(p => `<p>${p}</p>`).join('');
-  document.getElementById('mTags').innerHTML = it.tags.map(t => `<span class="tag">${t}</span>`).join('');
-  document.getElementById('mCta').innerHTML = `<a href="${it.link.url}" target="_blank" rel="noopener" class="btn primary">${it.link.label} <span class="ar">↗</span></a>`;
-  document.getElementById('modalScrim').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal() {
-  document.getElementById('modalScrim').classList.remove('open');
-  document.getElementById('mVideo').innerHTML = '';
-  document.body.style.overflow = '';
-}
-document.getElementById('modalX').addEventListener('click', closeModal);
-document.getElementById('modalScrim').addEventListener('click', e => { if (e.target.id === 'modalScrim') closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-buildCards('manga');
+const nav = document.getElementById('top');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
 </script>
 
 </body>

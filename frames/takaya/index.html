@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Takaya — GSS·Frames · Vol. 1</title>
+  <meta name="description" content="Takaya — a Global South Solidarities manga. Khartoum, 2023–2025. One pot. One street. One country refusing to starve. Dedicated to the volunteers of Sudan's Emergency Response Rooms." />
+  <meta property="og:title" content="Takaya — GSS·Frames · Vol. 1" />
+  <meta property="og:description" content="One pot. One street. One country refusing to starve." />
+  <meta property="og:image" content="/frames/takaya/cover.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bangers&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --ink: #0b0a0c;
+      --ink-2: #141217;
+      --paper: #f6f0e5;
+      --dim: #c9c0b2;
+      --muted: #867c6d;
+      --line: #2a2630;
+      --accent: #ed9a44;      /* GSS ochre */
+      --fire: #f07a1a;        /* Takaya cover orange */
+      --display: 'Fraunces', serif;
+      --manga: 'Bangers', 'Impact', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+      --ui: 'IBM Plex Sans Condensed', 'Arial Narrow', sans-serif;
+      color-scheme: dark;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { background: var(--ink); color: var(--paper); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── GSS chrome: top bar ── */
+    .top {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      background: color-mix(in srgb, var(--ink) 92%, transparent);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .top a.back { color: var(--dim); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: color 160ms ease; }
+    .top a.back:hover { color: var(--accent); }
+    .top .mark { color: var(--muted); }
+    .top .mark .t { color: var(--accent); }
+    .top .issue { color: var(--muted); }
+    .top .issue .n { color: var(--fire); }
+
+    /* ── header plate ── */
+    .plate {
+      padding: 36px 20px 10px;
+      display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      max-width: 980px; margin: 0 auto;
+    }
+    .plate .ttl {
+      font-family: var(--manga); font-weight: 400;
+      font-size: clamp(44px, 7vw, 72px); line-height: 0.95; letter-spacing: 0.08em;
+      color: var(--paper);
+    }
+    .plate .ttl .bang { color: var(--fire); margin-left: 2px; }
+    .plate .sub { font-family: var(--display); font-style: italic; font-size: clamp(14px, 1.6vw, 17px); color: var(--dim); letter-spacing: 0.01em; }
+
+    .tag {
+      max-width: 980px; margin: 2px auto 0; padding: 0 20px;
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+    }
+    .tag .k { color: var(--accent); }
+
+    /* ── reader stage ── */
+    .wrap {
+      max-width: 980px; margin: 0 auto;
+      padding: 20px max(16px, env(safe-area-inset-left, 0px)) 28px max(16px, env(safe-area-inset-right, 0px));
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .stage { position: relative; display: flex; justify-content: center; }
+    .stage img {
+      width: 100%; max-width: 760px; height: auto;
+      aspect-ratio: 1200 / 1700;
+      background: var(--paper);
+      box-shadow: 0 0 0 1px var(--line), 0 24px 60px rgba(0,0,0,0.65);
+      display: block; border-radius: 2px;
+      cursor: pointer;
+    }
+    @media (prefers-reduced-motion: no-preference) { .stage img { transition: opacity 180ms ease; } }
+
+    /* ── nav controls ── */
+    .ctrl { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .btn {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 11px 20px; min-height: 44px; min-width: 92px;
+      background: var(--ink-2); color: var(--paper); border: 1px solid var(--line);
+      border-radius: 24px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 160ms ease;
+    }
+    .btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .btn:disabled { opacity: 0.35; cursor: default; }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .count {
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+      font-variant-numeric: tabular-nums; min-width: 100px; text-align: center;
+      color: var(--dim); text-transform: uppercase;
+    }
+    .count .cur { color: var(--accent); }
+
+    /* ── thumbs ── */
+    .thumbs {
+      display: flex; gap: 10px; overflow-x: auto;
+      padding: 10px 0 14px; margin-top: 4px;
+      scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+    }
+    .thumbs::-webkit-scrollbar { height: 6px; }
+    .thumbs::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+    .thumb {
+      padding: 0; background: none; flex: 0 0 auto;
+      width: 56px; opacity: 0.5; border: 0; cursor: pointer; border-radius: 3px;
+      transition: all 160ms ease;
+    }
+    .thumb:hover { opacity: 0.85; }
+    .thumb[aria-current="true"] { opacity: 1; box-shadow: 0 0 0 2px var(--fire); }
+    .thumb img { width: 56px; height: auto; display: block; border-radius: 2px; }
+    .thumb:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* ── note / sources ── */
+    .note {
+      max-width: 760px; margin: 10px auto 0;
+      color: var(--muted); font-size: 13px; line-height: 1.65;
+      font-family: var(--ui);
+    }
+    .note a { color: var(--paper); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; }
+    .note a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+    .note .dedication {
+      font-family: var(--display); font-style: italic; font-size: 15px; color: var(--dim);
+      border-left: 2px solid var(--fire); padding-left: 14px; margin-bottom: 12px;
+    }
+    .note .kicker { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+
+    /* ── footer ── */
+    .foot {
+      padding: 24px 20px 32px; text-align: center;
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+    .foot .t { color: var(--accent); }
+    .foot a { color: var(--muted); text-decoration: none; margin: 0 8px; }
+    .foot a:hover { color: var(--accent); }
+
+    @media (max-width: 560px) {
+      .plate { padding-left: 16px; padding-right: 16px; }
+      .thumb, .thumb img { width: 48px; }
+      .ctrl { gap: 10px; }
+      .btn { padding: 10px 14px; min-width: 76px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top">
+  <a href="/frames.html" class="back">← Back to Frames</a>
+  <div class="mark">GSS<span class="t">·</span>Frames</div>
+  <div class="issue">Vol. <span class="n">01</span></div>
+</nav>
+
+<section class="plate">
+  <div>
+    <h1 class="ttl">TAKAYA<span class="bang">.</span></h1>
+    <p class="sub">A Global South Solidarities manga · Khartoum, 2023–2025</p>
+  </div>
+</section>
+<p class="tag"><span class="k">Original</span> · One pot. One street. One country refusing to starve.</p>
+
+<div class="wrap">
+  <div class="stage"><img id="page" src="pages/p01.jpg" alt="Page 1" /></div>
+
+  <div class="ctrl">
+    <button id="prev" class="btn" type="button" aria-label="Previous page">← Prev</button>
+    <div class="count"><span class="cur" id="cur">1</span> / <span id="total">12</span></div>
+    <button id="next" class="btn" type="button" aria-label="Next page">Next →</button>
+  </div>
+
+  <div class="thumbs" id="thumbs" aria-label="All pages"></div>
+
+  <div class="note">
+    <span class="kicker">About</span>
+    <p class="dedication">For the volunteers of Sudan's Emergency Response Rooms — the neighbourhood committees who kept communal kitchens (<em>takaya</em>, singular <em>takiyya</em>) open while the war closed everything else.</p>
+    <p>The characters are fictional; the events they live through are documented. The <em>Emergency Response Rooms</em> (ERRs) are decentralised, youth-led mutual-aid networks that have organised meals, medicine and evacuations across Sudan since the war between the SAF and RSF began on 15 April 2023. By mid-2024 the ERRs were running thousands of communal kitchens serving hundreds of thousands of people a day. Across 2024–2025 famine was formally declared, cholera returned, and foreign funding to the kitchens collapsed; many <em>takaya</em> have been forced to close.</p>
+    <p>Sources: <a href="https://en.wikipedia.org/wiki/Emergency_Response_Rooms" target="_blank" rel="noopener">Emergency Response Rooms (overview)</a> · <a href="https://www.thenewhumanitarian.org/opinion/first-person/2024/04/22/mutual-aid-volunteer-reflects-year-war-sudan" target="_blank" rel="noopener">The New Humanitarian — one volunteer, one year</a> · <a href="https://www.aljazeera.com/features/2025/3/5/sudanese-starve-as-soup-kitchens-close-down-and-warring-parties-block-aid" target="_blank" rel="noopener">Al Jazeera · Soup kitchens close (Mar 2025)</a> · <a href="https://www.aljazeera.com/news/2025/8/4/cholera-deaths-rise-to-191-in-sudans-darfur-area-amid-famine-ongoing-war" target="_blank" rel="noopener">Al Jazeera · Darfur cholera & famine (Aug 2025)</a> · <a href="https://www.hrw.org/world-report/2026/country-chapters/sudan" target="_blank" rel="noopener">Human Rights Watch · Sudan 2026</a>.</p>
+    <p style="margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);">Use ← → or swipe to turn pages. Tap the left/right third of a page to turn.</p>
+  </div>
+</div>
+
+<footer class="foot">
+  <div>© 2026 · Global South Solidarities · GSS<span class="t">·</span>Frames</div>
+  <div style="margin-top:8px;">
+    <a href="/frames.html">All of Frames</a> ·
+    <a href="/archive.html">The Archive</a> ·
+    <a href="mailto:globalsouthsolidarities@gmail.com">Submit a work</a>
+  </div>
+</footer>
+
+<script>
+const N = 12;
+const img = document.getElementById('page');
+const cur = document.getElementById('cur');
+const total = document.getElementById('total');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const thumbs = document.getElementById('thumbs');
+const src = i => `pages/p${String(i).padStart(2, '0')}.jpg`;
+
+total.textContent = N;
+let current = 1;
+
+for (let i = 1; i <= N; i++) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'thumb';
+  b.setAttribute('aria-label', `Page ${i}`);
+  const t = document.createElement('img');
+  t.src = src(i); t.alt = ''; t.loading = 'lazy';
+  b.append(t);
+  b.addEventListener('click', () => go(i));
+  thumbs.append(b);
+}
+
+function go(i) {
+  current = Math.min(N, Math.max(1, i));
+  img.src = src(current);
+  img.alt = `Page ${current}`;
+  cur.textContent = current;
+  prev.disabled = current === 1;
+  next.disabled = current === N;
+  [...thumbs.children].forEach((b, k) => b.setAttribute('aria-current', k + 1 === current ? 'true' : 'false'));
+  const active = thumbs.children[current - 1];
+  if (active) active.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  if (history.replaceState) history.replaceState(null, '', `#p${current}`);
+  if (current < N) { const pre = new Image(); pre.src = src(current + 1); }
+}
+
+prev.addEventListener('click', () => go(current - 1));
+next.addEventListener('click', () => go(current + 1));
+img.addEventListener('click', e => {
+  const r = img.getBoundingClientRect();
+  go(e.clientX - r.left < r.width / 3 ? current - 1 : current + 1);
+});
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 'Home') go(1);
+  if (e.key === 'End') go(N);
+});
+let sx = null;
+img.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+img.addEventListener('touchend', e => {
+  if (sx === null) return;
+  const dx = e.changedTouches[0].clientX - sx;
+  if (Math.abs(dx) > 40) go(dx < 0 ? current + 1 : current - 1);
+  sx = null;
+});
+
+const h = parseInt((location.hash || '').replace('#p', ''), 10);
+go(Number.isFinite(h) ? h : 1);
+</script>
+
+</body>
+</html>
